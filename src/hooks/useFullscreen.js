@@ -7,6 +7,13 @@ export const fullscreenSupported = () =>
 /** Fullscreen API (kèm tiền tố webkit cho Safari). Esc do trình duyệt tự xử lý. */
 export function useFullscreen(targetRef) {
   const [isFullscreen, setIsFullscreen] = useState(() => !!fsElement())
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!error) return
+    const t = setTimeout(() => setError(null), 4000)
+    return () => clearTimeout(t)
+  }, [error])
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!fsElement())
@@ -21,7 +28,8 @@ export function useFullscreen(targetRef) {
   const enter = useCallback(() => {
     const el = targetRef?.current || document.documentElement
     const req = el.requestFullscreen || el.webkitRequestFullscreen
-    return req?.call(el)?.catch?.(() => {})
+    // trình duyệt có thể từ chối (chính sách, chế độ kiểm thử tự động…) → báo cho người xem biết
+    return req?.call(el)?.catch?.(() => setError('Trình duyệt đang chặn chế độ toàn màn hình'))
   }, [targetRef])
 
   const exit = useCallback(() => {
@@ -32,5 +40,5 @@ export function useFullscreen(targetRef) {
 
   const toggle = useCallback(() => (fsElement() ? exit() : enter()), [enter, exit])
 
-  return { isFullscreen, enter, exit, toggle, supported: fullscreenSupported() }
+  return { isFullscreen, enter, exit, toggle, error, supported: fullscreenSupported() }
 }

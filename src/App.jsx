@@ -306,6 +306,9 @@ export default function App() {
         </button>
 
         <Hint show={hint && phase === 'reading'} touch={isTouch} />
+        <div className={`toast ${fullscreen.error ? 'is-shown' : ''}`} role="status" aria-live="polite">
+          {fullscreen.error}
+        </div>
 
         <div onPointerEnter={() => setOverControls(true)} onPointerLeave={() => setOverControls(false)}>
           <Controls

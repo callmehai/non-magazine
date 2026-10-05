@@ -427,6 +427,34 @@
   }
 }
 
+/* thông báo ngắn */
+.toast {
+  position: absolute;
+  left: 50%;
+  top: 56px;
+  z-index: 25;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--ui-line);
+  background: rgba(20, 14, 10, 0.9);
+  color: var(--ui-text);
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -6px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast:empty {
+  display: none;
+}
+
 /* ── mục lục ───────────────────────────────── */
 .panel-scrim {
   position: absolute;
