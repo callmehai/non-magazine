@@ -72,10 +72,14 @@ function VideoPlaceholder({ page, exists }) {
       <div className="video-ph__grain" aria-hidden="true" />
       <div className="video-ph__bars" aria-hidden="true" />
       <div className="video-ph__center">
-        <span className="video-ph__play" aria-hidden="true">
-          <Icon name="play" size={22} />
-        </span>
-        {!exists && <span className="video-ph__label">Thước phim đang được hoàn thiện</span>}
+        {/* chỉ hiện nút play ở hình thu nhỏ của video có thật — khung chờ thì không giả vờ bấm được */}
+        {exists ? (
+          <span className="video-ph__play" aria-hidden="true">
+            <Icon name="play" size={22} />
+          </span>
+        ) : (
+          <span className="video-ph__label">Thước phim đang được hoàn thiện</span>
+        )}
       </div>
       <span className="video-ph__tc" aria-hidden="true">
         REC ● 00:00:00

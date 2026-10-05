@@ -52,7 +52,8 @@ Mở http://localhost:5173.
 ```
 
 Video không tải trước, tự dừng khi lật sang trang khác. Chưa có file → hiện khung "Thước phim
-đang được hoàn thiện".
+đang được hoàn thiện". File `making-hat.mp4` có sẵn là video demo (cảnh 3D nón tự đan) —
+chép video thật của bạn đè lên cùng tên là xong.
 
 ## 4. Thêm audio
 

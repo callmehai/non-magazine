@@ -17,7 +17,7 @@ public/assets/
 |---|---|---|
 | `audio/background.mp3` | nhạc nền (`settings.backgroundMusic`) | phát nhạc ngũ cung tổng hợp sẵn |
 | `audio/page-flip.mp3` | tiếng lật trang (`settings.flipSound`) | dùng tiếng giấy tổng hợp sẵn |
-| `videos/making-hat.mp4` | trang 9 — video | hiện khung "Thước phim đang được hoàn thiện" |
+| `videos/making-hat.mp4` | trang 9 — video (đang là video demo: cảnh 3D nón tự đan) | hiện khung "Thước phim đang được hoàn thiện" |
 
 Chỉ cần **chép file đúng tên vào đúng thư mục** — không phải sửa code.
 Muốn dùng tên khác thì sửa đường dẫn tương ứng trong `magazine.js`.
