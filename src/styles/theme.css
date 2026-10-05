@@ -1,0 +1,42 @@
+/* ============================================================
+   THEME — đổi màu, font, nhịp chuyển động ở đây
+   ============================================================ */
+:root {
+  /* Bảng màu */
+  --ivory: #f4ede0; /* giấy */
+  --cream: #ebe0cb;
+  --cream-2: #e2d3b7;
+  --ink: #2a1f17; /* chữ chính */
+  --ink-2: #5e4d3d; /* chữ phụ */
+  --ink-3: #8d7a64;
+  --brown: #3b2a1e; /* nâu đậm */
+  --brown-2: #24180f;
+  --charcoal: #1d1a17;
+  --gold: #b8955a; /* vàng trầm */
+  --gold-2: #d9bd84;
+  --gold-deep: #8c6a33;
+  --wine: #7d2f2a;
+  --hairline: rgba(59, 42, 30, 0.18);
+
+  /* Nền phía sau cuốn sách */
+  --bg-1: #3a2719;
+  --bg-2: #1c130d;
+  --bg-3: #0e0907;
+
+  /* Giao diện điều khiển */
+  --ui-bg: rgba(26, 19, 14, 0.74);
+  --ui-line: rgba(217, 189, 132, 0.22);
+  --ui-text: rgba(244, 237, 224, 0.88);
+  --ui-text-2: rgba(244, 237, 224, 0.55);
+
+  /* Font — đều có đủ dấu tiếng Việt */
+  --font-serif: 'Playfair Display', 'Times New Roman', serif;
+  --font-italic: 'Cormorant Garamond', 'Playfair Display', serif;
+  --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Chuyển động */
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --anim-duration: 0.95s;
+  --anim-distance: 1.1em;
+}

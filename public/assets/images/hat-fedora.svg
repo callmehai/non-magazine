@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <radialGradient id="card-bg" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#f7efdf"/>
+      <stop offset="1" stop-color="#e3d3b4"/>
+    </radialGradient>
+    
+  <filter id="card-grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0.16 0"/>
+  </filter>
+    <linearGradient id="fd-crown" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3e2c20"/><stop offset="0.38" stop-color="#6a4c37"/><stop offset="1" stop-color="#2e2118"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#card-bg)"/>
+  <circle cx="300" cy="290" r="210" fill="#e7d8bb" opacity="0.7"/>
+  <ellipse cx="300" cy="455" rx="190" ry="20" fill="#3a2410" opacity="0.14"/>
+  <path d="M108 336 C 150 296, 450 296, 492 336 C 478 384, 122 384, 108 336 Z" fill="#33241a"/>
+   <path d="M205 334 C 198 262, 218 206, 252 192 C 276 210, 324 210, 348 192 C 382 206, 402 262, 395 334 Z" fill="url(#fd-crown)"/>
+   <path d="M300 205 C 296 240, 296 270, 300 300" fill="none" stroke="#1f1610" stroke-opacity="0.5" stroke-width="3"/>
+   <path d="M203 298 C 260 312, 340 312, 397 298 L 398 334 C 340 346, 260 346, 202 334 Z" fill="#1d140e"/>
+   <path d="M122 344 C 200 392, 400 392, 478 344 C 460 372, 140 372, 122 344 Z" fill="#4a3426"/>
+   <path d="M230 230 C 236 220, 250 212, 262 214" fill="none" stroke="#fff" stroke-opacity="0.15" stroke-width="6" stroke-linecap="round"/>
+  <rect width="600" height="600" filter="url(#card-grain)"/>
+</svg>

@@ -1,0 +1,333 @@
+/* ============================================================
+   CUỐN SÁCH — khung, bóng, giấy, hiệu ứng xuất hiện
+   ============================================================ */
+
+.book {
+  position: relative;
+  flex: none;
+  opacity: 0;
+  transform: perspective(1800px) translate3d(0, 7vh, 0) rotateX(24deg) scale(0.88);
+  transform-origin: 50% 80%;
+  transition:
+    opacity 1.1s var(--ease) 0.15s,
+    transform 1.5s var(--ease) 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.book.is-entered {
+  opacity: 1;
+  transform: none;
+}
+
+.book__shift {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.85s var(--ease-in-out);
+}
+
+.book__host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* bóng đổ dưới sách */
+.book__shadow {
+  position: absolute;
+  top: 1.5%;
+  bottom: -1.2%;
+  left: 0.6%;
+  right: 0.6%;
+  border-radius: 3px;
+  box-shadow:
+    0 40px 70px -18px rgba(0, 0, 0, 0.75),
+    0 14px 26px -6px rgba(0, 0, 0, 0.45);
+  transition: left 0.85s var(--ease-in-out), right 0.85s var(--ease-in-out);
+  pointer-events: none;
+}
+
+.orientation-landscape .book__shadow[data-alone='right'] {
+  left: 50.6%;
+}
+
+.orientation-landscape .book__shadow[data-alone='left'] {
+  right: 50.6%;
+}
+
+/* StPageFlip: lớp gốc do thư viện tạo */
+.book-root.stf__parent {
+  position: relative;
+}
+
+.book.is-zoomed .stf__parent {
+  touch-action: auto;
+}
+
+.mag-sheet {
+  background: var(--ivory);
+}
+
+.sheet-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── trang ─────────────────────────────────── */
+.page {
+  --pad-x: 3em;
+  --pad-y: 3.4em;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--ivory);
+  background-size: cover;
+  background-position: center;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  /* mọi kích thước trong trang tính bằng em → tự co giãn theo khổ trang */
+  font-size: calc(var(--pw, 480) * 0.0335px);
+  line-height: 1.62;
+  text-rendering: optimizeLegibility;
+}
+
+.page.theme-dark {
+  background-color: var(--brown-2);
+  color: var(--ivory);
+}
+
+.page__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .32 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  z-index: 3;
+}
+
+.theme-dark .page__grain {
+  mix-blend-mode: screen;
+  opacity: 0.18;
+}
+
+.page__body {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.page__head,
+.page__folio {
+  position: absolute;
+  z-index: 4;
+  font-size: 0.56em;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.page__head,
+.page__folio {
+  left: calc(var(--pad-x) / 0.56);
+  right: calc(var(--pad-x) / 0.56);
+}
+
+.page__head {
+  top: 2.6em;
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+}
+
+.page__head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.side-right .page__head {
+  flex-direction: row-reverse;
+}
+
+.page__folio {
+  bottom: 2.4em;
+  font-family: var(--font-serif);
+  letter-spacing: 0.12em;
+  font-size: 0.66em;
+}
+
+.side-right .page__folio,
+.side-single .page__folio {
+  text-align: right;
+}
+
+.theme-dark .page__head,
+.theme-dark .page__folio {
+  color: rgba(244, 237, 224, 0.6);
+}
+
+/* bóng gáy sách ở mép trong của trang */
+.page__gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 14%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.side-left .page__gutter {
+  right: 0;
+  background: linear-gradient(to left, rgba(40, 25, 12, 0.22), rgba(40, 25, 12, 0.06) 35%, transparent);
+}
+
+.side-right .page__gutter {
+  left: 0;
+  background: linear-gradient(to right, rgba(40, 25, 12, 0.24), rgba(40, 25, 12, 0.06) 35%, transparent);
+}
+
+.side-single .page__gutter {
+  left: 0;
+  width: 5%;
+  background: linear-gradient(to right, rgba(40, 25, 12, 0.14), transparent);
+}
+
+/* ── hiệu ứng xuất hiện (animation trong magazine.js) ─── */
+.sheet-content [data-anim] {
+  opacity: 0;
+  transition:
+    opacity var(--anim-duration) var(--ease) var(--d, 0s),
+    transform calc(var(--anim-duration) + 0.15s) var(--ease) var(--d, 0s);
+}
+
+.sheet-content [data-anim='fade-up'] {
+  transform: translate3d(0, var(--anim-distance), 0);
+}
+
+.sheet-content [data-anim='scale'] {
+  transform: scale(0.94);
+}
+
+.sheet-content [data-anim='slide'] {
+  transform: translate3d(calc(var(--anim-distance) * -1.4), 0, 0);
+}
+
+.sheet-content.is-revealed [data-anim] {
+  opacity: 1;
+  transform: none;
+}
+
+/* HTML tuỳ biến: tự áp dụng hiệu ứng cho từng khối con */
+.sheet-content [data-anim-children] > * > * {
+  opacity: 0;
+  transform: translate3d(0, var(--anim-distance), 0);
+  transition:
+    opacity var(--anim-duration) var(--ease),
+    transform calc(var(--anim-duration) + 0.15s) var(--ease);
+}
+
+.sheet-content [data-anim-children='fade-in'] > * > *,
+.sheet-content [data-anim-children='scale'] > * > * {
+  transform: none;
+}
+
+.sheet-content.is-revealed [data-anim-children] > * > * {
+  opacity: 1;
+  transform: none;
+}
+
+.sheet-content [data-anim-children] > * > :nth-child(2) { transition-delay: 0.08s; }
+.sheet-content [data-anim-children] > * > :nth-child(3) { transition-delay: 0.16s; }
+.sheet-content [data-anim-children] > * > :nth-child(4) { transition-delay: 0.24s; }
+.sheet-content [data-anim-children] > * > :nth-child(5) { transition-delay: 0.32s; }
+.sheet-content [data-anim-children] > * > :nth-child(6) { transition-delay: 0.4s; }
+.sheet-content [data-anim-children] > * > :nth-child(n + 7) { transition-delay: 0.48s; }
+
+.is-static [data-anim],
+.is-static [data-anim-children] > * > * {
+  transition: none !important;
+}
+
+/* parallax nhẹ theo con trỏ */
+img[data-parallax] {
+  transform: scale(1.08) translate3d(calc(var(--mx, 0) * -1.4%), calc(var(--my, 0) * -1.2%), 0);
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+
+.is-static img[data-parallax] {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book,
+  .book__shift,
+  .book__shadow {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+  }
+
+  .sheet-content [data-anim],
+  .sheet-content [data-anim-children] > * > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  img[data-parallax] {
+    transform: scale(1.02) !important;
+  }
+}
+
+/* ── ảnh dùng chung ────────────────────────── */
+.smart-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.smart-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+.smart-img.is-loaded img {
+  opacity: 1;
+}
+
+.img-placeholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.6em;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(135deg, rgba(140, 106, 51, 0.06) 0 2px, transparent 2px 9px),
+    var(--cream);
+  color: var(--ink-3);
+  font-size: 0.7em;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 1em;
+}
+
+.img-placeholder svg {
+  width: 4.5em;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.4;
+}
