@@ -44,7 +44,7 @@ const magazine = {
     // Nhạc nền. Nếu file chưa tồn tại, tạp chí tự phát một bản nhạc
     // nền tổng hợp nhẹ nhàng (đàn tranh/ngũ cung) bằng Web Audio.
     backgroundMusic: 'assets/audio/background.mp3',
-    backgroundMusicTitle: 'Nhạc nền',
+    backgroundMusicTitle: 'Bèo dạt mây trôi',
     musicVolume: 0.5,
 
     // Bật âm thanh (tiếng lật trang + nhạc nền) ngay từ đầu.
