@@ -61,8 +61,19 @@ export class HeroScene {
     // nón chính + nón phụ (dùng chung geometry/material)
     this.hat = createNonLa({ textureSize: this.mobile ? 1024 : 2048, anisotropy: renderer.capabilities.getMaxAnisotropy() })
     this.hatPivot = new THREE.Group()
-    this.hatPivot.add(this.hat.group)
+    // spin: góc xoay do người xem kéo chuột (để lật nón xem mặt trong)
+    this.spin = new THREE.Group()
+    this.spin.add(this.hat.group)
+    this.hatPivot.add(this.spin)
     scene.add(this.hatPivot)
+    this.drag = { active: false, id: null, x: 0, y: 0, rotX: 0, rotY: 0, vx: 0, vy: 0 }
+    this.onPointerDown = this.onPointerDown.bind(this)
+    this.onPointerMove = this.onPointerMove.bind(this)
+    this.onPointerUp = this.onPointerUp.bind(this)
+    canvas.addEventListener('pointerdown', this.onPointerDown)
+    window.addEventListener('pointermove', this.onPointerMove)
+    window.addEventListener('pointerup', this.onPointerUp)
+    window.addEventListener('pointercancel', this.onPointerUp)
 
     this.hat2 = this.hat.group.clone(true)
     this.hat2.traverse((o) => {
@@ -109,6 +120,38 @@ export class HeroScene {
     this.size = { w, h }
   }
 
+  onPointerDown(e) {
+    if (this.mode !== 'intro') return
+    const d = this.drag
+    d.active = true
+    d.id = e.pointerId
+    d.x = e.clientX
+    d.y = e.clientY
+    d.vx = d.vy = 0
+    this.canvas.classList.add('is-dragging')
+  }
+
+  onPointerMove(e) {
+    const d = this.drag
+    if (!d.active || e.pointerId !== d.id) return
+    const dx = (e.clientX - d.x) * 0.008
+    const dy = (e.clientY - d.y) * 0.008
+    d.x = e.clientX
+    d.y = e.clientY
+    d.rotY += dx
+    // kéo lên → lật vành nón về phía người xem để thấy mặt trong
+    d.rotX = THREE.MathUtils.clamp(d.rotX + dy, -2.9, 0.9)
+    d.vx = dx
+    d.vy = dy
+  }
+
+  onPointerUp(e) {
+    const d = this.drag
+    if (!d.active || (e.pointerId !== undefined && e.pointerId !== d.id)) return
+    d.active = false
+    this.canvas.classList.remove('is-dragging')
+  }
+
   setPointer(x, y) {
     this.pointer.set(x, y)
   }
@@ -122,6 +165,14 @@ export class HeroScene {
       }
       this.hat2Pivot.visible = true
     }
+  }
+
+  /** Chạy lại màn "đan nón" từ đầu (nút "Xem lại nón 3D") */
+  replay() {
+    this.mode = 'intro'
+    this.introDone = false
+    this.applyIntro(this.reducedMotion ? T.end : 0)
+    if (this.reducedMotion) this.finishIntro()
   }
 
   finishIntro() {
@@ -158,6 +209,7 @@ export class HeroScene {
     const speed = this.reducedMotion ? 10 : 0.6
     this.modeT += Math.sign(target - this.modeT) * Math.min(Math.abs(target - this.modeT), dt * speed)
     const m = easeInOut(this.modeT)
+    if (this.mode === 'intro' && this.modeT === 0) this.hat2Pivot.visible = false
 
     this.pointerSmooth.lerp(this.pointer, 1 - Math.pow(0.001, dt))
 
@@ -178,8 +230,8 @@ export class HeroScene {
       ? new THREE.Vector3(-halfW * 0.62, halfH * 0.78, -0.8)
       : new THREE.Vector3(-halfW * 0.8, halfH * 0.5, -0.8)
     const pivot = this.hatPivot
-    pivot.position.lerpVectors(new THREE.Vector3(0, -0.22, 0), readPos, m)
-    pivot.scale.setScalar(THREE.MathUtils.lerp(this.mobile ? 0.62 : 0.74, narrow ? 0.62 : 0.78, m))
+    pivot.position.lerpVectors(new THREE.Vector3(0, -0.02, 0), readPos, m)
+    pivot.scale.setScalar(THREE.MathUtils.lerp(this.mobile ? 0.56 : 0.64, narrow ? 0.62 : 0.78, m))
     pivot.rotation.x = THREE.MathUtils.lerp(0.36, 0.5, m) + Math.sin(time * 0.6) * 0.03 * motion
     pivot.rotation.z = THREE.MathUtils.lerp(0.06, -0.28, m)
     pivot.position.y += Math.sin(time * 0.8) * 0.03 * motion
@@ -195,13 +247,29 @@ export class HeroScene {
     p2.rotation.set(-0.35, 0, 0.42)
     this.hat2.rotation.y -= dt * 0.18 * motion
 
+    // xoay theo tay người xem (có quán tính); vào chế độ đọc thì từ từ trả về
+    const d = this.drag
+    if (!d.active) {
+      d.rotY += d.vx
+      d.rotX = THREE.MathUtils.clamp(d.rotX + d.vy, -2.9, 0.9)
+      const decay = Math.pow(0.04, dt)
+      d.vx *= decay
+      d.vy *= decay
+      if (this.mode === 'reading') {
+        const k = 1 - Math.pow(0.02, dt)
+        d.rotX += (0 - d.rotX) * k
+        d.rotY += (0 - d.rotY) * k
+      }
+    }
+    this.spin.rotation.set(d.rotX, d.rotY, 0)
+
     pivot.updateMatrixWorld(true)
     this.hat.setReveal(this.leafP ?? 1)
 
     // vũng sáng + chùm sáng tắt dần khi vào chế độ đọc
     const glow = 1 - m
     this.pool.material.opacity = 0.55 * glow * clamp01(this.introTime / 0.8)
-    this.pool.position.set(pivot.position.x, -0.72, pivot.position.z)
+    this.pool.position.set(pivot.position.x, pivot.position.y - 0.5, pivot.position.z)
     this.pool.visible = glow > 0.01
     this.beam.material.uniforms.uOpacity.value = 0.22 * glow * clamp01(this.introTime / 1.2)
     this.beam.visible = glow > 0.01
@@ -214,6 +282,10 @@ export class HeroScene {
   dispose() {
     this.renderer.setAnimationLoop(null)
     this.ro.disconnect()
+    this.canvas.removeEventListener('pointerdown', this.onPointerDown)
+    window.removeEventListener('pointermove', this.onPointerMove)
+    window.removeEventListener('pointerup', this.onPointerUp)
+    window.removeEventListener('pointercancel', this.onPointerUp)
     this.hat.dispose()
     this.dust.dispose()
     this.pool.geometry.dispose()

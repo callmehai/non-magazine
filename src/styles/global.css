@@ -78,6 +78,20 @@ button {
   height: 100%;
 }
 
+/* màn mở đầu: kéo để xoay nón — sách (vô hình) không được chặn chuột */
+.phase-intro .stage {
+  pointer-events: none;
+}
+
+.phase-intro .scene canvas {
+  cursor: grab;
+  touch-action: none;
+}
+
+.phase-intro .scene canvas.is-dragging {
+  cursor: grabbing;
+}
+
 .phase-reading .scene,
 .phase-leaving .scene {
   opacity: 0.8;

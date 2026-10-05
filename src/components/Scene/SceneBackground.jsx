@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
  * Canvas three.js cố định phía sau mọi thứ. Tải three.js bất đồng bộ;
  * nếu máy không hỗ trợ WebGL thì chỉ còn nền gradient (vẫn đẹp, không lỗi).
  */
-export default function SceneBackground({ mode, reducedMotion, enabled = true, onReady, onIntroDone, onFail }) {
+export default function SceneBackground({ mode, replayKey = 0, reducedMotion, enabled = true, onReady, onIntroDone, onFail }) {
   const canvasRef = useRef(null)
   const sceneRef = useRef(null)
   const cbs = useRef({ onReady, onIntroDone, onFail })
@@ -43,6 +43,11 @@ export default function SceneBackground({ mode, reducedMotion, enabled = true, o
   useEffect(() => {
     sceneRef.current?.setMode(mode)
   })
+
+  // replayKey tăng → chạy lại hiệu ứng đan nón
+  useEffect(() => {
+    if (replayKey > 0) sceneRef.current?.replay()
+  }, [replayKey])
 
   useEffect(() => {
     if (reducedMotion) return

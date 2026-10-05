@@ -152,7 +152,9 @@ Dùng file font riêng: chép `.woff2` vào `public/assets/fonts/`, khai báo `@
   `fade-in` · `fade-up` · `scale` · `slide` · `parallax` (ảnh trôi nhẹ theo chuột) · `none`.
 - Tốc độ/khoảng cách chung: `--anim-duration`, `--anim-distance`, `--ease` trong `theme.css`.
 - Tốc độ lật trang: `settings.flipDuration` (ms).
-- Màn mở đầu 3D: `settings.intro: false` để vào thẳng bìa; `settings.background3D: false` để tắt cảnh 3D.
+- Màn mở đầu 3D: luôn chạy hết hiệu ứng đan nón, người xem kéo để xoay/lật nón xem mặt trong, bấm
+  **Mở tạp chí** để vào đọc; nút **Xem lại nón 3D** ở trên cùng để xem lại. `settings.intro: false` để vào
+  thẳng bìa; `settings.background3D: false` để tắt cảnh 3D.
 - Người dùng bật *Reduce motion* trong hệ điều hành sẽ tự động được giảm/tắt hiệu ứng.
 
 ## 9. Đổi nhạc nền

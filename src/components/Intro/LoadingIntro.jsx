@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import Icon from '../common/Icon.jsx'
 
 /**
- * Lớp chữ của màn mở đầu: "NÓN — Đang mở tạp chí..." đặt trên cảnh 3D.
- * Bấm/nhấn phím bất kỳ để bỏ qua.
+ * Màn mở đầu: chữ "NÓN" trên cảnh 3D chiếc nón tự đan.
+ * Luôn chạy hết hiệu ứng; khi xong mới hiện nút "Mở tạp chí".
  */
-export default function LoadingIntro({ magazine, progress, leaving, onSkip }) {
-  const [canSkip, setCanSkip] = useState(false)
+export default function LoadingIntro({ magazine, progress, ready, leaving, onOpen }) {
+  const btnRef = useRef(null)
+
   useEffect(() => {
-    const t = setTimeout(() => setCanSkip(true), 600)
-    return () => clearTimeout(t)
-  }, [])
+    if (ready) btnRef.current?.focus({ preventScroll: true })
+  }, [ready])
 
   return (
-    <div className={`intro ${leaving ? 'is-leaving' : ''}`} onClick={canSkip ? onSkip : undefined} role="status" aria-live="polite">
+    <div className={`intro ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
       <div className="intro__text">
         <h1 className="intro__title" aria-label={magazine.title}>
           {[...magazine.title].map((ch, i) => (
@@ -23,24 +24,27 @@ export default function LoadingIntro({ magazine, progress, leaving, onSkip }) {
         </h1>
         <p className="intro__subtitle">{magazine.subtitle}</p>
       </div>
-      <div className="intro__status">
-        <span className="intro__bar" aria-hidden="true">
-          <span style={{ transform: `scaleX(${progress})` }} />
-        </span>
-        <span>Đang mở tạp chí...</span>
+
+      <div className="intro__foot" role="status" aria-live="polite">
+        {ready ? (
+          <>
+            <button ref={btnRef} type="button" className="intro__open" onClick={onOpen} disabled={leaving}>
+              <span>Mở tạp chí</span>
+              <Icon name="next" size={18} />
+            </button>
+            <p className="intro__drag" aria-hidden="true">
+              <Icon name="rotate" size={14} /> Kéo để xoay chiếc nón — lật lên để xem mặt trong
+            </p>
+          </>
+        ) : (
+          <div className="intro__status">
+            <span className="intro__bar" aria-hidden="true">
+              <span style={{ transform: `scaleX(${progress})` }} />
+            </span>
+            <span>Đang đan chiếc nón...</span>
+          </div>
+        )}
       </div>
-      {canSkip && !leaving && (
-        <button
-          type="button"
-          className="intro__skip"
-          onClick={(e) => {
-            e.stopPropagation()
-            onSkip()
-          }}
-        >
-          Bỏ qua
-        </button>
-      )}
     </div>
   )
 }

@@ -22,16 +22,7 @@ import { playFlipSound } from './lib/sound.js'
 import { asset, hasAsset } from './lib/assets.js'
 
 const INTRO_MS = 3200
-const SEEN_KEY = 'non-magazine:intro-seen'
 const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
-
-function readSeen() {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === '1'
-  } catch {
-    return false
-  }
-}
 
 export default function App() {
   const { settings, pages } = magazine
@@ -39,6 +30,8 @@ export default function App() {
   const reducedMotion = useReducedMotion()
   const stageRef = useRef(null)
   const appRef = useRef(null)
+
+  const [panelOpen, setPanelOpen] = useState(false)
 
   // ───────────── zoom + kích thước sách
   const [zoom, setZoom] = useState(1)
@@ -78,62 +71,49 @@ export default function App() {
   const visible = useMemo(() => visiblePages(currentPage, layout.orientation, count), [currentPage, layout.orientation, count])
   const lastVisible = visible[visible.length - 1]
 
-  // ───────────── intro
+  // ───────────── intro: luôn chạy hết hiệu ứng, bấm "Mở tạp chí" mới vào đọc
   const introEnabled = settings.intro !== false
   const [phase, setPhase] = useState(introEnabled ? 'intro' : 'reading') // intro → leaving → reading
   const [sceneStatus, setSceneStatus] = useState(settings.background3D === false && !introEnabled ? 'off' : 'loading')
   const [sceneIntroDone, setSceneIntroDone] = useState(false)
+  const [replayKey, setReplayKey] = useState(0)
   const [minTimePassed, setMinTimePassed] = useState(false)
   const [fontsReady, setFontsReady] = useState(false)
   const [progress, setProgress] = useState(0)
-  const quick = reducedMotion || readSeen()
 
   useEffect(() => {
     let alive = true
     const done = () => alive && setFontsReady(true)
     if (document.fonts?.ready) document.fonts.ready.then(done)
     else done()
-    const t = setTimeout(() => setMinTimePassed(true), quick ? 900 : 1400)
+    const t = setTimeout(() => setMinTimePassed(true), 1400)
     return () => {
       alive = false
       clearTimeout(t)
     }
-  }, [quick])
-
-  const finishIntro = useCallback(() => {
-    setPhase((p) => (p === 'intro' ? 'leaving' : p))
   }, [])
 
-  useEffect(() => {
-    if (phase !== 'intro') return
-    const sceneDone = sceneIntroDone || sceneStatus === 'failed' || sceneStatus === 'off' || (quick && sceneStatus === 'ready')
-    if (sceneDone && minTimePassed && fontsReady && book.ready) finishIntro()
-  }, [phase, sceneIntroDone, sceneStatus, minTimePassed, fontsReady, book.ready, quick, finishIntro])
+  const sceneDone = sceneIntroDone || sceneStatus === 'failed' || sceneStatus === 'off'
+  const introReady = phase === 'intro' && sceneDone && minTimePassed && fontsReady && book.ready
 
-  // thanh tiến trình
+  // thanh tiến trình trong lúc nón đang được đan
   useEffect(() => {
-    if (phase !== 'intro') {
+    if (phase !== 'intro' || sceneDone) {
       setProgress(1)
       return
     }
     let raf
     const start = performance.now()
-    const total = quick ? 900 : INTRO_MS
     const loop = (now) => {
-      setProgress(Math.min(0.96, (now - start) / total))
+      setProgress(Math.min(0.97, (now - start) / INTRO_MS))
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(raf)
-  }, [phase, quick])
+  }, [phase, sceneDone, replayKey])
 
   useEffect(() => {
     if (phase !== 'leaving') return
-    try {
-      sessionStorage.setItem(SEEN_KEY, '1')
-    } catch {
-      /* chế độ riêng tư */
-    }
     const t = setTimeout(() => setPhase('reading'), reducedMotion ? 200 : 1100)
     return () => clearTimeout(t)
   }, [phase, reducedMotion])
@@ -151,6 +131,23 @@ export default function App() {
     setSoundOn(true)
     music.play().then((ok) => setNeedsGesture(!ok))
   }, [music])
+
+  const openMagazine = useCallback(() => {
+    setPhase((p) => (p === 'intro' ? 'leaving' : p))
+    // bấm nút là thao tác của người dùng → trình duyệt cho phép phát nhạc
+    if (soundOnRef.current && !triedMusic.current) {
+      triedMusic.current = true
+      music.play().then((ok) => setNeedsGesture(!ok))
+    }
+  }, [music])
+
+  const replayIntro = useCallback(() => {
+    setPanelOpen(false)
+    setZoom(1)
+    setSceneIntroDone(false)
+    setReplayKey((k) => k + 1)
+    setPhase('intro')
+  }, [])
 
   const toggleSound = useCallback(() => {
     if (soundOnRef.current) {
@@ -172,7 +169,6 @@ export default function App() {
   }, [currentPage])
 
   // ───────────── panel, lightbox, fullscreen
-  const [panelOpen, setPanelOpen] = useState(false)
   const [lightbox, setLightbox] = useState(null)
   const fullscreen = useFullscreen(appRef)
   const idle = useIdle(3200, panelOpen || phase !== 'reading')
@@ -205,17 +201,6 @@ export default function App() {
     },
     phase === 'reading' && !lightbox
   )
-
-  // phím bất kỳ trong lúc intro = bỏ qua
-  useEffect(() => {
-    if (phase !== 'intro') return
-    const skip = (e) => {
-      if (e.key === 'Tab') return
-      if (book.ready) finishIntro()
-    }
-    window.addEventListener('keydown', skip)
-    return () => window.removeEventListener('keydown', skip)
-  }, [phase, book.ready, finishIntro])
 
   // Ctrl + lăn chuột (và pinch trên trackpad) = zoom
   useEffect(() => {
@@ -287,6 +272,7 @@ export default function App() {
         <div className="backdrop" aria-hidden="true" />
         <SceneBackground
           mode={phase === 'intro' ? 'intro' : 'reading'}
+          replayKey={replayKey}
           reducedMotion={reducedMotion}
           enabled={sceneStatus !== 'off'}
           onReady={() => setSceneStatus('ready')}
@@ -300,6 +286,11 @@ export default function App() {
           <span className="brand__sub">{magazine.subtitle}</span>
           {magazine.issue && <span className="brand__issue">{magazine.issue}</span>}
         </header>
+
+        <button type="button" className="replay" onClick={replayIntro} aria-label="Xem lại màn mở đầu nón lá 3D" tabIndex={phase === 'reading' ? 0 : -1}>
+          <Icon name="rotate" size={15} />
+          <span>Xem lại nón 3D</span>
+        </button>
 
         <main ref={stageRef} className={`stage ${zoom > 1 ? 'is-zoomed' : ''}`} aria-label={`Tạp chí ${magazine.title}`}>
           <div className="stage__inner" style={{ paddingTop: layout.padTop, paddingBottom: layout.padBottom }}>
@@ -343,7 +334,7 @@ export default function App() {
         <Lightbox state={lightbox} onChange={setLightbox} onClose={() => setLightbox(null)} />
 
         {phase !== 'reading' && (
-          <LoadingIntro magazine={magazine} progress={progress} leaving={phase === 'leaving'} onSkip={() => book.ready && finishIntro()} />
+          <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase === 'leaving'} leaving={phase === 'leaving'} onOpen={openMagazine} />
         )}
       </div>
     </MagazineContext.Provider>
