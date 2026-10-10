@@ -13,7 +13,7 @@ const SNAP_DIRS = { top: true, left: true, bottom: true, right: true, center: tr
  * - nhấp đúp vào chữ để sửa; thả ảnh từ máy tính hoặc từ cột trái vào trang
  * Trong lúc kéo, Moveable sửa thẳng style (mượt); thả tay mới ghi vào dữ liệu (onCommit) = một bước undo.
  */
-export default function Stage({ page, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles }) {
+export default function Stage({ page, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles, onOpenVideo }) {
   const wrapRef = useRef(null)
   const pageRef = useRef(null)
   const moveableRef = useRef(null)
@@ -90,6 +90,15 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
       } else if (!selectedIds.includes(id)) {
         onSelect([id])
         pendingDrag.current = e.nativeEvent
+        // nhả chuột mà khung kéo chưa kịp nhận → bỏ hẳn; để sót thì lần vẽ lại sau dragStart
+        // bằng sự kiện cũ, Moveable tưởng chuột còn giữ và phần tử dính theo con trỏ
+        const release = () => {
+          if (pendingDrag.current === e.nativeEvent) pendingDrag.current = null
+          window.removeEventListener('pointerup', release, true)
+          window.removeEventListener('pointercancel', release, true)
+        }
+        window.addEventListener('pointerup', release, true)
+        window.addEventListener('pointercancel', release, true)
       }
       return
     }
@@ -124,9 +133,10 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
   }
 
   const onDoubleClick = (e) => {
-    if (readOnly) return
     const node = e.target.closest('.cv-page > .cv-el')
     const el = node && byId.get(node.dataset.id)
+    if (el?.type === 'video' && el.src) return onOpenVideo(el.id) // xem được cả khi trang đang bị khoá
+    if (readOnly) return
     if (el?.type === 'text') onStartEdit(el.id)
   }
 
