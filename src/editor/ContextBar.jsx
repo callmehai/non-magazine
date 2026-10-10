@@ -19,7 +19,7 @@ export default function ContextBar(props) {
       {el.type === 'line' && <LineTools {...props} el={el} />}
       {el.type === 'image' && <ImageTools {...props} el={el} />}
       {el.type === 'video' && <VideoTools {...props} el={el} />}
-      {el.type === 'group' && <span className="ed-ctx__label">Nhóm hình minh hoạ</span>}
+      {el.type === 'group' && <GroupTools {...props} el={el} />}
       <span className="ed-ctx__grow" />
       <CommonTools {...props} el={el} />
     </div>
@@ -215,10 +215,25 @@ function CommonTools({ el, onChange, onLayer, onAlign, onDuplicate, onDelete }) 
   )
 }
 
-function MultiBar({ selection, onAlign, onDuplicate, onDelete }) {
+function GroupTools({ el, onUngroup }) {
+  return (
+    <>
+      <span className="ed-ctx__label">Nhóm</span>
+      <button type="button" className="ed-cbtn" onClick={() => onUngroup(el.id)} title="Tách nhóm để sửa từng phần (⌘⇧G)">
+        Rã nhóm
+      </button>
+      <span className="ed-ctx__hint">Nhấp đúp vào một phần để sửa riêng phần đó</span>
+    </>
+  )
+}
+
+function MultiBar({ selection, onAlign, onDuplicate, onDelete, onGroup }) {
   return (
     <div className="ed-ctx">
       <span className="ed-ctx__label">Đã chọn {selection.length} phần tử</span>
+      <button type="button" className="ed-cbtn" onClick={onGroup} title="Gộp thành một nhóm để di chuyển cùng nhau (⌘G)">
+        Nhóm lại
+      </button>
       <span className="ed-ctx__sep" />
       <span className="ed-ctx__text">Căn hàng</span>
       <AlignButtons onAlign={onAlign} inline />

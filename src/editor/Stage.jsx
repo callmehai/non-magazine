@@ -13,7 +13,7 @@ const SNAP_DIRS = { top: true, left: true, bottom: true, right: true, center: tr
  * - nhấp đúp vào chữ để sửa; thả ảnh từ máy tính hoặc từ cột trái vào trang
  * Trong lúc kéo, Moveable sửa thẳng style (mượt); thả tay mới ghi vào dữ liệu (onCommit) = một bước undo.
  */
-export default function Stage({ page, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles, onOpenVideo }) {
+export default function Stage({ page, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles, onOpenVideo, onEnterGroup }) {
   const wrapRef = useRef(null)
   const pageRef = useRef(null)
   const moveableRef = useRef(null)
@@ -147,6 +147,12 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
     const el = node && byId.get(node.dataset.id)
     if (el?.type === 'video' && el.src) return onOpenVideo(el.id) // xem được cả khi trang đang bị khoá
     if (readOnly) return
+    if (el?.type === 'group') {
+      // như Canva: nhấp đúp vào nhóm → vào trong, chọn đúng phần vừa bấm (ở đây: rã nhóm rồi chọn phần đó)
+      let child = e.target.closest('.cv-el')
+      while (child && child !== node && child.parentElement?.closest('.cv-el') !== node) child = child.parentElement.closest('.cv-el')
+      return onEnterGroup(el.id, child && child !== node ? child.dataset.id : null)
+    }
     if (el?.type === 'text') onStartEdit(el.id)
   }
 

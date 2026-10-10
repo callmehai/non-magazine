@@ -89,3 +89,48 @@ export const ELEMENT_LABELS = {
   video: 'Video',
   group: 'Nhóm',
 }
+
+/**
+ * Rã nhóm: phần tử con (toạ độ trong khung bw×bh của nhóm) → phần tử trên trang, giữ nguyên chỗ đang thấy.
+ * Nhóm được co giãn (w/bw, h/bh) và xoay (rot) → áp vào từng phần tử con; giữ id của con.
+ */
+export function ungroupElement(g) {
+  const sx = g.w / g.bw
+  const sy = g.h / g.bh
+  const s = Math.sqrt(sx * sy) // nét, cỡ chữ, bo góc: co theo tỉ lệ trung bình
+  const rot = g.rot || 0
+  const rad = (rot * Math.PI) / 180
+  const gcx = g.x + g.w / 2
+  const gcy = g.y + g.h / 2
+  const r1 = (n) => Math.round(n * 100) / 100
+  return g.children.map((c) => {
+    const w = c.w * sx
+    const h = c.h * sy
+    let cx = g.x + (c.x + c.w / 2) * sx
+    let cy = g.y + (c.y + c.h / 2) * sy
+    if (rot) {
+      const dx = cx - gcx
+      const dy = cy - gcy
+      cx = gcx + dx * Math.cos(rad) - dy * Math.sin(rad)
+      cy = gcy + dx * Math.sin(rad) + dy * Math.cos(rad)
+    }
+    const out = { ...c, x: r1(cx - w / 2), y: r1(cy - h / 2), w: r1(w), h: r1(h) }
+    if (rot || c.rot) out.rot = Math.round((((c.rot || 0) + rot) % 360 + 360) % 360)
+    if (g.opacity != null && g.opacity < 1) out.opacity = r1((c.opacity ?? 1) * g.opacity)
+    if (s !== 1) {
+      if (c.strokeWidth) out.strokeWidth = r1(c.strokeWidth * s)
+      if (c.size) out.size = r1(c.size * s)
+      if (c.radius) out.radius = r1(c.radius * s)
+    }
+    return out
+  })
+}
+
+/** Nhóm các phần tử (toạ độ trang) thành một nhóm bao quanh chúng */
+export function groupElements(els) {
+  const l = Math.min(...els.map((e) => e.x))
+  const t = Math.min(...els.map((e) => e.y))
+  const w = Math.max(...els.map((e) => e.x + e.w)) - l
+  const h = Math.max(...els.map((e) => e.y + e.h)) - t
+  return { id: uid(), type: 'group', name: 'Nhóm', x: l, y: t, w, h, bw: w, bh: h, children: els.map((e) => ({ ...e, x: e.x - l, y: e.y - t })) }
+}

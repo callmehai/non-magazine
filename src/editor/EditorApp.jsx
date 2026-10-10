@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getStore, between, pageData } from '../canvas/store/index.js'
-import { clonePageData, newElement, withIds, uid, PAGE_W, PAGE_H } from '../canvas/model.js'
+import { clonePageData, newElement, withIds, uid, ungroupElement, groupElements, PAGE_W, PAGE_H } from '../canvas/model.js'
 import { compressImage, fitBox, videoPoster, videoFrame } from '../canvas/media.js'
 import { ensureFont, ensureFontsFor, boldWeight } from '../canvas/fonts.js'
 import { lockHolder, holdersByPage } from '../canvas/locks.js'
@@ -320,6 +320,40 @@ function BookEditor({ store, user, onSignOut }) {
     if (!selectedIds.length || readOnly) return
     commitPage(currentId, (p) => ({ elements: p.elements.filter((e) => !selectedIds.includes(e.id)) }))
     setSelectedIds([])
+  }, [selectedIds, readOnly, currentId, commitPage])
+
+  /** rã nhóm → chọn phần vừa bấm (nhấp đúp) hoặc cả các phần */
+  const ungroup = useCallback(
+    (groupId, focusId) => {
+      if (!currentId || readOnly) return
+      let kids = []
+      commitPage(currentId, (p) => {
+        const i = p.elements.findIndex((e) => e.id === groupId)
+        if (i < 0 || p.elements[i].type !== 'group') return {}
+        kids = ungroupElement(p.elements[i])
+        const els = [...p.elements]
+        els.splice(i, 1, ...kids)
+        return { elements: els }
+      })
+      if (kids.length) setSelectedIds(focusId && kids.some((k) => k.id === focusId) ? [focusId] : kids.map((k) => k.id))
+    },
+    [currentId, readOnly, commitPage]
+  )
+
+  /** nhóm các phần đang chọn; nhóm nằm ở lớp của phần trên cùng */
+  const groupSelected = useCallback(() => {
+    if (selectedIds.length < 2 || readOnly) return
+    let group = null
+    commitPage(currentId, (p) => {
+      const picked = p.elements.filter((e) => selectedIds.includes(e.id))
+      if (picked.length < 2) return {}
+      group = groupElements(picked)
+      const top = p.elements.findLastIndex((e) => selectedIds.includes(e.id))
+      const below = p.elements.slice(0, top).filter((e) => !selectedIds.includes(e.id))
+      const above = p.elements.slice(top + 1)
+      return { elements: [...below, group, ...above] }
+    })
+    if (group) setSelectedIds([group.id])
   }, [selectedIds, readOnly, currentId, commitPage])
 
   const duplicateSelected = useCallback(() => {
@@ -649,6 +683,10 @@ function BookEditor({ store, user, onSignOut }) {
       } else if (mod && k === 'y') {
         e.preventDefault()
         undo(true)
+      } else if (mod && k === 'g') {
+        e.preventDefault()
+        if (!e.shiftKey) groupSelected()
+        else if (single?.type === 'group') ungroup(single.id)
       } else if (mod && k === 'd') {
         e.preventDefault()
         duplicateSelected()
@@ -689,7 +727,7 @@ function BookEditor({ store, user, onSignOut }) {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [undo, duplicateSelected, selection, page, deleteSelected, addElements, updateElements, updateSelected, currentId])
+  }, [undo, duplicateSelected, selection, page, deleteSelected, addElements, updateElements, updateSelected, currentId, groupSelected, ungroup])
 
   if (loadError) return <div className="ed-splash">Không tải được sách: {loadError}</div>
   if (!book) return <div className="ed-splash">Đang tải sách…</div>
@@ -780,6 +818,8 @@ function BookEditor({ store, user, onSignOut }) {
           onPageChange={(patch, key) => !readOnly && commitPage(currentId, patch, key && `page:${key}`)}
           onUpload={uploadForField}
           onPreviewVideo={(id) => setVideoPreview({ id, open: true })}
+          onUngroup={ungroup}
+          onGroup={groupSelected}
           onLayer={layer}
           onAlign={align}
           onDuplicate={duplicateSelected}
@@ -811,6 +851,7 @@ function BookEditor({ store, user, onSignOut }) {
             onDropData={onDropData}
             onDropFiles={onDropFiles}
             onOpenVideo={(id) => setVideoPreview({ id, open: true })}
+            onEnterGroup={ungroup}
           />
         ) : (
           <div className="ed-splash ed-splash--inline">Sách chưa có trang nào — bấm “+” ở dưới để thêm.</div>
