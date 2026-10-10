@@ -25,6 +25,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # editor (#/admin) + sách làm bằng editor: Settings → Secrets and variables → Actions → Variables
+          # (anon key là khoá công khai — an toàn khi nằm trong web; KHÔNG đặt service_role ở đây)
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
       - uses: actions/configure-pages@v5
         with:
           enablement: true
