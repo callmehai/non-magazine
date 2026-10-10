@@ -1,9 +1,10 @@
 /**
  * Sách làm bằng editor trên web (#/admin) — nội dung nằm trong database, không sửa ở đây.
  * File này chỉ chứa phần cài đặt chung: ngôn ngữ giao diện, chiều lật, nhạc nền…
- * Mở sách: thêm ?book=non vào cuối địa chỉ trang web.
+ * Đây là sách mở ra ở địa chỉ gốc của trang web (bản đã xuất bản; thêm ?draft=1 để xem bản nháp).
  */
 const canvasBook = {
+  slug: 'non', // tên sách trong database
   lang: 'ja',
   title: 'ノン',
   subtitle: '頭上の物語',

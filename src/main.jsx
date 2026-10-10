@@ -36,7 +36,7 @@ const params = new URLSearchParams(location.search)
 const bookParam = params.get('book')
 
 // #/admin → editor (đăng nhập, sửa sách) · ?book=pdf → sách từ file PDF
-// ?book=<tên sách> → sách làm bằng editor · mặc định là tạp chí NÓN
+// ?book=tap-chi → tạp chí NÓN cũ · còn lại → sách làm bằng editor (mặc định "non", ?draft=1 xem bản nháp)
 if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#admin)
   setLang('vi')
   document.title = 'Biên tập — ノン'
@@ -47,16 +47,10 @@ if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#
       </StrictMode>
     )
   )
-} else if (bookParam && bookParam !== 'pdf') {
-  setLang(canvasBook.lang)
-  document.title = `${canvasBook.title} — ${canvasBook.subtitle}`
-  root.render(<p className="boot-msg">{t('bootLoading')}</p>)
-  import('./lib/canvasBook.js')
-    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, bookParam, { draft: params.get('draft') === '1' }))
-    .then(render, (err) => {
-      console.error(err)
-      root.render(<p className="boot-msg">{err.message || String(err)}</p>)
-    })
+} else if (bookParam === 'tap-chi') {
+  setLang(magazine.lang)
+  document.title = 'NÓN — Dấu ấn trên đỉnh đầu'
+  render(magazine)
 } else if (bookParam === 'pdf') {
   setLang(pdfBook.lang)
   root.render(<p className="boot-msg">{t('bootLoading')}</p>)
@@ -69,6 +63,13 @@ if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#
       )
     })
 } else {
-  setLang(magazine.lang)
-  render(magazine)
+  setLang(canvasBook.lang)
+  document.title = `${canvasBook.title} — ${canvasBook.subtitle}`
+  root.render(<p className="boot-msg">{t('bootLoading')}</p>)
+  import('./lib/canvasBook.js')
+    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, bookParam || canvasBook.slug, { draft: params.get('draft') === '1' }))
+    .then(render, (err) => {
+      console.error(err)
+      root.render(<p className="boot-msg">{err.message || String(err)}</p>)
+    })
 }

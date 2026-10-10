@@ -594,7 +594,7 @@ function BookEditor({ store, user, onSignOut }) {
       toast.update(tid, {
         type: 'success',
         title: store.kind === 'local' ? 'Đã xuất bản (bản thử trên máy này)' : 'Đã xuất bản lên web',
-        action: { label: 'Xem trang', onClick: () => window.open(`${location.pathname}?book=${book.slug}`, '_blank') },
+        action: { label: 'Xem trang', onClick: () => window.open(location.pathname, '_blank') },
       })
     } catch (e) {
       toast.update(tid, { type: 'error', title: 'Xuất bản không thành công', desc: e.message || String(e), action: { label: 'Thử lại', onClick: () => store.publish(book.id) } })
@@ -665,7 +665,7 @@ function BookEditor({ store, user, onSignOut }) {
 
   const others = presence.filter((p) => p.key !== myKey)
   const hist = histCount[currentId] || { undo: 0, redo: 0 }
-  const previewUrl = `${location.pathname}?book=${book.slug}&draft=1`
+  const previewUrl = `${location.pathname}?draft=1`
 
   return (
     <div className={`ed-app ${tab ? 'has-panel' : ''}`}>
