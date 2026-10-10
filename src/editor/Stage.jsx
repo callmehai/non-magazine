@@ -18,7 +18,8 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
   const pageRef = useRef(null)
   const moveableRef = useRef(null)
   const gesture = useRef(new Map()) // id → { x, y, w, h, rot } trong lúc kéo
-  const pendingDrag = useRef(null)
+  const pendingDrag = useRef(null) // sự kiện mousedown chờ Moveable sẵn sàng để kéo luôn
+  const justSelected = useRef(null) // id vừa chọn ở pointerdown — kéo luôn khi tới mousedown
   const [avail, setAvail] = useState({ w: 800, h: 600 })
   const [targets, setTargets] = useState([])
   const [others, setOthers] = useState([])
@@ -78,8 +79,26 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
     return { x: (cx - r.left) / unit, y: (cy - r.top) / unit }
   }
 
+  // Nhấn giữ vào phần tử chưa chọn → chọn rồi kéo luôn (như Canva).
+  // Phải đưa Moveable sự kiện *mousedown*, không phải pointerdown: Moveable (gesto) gọi preventDefault()
+  // lên sự kiện bắt đầu, mà chặn pointerdown thì trình duyệt bỏ luôn mousemove/mouseup của lần nhấn đó
+  // → Moveable không biết đã nhả chuột, phần tử dính theo con trỏ cho tới cú bấm sau.
+  const onMouseDown = (e) => {
+    if (!justSelected.current || e.button !== 0) return
+    justSelected.current = null
+    const ev = e.nativeEvent
+    if (targets.length && moveableRef.current) return moveableRef.current.dragStart(ev)
+    pendingDrag.current = ev // Moveable chưa gắn xong → để effect bên trên gọi
+    const release = () => {
+      if (pendingDrag.current === ev) pendingDrag.current = null // nhả trước khi kịp kéo → bỏ
+      window.removeEventListener('mouseup', release, true)
+    }
+    window.addEventListener('mouseup', release, true)
+  }
+
   // ── bấm / quét chọn
   const onPointerDown = (e) => {
+    justSelected.current = null
     if (readOnly || e.button !== 0) return
     if (e.target.closest('.moveable-control-box, .ed-editing')) return
     const node = e.target.closest('.cv-page > .cv-el')
@@ -89,16 +108,7 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
         onSelect(selectedIds.includes(id) ? selectedIds.filter((x) => x !== id) : [...selectedIds, id])
       } else if (!selectedIds.includes(id)) {
         onSelect([id])
-        pendingDrag.current = e.nativeEvent
-        // nhả chuột mà khung kéo chưa kịp nhận → bỏ hẳn; để sót thì lần vẽ lại sau dragStart
-        // bằng sự kiện cũ, Moveable tưởng chuột còn giữ và phần tử dính theo con trỏ
-        const release = () => {
-          if (pendingDrag.current === e.nativeEvent) pendingDrag.current = null
-          window.removeEventListener('pointerup', release, true)
-          window.removeEventListener('pointercancel', release, true)
-        }
-        window.addEventListener('pointerup', release, true)
-        window.addEventListener('pointercancel', release, true)
+        justSelected.current = id // kéo bắt đầu ở onMouseDown, xem dưới
       }
       return
     }
@@ -156,21 +166,23 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
   const applyDrag = (ev) => {
     const g = gesture.current.get(ev.target.dataset.id)
     if (!g) return
-    ev.target.style.left = `${ev.left}px`
-    ev.target.style.top = `${ev.top}px`
     g.x = ev.left / unit
     g.y = ev.top / unit
+    // ghi bằng em (1em = 1pt của trang) như CanvasPage: chiều nào không đổi thì React không ghi lại,
+    // để px ở đó thì đổi zoom xong phần tử lệch chỗ
+    ev.target.style.left = `${g.x}em`
+    ev.target.style.top = `${g.y}em`
   }
   const applyResize = (ev) => {
     const id = ev.target.dataset.id
     const g = gesture.current.get(id)
     if (!g) return
     const s = ev.target.style
-    s.width = `${ev.width}px`
-    s.height = `${ev.height}px`
-    s.left = `${ev.drag.left}px`
-    s.top = `${ev.drag.top}px`
     Object.assign(g, { w: ev.width / unit, h: ev.height / unit, x: ev.drag.left / unit, y: ev.drag.top / unit })
+    s.width = `${g.w}em`
+    s.height = `${g.h}em`
+    s.left = `${g.x}em`
+    s.top = `${g.y}em`
     const el = byId.get(id)
     if (el?.type === 'group') {
       const inner = ev.target.querySelector(':scope > .cv-group')
@@ -204,7 +216,7 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
   }
 
   return (
-    <div className="ed-stage" ref={wrapRef} onPointerDown={onPointerDown} onDragOver={onDragOver} onDragLeave={() => setDropOver(false)} onDrop={onDrop}>
+    <div className="ed-stage" ref={wrapRef} onPointerDown={onPointerDown} onMouseDown={onMouseDown} onDragOver={onDragOver} onDragLeave={() => setDropOver(false)} onDrop={onDrop}>
       <div className="ed-stage__scroll">
         <div
           ref={pageRef}
