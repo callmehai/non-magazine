@@ -12,8 +12,9 @@
  *   addPage(bookId, data, position)   → Page
  *   deletePage(id) ; movePage(id, position)
  *   listVersions(pageId)              → [{ id, data, at, by }]   (bản cũ của trang, mới nhất trước — tự ghi ~5 phút/bản khi lưu)
- *   uploadFile(file, kind)            → URL dùng được trong <img>/<video>
- *   listUploads()                     → [{ url, type: 'image'|'video', name }]  (mới nhất trước, dùng chung cả nhóm)
+ *   uploadFile(file, kind, id?)       → URL dùng được trong <img>/<video>   kind: 'image' | 'video' | 'poster'
+ *                                       (ảnh bìa video: kind 'poster' + cùng id với video → listUploads gắn vào video đó)
+ *   listUploads()                     → [{ url, type: 'image'|'video', name, poster? }]  (mới nhất trước, dùng chung cả nhóm)
  *   subscribe(bookId, { onPage, onDelete })          → huỷ (sync)   — thay đổi từ người khác
  *   joinPresence(bookId, me, onChange)              → { update(state), leave() }  (sync)
  *   publish(bookId)                   → { publishedAt }

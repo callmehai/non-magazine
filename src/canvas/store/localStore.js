@@ -117,7 +117,7 @@ export function createLocalStore() {
       return readVersions()[pageId] || []
     },
 
-    async uploadFile(file, kind) {
+    async uploadFile(file, kind, id = uid()) {
       // không có máy chủ: nhúng thẳng vào dữ liệu (data URL). Ảnh đã được nén trước khi gọi.
       const url = await new Promise((resolve, reject) => {
         const r = new FileReader()
@@ -127,7 +127,10 @@ export function createLocalStore() {
       })
       try {
         const list = JSON.parse(localStorage.getItem(UPLOADS_KEY) || '[]')
-        list.unshift({ url, type: kind, name: file.name })
+        if (kind === 'poster') {
+          const video = list.find((x) => x.id === id)
+          if (video) video.poster = url
+        } else list.unshift({ id, url, type: kind, name: file.name })
         localStorage.setItem(UPLOADS_KEY, JSON.stringify(list.slice(0, 40)))
       } catch {
         /* đầy bộ nhớ trình duyệt: vẫn dùng được ảnh, chỉ không lưu vào thư viện */

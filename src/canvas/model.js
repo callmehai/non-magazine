@@ -74,7 +74,8 @@ export function newElement(type, opts = {}) {
     case 'image':
       return { ...base, w: opts.w || 300, h: opts.h || 200, x: PAGE_W / 2 - (opts.w || 300) / 2, y: PAGE_H / 2 - (opts.h || 200) / 2, type: 'image', src: opts.src || '', fit: 'cover', name: 'Ảnh' }
     case 'video':
-      return { ...base, x: PAGE_W * 0.1, y: PAGE_H * 0.3, w: PAGE_W * 0.8, h: PAGE_H * 0.45, type: 'video', src: opts.src || '', name: 'Video' }
+      if (opts.w && opts.h) return { ...base, w: opts.w, h: opts.h, x: PAGE_W / 2 - opts.w / 2, y: PAGE_H / 2 - opts.h / 2, type: 'video', src: opts.src || '', poster: opts.poster || '', name: 'Video' }
+      return { ...base, x: PAGE_W * 0.1, y: PAGE_H * 0.3, w: PAGE_W * 0.8, h: PAGE_H * 0.45, type: 'video', src: opts.src || '', poster: opts.poster || '', name: 'Video' }
     default:
       throw new Error('unknown element ' + type)
   }

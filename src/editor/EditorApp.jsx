@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getStore, between, pageData } from '../canvas/store/index.js'
-import { clonePageData, newElement, withIds, PAGE_W, PAGE_H } from '../canvas/model.js'
-import { compressImage, fitBox } from '../canvas/media.js'
+import { clonePageData, newElement, withIds, uid, PAGE_W, PAGE_H } from '../canvas/model.js'
+import { compressImage, fitBox, videoPoster, videoFrame } from '../canvas/media.js'
 import { ensureFont, ensureFontsFor, boldWeight } from '../canvas/fonts.js'
 import { lockHolder, holdersByPage } from '../canvas/locks.js'
 import Stage from './Stage.jsx'
@@ -10,6 +10,7 @@ import SidePanel from './SidePanel.jsx'
 import PageStrip, { colorOf, initials } from './PageStrip.jsx'
 import { colorsOfPage } from './ui.jsx'
 import HistoryPanel from './HistoryPanel.jsx'
+import VideoPreview from './VideoPreview.jsx'
 import { useConfirm, useToasts, GlobeIcon } from './Overlays.jsx'
 import { TEMPLATE_KINDS } from '../canvas/model.js'
 import '../canvas/canvas.css'
@@ -114,6 +115,7 @@ function BookEditor({ store, user, onSignOut }) {
   const checkpoints = useRef(new Map()) // pageId → [{ id, data, at, session }] — mới nhất trước
   const [historyPanel, setHistoryPanel] = useState(null) // null | { open }
   const [historyTick, setHistoryTick] = useState(0)
+  const [videoPreview, setVideoPreview] = useState(null) // null | { id, open }
   const saving = useRef(new Map()) // pageId → { timer, inFlight, dirty }
   const presenceRef = useRef(null)
   const doSaveRef = useRef(null)
@@ -414,8 +416,18 @@ function BookEditor({ store, user, onSignOut }) {
       if (!isVideo && !file.type.startsWith('image/')) throw new Error(`${file.name}: chỉ nhận ảnh hoặc video`)
       if (isVideo && file.size > 50 * 1024 * 1024) throw new Error(`${file.name}: video quá 50MB`)
       const prepared = isVideo ? { file } : await compressImage(file, store.kind === 'local' ? 1600 : 2400)
-      const url = await store.uploadFile(prepared.file, isVideo ? 'video' : 'image')
+      const id = uid()
+      const url = await store.uploadFile(prepared.file, isVideo ? 'video' : 'image', id)
       const item = { url, type: isVideo ? 'video' : 'image', name: file.name, width: prepared.width, height: prepared.height }
+      if (isVideo) {
+        // ảnh bìa tự động: chụp một khung hình đầu video (lỗi thì bỏ qua — vẫn dùng được video)
+        try {
+          const shot = await videoPoster(file)
+          Object.assign(item, { width: shot.width, height: shot.height, poster: await store.uploadFile(shot.file, 'poster', id) })
+        } catch (e) {
+          console.warn('Không tạo được ảnh bìa video', e)
+        }
+      }
       setUploads((u) => [item, ...u.filter((x) => x.url !== url)])
       return item
     },
@@ -444,20 +456,39 @@ function BookEditor({ store, user, onSignOut }) {
     [uploadOne, toast]
   )
 
-  /** dùng cho "Thay ảnh", ảnh nền… — trả về URL */
+  /** dùng cho "Thay ảnh", ảnh nền… — trả về URL (full: trả cả mục, vd. video kèm ảnh bìa) */
   const uploadForField = useCallback(
-    async (file) => {
+    async (file, _kind, full = false) => {
       const [item] = await uploadFiles([file])
       if (!item) throw new Error('upload failed')
-      return item.url
+      return full ? item : item.url
     },
     [uploadFiles]
   )
 
+  /** ảnh bìa video = khung hình đang dừng trong hộp "Xem video" */
+  const setPosterFromFrame = useCallback(
+    async (videoEl, elId) => {
+      const tid = toast.show({ type: 'loading', title: 'Đang lưu ảnh bìa' })
+      try {
+        const shot = await videoFrame(videoEl)
+        const poster = await store.uploadFile(shot.file, 'poster')
+        updateElements({ [elId]: { poster } })
+        toast.update(tid, { type: 'success', title: 'Đã đặt ảnh bìa video' })
+      } catch (e) {
+        toast.update(tid, { type: 'error', title: 'Không đặt được ảnh bìa', desc: e.message || String(e) })
+      }
+    },
+    [store, toast, updateElements]
+  )
+  const closeVideo = useCallback(() => setVideoPreview((s) => s && { ...s, open: false }), [])
+  const goneVideo = useCallback(() => setVideoPreview(null), [])
+  const previewEl = videoPreview && page?.elements.find((e) => e.id === videoPreview.id)
+
   /** phần tử ảnh/video từ một mục trong thư viện; `at` = điểm thả (pt) */
   const elementFromAsset = useCallback(async (asset, at) => {
     let el
-    if (asset.type === 'video') el = newElement('video', { src: asset.url })
+    if (asset.type === 'video') el = newElement('video', { src: asset.url, poster: asset.poster, ...(asset.width ? fitBox(asset.width, asset.height, 400) : {}) })
     else {
       const size = asset.width ? { width: asset.width, height: asset.height } : await naturalSize(asset.url)
       el = newElement('image', { src: asset.url, ...fitBox(size.width, size.height, 320) })
@@ -748,6 +779,7 @@ function BookEditor({ store, user, onSignOut }) {
           onChange={updateSelected}
           onPageChange={(patch, key) => !readOnly && commitPage(currentId, patch, key && `page:${key}`)}
           onUpload={uploadForField}
+          onPreviewVideo={(id) => setVideoPreview({ id, open: true })}
           onLayer={layer}
           onAlign={align}
           onDuplicate={duplicateSelected}
@@ -778,6 +810,7 @@ function BookEditor({ store, user, onSignOut }) {
             }}
             onDropData={onDropData}
             onDropFiles={onDropFiles}
+            onOpenVideo={(id) => setVideoPreview({ id, open: true })}
           />
         ) : (
           <div className="ed-splash ed-splash--inline">Sách chưa có trang nào — bấm “+” ở dưới để thêm.</div>
@@ -819,6 +852,16 @@ function BookEditor({ store, user, onSignOut }) {
           onRestore={restoreVersion}
           onClose={closeHistory}
           onGone={goneHistory}
+        />
+      )}
+      {previewEl?.src && (
+        <VideoPreview
+          open={videoPreview.open}
+          el={previewEl}
+          readOnly={readOnly}
+          onSetPoster={(v) => setPosterFromFrame(v, previewEl.id)}
+          onClose={closeVideo}
+          onGone={goneVideo}
         />
       )}
       {toaster}

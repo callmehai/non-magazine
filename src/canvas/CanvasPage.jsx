@@ -139,11 +139,19 @@ function LineBody({ el }) {
   )
 }
 
+/** chưa có ảnh bìa → để trình duyệt hiện một khung hình đầu video (#t=…) thay cho khung đen */
+const firstFrame = (src) => (src.startsWith('data:') ? src : `${src}#t=0.5`)
+
 function VideoBody({ el, mode, visible }) {
   if (mode !== 'read' || !el.src) {
+    // editor: chỉ hiển thị (bấm/kéo để chọn); xem video bằng nhấp đúp hoặc nút "Xem video"
     return (
       <div className="cv-video-ph">
-        {el.poster && <img src={asset(el.poster)} alt="" draggable="false" />}
+        {el.poster ? (
+          <img src={asset(el.poster)} alt="" draggable="false" />
+        ) : (
+          el.src && <video src={firstFrame(asset(el.src))} preload="metadata" muted playsInline tabIndex={-1} />
+        )}
         <span className="cv-video-ph__icon" aria-hidden="true" />
       </div>
     )
@@ -151,9 +159,9 @@ function VideoBody({ el, mode, visible }) {
   return (
     <video
       className="cv-video"
-      src={asset(el.src)}
+      src={el.poster ? asset(el.src) : firstFrame(asset(el.src))}
       poster={el.poster ? asset(el.poster) : undefined}
-      preload="none"
+      preload={el.poster ? 'none' : 'metadata'}
       playsInline
       controls
       ref={(v) => {

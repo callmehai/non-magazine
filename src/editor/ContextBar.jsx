@@ -142,16 +142,28 @@ function ImageTools({ el, onChange, onUpload }) {
   )
 }
 
-function VideoTools({ el, onChange, onUpload }) {
+function VideoTools({ el, onChange, onUpload, onPreviewVideo }) {
   return (
     <>
-      <UploadButton accept="video/mp4,video/webm" className="ed-cbtn" onFiles={async ([f]) => onChange({ src: await onUpload(f, 'video') })}>
+      {el.src && (
+        <button type="button" className="ed-cbtn" onClick={() => onPreviewVideo(el.id)} title="Xem video (hoặc nhấp đúp vào video)">
+          ▶ Xem video
+        </button>
+      )}
+      <UploadButton
+        accept="video/mp4,video/webm"
+        className="ed-cbtn"
+        onFiles={async ([f]) => {
+          const item = await onUpload(f, 'video', true)
+          onChange({ src: item.url, poster: item.poster || '' })
+        }}
+      >
         {el.src ? 'Thay video' : 'Tải video lên'}
       </UploadButton>
       <UploadButton accept="image/*" className="ed-cbtn" onFiles={async ([f]) => onChange({ poster: await onUpload(f, 'image') })}>
-        {el.poster ? 'Đổi ảnh bìa' : 'Ảnh bìa'}
+        {el.poster ? 'Tải ảnh bìa khác' : 'Tải ảnh bìa'}
       </UploadButton>
-      <span className="ed-ctx__hint">Trên web người đọc bấm vào khung để xem</span>
+      <span className="ed-ctx__hint">Ảnh bìa: mở “Xem video”, dừng ở cảnh đẹp rồi chọn làm ảnh bìa</span>
     </>
   )
 }

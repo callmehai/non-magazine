@@ -118,9 +118,9 @@ export function createSupabaseStore() {
       return data.map((r) => ({ id: r.id, data: r.data, at: r.saved_at, by: names.get(r.saved_by) || null }))
     },
 
-    async uploadFile(file, kind) {
+    async uploadFile(file, kind, id = uid()) {
       const ext = (file.name.split('.').pop() || (kind === 'video' ? 'mp4' : 'webp')).toLowerCase()
-      const path = `${kind}/${uid()}.${ext}`
+      const path = `${kind}/${id}.${ext}`
       const { error } = await sb.storage.from('book-assets').upload(path, file, { contentType: file.type, cacheControl: '31536000' })
       if (error) throw error
       return sb.storage.from('book-assets').getPublicUrl(path).data.publicUrl
@@ -129,12 +129,17 @@ export function createSupabaseStore() {
     async listUploads() {
       const bucket = sb.storage.from('book-assets')
       const out = []
+      // ảnh bìa video: poster/<id>.webp đi cùng video/<id>.mp4
+      const posters = new Map()
+      const { data: ps } = await bucket.list('poster', { limit: 500 })
+      for (const f of ps || []) if (f.id) posters.set(f.name.replace(/\.[^.]+$/, ''), bucket.getPublicUrl(`poster/${f.name}`).data.publicUrl)
       for (const type of ['image', 'video']) {
         const { data, error } = await bucket.list(type, { limit: 200, sortBy: { column: 'created_at', order: 'desc' } })
         if (error) throw error
         for (const f of data) {
           if (!f.id) continue // thư mục con
-          out.push({ url: bucket.getPublicUrl(`${type}/${f.name}`).data.publicUrl, type, name: f.name, createdAt: f.created_at })
+          const poster = type === 'video' ? posters.get(f.name.replace(/\.[^.]+$/, '')) : undefined
+          out.push({ url: bucket.getPublicUrl(`${type}/${f.name}`).data.publicUrl, type, name: f.name, createdAt: f.created_at, poster })
         }
       }
       return out.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))

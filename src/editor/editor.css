@@ -1738,3 +1738,42 @@
 .ed-top .ed-btn--ghost:disabled:hover {
   background: none;
 }
+
+/* ════ Xem video trong editor ════ */
+.ov-dialog.vp-dialog {
+  max-width: min(60rem, 100%);
+}
+
+.vp-video {
+  display: block;
+  width: 100%;
+  max-height: 68vh;
+  margin-top: 16px;
+  border-radius: 8px;
+  background: #000;
+}
+
+.vp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 16px;
+}
+
+.vp-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ov-muted);
+}
+
+.ov-dialog__actions.vp-actions {
+  margin-top: 0;
+}
+
+.ov-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

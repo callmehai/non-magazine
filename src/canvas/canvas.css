@@ -88,22 +88,35 @@
   background: #24180f;
 }
 
-.cv-video-ph img {
+.cv-video-ph img,
+.cv-video-ph video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.6;
+  pointer-events: none;
 }
 
+/* nút ▶ trên nền tròn tối: nổi rõ trên mọi ảnh bìa */
 .cv-video-ph__icon {
   position: relative;
-  width: 0;
-  height: 0;
+  width: 3.4em;
+  height: 3.4em;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.5);
+  /* cỡ chữ kế thừa từ khung (14pt) → nút ~48pt */
+}
+
+.cv-video-ph__icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
   border-style: solid;
-  border-width: 0.9em 0 0.9em 1.5em;
-  border-color: transparent transparent transparent #d9bd84;
+  border-width: 0.6em 0 0.6em 1em; /* tam giác ▶ */
+  border-color: transparent transparent transparent #fff;
+  translate: -50% -50%;
 }
 
 .cv-video {
