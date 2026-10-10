@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import Icon from '../common/Icon.jsx'
+import { t } from '../../lib/i18n.js'
 
 /**
  * Màn mở đầu: chữ "NÓN" trên cảnh 3D chiếc nón tự đan.
@@ -29,11 +30,11 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
         {ready ? (
           <>
             <button ref={btnRef} type="button" className="intro__open" onClick={onOpen} disabled={leaving}>
-              <span>Mở tạp chí</span>
+              <span>{t('openBook')}</span>
               <Icon name="next" size={18} />
             </button>
             <p className="intro__drag" aria-hidden="true">
-              <Icon name="rotate" size={14} /> Kéo để xoay chiếc nón — lật lên để xem mặt trong
+              <Icon name="rotate" size={14} /> {t('introDrag')}
             </p>
           </>
         ) : (
@@ -41,7 +42,7 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
             <span className="intro__bar" aria-hidden="true">
               <span style={{ transform: `scaleX(${progress})` }} />
             </span>
-            <span>Đang đan chiếc nón...</span>
+            <span>{t('introLoading')}</span>
           </div>
         )}
       </div>

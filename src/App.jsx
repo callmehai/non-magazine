@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import magazine from './content/magazine.js'
 import FlipBook, { visiblePages } from './components/FlipBook/FlipBook.jsx'
 import Controls from './components/Controls/Controls.jsx'
 import { ZOOM_LEVELS } from './components/Controls/ZoomControls.jsx'
@@ -20,11 +19,12 @@ import { useIdle } from './hooks/useIdle.js'
 import { MagazineContext } from './lib/context.js'
 import { playFlipSound } from './lib/sound.js'
 import { asset, hasAsset } from './lib/assets.js'
+import { t } from './lib/i18n.js'
 
 const INTRO_MS = 3200
 const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
 
-export default function App() {
+export default function App({ magazine }) {
   const { settings, pages } = magazine
   const count = pages.length
   const reducedMotion = useReducedMotion()
@@ -67,7 +67,7 @@ export default function App() {
 
   // ───────────── sách
   const book = useFlipBook({ pages, settings, layout, zoomed: zoom > 1, onFlipStart })
-  const { currentPage } = book
+  const { currentPage, rtl } = book
   const visible = useMemo(() => visiblePages(currentPage, layout.orientation, count), [currentPage, layout.orientation, count])
   const lastVisible = visible[visible.length - 1]
 
@@ -187,6 +187,7 @@ export default function App() {
     {
       next: book.next,
       prev: book.prev,
+      rtl,
       first: () => book.flipTo(0),
       last: () => book.flipTo(count - 1),
       fullscreen: fullscreen.toggle,
@@ -259,6 +260,9 @@ export default function App() {
     [reducedMotion, pauseMusic]
   )
 
+  const back = { onClick: book.prev, disabled: currentPage === 0, 'aria-label': t('prevPage') }
+  const forward = { onClick: book.next, disabled: lastVisible >= count - 1, 'aria-label': t('nextPage') }
+
   const pageLabel = visible.length === 2 ? `${visible[0] + 1}–${visible[1] + 1}` : `${visible[0] + 1}`
   const entered = phase !== 'intro'
 
@@ -287,21 +291,22 @@ export default function App() {
           {magazine.issue && <span className="brand__issue">{magazine.issue}</span>}
         </header>
 
-        <button type="button" className="replay" onClick={replayIntro} aria-label="Xem lại màn mở đầu nón lá 3D" tabIndex={phase === 'reading' ? 0 : -1}>
+        <button type="button" className="replay" onClick={replayIntro} aria-label={t('replayAria')} tabIndex={phase === 'reading' ? 0 : -1}>
           <Icon name="rotate" size={15} />
-          <span>Xem lại nón 3D</span>
+          <span>{t('replay')}</span>
         </button>
 
-        <main ref={stageRef} className={`stage ${zoom > 1 ? 'is-zoomed' : ''}`} aria-label={`Tạp chí ${magazine.title}`}>
+        <main ref={stageRef} className={`stage ${zoom > 1 ? 'is-zoomed' : ''}`} aria-label={t('bookAria', { title: magazine.title })}>
           <div className="stage__inner" style={{ paddingTop: layout.padTop, paddingBottom: layout.padBottom }}>
             <FlipBook book={book} magazine={magazine} layout={layout} entered={entered} zoomed={zoom > 1} />
           </div>
         </main>
 
-        <button type="button" className="side-arrow is-prev" onClick={book.prev} disabled={currentPage === 0} aria-label="Trang trước">
+        {/* mũi tên trái/phải theo vị trí trên màn hình; sách kiểu Nhật thì bên trái là trang sau */}
+        <button type="button" className="side-arrow is-prev" {...(rtl ? forward : back)}>
           <Icon name="prev" size={26} strokeWidth={1.2} />
         </button>
-        <button type="button" className="side-arrow is-next" onClick={book.next} disabled={lastVisible >= count - 1} aria-label="Trang sau">
+        <button type="button" className="side-arrow is-next" {...(rtl ? back : forward)}>
           <Icon name="next" size={26} strokeWidth={1.2} />
         </button>
 
@@ -329,11 +334,12 @@ export default function App() {
             panelOpen={panelOpen}
             onTogglePanel={() => setPanelOpen((o) => !o)}
             hidden={uiHidden}
+            rtl={rtl}
           />
           <AudioPlayer audio={music} soundOn={soundOn} needsGesture={needsGesture && soundOn} onEnable={enableSound} hidden={phase !== 'reading'} />
         </div>
 
-        <ThumbnailPanel open={panelOpen} magazine={magazine} visible={visible} onSelect={selectPage} onClose={() => setPanelOpen(false)} />
+        <ThumbnailPanel open={panelOpen} magazine={magazine} visible={visible} onSelect={selectPage} onClose={() => setPanelOpen(false)} rtl={rtl} />
         <Lightbox state={lightbox} onChange={setLightbox} onClose={() => setLightbox(null)} />
 
         {phase !== 'reading' && (

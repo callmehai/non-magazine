@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { t } from '../lib/i18n.js'
 
 const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement
 export const fullscreenSupported = () =>
@@ -29,7 +30,7 @@ export function useFullscreen(targetRef) {
     const el = targetRef?.current || document.documentElement
     const req = el.requestFullscreen || el.webkitRequestFullscreen
     // trình duyệt có thể từ chối (chính sách, chế độ kiểm thử tự động…) → báo cho người xem biết
-    return req?.call(el)?.catch?.(() => setError('Trình duyệt đang chặn chế độ toàn màn hình'))
+    return req?.call(el)?.catch?.(() => setError(t('fullscreenBlocked')))
   }, [targetRef])
 
   const exit = useCallback(() => {

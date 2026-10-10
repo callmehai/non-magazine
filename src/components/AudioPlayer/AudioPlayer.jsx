@@ -1,4 +1,5 @@
 import Icon from '../common/Icon.jsx'
+import { t } from '../../lib/i18n.js'
 
 function Bars({ playing }) {
   return (
@@ -18,7 +19,7 @@ function Volume({ audio, label }) {
         type="button"
         className="ctrl ctrl--sm"
         onClick={() => audio.setMuted(!audio.muted)}
-        aria-label={audio.muted ? `Bỏ tắt tiếng ${label}` : `Tắt tiếng ${label}`}
+        aria-label={audio.muted ? t('unmute', { label }) : t('mute', { label })}
         aria-pressed={audio.muted}
       >
         <Icon name={audio.muted || audio.volume === 0 ? 'soundOff' : 'soundOn'} size={16} />
@@ -33,7 +34,7 @@ function Volume({ audio, label }) {
           audio.setVolume(Number(e.target.value))
           if (audio.muted) audio.setMuted(false)
         }}
-        aria-label={`Âm lượng ${label}`}
+        aria-label={t('volume', { label })}
         style={{ '--v': audio.muted ? 0 : audio.volume }}
       />
     </span>
@@ -48,11 +49,11 @@ export default function AudioPlayer({ audio, soundOn, needsGesture, onEnable, hi
   if (!audio.available) return null
   const playing = audio.playing && soundOn
   return (
-    <div className={`music ${hidden ? 'is-hidden' : ''} ${playing ? 'is-playing' : ''}`} role="group" aria-label="Nhạc nền">
+    <div className={`music ${hidden ? 'is-hidden' : ''} ${playing ? 'is-playing' : ''}`} role="group" aria-label={t('music')}>
       {needsGesture ? (
         <button type="button" className="music__invite" onClick={onEnable}>
           <Icon name="music" size={16} />
-          Nhấn để bật âm thanh
+          {t('tapForSound')}
         </button>
       ) : (
         <>
@@ -60,7 +61,7 @@ export default function AudioPlayer({ audio, soundOn, needsGesture, onEnable, hi
             type="button"
             className="ctrl music__toggle"
             onClick={() => (playing ? audio.pause() : onEnable())}
-            aria-label={playing ? 'Tạm dừng nhạc nền' : 'Phát nhạc nền'}
+            aria-label={playing ? t('pauseMusic') : t('playMusic')}
             aria-pressed={playing}
           >
             <Icon name={playing ? 'pause' : 'play'} size={16} />
@@ -69,7 +70,7 @@ export default function AudioPlayer({ audio, soundOn, needsGesture, onEnable, hi
             <Bars playing={playing} />
             <span className="music__title">{audio.title}</span>
           </span>
-          <Volume audio={audio} label="nhạc nền" />
+          <Volume audio={audio} label={t('musicLower')} />
         </>
       )}
     </div>
@@ -88,7 +89,7 @@ export function InlineAudioPlayer({ audio, title, exists }) {
     return (
       <div className="inline-audio is-empty">
         <Icon name="music" size={18} />
-        <span>Âm thanh đang được cập nhật</span>
+        <span>{t('audioPending')}</span>
       </div>
     )
   }
@@ -96,7 +97,7 @@ export function InlineAudioPlayer({ audio, title, exists }) {
   const pct = duration ? (current / duration) * 100 : 0
   return (
     <div className={`inline-audio ${audio.playing ? 'is-playing' : ''}`}>
-      <button type="button" className="inline-audio__play" onClick={audio.toggle} aria-label={audio.playing ? `Tạm dừng ${title}` : `Phát ${title}`}>
+      <button type="button" className="inline-audio__play" onClick={audio.toggle} aria-label={audio.playing ? t('pause', { title }) : t('play', { title })}>
         <Icon name={audio.playing ? 'pause' : 'play'} size={18} />
       </button>
       <div className="inline-audio__main">
@@ -111,7 +112,7 @@ export function InlineAudioPlayer({ audio, title, exists }) {
           step="0.1"
           value={current}
           onChange={(e) => audio.seek(Number(e.target.value))}
-          aria-label="Tua"
+          aria-label={t('seek')}
           style={{ '--v': pct / 100 }}
         />
         <span className="inline-audio__time">

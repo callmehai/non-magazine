@@ -1,6 +1,7 @@
 import Icon from '../common/Icon.jsx'
 import ZoomControls from './ZoomControls.jsx'
 import FullscreenButton from './FullscreenButton.jsx'
+import { t } from '../../lib/i18n.js'
 
 /** Thanh điều khiển tối giản ở cuối màn hình. */
 export default function Controls({
@@ -21,22 +22,27 @@ export default function Controls({
   panelOpen,
   onTogglePanel,
   hidden,
+  rtl,
 }) {
+  // sách lật kiểu Nhật: nút bên trái là "trang sau"
+  const back = { onClick: onPrev, disabled: !canPrev, label: t('prevPage') }
+  const fwd = { onClick: onNext, disabled: !canNext, label: t('nextPage') }
+  const [left, right] = rtl ? [fwd, back] : [back, fwd]
   return (
-    <nav className={`controls ${hidden ? 'is-hidden' : ''}`} aria-label="Điều khiển tạp chí">
-      <div className="controls__progress" aria-hidden="true">
+    <nav className={`controls ${hidden ? 'is-hidden' : ''}`} aria-label={t('controls')}>
+      <div className={`controls__progress ${rtl ? 'is-rtl' : ''}`} aria-hidden="true">
         <span style={{ transform: `scaleX(${progress})` }} />
       </div>
       <div className="controls__row">
-        <button type="button" className="ctrl" onClick={onPrev} disabled={!canPrev} aria-label="Trang trước" title="Trang trước (←)">
+        <button type="button" className="ctrl" onClick={left.onClick} disabled={left.disabled} aria-label={left.label} title={`${left.label} (←)`}>
           <Icon name="prev" />
         </button>
         <span className="controls__page" aria-live="polite" aria-atomic="true">
-          <span className="sr-only">Trang </span>
+          <span className="sr-only">{t('page')}</span>
           {pageLabel}
           <span className="controls__total"> / {total}</span>
         </span>
-        <button type="button" className="ctrl" onClick={onNext} disabled={!canNext} aria-label="Trang sau" title="Trang sau (→)">
+        <button type="button" className="ctrl" onClick={right.onClick} disabled={right.disabled} aria-label={right.label} title={`${right.label} (→)`}>
           <Icon name="next" />
         </button>
 
@@ -48,10 +54,10 @@ export default function Controls({
           type="button"
           className={`ctrl ${panelOpen ? 'is-on' : ''}`}
           onClick={onTogglePanel}
-          aria-label="Mục lục và hình thu nhỏ"
+          aria-label={t('tocAndThumbs')}
           aria-expanded={panelOpen}
           aria-controls="thumb-panel"
-          title="Mục lục (T)"
+          title={`${t('toc')} (T)`}
         >
           <Icon name="grid" />
         </button>
@@ -59,9 +65,9 @@ export default function Controls({
           type="button"
           className="ctrl"
           onClick={onToggleSound}
-          aria-label={soundOn ? 'Tắt âm thanh' : 'Bật âm thanh'}
+          aria-label={soundOn ? t('soundOff') : t('soundOn')}
           aria-pressed={soundOn}
-          title={soundOn ? 'Tắt âm thanh' : 'Bật âm thanh'}
+          title={soundOn ? t('soundOff') : t('soundOn')}
         >
           <Icon name={soundOn ? 'soundOn' : 'soundOff'} />
         </button>

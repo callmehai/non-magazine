@@ -1,0 +1,149 @@
+/* ── trang "canvas" (dữ liệu từ editor) ─────────────────────── */
+.cv-page {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* 1em = 1pt của trang A4 (595.28pt), theo bề rộng thật trên màn hình */
+  font-size: calc(var(--pw, 480) * 1px / 595.28);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cv-page__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv-el {
+  position: absolute;
+  transform-origin: center;
+}
+
+.cv-group {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.cv-text {
+  width: 100%;
+  height: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-break: strict; /* 禁則: không để dấu câu đứng đầu dòng */
+}
+
+.cv-text p {
+  margin: 0 0 var(--para-gap, 0);
+}
+
+.cv-text p:last-child {
+  margin: 0;
+}
+
+.cv-text.is-vertical {
+  text-orientation: mixed;
+}
+
+.cv-text.is-vertical p {
+  margin: 0 0 0 var(--para-gap, 0);
+}
+
+.cv-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.cv-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.cv-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cv-placeholder,
+.cv-video-ph {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: #e2d3b7;
+  color: #8d7a64;
+  font-size: 14em;
+}
+
+.cv-video-ph {
+  position: relative;
+  background: #24180f;
+}
+
+.cv-video-ph img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.cv-video-ph__icon {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.9em 0 0.9em 1.5em;
+  border-color: transparent transparent transparent #d9bd84;
+}
+
+.cv-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* số trang trên trang canvas (flipbook) */
+.cv-folio {
+  position: absolute;
+  bottom: 2.6%;
+  z-index: 4;
+  font-family: var(--font-serif);
+  font-size: calc(var(--pw, 480) * 0.022px);
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+.canvas-sheet.side-left .cv-folio {
+  left: 6.5%;
+}
+
+.canvas-sheet.side-right .cv-folio,
+.canvas-sheet.side-single .cv-folio {
+  right: 6.5%;
+}
+
+.cv-folio.is-dark {
+  color: rgba(42, 31, 23, 0.62);
+}
+
+.cv-folio.is-light {
+  color: rgba(244, 237, 224, 0.72);
+}
+
+.canvas-sheet {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}

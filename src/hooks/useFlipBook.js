@@ -10,6 +10,10 @@ const NO_FLIP = 'a, button, input, select, textarea, label, video, audio, iframe
  * Mỗi trang là một <div> tạo sẵn; React render nội dung vào đó bằng portal,
  * còn StPageFlip được toàn quyền di chuyển/biến đổi các div này.
  * Nhờ vậy React và thư viện không tranh nhau cây DOM.
+ *
+ * Sách lật kiểu Nhật (settings.direction = 'rtl'): StPageFlip chỉ biết lật trái → phải,
+ * nên các trang được đưa vào thư viện theo thứ tự ngược (bìa trước nằm cuối, mở ở mép trái).
+ * Mọi số trang đi ra khỏi hook này (currentPage, flipTo…) vẫn là số trang "đọc" 0, 1, 2…
  */
 export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
   const hostRef = useRef(null)
@@ -22,6 +26,8 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
   const [current, setCurrent] = useState(0)
   const [flipState, setFlipState] = useState('read')
   const [ready, setReady] = useState(false)
+  const rtl = settings.direction === 'rtl'
+  const count = pages.length
 
   useEffect(() => {
     zoomedRef.current = zoomed
@@ -33,7 +39,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       const el = document.createElement('div')
       el.className = 'mag-sheet'
       el.dataset.index = String(i)
-      el.dataset.density = page.type === 'cover' ? 'hard' : 'soft'
+      el.dataset.density = page.type === 'cover' || page.hard ? 'hard' : 'soft'
       return el
     })
   )
@@ -82,19 +88,20 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       mobileScrollSupport: true,
       swipeDistance: 24,
       showPageCorners: true,
-      startPage: currentRef.current,
+      startPage: rtl ? count - 1 - currentRef.current : currentRef.current,
     })
 
     pf.on('flip', (e) => {
-      currentRef.current = e.data
-      setCurrent(e.data)
+      const page = rtl ? fromPhysical(e.data, pf.getOrientation(), count) : e.data
+      currentRef.current = page
+      setCurrent(page)
     })
     pf.on('changeState', (e) => {
       setFlipState(e.data)
       if (e.data === 'flipping') onFlipStartRef.current?.(pf)
     })
     pf.on('init', () => setReady(true))
-    pf.loadFromHTML(pageEls)
+    pf.loadFromHTML(rtl ? [...pageEls].reverse() : pageEls)
     root.style.minWidth = '0'
     root.style.minHeight = '0'
     flipRef.current = pf
@@ -122,19 +129,33 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     pf.update()
   }, [layout])
 
-  const next = useCallback(() => flipRef.current?.flipNext('bottom'), [])
-  const prev = useCallback(() => flipRef.current?.flipPrev('bottom'), [])
-  const flipTo = useCallback((index) => {
-    const pf = flipRef.current
-    if (!pf) return
-    const cur = pf.getCurrentPageIndex()
-    if (index === cur) return
-    // trang kề nhau thì lật có hiệu ứng, xa quá thì nhảy cho nhanh
-    if (Math.abs(index - cur) <= 3) pf.flip(index, 'bottom')
-    else pf.turnToPage(index)
-  }, [])
+  // rtl: trang sau nằm bên trái → lật ngược lại về phía phải
+  const next = useCallback(() => (rtl ? flipRef.current?.flipPrev('bottom') : flipRef.current?.flipNext('bottom')), [rtl])
+  const prev = useCallback(() => (rtl ? flipRef.current?.flipNext('bottom') : flipRef.current?.flipPrev('bottom')), [rtl])
+  const flipTo = useCallback(
+    (index) => {
+      const pf = flipRef.current
+      if (!pf) return
+      const cur = currentRef.current
+      if (index === cur) return
+      const target = rtl ? count - 1 - index : index
+      // trang kề nhau thì lật có hiệu ứng, xa quá thì nhảy cho nhanh
+      if (Math.abs(index - cur) <= 3) pf.flip(target, 'bottom')
+      else pf.turnToPage(target)
+    },
+    [rtl, count]
+  )
 
-  return { hostRef, pageEls, currentPage: current, flipState, ready, next, prev, flipTo, flipRef }
+  return { hostRef, pageEls, currentPage: current, flipState, ready, next, prev, flipTo, flipRef, rtl }
+}
+
+/**
+ * rtl: trang StPageFlip đang báo (trang trái của cặp, theo thứ tự vật lý) → trang "đọc" đầu tiên đang mở.
+ * Cặp trang vật lý (p, p+1) chứa trang đọc (n-2-p, n-1-p); trang đứng một mình chỉ là n-1-p.
+ */
+function fromPhysical(p, orientation, n) {
+  const paired = orientation === 'landscape' && p !== 0 && p !== n - 1
+  return paired ? n - 2 - p : n - 1 - p
 }
 
 function sizeRoot(root, L) {

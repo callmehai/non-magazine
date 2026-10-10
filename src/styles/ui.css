@@ -924,3 +924,34 @@
     padding: 56px 12px;
   }
 }
+
+/* thông báo lúc đang mở sách PDF */
+.boot-msg {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  font-family: var(--font-serif);
+  color: var(--ui-text-2);
+  background: radial-gradient(ellipse at center, var(--bg-1), var(--bg-3));
+}
+
+/* ── sách kiểu Nhật (lật phải → trái) ───────── */
+.controls__progress.is-rtl span {
+  transform-origin: right;
+}
+
+/* hình thu nhỏ xếp từ phải sang trái, chữ bên trong vẫn viết bình thường */
+.thumbs__grid[dir='rtl'] > li {
+  direction: ltr;
+}
+
+/* giao diện tiếng Nhật: Be Vietnam Pro/Playfair không có chữ Nhật → dùng font hệ thống */
+:root:lang(ja) {
+  --font-sans: 'Be Vietnam Pro', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', Meiryo, sans-serif;
+  --font-serif: 'Playfair Display', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+  --font-italic: 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+}

@@ -1,4 +1,5 @@
 import Icon from '../common/Icon.jsx'
+import { t } from '../../lib/i18n.js'
 
 export default function FullscreenButton({ isFullscreen, onToggle, supported }) {
   if (!supported) return null
@@ -7,9 +8,9 @@ export default function FullscreenButton({ isFullscreen, onToggle, supported }) 
       type="button"
       className="ctrl"
       onClick={onToggle}
-      aria-label={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
+      aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
       aria-pressed={isFullscreen}
-      title={isFullscreen ? 'Thoát toàn màn hình (Esc)' : 'Toàn màn hình (F)'}
+      title={isFullscreen ? `${t('exitFullscreen')} (Esc)` : `${t('fullscreen')} (F)`}
     >
       <Icon name={isFullscreen ? 'exitFullscreen' : 'fullscreen'} />
     </button>

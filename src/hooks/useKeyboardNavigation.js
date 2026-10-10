@@ -5,7 +5,7 @@ const isTyping = (el) =>
 
 /**
  * Phím tắt:
- *  ← trang trước · → / Space trang sau · F fullscreen · Esc thoát fullscreen/đóng panel
+ *  ← trang trước · → / Space trang sau (sách kiểu Nhật — handlers.rtl: ← trang sau, → trang trước) · F fullscreen · Esc thoát fullscreen/đóng panel
  *  + / − zoom · 0 về 100% · Home / End trang đầu/cuối · T mục lục
  */
 export function useKeyboardNavigation(handlers, enabled = true) {
@@ -25,12 +25,18 @@ export function useKeyboardNavigation(handlers, enabled = true) {
       const onControl = target instanceof HTMLElement && target.closest('button, a, video, audio, [role="slider"]')
       switch (e.key) {
         case 'ArrowRight':
-        case 'PageDown':
+        case 'ArrowLeft': {
           if (target instanceof HTMLInputElement) return
+          e.preventDefault()
+          const forward = (e.key === 'ArrowRight') !== !!h.rtl
+          if (forward) h.next?.()
+          else h.prev?.()
+          break
+        }
+        case 'PageDown':
           e.preventDefault()
           h.next?.()
           break
-        case 'ArrowLeft':
         case 'PageUp':
           e.preventDefault()
           h.prev?.()

@@ -25,7 +25,7 @@ function sideOf(index, orientation, count) {
 export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   const { pages } = magazine
   const count = pages.length
-  const { hostRef, pageEls, currentPage: current, flipState } = book
+  const { hostRef, pageEls, currentPage: current, flipState, rtl } = book
   const turning = flipState !== 'read'
 
   const visible = useMemo(() => visiblePages(current, layout.orientation, count), [current, layout.orientation, count])
@@ -49,13 +49,17 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   }, [visible, turning, entered, count])
 
   // Bìa trước/sau đứng một mình → dời sách vào giữa màn hình
+  // (sách kiểu Nhật: bìa trước nằm bên trái, bìa sau bên phải → dời ngược lại)
   let offset = 0
+  const alone = visible.length === 1
+  const dir = rtl ? -1 : 1
   if (layout.orientation === 'landscape') {
-    const alone = visible.length === 1
-    if (alone && current === 0) offset = -layout.pageW / 2
-    else if (alone && current === count - 1) offset = layout.pageW / 2
+    if (alone && current === 0) offset = (-dir * layout.pageW) / 2
+    else if (alone && current === count - 1) offset = (dir * layout.pageW) / 2
     if (flipState === 'flipping' && (current === 0 || current === count - 1)) offset = 0
   }
+  // bìa đứng một mình nằm nửa nào của khung sách
+  const aloneSide = (current === 0) !== !!rtl ? 'right' : 'left'
 
   const loadFrom = visible[0] - 3
   const loadTo = visible[visible.length - 1] + 4
@@ -71,7 +75,7 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
       }}
     >
       <div className="book__shift" style={{ transform: offset ? `translate3d(${offset}px,0,0)` : undefined }}>
-        <div className="book__shadow" aria-hidden="true" data-alone={visible.length === 1 ? (current === 0 ? 'right' : 'left') : undefined} />
+        <div className="book__shadow" aria-hidden="true" data-alone={alone ? aloneSide : undefined} />
         <div ref={hostRef} className="book__host" />
       </div>
       {pageEls.map((el, i) =>
@@ -80,7 +84,7 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
             page={pages[i]}
             index={i}
             total={count}
-            side={sideOf(i, layout.orientation, count)}
+            side={sideOf(rtl ? count - 1 - i : i, layout.orientation, count)}
             visible={visible.includes(i)}
             revealed={revealed.has(i)}
             load={i >= loadFrom && i <= loadTo}

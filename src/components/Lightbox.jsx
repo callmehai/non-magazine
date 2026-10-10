@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import Icon from './common/Icon.jsx'
 import { asset } from '../lib/assets.js'
+import { t } from '../lib/i18n.js'
 
 /** Xem ảnh gallery cỡ lớn. ← → để chuyển ảnh, Esc để đóng. */
 export default function Lightbox({ state, onChange, onClose }) {
@@ -36,20 +37,20 @@ export default function Lightbox({ state, onChange, onClose }) {
 
   if (!open || !img) return null
   return (
-    <div className="lightbox" role="dialog" aria-modal="true" aria-label={img.caption || img.alt || 'Ảnh'} onClick={onClose}>
+    <div className="lightbox" role="dialog" aria-modal="true" aria-label={img.caption || img.alt || t('image')} onClick={onClose}>
       <figure onClick={(e) => e.stopPropagation()}>
         <img src={asset(img.src)} alt={img.alt || img.caption || ''} />
         {img.caption && <figcaption>{img.caption}</figcaption>}
       </figure>
-      <button ref={closeRef} type="button" className="ctrl lightbox__close" onClick={onClose} aria-label="Đóng ảnh">
+      <button ref={closeRef} type="button" className="ctrl lightbox__close" onClick={onClose} aria-label={t('closeImage')}>
         <Icon name="close" />
       </button>
       {images.length > 1 && (
         <>
-          <button type="button" className="ctrl lightbox__nav is-prev" onClick={(e) => (e.stopPropagation(), go(-1))} aria-label="Ảnh trước">
+          <button type="button" className="ctrl lightbox__nav is-prev" onClick={(e) => (e.stopPropagation(), go(-1))} aria-label={t('prevImage')}>
             <Icon name="prev" />
           </button>
-          <button type="button" className="ctrl lightbox__nav is-next" onClick={(e) => (e.stopPropagation(), go(1))} aria-label="Ảnh sau">
+          <button type="button" className="ctrl lightbox__nav is-next" onClick={(e) => (e.stopPropagation(), go(1))} aria-label={t('nextImage')}>
             <Icon name="next" />
           </button>
         </>

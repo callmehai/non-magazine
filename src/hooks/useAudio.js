@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createAmbient } from '../lib/sound.js'
 import { asset, hasAsset } from '../lib/assets.js'
+import { t } from '../lib/i18n.js'
 
 /**
  * Điều khiển một file âm thanh (HTMLAudioElement).
@@ -26,7 +27,7 @@ export function useAudio(src, { loop = false, volume: initialVolume = 0.8 } = {}
     const onPause = () => setPlaying(false)
     const onTime = () => setTime({ current: a.currentTime, duration: a.duration || 0 })
     const onError = () => {
-      setError('Không tải được file âm thanh')
+      setError(t('audioError'))
       setPlaying(false)
     }
     a.addEventListener('play', onPlay)
@@ -136,7 +137,7 @@ export function useBackgroundMusic(settings) {
     setSynthPlaying(false)
   }, [])
 
-  if (hasFile) return { ...file, title: settings.backgroundMusicTitle || 'Nhạc nền', source: 'file' }
+  if (hasFile) return { ...file, title: settings.backgroundMusicTitle || t('music'), source: 'file' }
   return {
     playing: synthPlaying,
     play: synthPlay,
@@ -148,7 +149,7 @@ export function useBackgroundMusic(settings) {
     setMuted: setSynthMuted,
     blocked: synthBlocked,
     available: true,
-    title: 'Ngũ cung — nhạc nền tổng hợp',
+    title: t('musicSynth'),
     source: 'synth',
   }
 }

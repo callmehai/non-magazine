@@ -10,6 +10,8 @@ import QuotePage from '../pages/QuotePage.jsx'
 import SplitPage from '../pages/SplitPage.jsx'
 import CustomHtmlPage from '../pages/CustomHtmlPage.jsx'
 import Model3DPage from '../pages/Model3DPage.jsx'
+import PdfPage from '../pages/PdfPage.jsx'
+import CanvasSheet from '../pages/CanvasSheet.jsx'
 
 /** type trong magazine.js → component. Thêm loại trang mới: thêm một dòng ở đây. */
 export const PAGE_TYPES = {
@@ -24,6 +26,8 @@ export const PAGE_TYPES = {
   split: SplitPage,
   'custom-html': CustomHtmlPage,
   model3d: Model3DPage,
+  pdf: PdfPage,
+  canvas: CanvasSheet,
 }
 
 const warned = new Set()
