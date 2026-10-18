@@ -25,6 +25,8 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
   layoutRef.current = layout
   const [current, setCurrent] = useState(0)
   const [flipState, setFlipState] = useState('read')
+  // hướng lật đang chạy theo thứ tự đọc: 'next' | 'prev' (để dời sách vào giữa ngay trong lúc lật bìa)
+  const [flipDir, setFlipDir] = useState(null)
   const [ready, setReady] = useState(false)
   const rtl = settings.direction === 'rtl'
   const count = pages.length
@@ -97,6 +99,10 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       setCurrent(page)
     })
     pf.on('changeState', (e) => {
+      if (e.data === 'flipping' || e.data === 'user_fold') {
+        const back = pf.getFlipController().getCalculation()?.getDirection() === 1 // FlipDirection.BACK
+        setFlipDir(back !== rtl ? 'prev' : 'next')
+      } else if (e.data === 'read') setFlipDir(null)
       setFlipState(e.data)
       if (e.data === 'flipping') onFlipStartRef.current?.(pf)
     })
@@ -152,7 +158,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     [rtl, count]
   )
 
-  return { hostRef, pageEls, currentPage: current, flipState, ready, next, prev, flipTo, flipRef, rtl }
+  return { hostRef, pageEls, currentPage: current, flipState, flipDir, ready, next, prev, flipTo, flipRef, rtl }
 }
 
 /**

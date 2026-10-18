@@ -25,7 +25,7 @@ function sideOf(index, orientation, count) {
 export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   const { pages } = magazine
   const count = pages.length
-  const { hostRef, pageEls, currentPage: current, flipState, rtl } = book
+  const { hostRef, pageEls, currentPage: current, flipState, flipDir, rtl } = book
   const turning = flipState !== 'read'
 
   const visible = useMemo(() => visiblePages(current, layout.orientation, count), [current, layout.orientation, count])
@@ -53,13 +53,17 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   let offset = 0
   const alone = visible.length === 1
   const dir = rtl ? -1 : 1
+  // Dời sách chạy cùng lúc với cú lật bìa (không đợi lật xong mới trượt)
+  const flipping = flipState === 'flipping' || flipState === 'user_fold'
+  const toCover = flipping && flipDir === 'prev' && current === 1
+  const toBack = flipping && flipDir === 'next' && current === count - 3 && count % 2 === 0
   if (layout.orientation === 'landscape') {
-    if (alone && current === 0) offset = (-dir * layout.pageW) / 2
-    else if (alone && current === count - 1) offset = (dir * layout.pageW) / 2
-    if (flipState === 'flipping' && (current === 0 || current === count - 1)) offset = 0
+    if ((alone && current === 0 && !flipping) || toCover) offset = (-dir * layout.pageW) / 2
+    else if ((alone && current === count - 1 && !flipping) || toBack) offset = (dir * layout.pageW) / 2
   }
   // bìa đứng một mình nằm nửa nào của khung sách
-  const aloneSide = (current === 0) !== !!rtl ? 'right' : 'left'
+  const aloneSide = (current === 0 || toCover) !== !!rtl ? 'right' : 'left'
+  const shadowAlone = (alone && !flipping) || toCover || toBack
 
   const loadFrom = visible[0] - 3
   const loadTo = visible[visible.length - 1] + 4
@@ -75,7 +79,7 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
       }}
     >
       <div className="book__shift" style={{ transform: offset ? `translate3d(${offset}px,0,0)` : undefined }}>
-        <div className="book__shadow" aria-hidden="true" data-alone={alone ? aloneSide : undefined} />
+        <div className="book__shadow" aria-hidden="true" data-alone={shadowAlone ? aloneSide : undefined} />
         <div ref={hostRef} className="book__host" />
       </div>
       {pageEls.map((el, i) =>

@@ -33,11 +33,11 @@
   height: 100%;
 }
 
-/* bóng đổ dưới sách */
+/* bóng đổ dưới sách (khối nằm gọn sau trang, chỉ bóng lộ ra — không thò gờ dưới mép trang) */
 .book__shadow {
   position: absolute;
   top: 1.5%;
-  bottom: -1.2%;
+  bottom: 0.5%;
   left: 0.6%;
   right: 0.6%;
   border-radius: 3px;
