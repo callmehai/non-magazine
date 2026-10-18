@@ -63,7 +63,9 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   }
   // bìa đứng một mình nằm nửa nào của khung sách
   const aloneSide = (current === 0 || toCover) !== !!rtl ? 'right' : 'left'
-  const shadowAlone = (alone && !flipping) || toCover || toBack
+  // bóng đổ chỉ nằm dưới phần đang có trang: lúc đang mở bìa, nửa kia còn trống → giữ bóng một nửa
+  // (nếu không, bóng phủ cả nửa trống và lộ thành một tờ giấy trắng ma)
+  const shadowAlone = alone || toCover || toBack
 
   const loadFrom = visible[0] - 3
   const loadTo = visible[visible.length - 1] + 4
