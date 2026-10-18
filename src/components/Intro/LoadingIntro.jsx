@@ -8,6 +8,14 @@ import { t } from '../../lib/i18n.js'
  */
 export default function LoadingIntro({ magazine, progress, ready, leaving, onOpen }) {
   const btnRef = useRef(null)
+  // tên dài (vd. "Nón lá Làng Chuông"): chữ nhỏ hơn, xuống dòng theo từ — không tách giữa từ
+  const long = [...magazine.title].length > 8
+  let start = 0
+  const words = magazine.title.split(/\s+/).map((text) => {
+    const w = { text, start }
+    start += [...text].length
+    return w
+  })
 
   useEffect(() => {
     if (ready) btnRef.current?.focus({ preventScroll: true })
@@ -16,10 +24,14 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
   return (
     <div className={`intro ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
       <div className="intro__text">
-        <h1 className="intro__title" aria-label={magazine.title}>
-          {[...magazine.title].map((ch, i) => (
-            <span key={i} style={{ '--i': i }} aria-hidden="true">
-              {ch}
+        <h1 className={`intro__title ${long ? 'is-long' : ''}`} aria-label={magazine.title}>
+          {words.map((w, wi) => (
+            <span key={wi} className="intro__word" aria-hidden="true">
+              {[...w.text].map((ch, i) => (
+                <span key={i} className="intro__char" style={{ '--i': w.start + i }}>
+                  {ch}
+                </span>
+              ))}
             </span>
           ))}
         </h1>

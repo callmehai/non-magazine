@@ -147,7 +147,7 @@ button {
 .brand__mark {
   font-family: var(--font-serif);
   font-size: 17px;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.08em;
   color: var(--ui-accent);
 }
 

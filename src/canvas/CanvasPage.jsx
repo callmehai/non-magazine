@@ -58,7 +58,7 @@ function ElementBody({ el, mode, visible }) {
       return el.src ? (
         <img className="cv-img" src={asset(el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover' }} />
       ) : (
-        <div className="cv-placeholder">画像</div>
+        <PhotoPlaceholder el={el} />
       )
     case 'video':
       return <VideoBody el={el} mode={mode} visible={visible} />
@@ -119,6 +119,22 @@ function TextBody({ el, mode }) {
     )
   }
   return body
+}
+
+/** Khung ảnh tạm: ghi rõ cần ảnh gì (el.hint / el.hintJa) để nhóm kéo ảnh thật vào thay */
+function PhotoPlaceholder({ el }) {
+  const lang = useCanvasLang()
+  const hint = (lang === 'ja' && el.hintJa) || el.hint
+  return (
+    <div className="cv-placeholder cv-placeholder--photo">
+      <svg className="cv-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+        <rect x="3" y="6" width="18" height="13" rx="2" />
+        <circle cx="12" cy="12.5" r="3.4" />
+        <path d="M8.5 6l1.4-2h4.2l1.4 2" />
+      </svg>
+      {hint ? <span className="cv-placeholder__hint">{lang === 'ja' && el.hintJa ? <RubyText text={hint} /> : hint}</span> : <span className="cv-placeholder__hint">画像</span>}
+    </div>
+  )
 }
 
 /** {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css) */

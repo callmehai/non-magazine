@@ -41,6 +41,7 @@ export const FONT_LIST = [
   { family: 'Be Vietnam Pro', group: 'Latin', weights: [400, 700], italic: true },
   { family: 'Montserrat', group: 'Latin', weights: [400, 700], italic: true },
   { family: 'Bebas Neue', group: 'Latin', weights: [400] },
+  { family: 'Dancing Script', group: 'Latin', weights: [400, 700] },
   { family: 'Great Vibes', group: 'Latin', weights: [400] },
 ]
 

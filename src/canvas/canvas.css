@@ -196,3 +196,32 @@
   outline: 1px dashed rgba(140, 106, 51, 0.6);
   outline-offset: 2px;
 }
+
+/* khung ảnh tạm có mô tả: giấy kẻ chéo nhạt, viền chấm, biểu tượng máy ảnh */
+.cv-placeholder--photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5em;
+  padding: 10em;
+  box-sizing: border-box;
+  font-size: 1em;
+  text-align: center;
+  color: #9a8466;
+  background: repeating-linear-gradient(135deg, #ece2cb 0 6em, #e7dcc2 6em 12em);
+  box-shadow: inset 0 0 0 0.7em rgba(160, 122, 60, 0.28);
+}
+
+.cv-placeholder__icon {
+  width: 20em;
+  height: 20em;
+  opacity: 0.7;
+}
+
+.cv-placeholder__hint {
+  font-family: 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  font-size: 7.2em;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}

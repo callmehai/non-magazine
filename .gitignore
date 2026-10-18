@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# sách dựng tự động (scripts/book/build.mjs)
+scripts/book/out/

@@ -696,13 +696,38 @@
   color: var(--ui-strong);
 }
 
-.intro__title span {
+.intro__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.intro__word + .intro__word {
+  margin-left: 0.32em;
+}
+
+.intro__title.is-long {
+  max-width: min(92vw, 1100px);
+  font-size: clamp(40px, 6.6vw, 92px);
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  margin-right: -0.06em;
+}
+
+.intro__title.is-long .intro__word + .intro__word {
+  margin-left: 0.26em;
+}
+
+.intro__title .intro__char {
   display: inline-block;
   opacity: 0;
   transform: translateY(0.25em);
   filter: blur(8px);
   animation: letter-in 1.4s var(--ease) forwards;
   animation-delay: calc(0.15s + var(--i) * 0.14s);
+}
+
+.intro__title.is-long .intro__char {
+  animation-delay: calc(0.15s + var(--i) * 0.07s);
 }
 
 @keyframes letter-in {
