@@ -21,6 +21,9 @@ import { ch2 } from './content/02-ch2.mjs'
 import { ch3, ending } from './content/03-ch3.mjs'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
+// ảnh thật đã tải lên kho (upload-photos.mjs): mô tả khung → URL; chưa có thì khung ảnh tạm
+const photoFile = path.join(here, 'out', 'photos.json')
+const PHOTOS = fs.existsSync(photoFile) ? JSON.parse(fs.readFileSync(photoFile, 'utf8')) : {}
 
 // ── khổ trang & bảng màu
 const W = 595.28
@@ -115,7 +118,7 @@ const IMG = (x, y, w, h, hint, o = {}) => ({
   w: r1(w),
   h: r1(h),
   rot: 0,
-  src: o.src ?? '',
+  src: o.src ?? PHOTOS[hint?.[0]] ?? '',
   fit: o.fit ?? 'cover',
   hint: hint?.[0] ?? '',
   hintJa: hint?.[1] ?? '',
