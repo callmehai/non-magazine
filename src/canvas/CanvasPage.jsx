@@ -145,7 +145,7 @@ function RubyText({ text }) {
     typeof p === 'string' ? (
       p
     ) : (
-      <ruby key={i} tabIndex={0}>
+      <ruby key={i} tabIndex={0} data-rt={p.ruby}>
         {p.base}
         <rp>(</rp>
         <rt>{p.ruby}</rt>

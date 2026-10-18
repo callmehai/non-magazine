@@ -40,12 +40,15 @@ const C = {
 const ACC = { 0: '#a07a3c', 1: '#5f7350', 2: '#a95f3c', 3: '#3f7676', 9: '#8c6a33' }
 const TINT = { 0: '#efe3c6', 1: '#e3e8d8', 2: '#f1dccd', 3: '#d9e6e3', 9: '#efe3c6' }
 const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', jaHead: 'Shippori Mincho', jaBody: 'Noto Serif JP', jaSans: 'Noto Sans JP' }
-const M = { bottom: 62, outer: 44, inner: 54 }
-const TOP = 86 // chữ bắt đầu dưới đầu trang
+const M = { bottom: 58, outer: 40, inner: 50 }
+const TOP = 82 // chữ bắt đầu dưới đầu trang
 const BOT = H - M.bottom
 // thang chữ (pt trên trang A4)
-const BODY = { size: 15, lh: 1.58, jaSize: 14 }
-const S = { run: 9.5, cap: 10.5, note: 10, alt: 11.5, label: 11.5, block: 18.5, sec: 27, secNum: 46, quote: 20, card: 17, cardText: 14, cardTextJa: 13 }
+// tiếng Nhật ngắn hơn tiếng Việt ~30% → chữ Nhật lớn hơn để lấp khung (khung cao theo bản dài hơn).
+// Hệ số đo trên trang thật: đoạn văn dài cần ~1.14, đoạn ngắn (thẻ, mô tả) ~1.06.
+const jaPt = (size, k = 1.06) => Math.round(size * k * 2) / 2
+const BODY = { size: 17.5, lh: 1.55, jaSize: jaPt(17.5, 1.14) }
+const S = { run: 10, cap: 12.5, note: 12, alt: 13, label: 12.5, block: 21, sec: 30, secNum: 50, quote: 22, card: 19.5, cardText: 16.5, cardTextJa: jaPt(16.5) }
 const RUBY_MIN = 12 // chữ nhỏ hơn: bỏ phiên âm (nhãn, chú thích, dòng phụ)
 
 let seq = 0
@@ -69,7 +72,7 @@ function textH(pair, w, o = {}) {
   const gap = (o.paraGap ?? 0) * (n - 1)
   const hv = pair[0] ? lines(pair[0], w, size, o.font === F.jaSans || o.font === F.jaBody, o.font) * size * lh + gap : 0
   // phiên âm đội dòng lên: dòng chặt (tiêu đề) cần chừa nhiều hơn dòng thường
-  const ruby = /\{/.test(pair[1] ?? '') && size >= RUBY_MIN ? (lh < 1.5 ? (lh + 0.75) / lh : 1.15) : 1
+  const ruby = 1 // phiên âm hiện trong ô nổi khi rê chuột, không đội dòng
   const nj = String(pair[1] ?? '').split('\n').length
   const hj = pair[1] ? lines(pair[1], w, jaSize, true) * jaSize * lh * ruby + (o.paraGap ?? 0) * (nj - 1) : 0
   return Math.ceil(Math.max(hv, hj) + 2)
@@ -192,7 +195,7 @@ function sectionHead(p, y, num, title) {
   const x = p.x0
   const tx = num ? x + 86 : x
   const tw = p.x1 - tx
-  const o = { size: S.sec, font: F.head, lh: 1.2, jaSize: 25 }
+  const o = { size: S.sec, font: F.head, lh: 1.2, jaSize: 28 }
   const th = textH(title, tw, o)
   const ah = altH(title, tw)
   p.add(
@@ -206,7 +209,7 @@ function sectionHead(p, y, num, title) {
 }
 
 /** tiêu đề nhỏ của khối nội dung → chiều cao */
-const blockOpt = { size: S.block, font: F.head, lh: 1.25, jaSize: 17.5 }
+const blockOpt = { size: S.block, font: F.head, lh: 1.25, jaSize: 20 }
 const blockHeight = (h, w) => textH([h[0], strip(h[1])], w, blockOpt) + 3 + altH(h, w, 11) + 14
 function blockHead(p, y, h, x = p.x0, w = p.cw) {
   const acc = ACC[p.chapter]
@@ -228,7 +231,7 @@ function figure(p, x, y, w, h, cap, o = {}) {
 }
 
 /** trích dẫn lớn */
-const quoteOpt = (size) => ({ size, font: F.head, lh: 1.45, jaSize: size - 2 })
+const quoteOpt = (size) => ({ size, font: F.head, lh: 1.45, jaSize: jaPt(size) - 1 })
 function quote(p, y, pair, x = p.x0, w = p.cw, o = {}) {
   const opt = quoteOpt(o.size ?? S.quote)
   const h = textH(pair, w, opt)
@@ -317,7 +320,7 @@ class Flow {
   }
   /** đoạn văn: gộp các đoạn cùng trang vào một khối, tách đoạn khi sang trang */
   prose(paras, o = {}) {
-    const opt = { size: o.size ?? BODY.size, lh: o.lh ?? BODY.lh, paraGap: o.paraGap ?? 8, jaSize: o.jaSize ?? (o.size ? o.size - 1 : BODY.jaSize) }
+    const opt = { size: o.size ?? BODY.size, lh: o.lh ?? BODY.lh, paraGap: o.paraGap ?? 8, jaSize: o.jaSize ?? (o.size ? jaPt(o.size, 1.14) : BODY.jaSize) }
     const dx = o.dx ?? 0
     const w = () => (o.w ?? this.p.cw) - dx
     const queue = paras.map((q) => [...q])
@@ -356,18 +359,85 @@ class Flow {
   figure(cap, o = {}) {
     this.row([cap], o)
   }
-  /** n ảnh cạnh nhau */
+  /** n ảnh cạnh nhau; còn chỗ ít hơn minH một chút thì thu ảnh lại (tối thiểu minFit) thay vì sang trang */
   row(caps, o = {}) {
     const n = caps.length
     const gap = 14
     const w = (CW - gap * (n - 1)) / n
     const ch = Math.max(...caps.map((c) => capH(c, w)))
-    const minH = o.minH ?? 150
+    const minH = Math.min(o.minH ?? 150, o.minFit ?? 140)
     const maxH = o.maxH ?? 330
     if (!this.p || this.room < minH + ch + 6) this.page()
     const h = Math.max(minH, Math.min(o.fill ? Infinity : maxH, this.room - ch - 6))
     caps.forEach((c, i) => figure(this.p, this.p.x0 + i * (w + gap), this.y, w, h, c))
     this.y += h + 6 + ch + 22
+  }
+  /** lưới ảnh cols cột, ảnh giãn ra lấp chỗ còn lại của trang (không đủ chỗ thì sang trang mới) */
+  gallery(caps, cols = 2, o = {}) {
+    const gap = 14
+    const rows = Math.ceil(caps.length / cols)
+    const w = (CW - gap * (cols - 1)) / cols
+    const ch = Math.max(...caps.map((c) => capH(c, w)))
+    const minCell = o.minCell ?? 150
+    const need = (cell) => rows * (cell + 6 + ch) + (rows - 1) * 18
+    if (!this.p || this.room < need(minCell)) this.ensure(Infinity, o.filler)
+    const cell = Math.min(o.maxCell ?? 340, (this.room - need(0)) / rows)
+    caps.forEach((c, i) => figure(this.p, this.p.x0 + (i % cols) * (w + gap), this.y + Math.floor(i / cols) * (cell + 6 + ch + 18), w, cell, c))
+    this.y += need(cell) + 22
+  }
+  /** chỗ trống cuối trang đủ lớn → đặt một ảnh lấp kín (ảnh thật chưa dùng ở chỗ khác) */
+  fillGap(cap, min = 140) {
+    const c = cap?.pool ? cap.pool[0] : cap
+    if (!this.p || !c || this.fresh || this.room < min + capH(c, CW) + 6) return false
+    this.row([c], { minH: min, fill: true })
+    if (cap.pool) cap.pool.shift()
+    return true
+  }
+  /** khối cao h sắp đặt: không vừa trang này thì lấp chỗ trống bằng ảnh rồi sang trang */
+  ensure(h, filler) {
+    if (this.p && this.room >= h) return
+    if (filler) this.fillGap(filler)
+    this.page()
+  }
+  /**
+   * Dãy thẻ (loại nón, nguyên liệu, bước làm, nghệ nhân…): xếp đủ thẻ vào từng trang rồi chia đều chỗ dư —
+   * thẻ cao thêm tối đa `grow` (ảnh to ra), phần còn lại dàn vào khoảng cách giữa các thẻ.
+   * Trang cuối của dãy không dàn (nội dung tiếp theo chảy tiếp ngay bên dưới).
+   */
+  cards(items, measure, draw, o = {}) {
+    const gap = o.gap ?? 24
+    const grow = o.grow ?? 60
+    const hs = items.map(measure)
+    let i = 0
+    while (i < items.length) {
+      if (!this.p) this.page()
+      const start = this.y
+      let j = i
+      let used = 0
+      while (j < items.length && start + used + hs[j] <= this.bot) used += hs[j++] + gap
+      if (j === i) {
+        if (!this.fresh) {
+          this.page()
+          continue
+        }
+        j = i + 1 // thẻ cao hơn cả trang: đặt luôn
+        used = hs[i] + gap
+      }
+      const n = j - i
+      const last = j === items.length
+      const free = Math.max(0, this.bot - start - (used - gap))
+      const spare = last && free - gap >= (o.tail ?? 0) ? 0 : free
+      const add = Math.min(grow, spare / n)
+      const extraGap = n > 1 ? Math.min(70, (spare - add * n) / (n - 1)) : 0
+      let y = start
+      for (let k = i; k < j; k++) {
+        draw(this.p, y, items[k], hs[k] + add)
+        y += hs[k] + add + gap + extraGap
+      }
+      this.y = y
+      i = j
+      if (i < items.length) this.page()
+    }
   }
   /** chú thích cuối trang: neo đáy trang hiện tại, chữ chảy phía trên */
   notes(notes) {
@@ -376,7 +446,7 @@ class Flow {
   }
   /** khung ghi chú nền màu */
   note(pair, o = {}) {
-    const opt = { size: o.size ?? 13.5, lh: 1.55, jaSize: (o.size ?? 13.5) - 0.5 }
+    const opt = { size: o.size ?? 15.5, lh: 1.55, jaSize: jaPt(o.size ?? 15.5) }
     const h = textH(pair, CW - 36, opt)
     this.place(h + 32, (p, y) => p.add(RECT(p.x0, y, p.cw, h + 32, TINT[this.chapter], { radius: 8, name: 'Khung ghi chú' }), T(p.x0 + 18, y + 16, p.cw - 36, h, pair, { ...opt, italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Ghi chú' })))
   }
@@ -389,6 +459,26 @@ class Flow {
     this.place(16, (p, y) => p.add(T(p.x0, y, p.cw, 16, pair, { size: S.label, tracking: 2.4, weight: 700, color: ACC[this.chapter] ?? C.muted, jaFont: F.jaSans, name: 'Nhóm' })), 12)
   }
 }
+
+/** ảnh thật dùng để lấp chỗ trống cuối trang (Flow.fillGap / ensure), theo chương */
+const FILL = {
+  1: [
+    ['Nón lá trong tranh sơn dầu — Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)', '油彩画に描かれたノンラー — ベトナム美術博物館（著者撮影）'],
+    ['Nón lá cổ trưng bày tại Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)', 'ベトナム美術博物館に展示された古いノンラー（著者撮影）'],
+    ['Người phụ nữ đội nón giữa cánh đồng — tranh tại Bảo tàng Mỹ thuật Việt Nam', '田んぼでノンラーをかぶる女性 — ベトナム美術博物館の絵画'],
+  ],
+  2: [
+    ['Khung nón bày bán ở chợ Chuông', 'チュオンの市場で売られる笠の骨組み'],
+    ['Nứa chuốt sẵn và sợi màu bày bán ở chợ Chuông', 'チュオンの市場に並ぶ削ったヌア竹と色糸'],
+    ['Người bán nón bên những chồng nón trắng ở chợ Chuông', 'チュオンの市場で白い笠の山の横に座る売り手'],
+  ],
+  3: [
+    ['Nón chùm — sản phẩm OCOP 4 sao của cơ sở Lê Văn Tuy', '束ね笠 — レー・ヴァン・トゥイ工房のOCOP四つ星製品'],
+    ['Nón lá hai mặt lụa xanh ngọc nhìn từ trong lòng nón', '内側から見た、両面に翡翠色の絹を張った笠'],
+  ],
+}
+// chỉ lấy ảnh khỏi danh sách khi thật sự đặt (fillGap)
+const filler = (ch) => ({ pool: FILL[ch] })
 
 /** cặp trang mở chương: trái ảnh lớn tràn trang, phải tên chương */
 function chapterOpener(ch, photo) {
@@ -412,8 +502,8 @@ function chapterOpener(ch, photo) {
   y += altH(title, tw, 13) + 22
   p.add(HL(p.x0, y, 64, acc, 1.8))
   y += 28
-  const lo = { size: 15.5, lh: 1.65, jaSize: 14.5 }
-  p.add(T(p.x0, y, tw - 80, textH(ch.lead, tw - 80, lo), ch.lead, { ...lo, color: C.ink2, jaFont: F.jaBody, name: 'Đoạn dẫn' }))
+  const lo = { size: 19, lh: 1.6, jaSize: jaPt(19, 1.14) }
+  p.add(T(p.x0, y, tw - 30, textH(ch.lead, tw - 30, lo), ch.lead, { ...lo, color: C.ink2, jaFont: F.jaBody, name: 'Đoạn dẫn' }))
   return { left, right: p }
 }
 
@@ -459,7 +549,7 @@ endpaper()
     T(60, 392, W - 120, 24, [strip(front.title[1]) + '：' + strip(front.subtitle[1]), null], { font: F.jaBody, size: 14, lh: 1.3, align: 'center', color: C.ink2, name: 'Tên sách tiếng Nhật' }),
     T(60, 420, W - 120, 40, [front.subtitle[0], null], { font: F.script, size: 26, lh: 1.3, align: 'center', color: ACC[0], name: 'Chữ viết tay' }),
     HL(W / 2 - 30, 486, 60, ACC[0], 1.2),
-    T(60, H - 150, W - 120, 60, ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật\nTrường Đại học FPT Hà Nội · 2026', null], { size: 11.5, lh: 1.7, tracking: 1, align: 'center', color: C.muted, name: 'Thông tin' })
+    T(60, H - 150, W - 120, 60, ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật\nTrường Đại học FPT Hà Nội · 2026', 'FPT大学ハノイ校 日本語学科 卒業制作\n2026年'], { size: 12.5, jaFont: F.jaSans, lh: 1.7, tracking: 1, align: 'center', color: C.muted, name: 'Thông tin' })
   )
 }
 
@@ -474,8 +564,8 @@ endpaper()
   p.add(HL(p.x0, 178, 56, ACC[0], 1.4))
   f.y = 200
   f.prose(preface.paras)
-  const sign = textH(preface.sign, CW, { size: 13, lh: 1.5 })
-  f.place(sign, (pg, y) => pg.add(T(pg.x0, y, pg.cw, sign, preface.sign, { size: 13, italic: true, align: 'right', color: C.ink2, lh: 1.5, jaFont: F.jaBody, name: 'Ký tên' })), 26)
+  const sign = textH(preface.sign, CW, { size: 15, lh: 1.5 })
+  f.place(sign, (pg, y) => pg.add(T(pg.x0, y, pg.cw, sign, preface.sign, { size: 15, italic: true, align: 'right', color: C.ink2, lh: 1.5, jaFont: F.jaBody, name: 'Ký tên' })), 26)
   f.quote(preface.pull, { inset: 20, align: 'center' })
   f.figure(['Cổng làng Chuông, Phương Trung, Hà Nội', 'チュオン村の門（ハノイ・フオンチュン社）'], { minH: 180, fill: true })
 }
@@ -508,34 +598,33 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   const val = s11.blocks[2]
   f.block(val.h)
   f.prose(val.p)
-  f.row(val.images.slice(0, 2), { minH: 150, maxH: 230 })
-  f.row(val.images.slice(2), { minH: 150, maxH: 230 })
+  f.gallery(val.images, 2, { minCell: 170, filler: filler(1) })
 
   // hai dáng nón
   f.section(null, gal.title, { newPage: true })
   f.prose(gal.intro)
   const g0 = gal.groups[0]
-  const grid = (items, cols, cellMin) => {
+  // nhãn nhóm + lưới ảnh luôn đi cùng nhau; ảnh giãn ra lấp chỗ còn lại
+  const grid = (label, items, cols, cellMin) => {
     const gap = 14
     const cw = (CW - gap * (cols - 1)) / cols
     const rows = Math.ceil(items.length / cols)
-    const nameH = 48
-    if (f.room < rows * (cellMin + nameH) + 30) f.page()
-    const cell = Math.min(cols === 1 ? 260 : 220, (f.room - 30 - rows * nameH - (rows - 1) * 10) / rows)
+    const nameH = 54
+    if (f.room < 28 + rows * (cellMin + nameH) + (rows - 1) * 10) f.page()
+    f.label(label)
+    const cell = Math.min(cols === 1 ? 300 : 250, (f.room - 12 - rows * nameH - (rows - 1) * 10) / rows)
     const p = f.p
     items.forEach(([name, place], i) => {
       const gx = p.x0 + (i % cols) * (cw + gap)
       const gy = f.y + Math.floor(i / cols) * (cell + nameH + 10)
       p.add(IMG(gx, gy, cw, cell, [`${name[0]} — ${place[0]}`, `${strip(name[1])} — ${place[1]}`]))
-      p.add(T(gx, gy + cell + 6, cw, 22, name, { font: F.head, size: 15, lh: 1.25, jaFont: F.jaHead, jaSize: 14, name: 'Tên nón' }), T(gx, gy + cell + 29, cw, 14, place, { size: 10.5, tracking: 1, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Địa phương' }))
+      p.add(T(gx, gy + cell + 6, cw, 22, name, { font: F.head, size: 17, lh: 1.25, jaFont: F.jaHead, jaSize: 16.5, name: 'Tên nón' }), T(gx, gy + cell + 31, cw, 16, place, { size: 12, tracking: 1, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Địa phương' }))
     })
     f.y += rows * (cell + nameH + 10) + 12
   }
-  f.label(g0.name)
-  grid(g0.items, 2, 130)
+  grid(g0.name, g0.items, 2, 120)
   f.page()
-  f.label(gal.groups[1].name)
-  grid(gal.groups[1].items, 1, 200)
+  grid(gal.groups[1].name, gal.groups[1].items, 1, 200)
 
   // 1.2 — dấu tích + dòng thời gian
   const tr = s12.blocks[0]
@@ -545,12 +634,12 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   {
     const whenW = 104
     const tlOff = whenW + 14
-    const wo = { size: 13.5, lh: 1.5, jaSize: 13 }
+    const wo = { size: 15.5, lh: 1.5, jaSize: jaPt(15.5) }
     const textW = CW - tlOff - 20
-    const rows = tr.timeline.map(([when, what]) => Math.max(textH(when, whenW, { size: 14, font: F.head, lh: 1.2 }), textH(what, textW, wo)) + 16)
+    const rows = tr.timeline.map(([when, what]) => Math.max(textH(when, whenW, { size: 15.5, font: F.head, lh: 1.2 }), textH(what, textW, wo)) + 16)
     const notesH = textH(join(tr.notes), CW, { size: S.note, lh: 1.45, paraGap: 3 }) + 26
     const tlH = rows.reduce((a, b) => a + b, 0)
-    if (f.room < tlH + notesH + 10) f.page()
+    f.ensure(tlH + notesH + 10, filler(1))
     f.notes(tr.notes)
     const p = f.p
     const tlX = p.x0 + tlOff
@@ -559,7 +648,7 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
     tr.timeline.forEach(([when, what], i) => {
       p.add(
         ELL(tlX - 6, ty, 12, 12, i === 0 ? ACC[1] : C.cream, { stroke: ACC[1], sw: 1.3 }),
-        T(p.x0, ty - 3, whenW, 20, when, { font: F.head, size: 14, weight: 700, color: ACC[1], align: 'right', lh: 1.2, jaFont: F.jaHead, jaSize: 13, name: 'Mốc thời gian' }),
+        T(p.x0, ty - 3, whenW, 20, when, { font: F.head, size: 15.5, weight: 700, color: ACC[1], align: 'right', lh: 1.2, jaFont: F.jaHead, jaSize: 15, name: 'Mốc thời gian' }),
         T(tlX + 20, ty - 3, textW, rows[i] - 16, what, { ...wo, jaFont: F.jaBody, name: 'Sự kiện' })
       )
       ty += rows[i]
@@ -575,7 +664,7 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   const tr2 = s12.blocks[3]
   f.block(tr2.h)
   f.prose(tr2.p)
-  f.figure(['Toàn cảnh làng Chuông — những sân phơi lá, mái nhà làm nón', 'チュオン村の風景 — 葉を干す庭と笠づくりの家々'], { minH: 180, fill: true })
+  f.figure(['Chợ nón Chuông họp phiên — nơi bán lá, vành, sợi và nón thành phẩm', 'チュオンの笠市場 — 葉や輪、糸、完成した笠が並ぶ'], { minH: 180, fill: true })
 
   // 1.3 — làng Chuông
   const v = s13.blocks[0]
@@ -584,29 +673,35 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   f.prose(v.p.slice(0, 2))
   f.figure(v.images[0], { minH: 180, maxH: 300 })
   f.prose(v.p.slice(2))
-  f.row(v.images.slice(1), { minH: 170, maxH: 280 })
+  f.row(v.images.slice(1), { minH: 170, fill: true })
 
   // các loại nón: trang ảnh lớn rồi từng thẻ
   const ty = s13.blocks[1]
   f.page()
-  f.p.add(IMG(0, 60, W, 380, ty.hero, { name: 'Ảnh lớn' }))
-  f.y = 466
+  // ảnh lớn cao vừa đủ để phần giới thiệu nằm gọn trong trang này
+  const introH = blockHeight(ty.h, CW) + textH(join(ty.p), CW, { size: BODY.size, lh: BODY.lh, jaSize: BODY.jaSize, paraGap: 8 }) + 4
+  const heroH = Math.max(220, Math.min(420, BOT - 60 - 26 - introH))
+  f.p.add(IMG(0, 60, W, heroH, ty.hero, { name: 'Ảnh lớn' }))
+  f.y = 60 + heroH + 26
   f.block(ty.h)
   f.prose(ty.p)
   const iwT = 160
-  ty.types.forEach((t) => {
-    const tx = iwT + 18
-    const to = { size: S.cardText, lh: 1.55, jaSize: S.cardTextJa }
-    const th = textH(t.text, CW - tx, to)
-    const nh = textH(t.name, CW - tx, { size: S.card, font: F.head, lh: 1.25 })
-    const h = Math.max(nh + 8 + th, 170)
-    f.place(h, (p, y) => {
-      p.add(IMG(p.x0, y, iwT, Math.min(h, 200), [`${t.name[0]} — ảnh mặt trong và mặt ngoài`, `${strip(t.name[1])} — 内側と外側の写真`]))
+  const tx = iwT + 18
+  const to = { size: S.cardText, lh: 1.55, jaSize: S.cardTextJa }
+  const nameOf = (t) => textH(t.name, CW - tx, { size: S.card, font: F.head, lh: 1.25 })
+  f.cards(
+    ty.types,
+    (t) => Math.max(nameOf(t) + 8 + textH(t.text, CW - tx, to), 170),
+    (p, y, t, h) => {
+      const nh = nameOf(t)
+      p.add(IMG(p.x0, y, iwT, Math.min(h, 290), [`${t.name[0]} — ảnh mặt trong và mặt ngoài`, `${strip(t.name[1])} — 内側と外側の写真`]))
       p.add(T(p.x0 + tx, y - 2, CW - tx, nh, t.name, { font: F.head, size: S.card, weight: 700, color: ACC[1], lh: 1.25, jaFont: F.jaHead, name: 'Tên nón' }))
-      p.add(T(p.x0 + tx, y + nh + 8, CW - tx, th, t.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
-    }, 26)
-  })
+      p.add(T(p.x0 + tx, y + nh + 8, CW - tx, textH(t.text, CW - tx, to), t.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
+    },
+    { gap: 26, grow: 90, tail: textH(ty.after[0], CW - 36, { size: 15.5, lh: 1.55, jaSize: jaPt(15.5) }) + 32 }
+  )
   f.note(ty.after[0])
+  f.fillGap(filler(1))
 }
 
 // ═════════════════════════════════════════ CHƯƠNG 2
@@ -627,8 +722,10 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   f.prose([st.layers.intro])
   // sơ đồ ba lớp: ba nón xếp tầng (vẽ bằng hình)
   {
-    const coneH = 116
-    const dH = coneH * (1 + 2 * 0.8) + 34
+    // sơ đồ co lại cho vừa chỗ còn lại của trang (thay vì sang trang để lại khoảng trắng)
+    f.ensure(84 * 2.6 + 40, filler(2))
+    const coneH = Math.max(84, Math.min(116, (f.room - 40) / 2.6))
+    const dH = coneH * (1 + 2 * 0.8) + 40
     f.place(dH, (p, y) => {
       const dx = p.x0 + 184
       const dw = p.cw - 184
@@ -641,14 +738,14 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
         p.add(TRI(cx, cy, cwid, coneH, fill[i], { stroke: stroke[i], sw: i === 0 ? 1.6 : 1, opacity: 0.92 }), ELL(cx, cy + coneH - 10, cwid, 20, fill[i], { stroke: stroke[i], sw: 1, opacity: 0.92 }))
         const item = st.layers.items[i]
         const ly = cy + coneH * 0.4
-        p.add(ELL(p.x0, ly, 24, 24, ACC[2]), T(p.x0, ly + 4.5, 24, 15, [String(i + 1), null], { size: 11.5, weight: 700, color: '#fff', align: 'center', lh: 1.2, name: 'Số' }), T(p.x0 + 32, ly, 148, 44, item[0], { font: F.head, size: 14, weight: 700, color: ACC[2], lh: 1.3, jaFont: F.jaHead, jaSize: 13, name: 'Lớp' }))
+        p.add(ELL(p.x0, ly, 24, 24, ACC[2]), T(p.x0, ly + 4.5, 24, 15, [String(i + 1), null], { size: 11.5, weight: 700, color: '#fff', align: 'center', lh: 1.2, name: 'Số' }), T(p.x0 + 32, ly, 148, 44, item[0], { font: F.head, size: 15.5, weight: 700, color: ACC[2], lh: 1.3, jaFont: F.jaHead, jaSize: 15, name: 'Lớp' }))
       }
-      p.add(T(dx, y + dH - 16, dw, 16, ['Minh họa cấu trúc tách lớp, không theo tỷ lệ thực tế', '層を分けた構造のイメージ図（実寸ではありません）'], { size: 10, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích sơ đồ' }))
+      p.add(T(dx, y + dH - 16, dw, 16, ['Minh họa cấu trúc tách lớp, không theo tỷ lệ thực tế', '層を分けた構造のイメージ図（実寸ではありません）'], { size: 12, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích sơ đồ' }))
     })
   }
   st.layers.items.forEach((item, i) => {
     const w = CW - 40
-    const to = { size: 14.5, lh: 1.58, jaSize: 13.5 }
+    const to = { size: 16.5, lh: 1.55, jaSize: jaPt(16.5) }
     const nh = textH(item[0], w, { size: S.card, font: F.head, lh: 1.25 })
     const hh = textH(item[1], w, to)
     f.place(nh + 6 + hh, (p, y) => {
@@ -676,38 +773,40 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
         const eh = Math.max(2, rw * 0.09)
         p.add(ELL(fx + (fw - rw) / 2, ry - eh / 2, rw, eh, 'none', { stroke: i === 15 ? ACC[2] : '#a4865a', sw: i === 15 ? 1.6 : 0.9 }))
       }
-      p.add(T(fx + fw / 2 + 16, y - 6, 150, 20, ['← Chóp nón', '← 頂'], { size: 12, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }), T(fx + fw + 12, y + fH - 10, 150, 20, ['← Vòng cạp (vòng 16)', '← 縁の輪（16本目）'], { size: 12, italic: true, color: ACC[2], lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }))
+      p.add(T(fx + fw / 2 + 16, y - 6, 150, 20, ['← Chóp nón', '← 頂'], { size: 13.5, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }), T(fx + fw + 12, y + fH - 10, 150, 20, ['← Vòng cạp (vòng 16)', '← 縁の輪（16本目）'], { size: 13.5, italic: true, color: ACC[2], lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }))
     })
   }
   f.note(st.frame.note)
-  toLeft(st.frame.image, 2)
-  photoPage(st.frame.image, 2)
+  f.figure(st.frame.image, { minH: 240, fill: true })
 
   // 2.2 — nguyên liệu & dụng cụ
   const mt = ch.materials
-  const card = ([name, text, hint], acc = ACC[2]) => {
-    const iw = 150
-    const tx = iw + 18
-    const to = { size: S.cardText, lh: 1.55, jaSize: S.cardTextJa }
-    const nh = textH(name, CW - tx, { size: S.card, font: F.head, lh: 1.25 })
-    const th = textH(text, CW - tx, to)
-    const h = Math.max(nh + 8 + th, 124)
-    f.place(h, (p, y) => {
-      p.add(IMG(p.x0, y, iw, Math.min(h, 150), hint))
-      p.add(T(p.x0 + tx, y - 2, CW - tx, nh, name, { font: F.head, size: S.card, weight: 700, color: acc, lh: 1.25, jaFont: F.jaHead, name: 'Tên' }))
-      p.add(T(p.x0 + tx, y + nh + 8, CW - tx, th, text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
-    }, 24)
-  }
+  const cardTo = { size: S.cardText, lh: 1.55, jaSize: S.cardTextJa }
+  const cardTx = 150 + 18
+  const cardNh = (name) => textH(name, CW - cardTx, { size: S.card, font: F.head, lh: 1.25 })
+  const cards = (list, tail = 0) =>
+    f.cards(
+      list,
+      ([name, text]) => Math.max(cardNh(name) + 8 + textH(text, CW - cardTx, cardTo), 124),
+      (p, y, [name, text, hint], h) => {
+        const nh = cardNh(name)
+        p.add(IMG(p.x0, y, 150, Math.min(h, 200), hint))
+        p.add(T(p.x0 + cardTx, y - 2, CW - cardTx, nh, name, { font: F.head, size: S.card, weight: 700, color: ACC[2], lh: 1.25, jaFont: F.jaHead, name: 'Tên' }))
+        p.add(T(p.x0 + cardTx, y + nh + 8, CW - cardTx, textH(text, CW - cardTx, cardTo), text, { ...cardTo, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
+      },
+      { gap: 24, grow: 50, tail }
+    )
   mark(2, mt.title, f.section('2.2', mt.title, { newPage: true }), '2.2')
   f.label(['NGUYÊN LIỆU', '材料'])
-  mt.items.forEach((it) => card(it))
+  cards(mt.items, 330)
   const [mold, ...tools] = mt.tools
-  f.section(null, ['Dụng cụ', '道具'], { newPage: f.room < 420 })
-  f.figure(mold[2], { minH: 180, maxH: 220 })
+  f.section(null, ['Dụng cụ', '道具'], { newPage: f.room < 330 })
+  f.figure(mold[2], { minH: 170, maxH: 230 })
   f.place(24, (p, y) => p.add(T(p.x0, y, p.cw, 24, mold[0], { font: F.head, size: S.card, weight: 700, color: ACC[2], lh: 1.25, jaFont: F.jaHead, name: 'Tên' })), 8)
-  f.prose([mold[1]], { size: 14.5, jaSize: 13.5 })
-  tools.forEach((it) => card(it))
+  f.prose([mold[1]], { size: 16.5 })
+  cards(tools)
   f.note(mt.outro)
+  f.fillGap(filler(2))
 
   // 2.3 — quy trình
   const pr = ch.process
@@ -716,25 +815,30 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   f.prose(pr.leaf.p)
   f.row(pr.leaf.images, { minH: 170, maxH: 260 })
   const iwS = 190
-  pr.steps.forEach((s) => {
+  const stepTw = CW - iwS - 18
+  const stepTo = { size: 16, lh: 1.55, jaSize: jaPt(16) }
+  const stepNameO = { font: F.head, size: 21, lh: 1.25, jaSize: 20.5 }
+  const stepName = (s) => [`Bước ${s.no} · ${s.name[0]}`, `ステップ${s.no}・${s.name[1]}`]
+  const stepHead = (s) => textH(stepName(s), CW - 54, stepNameO) + 36
+  f.cards(pr.steps, (s) => stepHead(s) + Math.max(textH(s.text, stepTw, stepTo), 190), (p, y, s, h) => {
     const acc = ACC[2]
-    const tw = CW - iwS - 18
-    const to = { size: 14, lh: 1.6, jaSize: 13 }
+    const tw = stepTw
+    const to = stepTo
     const th = textH(s.text, tw, to)
-    const nameO = { font: F.head, size: 20, lh: 1.25, jaSize: 19 }
-    const nm = [`Bước ${s.no} · ${s.name[0]}`, `ステップ${s.no}・${s.name[1]}`]
-    const nh = textH(nm, CW - 54, nameO)
-    const body = Math.max(th, 190)
-    const h = nh + 22 + 14 + body
-    f.place(h, (p, y) => {
+    const nameO = stepNameO
+    const nm = stepName(s)
+    const nh = stepHead(s) - 36
+    const body = h - stepHead(s)
+    {
       p.add(ELL(p.x0, y, 42, 42, acc), T(p.x0, y + 9, 42, 24, [String(s.no), null], { font: F.head, size: 19, weight: 700, color: '#fff', align: 'center', lh: 1.2, name: 'Số bước' }))
       p.add(T(p.x0 + 54, y, CW - 54, nh, nm, { ...nameO, weight: 700, color: C.ink, jaFont: F.jaHead, name: 'Tên bước' }))
-      p.add(T(p.x0 + 54, y + nh + 2, CW - 54, 18, s.sub, { size: 12.5, italic: true, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Phụ đề' }))
+      p.add(T(p.x0 + 54, y + nh + 2, CW - 54, 18, s.sub, { size: 13.5, italic: true, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Phụ đề' }))
       const iy = y + nh + 36
       p.add(IMG(p.x0, iy, iwS, body, s.image))
       p.add(T(p.x0 + iwS + 18, iy, tw, th, s.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả bước' }))
-    }, 34)
-  })
+    }
+  }, { gap: 34, grow: 70, tail: Infinity })
+  f.fillGap(filler(2))
   // trang kết chương: ảnh nón hoàn thiện + trích dẫn
   const p = new Page({ chapter: 2, hideNumber: true })
   p.add(IMG(0, 0, W, H - 230, ['Ảnh toàn trang: chiếc nón lá trắng hoàn thiện, bóng nhẹ sau khi quang dầu', '全面写真：油を塗り終え、やわらかな艶をもつ完成したノンラー']), RECT(0, H - 230, W, 230, C.cream, { name: 'Nền' }), DECO('non-line', W / 2 - 80, H - 214, 160, 85, 0.6))
@@ -768,49 +872,50 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   f.section(null, ar.title, { newPage: true })
   f.prose([ar.intro])
   const bioO = { size: S.cardText, lh: 1.55, jaSize: S.cardTextJa }
-  const person = ([name, role, bio], img) => {
-    const iw = img ? 130 : 0
-    const tx = img ? iw + 18 : 0
-    const tw = CW - tx
-    const nh = textH(name, tw, { size: S.card, font: F.head, lh: 1.25 })
-    const bh = textH(bio, tw, bioO)
-    const h = Math.max(nh + 24 + bh, img ? 170 : 0)
-    f.place(h, (p, y) => {
-      if (img) p.add(IMG(p.x0, y, iw, 170, img))
+  const personW = (img) => CW - (img ? 148 : 0)
+  const personNh = (name, img) => textH(name, personW(img), { size: S.card, font: F.head, lh: 1.25 })
+  const people = (list, tail = 0) =>
+    f.cards(list, ([[name, , bio], img]) => Math.max(personNh(name, img) + 24 + textH(bio, personW(img), bioO), img ? 170 : 0), (p, y, [[name, role, bio], img], h) => {
+      const iw = img ? 130 : 0
+      const tx = img ? iw + 18 : 0
+      const tw = CW - tx
+      const nh = personNh(name, img)
+      const bh = textH(bio, tw, bioO)
+      if (img) p.add(IMG(p.x0, y, iw, Math.min(h, 230), img))
       p.add(
         T(p.x0 + tx, y - 2, tw, nh, name, { font: F.head, size: S.card, weight: 700, color: C.ink, lh: 1.25, jaFont: F.jaHead, name: 'Tên nghệ nhân' }),
-        T(p.x0 + tx, y + nh, tw, 18, role, { size: 12.5, italic: true, color: ACC[3], lh: 1.3, jaFont: F.jaSans, name: 'Vai trò' }),
+        T(p.x0 + tx, y + nh, tw, 18, role, { size: 13.5, italic: true, color: ACC[3], lh: 1.3, jaFont: F.jaSans, name: 'Vai trò' }),
         T(p.x0 + tx, y + nh + 24, tw, bh, bio, { ...bioO, align: 'justify', jaFont: F.jaBody, name: 'Tiểu sử' })
       )
-    }, 24)
-  }
+    }, { gap: 24, grow: 40, tail })
   f.label(ar.groups[0].name)
-  ar.groups[0].people.forEach((per) => person(per))
-  f.figure(['Nón lá trắng, nón quai thao cổ và bộ sưu tập các kiểu nón truyền thống', '白いノンラー、古いクアイタオ笠、伝統的な笠のコレクション'], { minH: 160, fill: true })
+  people(ar.groups[0].people.map((per) => [per, null]))
+  f.figure(['Gian trưng bày nón ở làng Chuông: nón trắng, nón quai thao, nón vẽ', 'チュオン村の笠の展示：白い笠、クアイタオ笠、絵付けの笠'], { minH: 160, fill: true })
   f.label(ar.groups[1].name)
-  ar.groups[1].people.forEach((per, i) => person(per, ar.image[i]))
+  people(ar.groups[1].people.map((per, i) => [per, ar.image[i]]), Infinity)
+  f.fillGap(filler(3))
 
   // 3.2 bảo tồn, 3.3 thách thức: mỗi chủ đề = tiêu đề nhỏ + đoạn văn + ảnh bên phải
-  const topic = ([name, text, hint]) => {
-    const iw = 160
-    const tw = CW - iw - 18
-    const nh = textH(name, CW, { size: S.card + 1, font: F.head, lh: 1.25 })
-    const th = textH(text, tw, bioO)
-    const h = nh + 12 + Math.max(th, 170)
-    f.place(h, (p, y) => {
+  const topicTw = CW - 160 - 18
+  const topicNh = (name) => textH(name, CW, { size: S.card + 1, font: F.head, lh: 1.25 })
+  const topics = (list) =>
+    f.cards(list, ([name, text]) => topicNh(name) + 12 + Math.max(textH(text, topicTw, bioO), 170), (p, y, [name, text, hint], h) => {
+      const iw = 160
+      const nh = topicNh(name)
+      const th = textH(text, topicTw, bioO)
       p.add(T(p.x0, y, p.cw, nh, name, { font: F.head, size: S.card + 1, weight: 700, color: ACC[3], lh: 1.25, jaFont: F.jaHead, name: 'Tiêu đề nhỏ' }))
-      p.add(T(p.x0, y + nh + 12, tw, th, text, { ...bioO, align: 'justify', jaFont: F.jaBody, name: 'Đoạn văn' }))
-      p.add(IMG(p.x1 - iw, y + nh + 12, iw, Math.max(170, Math.min(th, 220)), hint))
-    }, 30)
-  }
+      p.add(T(p.x0, y + nh + 12, topicTw, th, text, { ...bioO, align: 'justify', jaFont: F.jaBody, name: 'Đoạn văn' }))
+      p.add(IMG(p.x1 - iw, y + nh + 12, iw, Math.min(h - nh - 12, 300), hint))
+    }, { gap: 30, grow: 60, tail: Infinity })
   const ps = ch.preservation
   mark(2, ps.title, f.section('3.2', ps.title, { newPage: true }), '3.2')
   f.prose([ps.intro])
-  ps.topics.forEach(topic)
+  topics(ps.topics)
+  f.fillGap(filler(3))
   const cl = ch.challenges
   mark(2, cl.title, f.section('3.3', cl.title, { newPage: true }), '3.3')
   f.prose([cl.intro])
-  cl.topics.forEach(topic)
+  topics(cl.topics)
 
   const p = new Page({ chapter: 3, hideNumber: true, bg: C.cream })
   p.add(RECT(0, 0, 18, H, ACC[3], { name: 'Dải màu' }), DECO('bamboo', 56, 80, 150, 300, 0.4), HL(80, 360, 64, ACC[3], 1.8))
@@ -823,42 +928,52 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   const f = new Flow(9, ['KẾT LUẬN', 'まとめ'])
   mark(1, e.conclusion.title, f.section(null, e.conclusion.title), '—')
   f.prose(e.conclusion.p.slice(0, 2))
-  f.figure(['Nón lá hoa văn — sản phẩm sáng tạo của làng Chuông hôm nay', '絵付けのノンラー — 今のチュオン村の創作品'], { minH: 170, maxH: 300 })
+  f.figure(['Nón cô dâu vẽ hoa — sản phẩm sáng tạo của làng Chuông hôm nay', '花を描いた花嫁の笠 — 今のチュオン村の創作品'], { minH: 170, maxH: 300 })
   f.prose(e.conclusion.p.slice(2))
-  f.place(110, (p, y) => p.add(DECO('non-line', p.x0 + p.cw / 2 - 90, y, 180, 96, 0.55)), 16)
-  f.quote(e.conclusion.quote, { inset: 16, align: 'center' })
+  if (f.room > 130) f.place(110, (p, y) => p.add(DECO('non-line', p.x0 + p.cw / 2 - 90, y + (f.room - 110) / 2, 180, 96, 0.55)), 16)
+  // trang trích dẫn kết: ảnh lớn + câu trích
+  {
+    const q = new Page({ chapter: 9, hideNumber: true, bg: C.cream })
+    const qo = quoteOpt(21)
+    const qh = textH(e.conclusion.quote, W - 120, qo)
+    const top = H - qh - 150
+    q.add(IMG(0, 0, W, top, ['Nón lá hai mặt lụa xanh ngọc — sản phẩm OCOP 4 sao', '両面に翡翠色の絹を張ったノンラー — OCOP四つ星製品'], { name: 'Ảnh' }), DECO('non-line', W / 2 - 60, top + 26, 120, 64, 0.6))
+    quote(q, top + 104, e.conclusion.quote, 60, W - 120, { size: 21, align: 'center' })
+  }
 
   f.page({ label: ['LƯU Ý', 'ご注意'] })
   f.y = sectionHead(f.p, TOP, null, e.notice.title)
   f.prose(e.notice.p)
+  // họa tiết tre ở góc dưới, chỉ khi còn chỗ (không đè chữ)
+  if (BOT - f.y > 140) f.p.add(DECO('bamboo', f.p.x1 - 110, Math.max(f.y, BOT - 230), 100, Math.min(220, BOT - f.y), 0.3))
 
   f.page({ label: ['TÀI LIỆU THAM KHẢO', '参考文献'] })
   mark(1, e.references.title, f.p, '—')
   f.y = sectionHead(f.p, TOP, null, e.references.title)
   e.references.items.forEach((ref, i) => {
-    const ro = { size: 12.5, lh: 1.5 }
+    const ro = { size: 14, lh: 1.5 }
     const hh = textH([ref, null], CW - 34, ro)
     f.place(hh, (p, y) => p.add(T(p.x0, y, 30, 18, [`[${i + 1}]`, null], { size: 12, color: ACC[9], weight: 700, lh: 1.5, name: 'Số' }), T(p.x0 + 34, y, p.cw - 34, hh, [ref, null], { ...ro, color: C.ink2, name: 'Tài liệu' })), 10)
   })
-  f.place(18, (p, y) => p.add(T(p.x0, y + 6, p.cw, 18, e.references.note, { size: 11, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Ghi chú' })))
+  f.place(18, (p, y) => p.add(T(p.x0, y + 6, p.cw, 18, e.references.note, { size: 12.5, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Ghi chú' })))
 
   // nhóm thực hiện: chèn trang để bìa sau rơi vào trang trái cuối sách
   const p = new Page({ chapter: 9, bg: C.cream })
   runningHead(p, ['NHÓM THỰC HIỆN', '制作チーム'])
   let y = sectionHead(p, TOP, null, e.team.title)
-  const lo = { size: 14, lh: 1.55, jaSize: 13 }
+  const lo = { size: 16, lh: 1.55, jaSize: jaPt(16) }
   const lh = textH([e.team.lead], p.cw, lo)
   p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, name: 'Đoạn văn' }))
   y += lh + 20
   const mw = (p.cw - 14) / 2
   e.team.members.forEach(([name, code], i) => {
     const mx = p.x0 + (i % 2) * (mw + 14)
-    const my = y + Math.floor(i / 2) * 168
-    p.add(IMG(mx + (mw - 100) / 2, my, 100, 100, [`Ảnh chân dung — ${name}`, `ポートレート — ${name}`]), T(mx, my + 108, mw, 22, [name, null], { font: F.head, size: 15, align: 'center', lh: 1.3, name: 'Tên thành viên' }), T(mx, my + 132, mw, 16, [code, null], { size: 10.5, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' }))
+    const my = y + Math.floor(i / 2) * 200
+    p.add(IMG(mx + (mw - 132) / 2, my, 132, 132, [`Ảnh chân dung — ${name}`, `ポートレート — ${name}`]), T(mx, my + 140, mw, 22, [name, null], { font: F.head, size: 16.5, align: 'center', lh: 1.3, name: 'Tên thành viên' }), T(mx, my + 166, mw, 16, [code, null], { size: 12, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' }))
   })
-  y += 2 * 168 + 4
+  y += 2 * 200 + 4
   p.add(HL(p.x0, y, p.cw, C.line, 0.5))
-  const co = { size: 13, lh: 1.55, jaSize: 12.5, paraGap: 6 }
+  const co = { size: 14.5, lh: 1.55, jaSize: jaPt(14.5), paraGap: 6 }
   const pair = join([e.team.contact, e.team.thanks])
   p.add(T(p.x0, y + 18, p.cw, textH(pair, p.cw, co), pair, { ...co, align: 'center', italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Lời cảm ơn' }))
 
@@ -878,22 +993,23 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
 // ═════════════════════════════════════════ MỤC LỤC (điền sau khi biết số trang)
 {
   const p = tocPage
-  p.add(T(p.x0, 84, 320, 44, tocTitle, { font: F.head, size: 34, lh: 1.2, jaFont: F.jaHead, name: 'Tiêu đề' }), ALT(p.x0, 132, 300, tocTitle, { size: 13 }), HL(p.x0, 164, 56, ACC[0], 1.4))
+  p.add(T(p.x0, 84, 320, 44, tocTitle.map(strip), { font: F.head, size: 34, lh: 1.2, jaFont: F.jaHead, name: 'Tiêu đề' }), ALT(p.x0, 132, 300, tocTitle, { size: 13 }), HL(p.x0, 164, 56, ACC[0], 1.4))
   let y = 188
   for (const a of anchors) {
     const acc = ACC[{ '01': 1, '02': 2, '03': 3 }[a.label] ?? 9]
     const pg = String(a.page).padStart(2, '0')
     if (a.level === 1) {
       y += 12
-      const tt = a.title.map((s) => (s ? s.replace(/\n/g, ' ') : s))
-      const o = { font: F.head, size: 16, lh: 1.3, jaSize: 15 }
+      const tt = a.title.map((s) => (s ? strip(s).replace(/\n/g, ' ') : s))
+      const o = { font: F.head, size: 17.5, lh: 1.3, jaSize: 17 }
       const th = textH(tt, p.cw - 110, o)
       p.add(T(p.x0, y - 3, 44, 26, [a.label, null], { font: F.head, size: 21, color: acc, lh: 1.1, name: 'Số chương' }), T(p.x0 + 50, y, p.cw - 110, th, tt, { ...o, jaFont: F.jaHead, name: 'Mục lục' }), T(p.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 15, color: acc, align: 'right', lh: 1.3, name: 'Số trang' }))
       y += th + 8
     } else {
-      const o = { size: 12.5, lh: 1.4, jaSize: 12 }
-      const th = textH(a.title, p.cw - 150, o)
-      p.add(T(p.x0 + 50, y, 34, 18, [a.label, null], { size: 12, color: acc, weight: 700, lh: 1.4, name: 'Số mục' }), T(p.x0 + 88, y, p.cw - 150, th, a.title, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 12, color: C.muted, align: 'right', lh: 1.4, name: 'Số trang' }))
+      const o = { size: 14, lh: 1.4, jaSize: 14 }
+      const st = a.title.map(strip)
+      const th = textH(st, p.cw - 150, o)
+      p.add(T(p.x0 + 50, y, 34, 18, [a.label, null], { size: 13.5, color: acc, weight: 700, lh: 1.4, name: 'Số mục' }), T(p.x0 + 88, y, p.cw - 150, th, st, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 13.5, color: C.muted, align: 'right', lh: 1.4, name: 'Số trang' }))
       y += th + 7
     }
   }

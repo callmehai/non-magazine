@@ -31,7 +31,7 @@ export const ch2 = {
         'Ba lớp vật liệu bổ trợ cho nhau: lớp ngoài che chắn và tạo bề mặt, lớp mo nang tăng độ chắc chắn, lớp trong hoàn thiện mặt trong — tạo nên phần lá lợp vừa nhẹ nhàng, vừa ổn định.',
         '外層は{守|まも}りと表面を、竹皮は強さを、内層は内側の仕上げを担います。三つの層が{補|おぎな}い合い、軽くて安定した葺き葉ができあがります。',
       ],
-      image: ['Ảnh/ảnh 3D tách 3 lớp: lá ngoài — mo nang — lá trong', '三層を分けて見せる写真・3D図：外層の葉 — 竹皮 — 内層の葉'],
+      image: ['Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá', '葺きかけの笠：葉の間からのぞく竹皮（モーナン）の層'],
     },
     frame: {
       h: ['Khung 16 vành nứa', '16{本|ほん}の{輪|わ}の骨組み'],
@@ -49,7 +49,7 @@ export const ch2 = {
         'Cây nứa — loài cây cùng họ với tre, thân mỏng, gióng dài, mọc thành bụi ở rừng. Thân nứa chẻ ra dùng đan phên, đan lát; thanh nứa rất dẻo, thích hợp làm vành nón.',
         'ヌア竹：竹の{仲間|なかま}で、{幹|みき}が{薄|うす}く{節間|せっかん}が長く、森に{群生|ぐんせい}します。{割|わ}って{編|あ}み{物|もの}などに使われ、しなやかなので笠の輪に{適|てき}しています。',
       ],
-      image: ['Ảnh khung nứa 16 vành', '16本のヌア竹の輪でできた骨組みの写真'],
+      image: ['Nghệ nhân Lê Văn Tuy nối vành nứa vào khung nón', 'ヌア竹の輪を骨組みにつなぐ職人レー・ヴァン・トゥイ'],
     },
   },
   materials: {

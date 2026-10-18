@@ -31,9 +31,9 @@ export const ch3 = {
       ['³ OCOP (One Commune One Product – Mỗi xã một sản phẩm): chương trình phát triển sản phẩm đặc trưng địa phương, phân hạng từ 1 đến 5 sao.', '³ OCOP（一村一品）：地域の{特産品|とくさんひん}を育てるベトナムの{制度|せいど}。1〜5つ星で格付けされる。'],
     ],
     images: [
-      ['Sản phẩm OCOP tiêu biểu: ảnh + tên sản phẩm + nghệ nhân/cơ sở + hạng sao', '代表的なOCOP製品：写真・製品名・職人／工房・星の数'],
+      ['Giấy chứng nhận OCOP 4 sao cho nón chùm của cơ sở Lê Văn Tuy', 'レー・ヴァン・トゥイ工房の笠に与えられたOCOP四つ星の認定証'],
       ['Chợ nón Chuông — những chiếc nón trắng bày bán', 'チュオン村の笠市場 — 並べられた白い笠'],
-      ['Đình Chuông / bằng công nhận làng nghề truyền thống', 'チュオン村の{亭|ディン}／伝統工芸村の認定証'],
+      ['Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy', 'レー・ヴァン・トゥイ氏の「ベトナム工芸村職人」認定証'],
     ],
   },
   artisans: {
