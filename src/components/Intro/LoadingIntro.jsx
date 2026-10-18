@@ -23,7 +23,8 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
 
   return (
     <div className={`intro ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
-      <div className="intro__text">
+      {/* key theo tên: đổi ngôn ngữ thì cả tên lẫn dòng phụ cùng chạy lại hiệu ứng hiện chữ */}
+      <div className="intro__text" key={`${magazine.title}|${magazine.subtitle}`}>
         <h1 className={`intro__title ${long ? 'is-long' : ''}`} aria-label={magazine.title}>
           {words.map((w, wi) => (
             <span key={wi} className="intro__word" aria-hidden="true">
