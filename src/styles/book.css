@@ -42,8 +42,8 @@
   right: 0.6%;
   border-radius: 3px;
   box-shadow:
-    0 40px 70px -18px rgba(0, 0, 0, 0.75),
-    0 14px 26px -6px rgba(0, 0, 0, 0.45);
+    0 40px 70px -24px rgba(90, 62, 20, 0.45),
+    0 14px 26px -10px rgba(90, 62, 20, 0.28);
   transition: left 0.85s var(--ease-in-out), right 0.85s var(--ease-in-out);
   pointer-events: none;
 }

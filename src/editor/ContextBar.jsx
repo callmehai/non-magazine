@@ -1,6 +1,10 @@
 import FontPicker from './FontPicker.jsx'
 import { ColorButton, Popover, Stepper, Slider, NumberField, IconBtn, UploadButton } from './ui.jsx'
 import { boldWeight } from '../canvas/fonts.js'
+import { pageSide } from '../canvas/model.js'
+import canvasBook from '../content/canvasBook.js'
+
+const BOOK_DIRECTION = canvasBook.settings.direction
 
 /**
  * Thanh công cụ ngay trên trang — đổi theo thứ đang chọn (giống Canva):
@@ -26,9 +30,9 @@ export default function ContextBar(props) {
   )
 }
 
-function PageBar({ page, pageNumber, docColors, onPageChange, onUpload }) {
+function PageBar({ page, pageNumber, pageCount, docColors, onPageChange, onUpload }) {
   if (!page) return <div className="ed-ctx" />
-  const side = pageNumber === 1 ? 'Bìa trước' : pageNumber % 2 === 0 ? 'Trang nằm bên phải' : 'Trang nằm bên trái'
+  const side = { cover: 'Bìa trước', back: 'Bìa sau', left: 'Trang nằm bên trái', right: 'Trang nằm bên phải' }[pageSide(pageNumber, pageCount, BOOK_DIRECTION)]
   return (
     <div className="ed-ctx">
       <span className="ed-ctx__label">

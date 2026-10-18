@@ -1,5 +1,10 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import CanvasPage from '../canvas/CanvasPage.jsx'
+import { pageSide } from '../canvas/model.js'
+import canvasBook from '../content/canvasBook.js'
+
+const BOOK_DIRECTION = canvasBook.settings.direction
+const SIDE_LABEL = { cover: ' · bìa', back: ' · bìa sau', left: ' · trái', right: ' · phải' }
 
 /** Dải trang ở dưới (giống Canva): bấm để mở, kéo để đổi thứ tự, rê chuột để nhân bản/xoá. */
 export default function PageStrip({ pages, currentId, holders, myKey, onOpen, onAddClick, onDuplicate, onDelete, onMove }) {
@@ -47,7 +52,7 @@ export default function PageStrip({ pages, currentId, holders, myKey, onOpen, on
               </button>
               <span className="ed-sthumb__no">
                 {i + 1}
-                <em>{i === 0 ? ' · bìa' : i === pages.length - 1 ? ' · bìa sau' : i % 2 === 1 ? ' · phải' : ' · trái'}</em>
+                <em>{SIDE_LABEL[pageSide(i + 1, pages.length, BOOK_DIRECTION)]}</em>
               </span>
               {holder && (
                 <span className="ed-sthumb__who" style={{ '--c': colorOf(holder.user?.id || holder.key) }} title={`${holder.user?.name} đang ở trang này`}>

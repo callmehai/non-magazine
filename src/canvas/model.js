@@ -134,3 +134,14 @@ export function groupElements(els) {
   const h = Math.max(...els.map((e) => e.y + e.h)) - t
   return { id: uid(), type: 'group', name: 'Nhóm', x: l, y: t, w, h, bw: w, bh: h, children: els.map((e) => ({ ...e, x: e.x - l, y: e.y - t })) }
 }
+
+/**
+ * Trang thứ `n` (bắt đầu từ 1) nằm bên nào khi mở sách thành đôi.
+ * Bìa trước đứng một mình; sách lật trái → phải (ltr) thì trang chẵn bên trái, lật kiểu Nhật (rtl) thì ngược lại.
+ */
+export function pageSide(n, total, direction = 'ltr') {
+  if (n === 1) return 'cover'
+  if (n === total) return 'back'
+  const evenLeft = direction !== 'rtl'
+  return (n % 2 === 0) === evenLeft ? 'left' : 'right'
+}

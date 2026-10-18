@@ -813,6 +813,7 @@ function BookEditor({ store, user, onSignOut }) {
           readOnly={readOnly}
           page={page}
           pageNumber={pageIndex + 1}
+          pageCount={pages.length}
           docColors={docColors}
           onChange={updateSelected}
           onPageChange={(patch, key) => !readOnly && commitPage(currentId, patch, key && `page:${key}`)}

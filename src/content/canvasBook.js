@@ -5,14 +5,14 @@
  */
 const canvasBook = {
   slug: 'non', // tên sách trong database
-  lang: 'ja',
+  lang: 'vi', // giao diện trang đọc (nút, mục lục): người đọc chủ yếu là người Việt
   title: 'ノン',
   subtitle: '頭上の物語',
   issue: '第1号 — 2026年秋',
 
   settings: {
-    // 'rtl' = lật từ phải sang trái kiểu sách Nhật
-    direction: 'rtl',
+    // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật
+    direction: 'ltr',
     flipDuration: 950,
     backgroundMusic: 'assets/audio/background.mp3',
     backgroundMusicTitle: 'Bèo dạt mây trôi',
