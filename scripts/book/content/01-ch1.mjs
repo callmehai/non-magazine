@@ -45,8 +45,8 @@ export const ch1 = {
           images: [
             ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Tuổi Trẻ', 'カオ・ヴァン・ラウ劇場（バクリエウ）— 出典：トゥオイチェー{紙|し}'],
             ['Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí', 'ベトナム・ファッションウィーク2017のノンラー（デザイナー：チュー・ラー）— 出典：ザンチー紙'],
-            ['Nón lá bên tà áo dài — ảnh tự chụp', 'アオザイとノンラー — {著者撮影|ちょしゃさつえい}'],
-            ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam — ảnh tự chụp', 'ベトナム女性博物館の展示 — 著者撮影'],
+            ['Nón lá bên tà áo dài', 'アオザイとノンラー'],
+            ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館の展示'],
           ],
         },
       ],

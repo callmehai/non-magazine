@@ -463,8 +463,8 @@ class Flow {
 /** ảnh thật dùng để lấp chỗ trống cuối trang (Flow.fillGap / ensure), theo chương */
 const FILL = {
   1: [
-    ['Nón lá trong tranh sơn dầu — Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)', '油彩画に描かれたノンラー — ベトナム美術博物館（著者撮影）'],
-    ['Nón lá cổ trưng bày tại Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)', 'ベトナム美術博物館に展示された古いノンラー（著者撮影）'],
+    ['Nón lá trong tranh sơn dầu — Bảo tàng Mỹ thuật Việt Nam', '油彩画に描かれたノンラー — ベトナム美術博物館'],
+    ['Nón lá cổ trưng bày tại Bảo tàng Mỹ thuật Việt Nam', 'ベトナム美術博物館に展示された古いノンラー'],
     ['Người phụ nữ đội nón giữa cánh đồng — tranh tại Bảo tàng Mỹ thuật Việt Nam', '田んぼでノンラーをかぶる女性 — ベトナム美術博物館の絵画'],
   ],
   2: [
