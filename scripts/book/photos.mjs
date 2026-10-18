@@ -5,6 +5,8 @@
  * Khung không có ở đây (ảnh lấy từ báo, logo, chân dung nhóm…) vẫn là khung ảnh tạm.
  */
 export const photos = {
+  "Ảnh trang lót: hai thiếu nữ áo dài cầm nón lá bên hiên đình Chuông": "Chương 3/Không gian tại đình Chuông/Không gian đình Chuông 2",
+  "Ảnh trang lót: chùm nón lá trang trí treo dưới giàn tre": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/IMG_7343",
   "Ảnh bìa: thiếu nữ áo dài đội nón lá trong hành lang đình Chuông": "Chương 3/Không gian tại đình Chuông/Không gian đình Chuông",
   "Cổng làng Chuông, Phương Trung, Hà Nội": "Chương 1/Tại làng Chuông/IMG_3567",
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá giữa cánh đồng": "Chương 1/Tại làng Chuông/IMG_3610",

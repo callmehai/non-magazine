@@ -529,23 +529,9 @@ function chapterOpener(ch, photo) {
   )
 }
 
-/** trang lót mặt trong bìa: nền rơm, họa tiết nón lặp lại */
-function endpaper() {
-  const p = new Page({ hideNumber: true, bg: '#dcc28c' })
-  const cols = 4
-  const rows = 6
-  const cw = W / cols
-  const rh = H / rows
-  for (let r = 0; r < rows; r++)
-    for (let c = 0; c < cols; c++) {
-      const x = c * cw + (r % 2 ? cw / 2 : 0) - (r % 2 ? cw / 4 : 0)
-      p.add(DECO('non-line', x + cw * 0.18, r * rh + rh * 0.28, cw * 0.64, rh * 0.44, 0.22))
-    }
-  return p
-}
-
 // ═════════════════════════════════════════ TRANG LÓT + TRANG TÊN SÁCH
-endpaper()
+// trang lót mặt trong bìa trước: ảnh toàn trang
+photoPage(['Ảnh trang lót: hai thiếu nữ áo dài cầm nón lá bên hiên đình Chuông', '見返し写真：チュオン村の亭の軒下でノンラーを持つアオザイの女性'])
 {
   const p = new Page({ hideNumber: true, bg: C.cream })
   p.add(
@@ -1000,7 +986,7 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
 
   // trang lót mặt trong bìa sau (trang phải) rồi bìa sau (trang trái cuối cùng)
   if ((pages.length + 1) % 2 === 0) photoPage(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
-  endpaper()
+  photoPage(['Ảnh trang lót: chùm nón lá trang trí treo dưới giàn tre', '見返し写真：竹の天井から吊るされたノンラーの飾り'], 9)
   const b = new Page({ chapter: 9, hideNumber: true, bg: '#2b2118' })
   b.add(
     IMG(0, 0, W, H * 0.55, ['Ảnh bìa sau: chiếc nón lá trên nền tre, ánh sáng dịu', '裏表紙写真：竹を背景にしたノンラー'], { name: 'Ảnh bìa sau' }),
