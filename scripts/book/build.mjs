@@ -431,6 +431,35 @@ function chapterOpener(ch, photo) {
   )
 }
 
+/** trang lót mặt trong bìa: nền rơm, họa tiết nón lặp lại */
+function endpaper() {
+  const p = new Page({ hideNumber: true, bg: '#dcc28c' })
+  const cols = 4
+  const rows = 6
+  const cw = W / cols
+  const rh = H / rows
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      const x = c * cw + (r % 2 ? cw / 2 : 0) - (r % 2 ? cw / 4 : 0)
+      p.add(DECO('non-line', x + cw * 0.18, r * rh + rh * 0.28, cw * 0.64, rh * 0.44, 0.22))
+    }
+  return p
+}
+
+// ═════════════════════════════════════════ TRANG LÓT + TRANG TÊN SÁCH
+endpaper()
+{
+  const p = new Page({ hideNumber: true, bg: C.cream })
+  p.add(
+    DECO('non-line', W / 2 - 70, 200, 140, 75, 0.6),
+    T(60, 300, W - 120, 100, ['NÓN LÁ\nLÀNG CHUÔNG', null], { font: F.head, size: 34, lh: 1.15, tracking: 2.5, align: 'center', name: 'Tên sách' }),
+    T(60, 392, W - 120, 24, [strip(front.title[1]) + '：' + strip(front.subtitle[1]), null], { font: F.jaBody, size: 14, lh: 1.3, align: 'center', color: C.ink2, name: 'Tên sách tiếng Nhật' }),
+    T(60, 420, W - 120, 40, [front.subtitle[0], null], { font: F.script, size: 26, lh: 1.3, align: 'center', color: ACC[0], name: 'Chữ viết tay' }),
+    HL(W / 2 - 30, 486, 60, ACC[0], 1.2),
+    T(60, H - 150, W - 120, 60, ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật\nTrường Đại học FPT Hà Nội · 2026', null], { size: 11.5, lh: 1.7, tracking: 1, align: 'center', color: C.muted, name: 'Thông tin' })
+  )
+}
+
 // ═════════════════════════════════════════ LỜI MỞ ĐẦU
 {
   const f = new Flow(0, ['LỜI MỞ ĐẦU', 'はじめに'])
@@ -830,8 +859,9 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   const pair = join([e.team.contact, e.team.thanks])
   p.add(T(p.x0, y + 18, p.cw, textH(pair, p.cw, co), pair, { ...co, align: 'center', italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Lời cảm ơn' }))
 
-  // bìa sau: luôn là trang trái cuối cùng
-  toLeft(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
+  // trang lót mặt trong bìa sau (trang phải) rồi bìa sau (trang trái cuối cùng)
+  if ((pages.length + 1) % 2 === 0) photoPage(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
+  endpaper()
   const b = new Page({ chapter: 9, hideNumber: true, bg: '#2b2118' })
   b.add(
     IMG(0, 0, W, H * 0.55, ['Ảnh bìa sau: chiếc nón lá trên nền tre, ánh sáng dịu', '裏表紙写真：竹を背景にしたノンラー'], { name: 'Ảnh bìa sau' }),

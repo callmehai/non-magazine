@@ -19,6 +19,7 @@ export async function loadCanvasBook(config, slug, { draft = false } = {}) {
     type: 'canvas',
     data: p,
     hard: i === 0 || i === n - 1,
+    soft: true, // bìa vẫn lật cong như trang giấy; kiểu "bìa cứng" của StPageFlip xoay phẳng như cánh cửa
     folio: i !== 0 && i !== n - 1 && !p.hideNumber ? i + 1 : null,
     thumbnailLabel: i === 0 ? t('cover') : i === n - 1 ? t('backCover') : undefined,
   }))

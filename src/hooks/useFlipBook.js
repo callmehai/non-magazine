@@ -39,7 +39,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       const el = document.createElement('div')
       el.className = 'mag-sheet'
       el.dataset.index = String(i)
-      el.dataset.density = page.type === 'cover' || page.hard ? 'hard' : 'soft'
+      el.dataset.density = (page.type === 'cover' || page.hard) && !page.soft ? 'hard' : 'soft'
       return el
     })
   )
@@ -101,7 +101,13 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       if (e.data === 'flipping') onFlipStartRef.current?.(pf)
     })
     pf.on('init', () => setReady(true))
-    pf.loadFromHTML(rtl ? [...pageEls].reverse() : pageEls)
+    const order = rtl ? [...pageEls].reverse() : pageEls
+    pf.loadFromHTML(order)
+    // showCover khiến StPageFlip ép bìa trước/sau thành "bìa cứng" (xoay phẳng như cánh cửa);
+    // trang nào được yêu cầu mềm thì trả lại mềm để lật cong như giấy
+    order.forEach((el, i) => {
+      if (el.dataset.density === 'soft') pf.getPage(i)?.setDensity('soft')
+    })
     root.style.minWidth = '0'
     root.style.minHeight = '0'
     flipRef.current = pf
