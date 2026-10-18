@@ -4,7 +4,7 @@
  */
 const STRINGS = {
   vi: {
-    bookAria: 'Tạp chí {title}',
+    bookAria: 'Sách {title}',
     replay: 'Xem lại nón 3D',
     replayAria: 'Xem lại màn mở đầu nón lá 3D',
     prevPage: 'Trang trước',
@@ -49,7 +49,7 @@ const STRINGS = {
     nextImage: 'Ảnh sau',
     hintTouch: 'Chạm hoặc vuốt để lật trang',
     hintMouse: 'Click hoặc kéo để lật trang',
-    openBook: 'Mở tạp chí',
+    openBook: 'Mở sách',
     introDrag: 'Kéo để xoay chiếc nón — lật lên để xem mặt trong',
     introLoading: 'Đang đan chiếc nón...',
     bootLoading: 'Đang mở sách…',

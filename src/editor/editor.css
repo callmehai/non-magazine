@@ -1777,3 +1777,57 @@
   opacity: 0.6;
   cursor: default;
 }
+
+/* ════ Song ngữ: chọn bản đang sửa ════ */
+.ed-langswitch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 10px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.ed-langswitch > span {
+  padding: 0 6px 0 8px;
+  opacity: 0.7;
+}
+
+.ed-langswitch button {
+  height: 26px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: rgba(255, 255, 255, 0.8);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ed-langswitch button:hover {
+  color: #fff;
+}
+
+.ed-langswitch button.is-on {
+  background: #fff;
+  color: var(--ed-accent);
+  font-weight: 600;
+}
+
+/* sửa bản tiếng Nhật: bản tiếng Việt mờ phía sau làm tham khảo */
+.ed-editing__ref {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.ed-ctx__hint code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.06);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.95em;
+}

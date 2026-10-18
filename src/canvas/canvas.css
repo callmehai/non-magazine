@@ -160,3 +160,39 @@
   inset: 0;
   overflow: hidden;
 }
+
+/* ── phiên âm (furigana): chữ Hán khó có gạch chấm; rê chuột / chạm mới hiện cách đọc ── */
+.cv-text ruby {
+  ruby-position: over;
+  text-decoration: underline dotted rgba(140, 106, 51, 0.55);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.22em;
+  cursor: help;
+  border-radius: 0.1em;
+  outline: none;
+}
+
+.cv-text rt {
+  font-size: 0.5em;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.cv-text ruby:hover,
+.cv-text ruby:focus-visible {
+  background: rgba(217, 189, 132, 0.28);
+}
+
+.cv-text ruby:hover rt,
+.cv-text ruby:focus rt,
+.cv-book-furigana .cv-text rt {
+  opacity: 1;
+}
+
+/* editor đang xem tiếng Nhật, khối chưa dịch: mờ + viền chấm */
+.cv-text.is-missing {
+  opacity: 0.4;
+  outline: 1px dashed rgba(140, 106, 51, 0.6);
+  outline-offset: 2px;
+}

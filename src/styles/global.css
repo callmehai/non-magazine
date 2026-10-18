@@ -253,3 +253,51 @@ button {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── đổi ngôn ngữ (sách song ngữ): góc trên phải, luôn hiện ── */
+.langswitch {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  z-index: 40;
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--ui-line);
+  border-radius: 999px;
+  background: var(--ui-bg);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--ui-shadow);
+}
+
+.langswitch button {
+  min-width: 52px;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ui-text-2);
+  font: 500 12.5px/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.langswitch button[lang='ja'] {
+  font-family: 'Noto Sans JP', var(--font-sans);
+}
+
+.langswitch button:hover {
+  color: var(--ui-strong);
+}
+
+.langswitch button.is-on {
+  background: var(--ui-strong);
+  color: #fdf8ea;
+}
+
+/* tên số báo bên phải nhường chỗ cho nút ngôn ngữ */
+.langswitch ~ .brand .brand__issue,
+.brand:has(~ .langswitch) .brand__issue {
+  margin-right: 150px;
+}

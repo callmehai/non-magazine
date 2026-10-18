@@ -5,10 +5,20 @@
  */
 const canvasBook = {
   slug: 'non', // tên sách trong database
-  lang: 'vi', // giao diện trang đọc (nút, mục lục): người đọc chủ yếu là người Việt
-  title: 'ノン',
-  subtitle: '頭上の物語',
-  issue: '第1号 — 2026年秋',
+  // Song ngữ: người đọc bấm VI / 日本語 ở góc trên phải. Mặc định tiếng Việt (người đọc chủ yếu là người Việt).
+  // Mỗi khối chữ có bản tiếng Việt (text) và tiếng Nhật (ja); khối chưa dịch thì hiện tiếng Việt.
+  lang: 'vi',
+  languages: ['vi', 'ja'],
+  title: 'Nón lá Làng Chuông',
+  subtitle: 'Nét đẹp truyền thống Việt Nam',
+  issue: 'Đồ án tốt nghiệp · ĐH FPT Hà Nội · 2026',
+  translations: {
+    ja: {
+      title: 'チュオン村のノンラー',
+      subtitle: 'ベトナムの伝統美',
+      issue: 'FPT大学ハノイ校 卒業制作 · 2026',
+    },
+  },
 
   settings: {
     // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật

@@ -60,7 +60,7 @@ function PageBar({ page, pageNumber, pageCount, docColors, onPageChange, onUploa
   )
 }
 
-function TextTools({ el, onChange, docColors }) {
+function TextTools({ el, onChange, docColors, editLang }) {
   const bold = (el.weight || 400) >= 600
   const nextAlign = { left: 'center', center: 'right', right: 'left' }[el.align || 'left']
   return (
@@ -95,6 +95,11 @@ function TextTools({ el, onChange, docColors }) {
           </label>
         </div>
       </Popover>
+      {editLang === 'ja' && (
+        <span className="ed-ctx__hint" lang="ja">
+          Phiên âm chữ khó: gõ <code>{'{漢字|かんじ}'}</code> — người đọc rê chuột vào sẽ thấy cách đọc
+        </span>
+      )}
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
+import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby } from './lang.js'
 
 /**
  * Vẽ một trang "canvas" (dữ liệu JSON do editor tạo) — dùng chung cho editor và flipbook.
@@ -81,27 +82,32 @@ function ElementBody({ el, mode, visible }) {
   }
 }
 
-export function textStyle(el) {
+export function textStyle(el, lang = 'vi') {
+  const size = sizeOf(el, lang)
   return {
-    fontFamily: fontStack(el.font),
+    fontFamily: fontStack(fontOf(el, lang)),
     fontWeight: el.weight || 400,
     fontStyle: el.italic ? 'italic' : 'normal',
-    fontSize: `${el.size}em`,
+    fontSize: `${size}em`,
     color: el.color,
     textAlign: el.align || 'left',
     lineHeight: el.lineHeight || 1.5,
-    letterSpacing: el.tracking ? `${el.tracking / el.size}em` : undefined,
+    letterSpacing: el.tracking ? `${el.tracking / size}em` : undefined,
     writingMode: el.vertical ? 'vertical-rl' : undefined,
-    '--para-gap': `${(el.paraGap || 0) / el.size}em`,
+    '--para-gap': `${(el.paraGap || 0) / size}em`,
   }
 }
 
 function TextBody({ el, mode }) {
-  const paras = String(el.text ?? '').split('\n')
+  const lang = useCanvasLang()
+  const paras = String(textOf(el, lang)).split('\n')
+  // editor đang xem tiếng Nhật mà khối này chưa dịch → hiện mờ bản tiếng Việt để biết còn thiếu
+  const missing = mode === 'edit' && !hasLang(el, lang)
+  const shown = missing ? 'vi' : lang
   const body = (
-    <div className={`cv-text ${el.vertical ? 'is-vertical' : ''}`} style={textStyle(el)}>
+    <div className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
-        <p key={i}>{p || ' '}</p>
+        <p key={i}>{p ? <RubyText text={p} /> : '\u00a0'}</p>
       ))}
     </div>
   )
@@ -113,6 +119,24 @@ function TextBody({ el, mode }) {
     )
   }
   return body
+}
+
+/** {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css) */
+function RubyText({ text }) {
+  const parts = parseRuby(text)
+  if (parts.length === 1 && typeof parts[0] === 'string') return text
+  return parts.map((p, i) =>
+    typeof p === 'string' ? (
+      p
+    ) : (
+      <ruby key={i} tabIndex={0}>
+        {p.base}
+        <rp>(</rp>
+        <rt>{p.ruby}</rt>
+        <rp>)</rp>
+      </ruby>
+    )
+  )
 }
 
 function ShapeBody({ el }) {

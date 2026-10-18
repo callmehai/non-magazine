@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Moveable from 'react-moveable'
 import CanvasPage, { boxStyle, textStyle, PAGE_W, PAGE_H } from '../canvas/CanvasPage.jsx'
 import { DND_TYPE } from './SidePanel.jsx'
+import { useCanvasLang, plainText } from '../canvas/lang.js'
 
 const RATIO = PAGE_W / PAGE_H
 const SNAP_DIRS = { top: true, left: true, bottom: true, right: true, center: true, middle: true }
@@ -298,9 +299,13 @@ const r1 = (v) => Math.round(v * 10) / 10
 /** Sửa chữ ngay trên trang (nhấp đúp). Enter = xuống dòng, Esc/bấm ra ngoài = xong. */
 function EditableText({ el, onDone }) {
   const ref = useRef(null)
+  const lang = useCanvasLang()
+  const ja = lang === 'ja'
+  // sửa bản tiếng Nhật: khối chưa dịch bắt đầu trống, bản tiếng Việt hiện mờ phía sau để tham khảo
+  const initial = ja ? el.ja || '' : el.text || ''
   useLayoutEffect(() => {
     const node = ref.current
-    node.innerText = el.text || ''
+    node.innerText = initial
     node.focus()
     const range = document.createRange()
     range.selectNodeContents(node)
@@ -312,10 +317,16 @@ function EditableText({ el, onDone }) {
   }, [])
   return (
     <div className="cv-el ed-editing" style={boxStyle(el)}>
+      {ja && !el.ja && (
+        <div className={`cv-text ed-editing__ref ${el.vertical ? 'is-vertical' : ''}`} style={textStyle(el)} aria-hidden="true">
+          {plainText(el.text)}
+        </div>
+      )}
       <div
         ref={ref}
+        lang={ja ? 'ja' : 'vi'}
         className={`cv-text ${el.vertical ? 'is-vertical' : ''}`}
-        style={textStyle(el)}
+        style={textStyle(ja ? { ...el, ja: el.ja || '…' } : el, lang)}
         contentEditable="plaintext-only"
         suppressContentEditableWarning
         spellCheck={false}

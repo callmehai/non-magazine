@@ -10,6 +10,7 @@ import SidePanel from './SidePanel.jsx'
 import PageStrip, { colorOf, initials } from './PageStrip.jsx'
 import { colorsOfPage } from './ui.jsx'
 import HistoryPanel from './HistoryPanel.jsx'
+import { CanvasLang, textField, plainText } from '../canvas/lang.js'
 import VideoPreview from './VideoPreview.jsx'
 import { useConfirm, useToasts, GlobeIcon } from './Overlays.jsx'
 import { TEMPLATE_KINDS } from '../canvas/model.js'
@@ -103,6 +104,23 @@ function BookEditor({ store, user, onSignOut }) {
   const [currentId, setCurrentId] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])
   const [editingId, setEditingId] = useState(null)
+  // đang sửa bản nào của sách song ngữ (nhớ trên máy này)
+  const [editLang, setEditLangState] = useState(() => {
+    try {
+      return localStorage.getItem('non-editor-lang') === 'ja' ? 'ja' : 'vi'
+    } catch {
+      return 'vi'
+    }
+  })
+  const setEditLang = (l) => {
+    setEditLangState(l)
+    setEditingId(null)
+    try {
+      localStorage.setItem('non-editor-lang', l)
+    } catch {
+      /* bỏ qua */
+    }
+  }
   const [zoom, setZoom] = useState(1)
   const [tab, setTab] = useState('text')
   const [uploads, setUploads] = useState([])
@@ -737,178 +755,191 @@ function BookEditor({ store, user, onSignOut }) {
   const previewUrl = `${location.pathname}?draft=1`
 
   return (
-    <div className={`ed-app ${tab ? 'has-panel' : ''}`}>
-      <header className="ed-top">
-        <div className="ed-top__left">
-          <strong className="ed-top__title">{book.title}</strong>
-          <span className={`ed-save is-${saveState}`}>{saveState === 'saving' ? 'Đang lưu…' : saveState === 'error' ? 'Lỗi lưu!' : '✓ Đã lưu'}</span>
-          {store.kind === 'local' && <span className="ed-badge">Chế độ thử — lưu trên máy này</span>}
-        </div>
-        <div className="ed-top__mid">
-          <button
-            type="button"
-            className="ed-btn ed-btn--ghost"
-            onClick={() => undo(false)}
-            disabled={readOnly || !hist.undo}
-            title={hist.undo ? `Hoàn tác (${MOD}Z) · còn ${hist.undo} bước` : 'Chưa có gì để hoàn tác'}
-            aria-label="Hoàn tác"
-          >
-            ↶
-          </button>
-          <button
-            type="button"
-            className="ed-btn ed-btn--ghost"
-            onClick={() => undo(true)}
-            disabled={readOnly || !hist.redo}
-            title={hist.redo ? `Làm lại (${MOD}⇧Z) · còn ${hist.redo} bước` : 'Chưa có gì để làm lại'}
-            aria-label="Làm lại"
-          >
-            ↷
-          </button>
-          <button type="button" className="ed-btn ed-btn--ghost ed-histbtn" onClick={() => setHistoryPanel({ open: true })} disabled={!page} title="Xem và khôi phục bản cũ của trang này">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-              <path d="M3 3v5h5" />
-              <path d="M12 7v5l4 2" />
-            </svg>
-            Lịch sử
-          </button>
-        </div>
-        <div className="ed-top__right">
-          <div className="ed-people">
-            {others.map((p) => (
-              <span key={p.key} className="ed-avatar" style={{ '--c': colorOf(p.user?.id || p.key) }} title={`${p.user?.name} — trang ${pages.findIndex((x) => x.id === p.pageId) + 1 || '?'}`}>
-                {initials(p.user?.name)}
-              </span>
-            ))}
+    <CanvasLang.Provider value={editLang}>
+      <div className={`ed-app ${tab ? 'has-panel' : ''}`}>
+        <header className="ed-top">
+          <div className="ed-top__left">
+            <strong className="ed-top__title">{book.title}</strong>
+            <span className={`ed-save is-${saveState}`}>{saveState === 'saving' ? 'Đang lưu…' : saveState === 'error' ? 'Lỗi lưu!' : '✓ Đã lưu'}</span>
+            {store.kind === 'local' && <span className="ed-badge">Chế độ thử — lưu trên máy này</span>}
           </div>
-          <a className="ed-btn" href={previewUrl} target="_blank" rel="noreferrer">
-            Xem thử
-          </a>
-          {user.role === 'admin' && (
-            <button type="button" className="ed-btn ed-btn--primary" onClick={publish}>
-              Xuất bản
+          <div className="ed-top__mid">
+            <div className="ed-langswitch" role="group" aria-label="Đang sửa bản">
+              <span>Bản</span>
+              <button type="button" className={editLang === 'vi' ? 'is-on' : ''} aria-pressed={editLang === 'vi'} onClick={() => setEditLang('vi')}>
+                Tiếng Việt
+              </button>
+              <button type="button" lang="ja" className={editLang === 'ja' ? 'is-on' : ''} aria-pressed={editLang === 'ja'} onClick={() => setEditLang('ja')} title="Chữ chưa dịch hiện mờ, viền chấm">
+                日本語
+              </button>
+            </div>
+            <button
+              type="button"
+              className="ed-btn ed-btn--ghost"
+              onClick={() => undo(false)}
+              disabled={readOnly || !hist.undo}
+              title={hist.undo ? `Hoàn tác (${MOD}Z) · còn ${hist.undo} bước` : 'Chưa có gì để hoàn tác'}
+              aria-label="Hoàn tác"
+            >
+              ↶
             </button>
-          )}
-          <button type="button" className="ed-btn ed-btn--ghost" onClick={onSignOut} title="Đăng xuất">
-            {user.name} ⎋
-          </button>
-        </div>
-      </header>
-
-      <SidePanel
-        tab={tab}
-        onTab={setTab}
-        uploads={uploads}
-        uploading={uploading}
-        onAddPage={(tpl) => addPage(tpl)}
-        onAddElement={addElement}
-        onAddAsset={async (a) => addElement(await elementFromAsset(a))}
-        onUploadFiles={uploadFiles}
-      />
-
-      <main className="ed-main">
-        <ContextBar
-          selection={selection}
-          readOnly={readOnly}
-          page={page}
-          pageNumber={pageIndex + 1}
-          pageCount={pages.length}
-          docColors={docColors}
-          onChange={updateSelected}
-          onPageChange={(patch, key) => !readOnly && commitPage(currentId, patch, key && `page:${key}`)}
-          onUpload={uploadForField}
-          onPreviewVideo={(id) => setVideoPreview({ id, open: true })}
-          onUngroup={ungroup}
-          onGroup={groupSelected}
-          onLayer={layer}
-          onAlign={align}
-          onDuplicate={duplicateSelected}
-          onDelete={deleteSelected}
-        />
-        {readOnly && (
-          <div className="ed-lock" style={{ '--c': colorOf(holder.user?.id || holder.key) }}>
-            <b>{holder.user?.name}</b> đang sửa trang này — bạn chỉ xem được. Trang tự mở khoá khi họ chuyển sang trang khác.
+            <button
+              type="button"
+              className="ed-btn ed-btn--ghost"
+              onClick={() => undo(true)}
+              disabled={readOnly || !hist.redo}
+              title={hist.redo ? `Làm lại (${MOD}⇧Z) · còn ${hist.redo} bước` : 'Chưa có gì để làm lại'}
+              aria-label="Làm lại"
+            >
+              ↷
+            </button>
+            <button type="button" className="ed-btn ed-btn--ghost ed-histbtn" onClick={() => setHistoryPanel({ open: true })} disabled={!page} title="Xem và khôi phục bản cũ của trang này">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+                <path d="M12 7v5l4 2" />
+              </svg>
+              Lịch sử
+            </button>
           </div>
-        )}
-        {page ? (
-          <Stage
-            page={page}
-            zoom={zoom}
-            selectedIds={selectedIds}
-            editingId={editingId}
-            readOnly={readOnly}
-            onSelect={setSelectedIds}
-            onCommit={(patches) => updateElements(patches)}
-            onStartEdit={(id) => {
-              setSelectedIds([id])
-              setEditingId(id)
-            }}
-            onEndEdit={(id, text) => {
-              setEditingId(null)
-              const el = pagesRef.current.find((p) => p.id === currentId)?.elements.find((x) => x.id === id)
-              if (el && el.text !== text) updateElements({ [id]: { text } })
-            }}
-            onDropData={onDropData}
-            onDropFiles={onDropFiles}
-            onOpenVideo={(id) => setVideoPreview({ id, open: true })}
-            onEnterGroup={ungroup}
-          />
-        ) : (
-          <div className="ed-splash ed-splash--inline">Sách chưa có trang nào — bấm “+” ở dưới để thêm.</div>
-        )}
-        <div className="ed-zoom">
-          <button type="button" onClick={() => setZoom((z) => Math.max(0.5, Math.round((z - 0.25) * 100) / 100))} title="Thu nhỏ">
-            −
-          </button>
-          <button type="button" onClick={() => setZoom(1)} title="Vừa màn hình">
-            {Math.round(zoom * 100)}%
-          </button>
-          <button type="button" onClick={() => setZoom((z) => Math.min(3, Math.round((z + 0.25) * 100) / 100))} title="Phóng to">
-            +
-          </button>
-        </div>
-        <PageStrip
-          pages={pages}
-          currentId={currentId}
-          holders={holders}
-          myKey={myKey}
-          onOpen={setCurrentId}
-          onAddClick={() => setTab('templates')}
-          onDuplicate={duplicatePage}
-          onDelete={deletePage}
-          onMove={movePage}
-        />
-      </main>
+          <div className="ed-top__right">
+            <div className="ed-people">
+              {others.map((p) => (
+                <span key={p.key} className="ed-avatar" style={{ '--c': colorOf(p.user?.id || p.key) }} title={`${p.user?.name} — trang ${pages.findIndex((x) => x.id === p.pageId) + 1 || '?'}`}>
+                  {initials(p.user?.name)}
+                </span>
+              ))}
+            </div>
+            <a className="ed-btn" href={previewUrl} target="_blank" rel="noreferrer">
+              Xem thử
+            </a>
+            {user.role === 'admin' && (
+              <button type="button" className="ed-btn ed-btn--primary" onClick={publish}>
+                Xuất bản
+              </button>
+            )}
+            <button type="button" className="ed-btn ed-btn--ghost" onClick={onSignOut} title="Đăng xuất">
+              {user.name} ⎋
+            </button>
+          </div>
+        </header>
 
-      {historyPanel && (
-        <HistoryPanel
-          open={historyPanel.open}
-          store={store}
-          page={page}
-          pageNumber={pageIndex + 1}
-          readOnly={readOnly}
-          getSessionVersions={getSessionVersions}
-          refreshKey={historyTick}
-          undoKey={`${MOD}Z`}
-          onRestore={restoreVersion}
-          onClose={closeHistory}
-          onGone={goneHistory}
+        <SidePanel
+          tab={tab}
+          onTab={setTab}
+          uploads={uploads}
+          uploading={uploading}
+          onAddPage={(tpl) => addPage(tpl)}
+          onAddElement={addElement}
+          onAddAsset={async (a) => addElement(await elementFromAsset(a))}
+          onUploadFiles={uploadFiles}
         />
-      )}
-      {previewEl?.src && (
-        <VideoPreview
-          open={videoPreview.open}
-          el={previewEl}
-          readOnly={readOnly}
-          onSetPoster={(v) => setPosterFromFrame(v, previewEl.id)}
-          onClose={closeVideo}
-          onGone={goneVideo}
-        />
-      )}
-      {toaster}
-      {confirmDialog}
-    </div>
+
+        <main className="ed-main">
+          <ContextBar
+            selection={selection}
+            readOnly={readOnly}
+            page={page}
+            pageNumber={pageIndex + 1}
+            pageCount={pages.length}
+            editLang={editLang}
+            docColors={docColors}
+            onChange={updateSelected}
+            onPageChange={(patch, key) => !readOnly && commitPage(currentId, patch, key && `page:${key}`)}
+            onUpload={uploadForField}
+            onPreviewVideo={(id) => setVideoPreview({ id, open: true })}
+            onUngroup={ungroup}
+            onGroup={groupSelected}
+            onLayer={layer}
+            onAlign={align}
+            onDuplicate={duplicateSelected}
+            onDelete={deleteSelected}
+          />
+          {readOnly && (
+            <div className="ed-lock" style={{ '--c': colorOf(holder.user?.id || holder.key) }}>
+              <b>{holder.user?.name}</b> đang sửa trang này — bạn chỉ xem được. Trang tự mở khoá khi họ chuyển sang trang khác.
+            </div>
+          )}
+          {page ? (
+            <Stage
+              page={page}
+              zoom={zoom}
+              selectedIds={selectedIds}
+              editingId={editingId}
+              readOnly={readOnly}
+              onSelect={setSelectedIds}
+              onCommit={(patches) => updateElements(patches)}
+              onStartEdit={(id) => {
+                setSelectedIds([id])
+                setEditingId(id)
+              }}
+              onEndEdit={(id, text) => {
+                setEditingId(null)
+                const el = pagesRef.current.find((p) => p.id === currentId)?.elements.find((x) => x.id === id)
+                const field = textField(editLang) // tiếng Việt → text, tiếng Nhật → ja
+                if (el && (el[field] || '') !== text) updateElements({ [id]: { [field]: text || undefined } })
+              }}
+              onDropData={onDropData}
+              onDropFiles={onDropFiles}
+              onOpenVideo={(id) => setVideoPreview({ id, open: true })}
+              onEnterGroup={ungroup}
+            />
+          ) : (
+            <div className="ed-splash ed-splash--inline">Sách chưa có trang nào — bấm “+” ở dưới để thêm.</div>
+          )}
+          <div className="ed-zoom">
+            <button type="button" onClick={() => setZoom((z) => Math.max(0.5, Math.round((z - 0.25) * 100) / 100))} title="Thu nhỏ">
+              −
+            </button>
+            <button type="button" onClick={() => setZoom(1)} title="Vừa màn hình">
+              {Math.round(zoom * 100)}%
+            </button>
+            <button type="button" onClick={() => setZoom((z) => Math.min(3, Math.round((z + 0.25) * 100) / 100))} title="Phóng to">
+              +
+            </button>
+          </div>
+          <PageStrip
+            pages={pages}
+            currentId={currentId}
+            holders={holders}
+            myKey={myKey}
+            onOpen={setCurrentId}
+            onAddClick={() => setTab('templates')}
+            onDuplicate={duplicatePage}
+            onDelete={deletePage}
+            onMove={movePage}
+          />
+        </main>
+
+        {historyPanel && (
+          <HistoryPanel
+            open={historyPanel.open}
+            store={store}
+            page={page}
+            pageNumber={pageIndex + 1}
+            readOnly={readOnly}
+            getSessionVersions={getSessionVersions}
+            refreshKey={historyTick}
+            undoKey={`${MOD}Z`}
+            onRestore={restoreVersion}
+            onClose={closeHistory}
+            onGone={goneHistory}
+          />
+        )}
+        {previewEl?.src && (
+          <VideoPreview
+            open={videoPreview.open}
+            el={previewEl}
+            readOnly={readOnly}
+            onSetPoster={(v) => setPosterFromFrame(v, previewEl.id)}
+            onClose={closeVideo}
+            onGone={goneVideo}
+          />
+        )}
+        {toaster}
+        {confirmDialog}
+      </div>
+    </CanvasLang.Provider>
   )
 }
 
@@ -928,6 +959,6 @@ const short = (name, n = 30) => (name.length > n ? name.slice(0, n) + '…' : na
 function describePage(p) {
   // bỏ chữ trang trí (dấu ngoặc lớn, số chương…): cần ít nhất 2 chữ cái thật
   const texts = (p?.elements || []).filter((e) => e.type === 'text' && /[\p{L}]{2,}/u.test(e.text || ''))
-  const title = [...texts].sort((a, b) => b.size - a.size)[0]?.text.split('\n')[0]
+  const title = plainText([...texts].sort((a, b) => b.size - a.size)[0]?.text.split('\n')[0] || '')
   return title ? `“${short(title, 24)}”` : KIND_NAMES[p?.template] || 'trang trống'
 }

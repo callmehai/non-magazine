@@ -5,6 +5,7 @@
  * weights: các độ đậm font có (xin độ đậm không có → Google trả lỗi)
  * italic:  font có kiểu nghiêng thật
  */
+import { fontOf } from './lang.js'
 export const FONT_LIST = [
   // ゴシック — chữ không chân
   { family: 'Noto Sans JP', group: 'Gothic', weights: [400, 700] },
@@ -74,6 +75,7 @@ export function ensureFontsFor(pages) {
   const walk = (els) => {
     for (const el of els || []) {
       if (el.font) ensureFont(el.font)
+      if (el.ja) ensureFont(fontOf(el, 'ja')) // bản tiếng Nhật dùng font Nhật tương ứng
       if (el.children) walk(el.children)
     }
   }

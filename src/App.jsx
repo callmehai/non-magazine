@@ -19,13 +19,33 @@ import { useIdle } from './hooks/useIdle.js'
 import { MagazineContext } from './lib/context.js'
 import { playFlipSound } from './lib/sound.js'
 import { asset, hasAsset } from './lib/assets.js'
-import { t } from './lib/i18n.js'
+import { t, setLang } from './lib/i18n.js'
+import { CanvasLang } from './canvas/lang.js'
 
 const INTRO_MS = 3200
 const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
 
-export default function App({ magazine }) {
+export default function App({ magazine: source }) {
+  // sách hai ngôn ngữ (source.languages): đổi ngôn ngữ = đổi chữ trên trang + tên sách + chữ giao diện
+  const languages = source.languages
+  const [lang, setLangState] = useState(() => initialLang(languages, source.lang))
+  if (languages) setLang(lang) // trước khi vẽ, để t() trả đúng ngôn ngữ
+  const magazine = useMemo(() => ({ ...source, ...(source.translations?.[lang] || {}) }), [source, lang])
+  const changeLang = useCallback((next) => {
+    setLangState(next)
+    try {
+      localStorage.setItem(LANG_KEY, next)
+    } catch {
+      /* trình duyệt chặn bộ nhớ: vẫn đổi được, chỉ không nhớ */
+    }
+    const url = new URL(location.href)
+    url.searchParams.set('lang', next)
+    history.replaceState(null, '', url)
+  }, [])
   const { settings, pages } = magazine
+  useEffect(() => {
+    if (languages) document.title = `${magazine.title} — ${magazine.subtitle}`
+  }, [languages, magazine.title, magazine.subtitle])
   const count = pages.length
   const reducedMotion = useReducedMotion()
   const stageRef = useRef(null)
@@ -267,85 +287,117 @@ export default function App({ magazine }) {
   const entered = phase !== 'intro'
 
   return (
-    <MagazineContext.Provider value={ctx}>
-      <div
-        ref={appRef}
-        className={`app phase-${phase} ${uiHidden ? 'ui-hidden' : ''} ${reducedMotion ? 'reduced-motion' : ''}`}
-        style={{ '--ratio': `${settings.pageWidth} / ${settings.pageHeight}` }}
-      >
-        <div className="backdrop" aria-hidden="true" />
-        <SceneBackground
-          mode={phase === 'intro' ? 'intro' : 'reading'}
-          replayKey={replayKey}
-          reducedMotion={reducedMotion}
-          enabled={sceneStatus !== 'off'}
-          onReady={() => setSceneStatus('ready')}
-          onIntroDone={() => setSceneIntroDone(true)}
-          onFail={() => setSceneStatus('failed')}
-        />
-        <div className="vignette" aria-hidden="true" />
-
-        <header className="brand" aria-hidden={uiHidden}>
-          <span className="brand__mark">{magazine.title}</span>
-          <span className="brand__sub">{magazine.subtitle}</span>
-          {magazine.issue && <span className="brand__issue">{magazine.issue}</span>}
-        </header>
-
-        <button type="button" className="replay" onClick={replayIntro} aria-label={t('replayAria')} tabIndex={phase === 'reading' ? 0 : -1}>
-          <Icon name="rotate" size={15} />
-          <span>{t('replay')}</span>
-        </button>
-
-        <main ref={stageRef} className={`stage ${zoom > 1 ? 'is-zoomed' : ''}`} aria-label={t('bookAria', { title: magazine.title })}>
-          <div className="stage__inner" style={{ paddingTop: layout.padTop, paddingBottom: layout.padBottom }}>
-            <FlipBook book={book} magazine={magazine} layout={layout} entered={entered} zoomed={zoom > 1} />
-          </div>
-        </main>
-
-        {/* mũi tên trái/phải theo vị trí trên màn hình; sách kiểu Nhật thì bên trái là trang sau */}
-        <button type="button" className="side-arrow is-prev" {...(rtl ? forward : back)}>
-          <Icon name="prev" size={26} strokeWidth={1.2} />
-        </button>
-        <button type="button" className="side-arrow is-next" {...(rtl ? back : forward)}>
-          <Icon name="next" size={26} strokeWidth={1.2} />
-        </button>
-
-        <Hint show={hint && phase === 'reading'} touch={isTouch} />
-        <div className={`toast ${fullscreen.error ? 'is-shown' : ''}`} role="status" aria-live="polite">
-          {fullscreen.error}
-        </div>
-
-        <div onPointerEnter={() => setOverControls(true)} onPointerLeave={() => setOverControls(false)}>
-          <Controls
-            pageLabel={pageLabel}
-            total={count}
-            progress={(lastVisible + 1) / count}
-            canPrev={currentPage > 0}
-            canNext={lastVisible < count - 1}
-            onPrev={book.prev}
-            onNext={book.next}
-            zoom={zoom}
-            onZoomIn={zoomIn}
-            onZoomOut={zoomOut}
-            onZoomReset={zoomReset}
-            fullscreen={fullscreen}
-            soundOn={soundOn}
-            onToggleSound={toggleSound}
-            panelOpen={panelOpen}
-            onTogglePanel={() => setPanelOpen((o) => !o)}
-            hidden={uiHidden}
-            rtl={rtl}
+    <CanvasLang.Provider value={languages ? lang : 'vi'}>
+      <MagazineContext.Provider value={ctx}>
+        <div
+          ref={appRef}
+          className={`app phase-${phase} ${uiHidden ? 'ui-hidden' : ''} ${reducedMotion ? 'reduced-motion' : ''}`}
+          style={{ '--ratio': `${settings.pageWidth} / ${settings.pageHeight}` }}
+        >
+          <div className="backdrop" aria-hidden="true" />
+          <SceneBackground
+            mode={phase === 'intro' ? 'intro' : 'reading'}
+            replayKey={replayKey}
+            reducedMotion={reducedMotion}
+            enabled={sceneStatus !== 'off'}
+            onReady={() => setSceneStatus('ready')}
+            onIntroDone={() => setSceneIntroDone(true)}
+            onFail={() => setSceneStatus('failed')}
           />
-          <AudioPlayer audio={music} soundOn={soundOn} needsGesture={needsGesture && soundOn} onEnable={enableSound} hidden={phase !== 'reading'} />
+          <div className="vignette" aria-hidden="true" />
+
+          <header className="brand" aria-hidden={uiHidden}>
+            <span className="brand__mark">{magazine.title}</span>
+            <span className="brand__sub">{magazine.subtitle}</span>
+            {magazine.issue && <span className="brand__issue">{magazine.issue}</span>}
+          </header>
+          {languages && <LangSwitch languages={languages} lang={lang} onChange={changeLang} />}
+
+          <button type="button" className="replay" onClick={replayIntro} aria-label={t('replayAria')} tabIndex={phase === 'reading' ? 0 : -1}>
+            <Icon name="rotate" size={15} />
+            <span>{t('replay')}</span>
+          </button>
+
+          <main ref={stageRef} className={`stage ${zoom > 1 ? 'is-zoomed' : ''}`} aria-label={t('bookAria', { title: magazine.title })}>
+            <div className="stage__inner" style={{ paddingTop: layout.padTop, paddingBottom: layout.padBottom }}>
+              <FlipBook book={book} magazine={magazine} layout={layout} entered={entered} zoomed={zoom > 1} />
+            </div>
+          </main>
+
+          {/* mũi tên trái/phải theo vị trí trên màn hình; sách kiểu Nhật thì bên trái là trang sau */}
+          <button type="button" className="side-arrow is-prev" {...(rtl ? forward : back)}>
+            <Icon name="prev" size={26} strokeWidth={1.2} />
+          </button>
+          <button type="button" className="side-arrow is-next" {...(rtl ? back : forward)}>
+            <Icon name="next" size={26} strokeWidth={1.2} />
+          </button>
+
+          <Hint show={hint && phase === 'reading'} touch={isTouch} />
+          <div className={`toast ${fullscreen.error ? 'is-shown' : ''}`} role="status" aria-live="polite">
+            {fullscreen.error}
+          </div>
+
+          <div onPointerEnter={() => setOverControls(true)} onPointerLeave={() => setOverControls(false)}>
+            <Controls
+              pageLabel={pageLabel}
+              total={count}
+              progress={(lastVisible + 1) / count}
+              canPrev={currentPage > 0}
+              canNext={lastVisible < count - 1}
+              onPrev={book.prev}
+              onNext={book.next}
+              zoom={zoom}
+              onZoomIn={zoomIn}
+              onZoomOut={zoomOut}
+              onZoomReset={zoomReset}
+              fullscreen={fullscreen}
+              soundOn={soundOn}
+              onToggleSound={toggleSound}
+              panelOpen={panelOpen}
+              onTogglePanel={() => setPanelOpen((o) => !o)}
+              hidden={uiHidden}
+              rtl={rtl}
+            />
+            <AudioPlayer audio={music} soundOn={soundOn} needsGesture={needsGesture && soundOn} onEnable={enableSound} hidden={phase !== 'reading'} />
+          </div>
+
+          <ThumbnailPanel open={panelOpen} magazine={magazine} visible={visible} onSelect={selectPage} onClose={() => setPanelOpen(false)} rtl={rtl} />
+          <Lightbox state={lightbox} onChange={setLightbox} onClose={() => setLightbox(null)} />
+
+          {phase !== 'reading' && (
+            <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase === 'leaving'} leaving={phase === 'leaving'} onOpen={openMagazine} />
+          )}
         </div>
+      </MagazineContext.Provider>
+    </CanvasLang.Provider>
+  )
+}
 
-        <ThumbnailPanel open={panelOpen} magazine={magazine} visible={visible} onSelect={selectPage} onClose={() => setPanelOpen(false)} rtl={rtl} />
-        <Lightbox state={lightbox} onChange={setLightbox} onClose={() => setLightbox(null)} />
+const LANG_KEY = 'non-book-lang'
+const LANG_NAMES = { vi: 'VI', ja: '日本語' }
 
-        {phase !== 'reading' && (
-          <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase === 'leaving'} leaving={phase === 'leaving'} onOpen={openMagazine} />
-        )}
-      </div>
-    </MagazineContext.Provider>
+/** ngôn ngữ mở sách: ?lang= trên địa chỉ → lần chọn trước → ngôn ngữ mặc định của sách */
+function initialLang(languages, fallback) {
+  if (!languages) return fallback
+  const fromUrl = new URLSearchParams(location.search).get('lang')
+  if (languages.includes(fromUrl)) return fromUrl
+  try {
+    const saved = localStorage.getItem(LANG_KEY)
+    if (languages.includes(saved)) return saved
+  } catch {
+    /* bỏ qua */
+  }
+  return languages.includes(fallback) ? fallback : languages[0]
+}
+
+function LangSwitch({ languages, lang, onChange }) {
+  return (
+    <div className="langswitch" role="group" aria-label="Ngôn ngữ / 言語">
+      {languages.map((l) => (
+        <button key={l} type="button" className={l === lang ? 'is-on' : ''} aria-pressed={l === lang} lang={l} onClick={() => onChange(l)}>
+          {LANG_NAMES[l] || l}
+        </button>
+      ))}
+    </div>
   )
 }
