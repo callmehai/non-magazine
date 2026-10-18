@@ -7,7 +7,7 @@ import { t } from '../lib/i18n.js'
  * Điều khiển một file âm thanh (HTMLAudioElement).
  * Không tự phát: nếu trình duyệt chặn, `blocked` = true để UI mời người dùng bấm.
  */
-export function useAudio(src, { loop = false, volume: initialVolume = 0.8 } = {}) {
+export function useAudio(src, { loop = false, volume: initialVolume = 0.8, trackTime = true } = {}) {
   const audioRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [volume, setVolumeState] = useState(initialVolume)
@@ -33,8 +33,11 @@ export function useAudio(src, { loop = false, volume: initialVolume = 0.8 } = {}
     a.addEventListener('play', onPlay)
     a.addEventListener('pause', onPause)
     a.addEventListener('ended', onPause)
-    a.addEventListener('timeupdate', onTime)
-    a.addEventListener('loadedmetadata', onTime)
+    // timeupdate bắn ~4 lần/giây; nhạc nền không hiện thời gian thì đừng nghe (mỗi lần là một lượt render cả app)
+    if (trackTime) {
+      a.addEventListener('timeupdate', onTime)
+      a.addEventListener('loadedmetadata', onTime)
+    }
     a.addEventListener('error', onError)
     return () => {
       a.pause()
@@ -48,7 +51,7 @@ export function useAudio(src, { loop = false, volume: initialVolume = 0.8 } = {}
       a.load()
       audioRef.current = null
     }
-  }, [src, loop])
+  }, [src, loop, trackTime])
 
   useEffect(() => {
     const a = audioRef.current
@@ -99,7 +102,7 @@ export function useAudio(src, { loop = false, volume: initialVolume = 0.8 } = {}
 export function useBackgroundMusic(settings) {
   const path = settings.backgroundMusic
   const hasFile = hasAsset(path)
-  const file = useAudio(hasFile ? asset(path) : null, { loop: true, volume: settings.musicVolume ?? 0.5 })
+  const file = useAudio(hasFile ? asset(path) : null, { loop: true, volume: settings.musicVolume ?? 0.5, trackTime: false })
 
   const synthRef = useRef(null)
   const [synthPlaying, setSynthPlaying] = useState(false)

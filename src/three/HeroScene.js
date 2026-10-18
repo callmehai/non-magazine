@@ -15,6 +15,8 @@ const T = { rings: [0.15, 1.5], leaf: [1.15, 2.75], strap: [2.45, 3.05], end: 3.
  * Cảnh nền 3D: chiếc nón lá tự "đan" khi mở trang (intro),
  * rồi lùi về làm nền chuyển động phía sau cuốn tạp chí (reading).
  */
+const IDLE_MS = 6000
+
 export class HeroScene {
   constructor(canvas, { reducedMotion = false, onIntroDone } = {}) {
     this.canvas = canvas
@@ -30,7 +32,8 @@ export class HeroScene {
     this.pointerSmooth = new THREE.Vector2()
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, this.mobile ? 1.5 : 1.75))
+    this.fullDpr = Math.min(window.devicePixelRatio || 1, this.mobile ? 1.5 : 1.75)
+    renderer.setPixelRatio(this.fullDpr)
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 0.88
@@ -118,6 +121,7 @@ export class HeroScene {
     this.camera.aspect = w / h
     this.camera.updateProjectionMatrix()
     this.size = { w, h }
+    this.lastInput = performance.now() // đổi cỡ xoá canvas → vẽ lại dù đang đứng hình
   }
 
   onPointerDown(e) {
@@ -154,6 +158,7 @@ export class HeroScene {
 
   setPointer(x, y) {
     this.pointer.set(x, y)
+    this.lastInput = performance.now()
   }
 
   setMode(mode) {
@@ -194,10 +199,26 @@ export class HeroScene {
     return { halfH, halfW: halfH * this.camera.aspect }
   }
 
+  /** Lúc đọc sách nón chỉ là nền trang trí: vẽ thưa hơn, độ phân giải thấp hơn để máy không nóng */
+  setLowPower(low) {
+    if (this.lowPower === low) return
+    this.lowPower = low
+    this.renderer.setPixelRatio(low ? Math.min(this.fullDpr, 1.25) : this.fullDpr)
+    this.resize()
+  }
+
   tick(timestamp) {
+    const settled = this.mode === 'reading' && this.modeT >= 1 && !this.drag.active
+    this.setLowPower(settled)
+    // đang đọc mà không đụng chuột vài giây → đứng hình (khung cuối vẫn nằm trên canvas), không tốn GPU
+    if (settled && timestamp - (this.lastInput ?? 0) > IDLE_MS) return
+    if (settled && timestamp - (this.lastFrame ?? 0) < 1000 / 30 - 2) return
+    this.lastFrame = timestamp
     this.timer.update(timestamp)
     const dt = Math.min(this.timer.getDelta(), 0.05)
-    const time = this.timer.getElapsed()
+    // thời gian chuyển động chỉ trôi khi có vẽ → hết đứng hình thì nón chạy tiếp, không giật
+    this.animTime = (this.animTime ?? 0) + dt
+    const time = this.animTime
     const motion = this.reducedMotion ? 0 : 1
 
     if (!this.introDone) {

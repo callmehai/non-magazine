@@ -22,6 +22,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
   const onFlipStartRef = useRef(onFlipStart)
   const currentRef = useRef(0)
   const layoutRef = useRef(layout)
+  const redrawRef = useRef(0) // số khung hình còn phải vẽ lại sau một thay đổi
   layoutRef.current = layout
   const [current, setCurrent] = useState(0)
   const [flipState, setFlipState] = useState('read')
@@ -114,6 +115,24 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     order.forEach((el, i) => {
       if (el.dataset.density === 'soft') pf.getPage(i)?.setDensity('soft')
     })
+    // StPageFlip vẽ lại cả 66 trang ở mọi khung hình kể cả khi sách nằm yên (gán lại style từng trang)
+    // → chỉ vẽ khi đang lật / rê góc, hoặc vài khung ngay sau một thay đổi
+    const render = pf.getRender()
+    const drawFrame = render.drawFrame.bind(render)
+    render.drawFrame = () => {
+      if (pf.getState() !== 'read' || render.animation || redrawRef.current > 0) {
+        drawFrame()
+        if (redrawRef.current > 0) redrawRef.current--
+      }
+    }
+    const touch = () => {
+      redrawRef.current = 4
+    }
+    touch()
+    pf.on('flip', touch)
+    pf.on('changeState', touch)
+    pf.on('changeOrientation', touch)
+    pf.on('init', touch)
     root.style.minWidth = '0'
     root.style.minHeight = '0'
     flipRef.current = pf
@@ -139,6 +158,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     // orientation do layout quyết định: block < minWidth*2 → 1 trang
     pf.getSettings().minWidth = layout.pageW * 0.75
     pf.update()
+    redrawRef.current = 4
   }, [layout])
 
   // rtl: trang sau nằm bên trái → lật ngược lại về phía phải
@@ -153,7 +173,10 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       const target = rtl ? count - 1 - index : index
       // trang kề nhau thì lật có hiệu ứng, xa quá thì nhảy cho nhanh
       if (Math.abs(index - cur) <= 3) pf.flip(target, 'bottom')
-      else pf.turnToPage(target)
+      else {
+        redrawRef.current = 4
+        pf.turnToPage(target)
+      }
     },
     [rtl, count]
   )

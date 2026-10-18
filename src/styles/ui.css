@@ -341,28 +341,34 @@
 
 .eq i {
   width: 2px;
-  height: 3px;
+  height: 12px;
   background: var(--ui-accent);
   border-radius: 1px;
-  transition: height 0.3s;
+  /* co giãn bằng transform (chỉ compositor) thay vì đổi height — đổi height bắt vẽ lại cả khung kính mờ mỗi khung hình */
+  transform: scaleY(0.25);
+  transform-origin: 50% 100%;
+  transition: transform 0.3s;
 }
 
 .inline-audio .eq i {
   background: var(--gold-deep);
 }
 
+/* đang phát: nhún vài nhịp rồi đứng yên ở dáng "đang phát" — hiệu ứng lặp vô hạn bắt GPU vẽ lại
+   cả màn hình 120 lần/giây (thanh nhạc nằm trên lớp kính mờ) → máy nóng */
 .eq.is-playing i {
-  animation: eq 1s ease-in-out infinite;
+  animation: eq 1s ease-in-out 3;
 }
 
-.eq.is-playing i:nth-child(2) { animation-delay: -0.3s; }
-.eq.is-playing i:nth-child(3) { animation-delay: -0.6s; }
-.eq.is-playing i:nth-child(4) { animation-delay: -0.15s; }
+.eq.is-playing i:nth-child(1) { transform: scaleY(0.55); }
+.eq.is-playing i:nth-child(2) { transform: scaleY(0.95); animation-delay: -0.3s; }
+.eq.is-playing i:nth-child(3) { transform: scaleY(0.4); animation-delay: -0.6s; }
+.eq.is-playing i:nth-child(4) { transform: scaleY(0.75); animation-delay: -0.15s; }
 
 @keyframes eq {
   0%,
-  100% { height: 3px; }
-  50% { height: 12px; }
+  100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
 }
 
 @media (max-width: 699px) {
@@ -412,7 +418,10 @@
 
 .hint svg {
   color: var(--ui-accent);
-  animation: nudge 1.6s ease-in-out infinite;
+}
+
+.hint.is-shown svg {
+  animation: nudge 1.6s ease-in-out 3;
 }
 
 @keyframes nudge {
