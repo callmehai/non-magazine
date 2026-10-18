@@ -5,7 +5,7 @@
  * Khung không có ở đây (ảnh lấy từ báo, logo, chân dung nhóm…) vẫn là khung ảnh tạm.
  */
 export const photos = {
-  "Ảnh bìa: những chiếc nón lá trắng Làng Chuông xếp lớp, ánh nắng nhẹ": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Người thợ 1",
+  "Ảnh bìa: thiếu nữ áo dài đội nón lá trong hành lang đình Chuông": "Chương 3/Không gian tại đình Chuông/Không gian đình Chuông",
   "Cổng làng Chuông, Phương Trung, Hà Nội": "Chương 1/Tại làng Chuông/IMG_3567",
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá giữa cánh đồng": "Chương 1/Tại làng Chuông/IMG_3610",
   "Nón lá trong đời sống thường ngày: che nắng, che mưa khi lao động": "Chương 1/BTHN/IMG_20261002_150751",
@@ -61,6 +61,7 @@ export const photos = {
   "Trải nghiệm làm nón tại nhà nghệ nhân Lê Văn Tuy": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Trải nghiệm làm nón ở nhà LVT",
   "Người nghệ nhân lớn tuổi": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3226",
   "Đôi bàn tay người thợ": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Đôi bàn tay người thợ",
+  "Ảnh toàn trang: chiếc nón lá trắng Làng Chuông (trang ảnh trước mục lục)": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Người thợ 1",
   // ảnh lấp chỗ trống cuối trang (build.mjs → FILL)
   "Nón lá trong tranh sơn dầu — Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)": "Chương 1/BTMTVN/IMG_20260929_142636",
   "Nón lá cổ trưng bày tại Bảo tàng Mỹ thuật Việt Nam (ảnh tự chụp)": "Chương 1/BTMTVN/IMG_2760",

@@ -508,19 +508,22 @@ function chapterOpener(ch, photo) {
 }
 
 // ═════════════════════════════════════════ BÌA
+// ảnh tràn trang (hành lang đình Chuông), lớp tối dần ở trên/dưới để chữ màu kem đọc rõ
 {
-  const p = new Page({ hideNumber: true, bg: C.cream })
+  const p = new Page({ hideNumber: true, bg: '#2b2118' })
+  const shade = (y, h, flip) => ({ ...DECO('shade', 0, y, W, h, 1), fit: 'fill', rot: flip ? 180 : 0, name: 'Lớp tối' })
+  const cream = '#fbf4e4'
   p.add(
-    IMG(0, 0, W, 470, ['Ảnh bìa: những chiếc nón lá trắng Làng Chuông xếp lớp, ánh nắng nhẹ', '表紙写真：重ねられたチュオン村の白いノンラー、やわらかな光'], { name: 'Ảnh bìa' }),
-    RECT(0, 470, W, 3, ACC[0], { name: 'Vạch màu' }),
-    DECO('bamboo', W - 190, 500, 170, 320, 0.45),
-    T(48, 500, 460, 112, ['NÓN LÁ\nLÀNG CHUÔNG', null], { font: F.head, size: 50, lh: 1.06, tracking: 2.5, color: C.ink, name: 'Tên sách' }),
-    T(50, 618, 460, 26, [strip(front.title[1]) + '：' + strip(front.subtitle[1]), null], { font: F.jaBody, size: 17, lh: 1.3, color: C.ink2, name: 'Tên sách tiếng Nhật' }),
-    T(48, 648, 460, 46, [front.subtitle[0], null], { font: F.script, size: 31, lh: 1.3, color: ACC[0], name: 'Chữ viết tay' }),
-    RECT(50, 712, 178, 26, 'none', { stroke: ACC[0], sw: 0.9, radius: 13, name: 'Khung nhãn' }),
-    T(50, 718, 178, 15, ['SONG NGỮ VIỆT – NHẬT', null], { size: 9.5, tracking: 1.6, align: 'center', color: ACC[0], weight: 700, lh: 1.2, name: 'Nhãn song ngữ' }),
-    IMG(50, 762, 76, 30, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
-    T(138, 762, 340, 32, [`${front.team[0]}\n${strip(front.team[1])}`, null], { size: 10, lh: 1.5, color: C.muted, name: 'Tên nhóm' })
+    IMG(0, 0, W, H, ['Ảnh bìa: thiếu nữ áo dài đội nón lá trong hành lang đình Chuông', '表紙写真：チュオン村の亭の回廊で、ノンラーをかぶるアオザイ姿の女性'], { name: 'Ảnh bìa' }),
+    shade(0, 330),
+    shade(H - 230, 230, true),
+    T(46, 54, 500, 112, ['NÓN LÁ\nLÀNG CHUÔNG', null], { font: F.head, size: 50, lh: 1.06, tracking: 2.5, color: cream, name: 'Tên sách' }),
+    T(48, 172, 500, 26, [strip(front.title[1]) + '：' + strip(front.subtitle[1]), null], { font: F.jaBody, size: 17, lh: 1.3, color: 'rgba(251,244,228,.88)', name: 'Tên sách tiếng Nhật' }),
+    T(46, 200, 500, 46, [front.subtitle[0], null], { font: F.script, size: 31, lh: 1.3, color: '#e7c98f', name: 'Chữ viết tay' }),
+    RECT(48, H - 132, 178, 26, 'none', { stroke: '#e7c98f', sw: 0.9, radius: 13, name: 'Khung nhãn' }),
+    T(48, H - 126, 178, 15, ['SONG NGỮ VIỆT – NHẬT', null], { size: 9.5, tracking: 1.6, align: 'center', color: '#e7c98f', weight: 700, lh: 1.2, name: 'Nhãn song ngữ' }),
+    IMG(48, H - 88, 76, 30, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
+    T(136, H - 88, 400, 32, [`${front.team[0]}\n${strip(front.team[1])}`, null], { size: 10, lh: 1.5, color: 'rgba(251,244,228,.8)', name: 'Tên nhóm' })
   )
 }
 
