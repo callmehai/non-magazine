@@ -44,7 +44,7 @@ export const ch1 = {
           ],
           images: [
             ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Tuổi Trẻ', 'カオ・ヴァン・ラウ劇場（バクリエウ）— 出典：トゥオイチェー{紙|し}'],
-            ['Nón lá trong thiết kế trang phục — nguồn: Báo Dân Trí', 'ファッションに取り入れられたノンラー — 出典：ザンチー紙'],
+            ['Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí', 'ベトナム・ファッションウィーク2017のノンラー（デザイナー：チュー・ラー）— 出典：ザンチー紙'],
             ['Nón lá bên tà áo dài — ảnh tự chụp', 'アオザイとノンラー — {著者撮影|ちょしゃさつえい}'],
             ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam — ảnh tự chụp', 'ベトナム女性博物館の展示 — 著者撮影'],
           ],
@@ -131,8 +131,8 @@ export const ch1 = {
             ],
           ],
           images: [
-            ['Phu nhân Thủ tướng Singapore đội nón lá — nguồn: Vietnamnet', 'ノンラーをかぶるシンガポール首相夫人 — 出典：ベトナムネット'],
-            ['Tổng thống Hàn Quốc đội nón lá — nguồn: Báo Tuổi Trẻ', 'ノンラーをかぶる韓国大統領 — 出典：トゥオイチェー紙'],
+            ['Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet', 'ノンラーをかぶるシンガポール首相夫人とベトナム首相夫人（2025年3月）— 出典：ベトナムネット'],
+            ['Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ', 'ハノイ旧市街でノンラーをかぶる韓国のイ・ジェミョン大統領（2026年4月）— 出典：トゥオイチェー紙'],
           ],
         },
         {
@@ -172,8 +172,8 @@ export const ch1 = {
           ],
           images: [
             ['Bản đồ Làng Chuông (xã Phương Trung, Hà Nội)', 'チュオン村の地図（ハノイ市フオンチュン社）'],
-            ['Phác họa: nghệ nhân Làng Chuông dâng nón lên Hoàng hậu, Công chúa', 'イラスト：皇后・王女に笠を献上するチュオン村の職人'],
-            ['Tư liệu thời chiến: “nón lá ngụy trang” phủ vải dù', '戦時中の資料：パラシュート布で覆った「偽装ノンラー」'],
+            ['Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)', '1896年、ハノイの笠屋 — 写真：アンドレ・サル（フランス国立図書館）'],
+            ['Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam', 'タインオアイ（ハノイ）のノンラー（1999年）— ベトナム女性博物館所蔵'],
           ],
         },
         {

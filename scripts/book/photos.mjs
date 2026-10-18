@@ -72,4 +72,17 @@ export const photos = {
   "Nón chùm — sản phẩm OCOP 4 sao của cơ sở Lê Văn Tuy": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón chùm-ảnh",
   "Nón lá hai mặt lụa xanh ngọc — sản phẩm OCOP 4 sao": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón lá 2 mặt lụa - xanh ngọc 2",
   "Nón lá hai mặt lụa xanh ngọc nhìn từ trong lòng nón": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón lá 2 mặt lụa - xanh ngọc 1",
+  // ảnh lấy trên mạng (nguồn ghi ở chú thích và mục "Nguồn ảnh" trang tài liệu tham khảo)
+  "Logo FPT": "online/logo-fpt",
+  "Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Tuổi Trẻ": "online/ba-non-la",
+  "Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí": "online/thoi-trang",
+  "Nón bài thơ — Huế": "online/non-bai-tho",
+  "Nón lá sen — Huế": "online/non-la-sen",
+  "Nón ngựa — Bình Định": "online/non-ngua",
+  "Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet": "online/phu-nhan-singapore",
+  "Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ": "online/tong-thong-han-quoc",
+  "Bản đồ Làng Chuông (xã Phương Trung, Hà Nội)": "online/ban-do-lang-chuong",
+  "Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)": "online/hang-non-1896",
+  "Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam": "online/non-thanh-oai-1999",
+  "Dao, kéo cắt lá": "online/dao-cat-la",
 }

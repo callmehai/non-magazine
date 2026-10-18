@@ -522,8 +522,10 @@ function chapterOpener(ch, photo) {
     T(46, 200, 500, 46, [front.subtitle[0], null], { font: F.script, size: 31, lh: 1.3, color: '#e7c98f', name: 'Chữ viết tay' }),
     RECT(48, H - 132, 178, 26, 'none', { stroke: '#e7c98f', sw: 0.9, radius: 13, name: 'Khung nhãn' }),
     T(48, H - 126, 178, 15, ['SONG NGỮ VIỆT – NHẬT', null], { size: 9.5, tracking: 1.6, align: 'center', color: '#e7c98f', weight: 700, lh: 1.2, name: 'Nhãn song ngữ' }),
-    IMG(48, H - 88, 76, 30, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
-    T(136, H - 88, 400, 32, [`${front.team[0]}\n${strip(front.team[1])}`, null], { size: 10, lh: 1.5, color: 'rgba(251,244,228,.8)', name: 'Tên nhóm' })
+    // logo nhiều màu: đặt trên ô nền sáng để không chìm vào ảnh tối
+    RECT(48, H - 94, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
+    IMG(54, H - 89, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
+    T(186, H - 88, 360, 32, [`${front.team[0]}\n${strip(front.team[1])}`, null], { size: 10, lh: 1.5, color: 'rgba(251,244,228,.85)', name: 'Tên nhóm' })
   )
 }
 
@@ -959,6 +961,22 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
     f.place(hh, (p, y) => p.add(T(p.x0, y, 30, 18, [`[${i + 1}]`, null], { size: 12, color: ACC[9], weight: 700, lh: 1.5, name: 'Số' }), T(p.x0 + 34, y, p.cw - 34, hh, [ref, null], { ...ro, color: C.ink2, name: 'Tài liệu' })), 10)
   })
   f.place(18, (p, y) => p.add(T(p.x0, y + 6, p.cw, 18, e.references.note, { size: 12.5, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Ghi chú' })))
+  // nguồn ảnh lấy từ báo chí / kho ảnh mở (ảnh còn lại do nhóm tự chụp)
+  {
+    const credits = [
+      ['NGUỒN ẢNH', '写真の出典'],
+      ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
+      ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Quân đội nhân dân (nón lá sen; dao cắt lá) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・人民軍隊紙（蓮の葉の笠・小刀）・ベトナムネット（シンガポール首相夫人）'],
+      ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng) · bản đồ nền Hà Nội (Anewplayer, CC BY-SA 4.0)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・1896年ハノイの笠屋（アンドレ・サル、BnF、パブリックドメイン）・ハノイの地図（Anewplayer、CC BY-SA 4.0）'],
+    ]
+    const co = { size: 11.5, lh: 1.5, jaSize: 11.5, paraGap: 4 }
+    const body = join(credits.slice(1))
+    const hh = textH(body, CW, co)
+    f.place(22 + hh, (p, y) => p.add(
+      T(p.x0, y + 10, p.cw, 16, credits[0], { size: S.label, tracking: 2.4, weight: 700, color: ACC[9], jaFont: F.jaSans, name: 'Nhóm' }),
+      T(p.x0, y + 32, p.cw, hh, body, { ...co, color: C.ink2, jaFont: F.jaSans, name: 'Nguồn ảnh' })
+    ))
+  }
 
   // nhóm thực hiện: chèn trang để bìa sau rơi vào trang trái cuối sách
   const p = new Page({ chapter: 9, bg: C.cream })
