@@ -122,6 +122,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     render.drawFrame = () => {
       if (pf.getState() !== 'read' || render.animation || redrawRef.current > 0) {
         drawFrame()
+        clipUnderCover(pf, render)
         if (redrawRef.current > 0) redrawRef.current--
       }
     }
@@ -191,6 +192,26 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
 function fromPhysical(p, orientation, n) {
   const paired = orientation === 'landscape' && p !== 0 && p !== n - 1
   return paired ? n - 2 - p : n - 1 - p
+}
+
+/**
+ * Lỗi của StPageFlip khi lật tờ bìa đứng một mình (đóng bìa trước / mở bìa sau): "trang bên dưới" chính là
+ * tờ đang lật, nên trang tĩnh cùng phía (trang lót) không bị che ở phần tờ bìa vừa nhấc lên → trông như hai tờ.
+ * Cắt bỏ phần đó khỏi trang tĩnh (path evenodd = cả trang trừ vùng đã nhấc).
+ */
+function clipUnderCover(pf, render) {
+  const flipping = render.flippingPage
+  if (!flipping || flipping !== render.bottomPage || pf.getOrientation() !== 'landscape') return
+  const back = render.direction === 1 // FlipDirection.BACK
+  const page = back ? render.leftPage : render.rightPage
+  const area = pf.getFlipController().getCalculation()?.getBottomClipArea()
+  if (!page || !area) return
+  const { pageWidth: w, height: h } = render.getRect()
+  const pts = area.filter(Boolean).map((p) => `${(back ? w - p.x : p.x).toFixed(1)} ${p.y.toFixed(1)}`)
+  if (pts.length < 3) return
+  const d = `M0 0 H${w} V${h} H0 Z M${pts.join(' L')} Z`
+  const el = page.getElement()
+  el.style.clipPath = `path(evenodd, '${d}')`
 }
 
 function sizeRoot(root, L) {
