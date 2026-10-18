@@ -1,111 +1,230 @@
 import * as THREE from 'three'
 
-/** Kích thước nón (đơn vị scene): bán kính vành và chiều cao chóp */
-export const HAT = { R: 1, H: 0.74, RINGS: 16 }
+/**
+ * Kích thước nón (đơn vị scene): bán kính vành và chiều cao chóp.
+ * Nón Chuông: vành ~41cm, cao ~18–19cm → chóp khá dốc, thành thẳng.
+ */
+export const HAT = { R: 1, H: 0.86, RINGS: 16 }
 
 let cachedTextures = null
 
-/** Vẽ texture lá nón trên canvas: dải lá, thớ lá, vòng nan nổi và mũi khâu. */
+/**
+ * Texture vẽ bằng canvas theo ảnh nón Chuông thật (canvas y = 0 là đỉnh chóp, y = h là vành):
+ * Theo mô tả trong sách (chương 2): khung 16 vòng nứa cách đều (vòng 16 là vòng cạp), lợp 3 lớp — lá lụi
+ * (17–18 tàu) / mo nang (5 tàu) / lá lụi, khâu bằng sợi cước vào từng vòng, cạp bọc sợi liếc, chỉ nhôi màu
+ * trong lòng nón để buộc quai, ngoài cùng quét dầu bóng.
+ *  - ngoài: 18 tàu lá trắng ngà nhiều gân nhỏ, bóng mo thấp thoáng, 15 đường khâu cước trắng, núm chóp, cạp nâu đỏ
+ *  - trong: lá sáng màu, vòng nứa nổi rõ, bông chỉ đỏ giữa chóp, hai mảng chỉ nhôi đỏ – xanh
+ */
 function makeTextures(size = 2048) {
   if (cachedTextures) return cachedTextures
   const w = size
   const h = size / 2
-  const rand = mulberry32(7)
+  const k = size / 2048 // tỉ lệ nét vẽ theo cỡ texture
+  const rand = mulberry32(11)
+  const canvas = () => {
+    const el = document.createElement('canvas')
+    el.width = w
+    el.height = h
+    return [el, el.getContext('2d')]
+  }
+  const [color, c] = canvas()
+  const [bump, b] = canvas()
+  const [inside, n] = canvas()
 
-  const color = document.createElement('canvas')
-  color.width = w
-  color.height = h
-  const c = color.getContext('2d')
-
-  const bump = document.createElement('canvas')
-  bump.width = w
-  bump.height = h
-  const b = bump.getContext('2d')
-
-  // canvas y = 0 là đỉnh chóp, y = h là vành
+  // ── nền: trắng ngà, đầm hơn một chút về phía vành
   const base = c.createLinearGradient(0, 0, 0, h)
-  base.addColorStop(0, '#ead9b0')
-  base.addColorStop(0.55, '#dcc493')
-  base.addColorStop(1, '#c6a66d')
+  base.addColorStop(0, '#efe4c9')
+  base.addColorStop(0.45, '#e4d3aa')
+  base.addColorStop(1, '#d6bf8d')
   c.fillStyle = base
   c.fillRect(0, 0, w, h)
   b.fillStyle = '#808080'
   b.fillRect(0, 0, w, h)
+  const inBase = n.createLinearGradient(0, 0, 0, h)
+  inBase.addColorStop(0, '#f1e7d0')
+  inBase.addColorStop(1, '#e6d6b2')
+  n.fillStyle = inBase
+  n.fillRect(0, 0, w, h)
 
-  // các dải lá xếp dọc từ đỉnh xuống vành
-  const strips = 84
-  const sw = w / strips
-  for (let i = 0; i < strips; i++) {
-    const x = i * sw
-    const tone = (rand() - 0.5) * 22
-    c.fillStyle = `rgba(${tone > 0 ? '255,250,235' : '120,90,40'},${Math.abs(tone) / 160})`
-    c.fillRect(x, 0, sw, h)
-    // mép lá chồng lên nhau
-    c.fillStyle = 'rgba(110,80,40,0.16)'
-    c.fillRect(x + sw - 1.5, 0, 1.5, h)
-    c.fillStyle = 'rgba(255,252,240,0.22)'
-    c.fillRect(x, 0, 1, h)
-    b.fillStyle = '#5a5a5a'
-    b.fillRect(x + sw - 1.5, 0, 1.5, h)
+  // ── lá lụi: mỗi lớp 17–18 tàu lá xếp chồng quanh khung (theo nội dung sách, mục 2.3 bước 4).
+  // Mỗi tàu lá rộng, nhiều gân nhỏ song song chạy từ chóp xuống vành; mép tàu này đè lên tàu kia.
+  const leaves = 18
+  const lw = w / leaves
+  for (let i = 0; i < leaves; i++) {
+    const x0 = i * lw + (rand() - 0.5) * lw * 0.25
+    const tone = (rand() - 0.5) * 2
+    c.fillStyle = tone > 0 ? `rgba(255,253,244,${tone * 0.18})` : `rgba(196,160,98,${-tone * 0.14})`
+    c.fillRect(x0, 0, lw * 1.08, h)
+    n.fillStyle = tone > 0 ? `rgba(255,252,242,${tone * 0.12})` : `rgba(170,140,90,${-tone * 0.06})`
+    n.fillRect(x0, 0, lw * 1.08, h)
+    // gân lá: dày, mảnh, gần như song song (tàu lá đã được là phẳng)
+    for (let x = x0; x < x0 + lw * 1.08; x += (3.2 + rand() * 2.6) * k) {
+      const strong = rand() < 0.18
+      c.fillStyle = strong ? `rgba(135,100,52,${0.14 + rand() * 0.1})` : `rgba(150,118,68,${0.06 + rand() * 0.06})`
+      c.fillRect(x, 0, (strong ? 1 : 0.6) * k, h)
+      if (rand() < 0.35) {
+        c.fillStyle = `rgba(255,255,250,${0.12 + rand() * 0.15})`
+        c.fillRect(x + 1.2 * k, 0, 0.8 * k, h)
+      }
+      if (rand() < 0.3) {
+        n.fillStyle = `rgba(150,120,72,${0.04 + rand() * 0.04})`
+        n.fillRect(x, 0, 0.6 * k, h)
+      }
+    }
+    // mép tàu lá đè lên tàu bên cạnh: một vệt bóng + một vệt sáng
+    const edge = x0 + lw * 1.08
+    c.fillStyle = 'rgba(110,82,42,0.28)'
+    c.fillRect(edge - 1.6 * k, 0, 1.6 * k, h)
+    c.fillStyle = 'rgba(255,255,250,0.45)'
+    c.fillRect(edge - 3 * k, 0, 1.2 * k, h)
+    n.fillStyle = 'rgba(140,110,65,0.16)'
+    n.fillRect(edge - 1.2 * k, 0, 1.2 * k, h)
+    b.fillStyle = '#5c5c5c'
+    b.fillRect(edge - 1.6 * k, 0, 1.6 * k, h)
+    b.fillStyle = '#a8a8a8'
+    b.fillRect(edge - 3.2 * k, 0, 1.6 * k, h)
   }
-
-  // thớ lá
-  for (let i = 0; i < 2600; i++) {
+  // lớp giữa: 5 tàu mo nang vàng óng, thấp thoáng sau lá lụi mỏng
+  for (let i = 0; i < 5; i++) {
+    const x = (i / 5) * w + rand() * (w / 10)
+    const mg = c.createLinearGradient(x, 0, x + w / 5, 0)
+    mg.addColorStop(0, 'rgba(205,165,90,0)')
+    mg.addColorStop(0.5, 'rgba(205,165,90,0.07)')
+    mg.addColorStop(1, 'rgba(205,165,90,0)')
+    c.fillStyle = mg
+    c.fillRect(x, h * 0.05, w / 5, h * 0.95)
+  }
+  // thớ lá ngắn, rất nhẹ
+  for (let i = 0; i < 1800; i++) {
     const x = rand() * w
     const y = rand() * h
-    const len = 30 + rand() * 220
-    const dark = rand() > 0.45
-    c.strokeStyle = dark ? `rgba(120,88,45,${0.05 + rand() * 0.08})` : `rgba(255,250,236,${0.06 + rand() * 0.1})`
-    c.lineWidth = 0.6 + rand() * 0.8
+    c.strokeStyle = rand() > 0.5 ? `rgba(140,108,60,${0.04 + rand() * 0.05})` : `rgba(255,253,244,${0.06 + rand() * 0.08})`
+    c.lineWidth = (0.5 + rand() * 0.6) * k
     c.beginPath()
     c.moveTo(x, y)
-    c.lineTo(x + (rand() - 0.5) * 3, y + len)
+    c.lineTo(x + (rand() - 0.5) * 2, y + (20 + rand() * 120) * k)
     c.stroke()
   }
 
-  // đốm nắng / vết thời gian rất nhẹ
-  for (let i = 0; i < 70; i++) {
-    const x = rand() * w
-    const y = rand() * h
-    const r = 20 + rand() * 90
-    const g = c.createRadialGradient(x, y, 0, x, y, r)
-    g.addColorStop(0, 'rgba(150,110,55,0.07)')
-    g.addColorStop(1, 'rgba(150,110,55,0)')
-    c.fillStyle = g
-    c.fillRect(x - r, y - r, r * 2, r * 2)
-  }
-
-  // vòng nan nổi dưới lớp lá + mũi khâu
-  for (let k = 1; k <= HAT.RINGS; k++) {
-    const y = (k / HAT.RINGS) * h
-    c.fillStyle = 'rgba(255,250,235,0.35)'
-    c.fillRect(0, y - 4, w, 2)
-    c.fillStyle = 'rgba(95,68,32,0.28)'
-    c.fillRect(0, y + 1, w, 2.5)
-    const bg = b.createLinearGradient(0, y - 6, 0, y + 6)
-    bg.addColorStop(0, '#808080')
-    bg.addColorStop(0.5, '#e8e8e8')
-    bg.addColorStop(1, '#808080')
-    b.fillStyle = bg
-    b.fillRect(0, y - 6, w, 12)
-
-    const step = 9 + (k % 3)
-    for (let x = rand() * step; x < w; x += step) {
-      c.fillStyle = 'rgba(250,244,228,0.75)'
-      c.fillRect(x, y - 1.5, 4, 2)
-      c.fillStyle = 'rgba(90,65,30,0.25)'
-      c.fillRect(x, y + 0.5, 4, 1)
+  // ── 15 vòng nứa + đường khâu sợi cước (vòng 16 là vòng cạp)
+  for (let ring = 1; ring < HAT.RINGS; ring++) {
+    const f = ring / HAT.RINGS
+    const y = f * h
+    // gờ nan nổi dưới lá
+    c.fillStyle = 'rgba(255,253,246,0.4)'
+    c.fillRect(0, y - 3.5 * k, w, 1.6 * k)
+    c.fillStyle = 'rgba(120,90,48,0.2)'
+    c.fillRect(0, y + 1.5 * k, w, 2 * k)
+    const g = b.createLinearGradient(0, y - 5 * k, 0, y + 5 * k)
+    g.addColorStop(0, '#808080')
+    g.addColorStop(0.5, '#d8d8d8')
+    g.addColorStop(1, '#808080')
+    b.fillStyle = g
+    b.fillRect(0, y - 5 * k, w, 10 * k)
+    // mặt trong: nan tre lộ rõ
+    n.fillStyle = 'rgba(196,164,108,0.55)'
+    n.fillRect(0, y - 2 * k, w, 3.2 * k)
+    n.fillStyle = 'rgba(255,250,236,0.5)'
+    n.fillRect(0, y - 3 * k, w, 1 * k)
+    // mũi khâu: khoảng cách thật đều nhau → trên texture giãn ra ở vòng nhỏ gần chóp
+    // sợi cước khâu lá vào vòng: mũi đều tăm tắp (khoảng cách thật như nhau trên mọi vòng)
+    const step = (8 * k) / Math.max(f, 0.12)
+    const len = Math.min(step * 0.7, 7 * k)
+    for (let x = (ring * 3.7 * k) % step; x < w; x += step) {
+      c.fillStyle = 'rgba(95,72,40,0.12)'
+      c.fillRect(x + 0.5 * k, y + 0.6 * k, len, 1 * k)
+      c.fillStyle = 'rgba(255,255,255,0.82)'
+      c.fillRect(x, y - 1 * k, len, 1.5 * k)
       b.fillStyle = '#ffffff'
-      b.fillRect(x, y - 1.5, 4, 2)
+      b.fillRect(x, y - 1.2 * k, len, 1.9 * k)
+      n.fillStyle = 'rgba(250,248,240,0.7)'
+      n.fillRect(x, y - 0.8 * k, 1.4 * k, 3 * k)
     }
   }
 
-  const map = new THREE.CanvasTexture(color)
-  map.colorSpace = THREE.SRGBColorSpace
-  map.wrapS = THREE.RepeatWrapping
-  const bumpMap = new THREE.CanvasTexture(bump)
-  bumpMap.wrapS = THREE.RepeatWrapping
-  cachedTextures = { map, bumpMap }
+  // ── núm chóp trắng (ngoài) và bông chỉ đỏ (trong)
+  const tip = 0.045 * h
+  const tg = c.createLinearGradient(0, 0, 0, tip)
+  tg.addColorStop(0, '#fbf8f1')
+  tg.addColorStop(0.85, '#f3ecdc')
+  tg.addColorStop(1, 'rgba(243,236,220,0)')
+  c.fillStyle = tg
+  c.fillRect(0, 0, w, tip)
+  for (let x = 0; x < w; x += 6 * k) {
+    c.fillStyle = 'rgba(170,150,110,0.25)'
+    c.fillRect(x, 0, 1 * k, tip * 0.8)
+  }
+  n.fillStyle = '#b3241d'
+  n.fillRect(0, 0, w, 0.045 * h)
+  n.fillStyle = '#d63a2c'
+  n.fillRect(0, 0.012 * h, w, 0.008 * h)
+  n.fillStyle = '#e8d9b6'
+  n.fillRect(0, 0.026 * h, w, 0.004 * h)
+  for (let x = 0; x < w; x += 9 * k) {
+    n.fillStyle = 'rgba(200,40,30,0.85)'
+    n.fillRect(x, 0.045 * h, 2 * k, 0.02 * h)
+  }
+
+  // ── vành cạp: khâu bọc bằng sợi liếc (vỏ nâu sẫm, bóng) — trên nón thật ánh nâu đỏ
+  const rimY = h * 0.986
+  c.fillStyle = '#6b2418'
+  c.fillRect(0, rimY, w, h - rimY)
+  n.fillStyle = '#6b2418'
+  n.fillRect(0, rimY, w, h - rimY)
+  for (let x = 0; x < w; x += 4 * k) {
+    c.strokeStyle = 'rgba(190,105,70,0.55)'
+    c.lineWidth = 1.2 * k
+    c.beginPath()
+    c.moveTo(x, rimY)
+    c.lineTo(x + 3 * k, h)
+    c.stroke()
+  }
+
+  // ── chỉ nhôi trong lòng nón: hai mảng đối nhau, chỉ đỏ đan zíc zắc giữa hai vòng nan, chỉ xanh bắt chéo ở giữa
+  const nhoi = (cx) => {
+    const y1 = h * (9 / 16)
+    const y2 = h * (11.5 / 16)
+    const half = w * 0.075
+    const slant = half * 0.45
+    // chỉ đỏ: nhiều sợi song song, nửa trái nghiêng một chiều, nửa phải nghiêng chiều ngược → hình chữ V dẹt
+    const lines = 40
+    for (let i = 0; i < lines; i++) {
+      const t = i / (lines - 1)
+      const x = cx - half + t * half * 2
+      const dir = t < 0.5 ? 1 : -1
+      n.strokeStyle = `rgb(${190 + rand() * 30},${18 + rand() * 14},${20 + rand() * 10})`
+      n.lineWidth = 3.4 * k
+      n.beginPath()
+      n.moveTo(x, y1)
+      n.lineTo(x + slant * dir, y2)
+      n.stroke()
+    }
+    // chỉ xanh bắt chéo ở giữa mảng
+    for (let i = 0; i < 16; i++) {
+      const x = cx - half * 0.4 + (i / 15) * half * 0.8
+      n.strokeStyle = '#1d2c9e'
+      n.lineWidth = 3.4 * k
+      n.beginPath()
+      n.moveTo(x + slant * 0.5, y1 + (y2 - y1) * 0.12)
+      n.lineTo(x - slant * 0.5, y2 - (y2 - y1) * 0.12)
+      n.stroke()
+    }
+    // sợi chỉ chặn trên hai vòng nan
+    n.fillStyle = '#b8261f'
+    n.fillRect(cx - half, y1 - 1.5 * k, half * 2, 3 * k)
+    n.fillRect(cx - half + slant, y2 - 1.5 * k, half * 2 - slant * 2, 3 * k)
+  }
+  nhoi(w * 0.25)
+  nhoi(w * 0.75)
+
+  const tex = (el, srgb) => {
+    const t = new THREE.CanvasTexture(el)
+    if (srgb) t.colorSpace = THREE.SRGBColorSpace
+    t.wrapS = THREE.RepeatWrapping
+    return t
+  }
+  cachedTextures = { map: tex(color, true), bumpMap: tex(bump, false), insideMap: tex(inside, true) }
   return cachedTextures
 }
 
@@ -119,49 +238,80 @@ function mulberry32(a) {
   }
 }
 
+/** quai nón: dải lụa dẹt (không phải ống tròn), mặt dải quay vào trong */
+function ribbonGeometry(curve, width, segments) {
+  const pos = []
+  const uv = []
+  const idx = []
+  const z = new THREE.Vector3(0, 0, 1)
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments
+    const p = curve.getPointAt(t)
+    const tan = curve.getTangentAt(t)
+    const side = z.clone().sub(tan.clone().multiplyScalar(tan.dot(z))).normalize().multiplyScalar(width / 2)
+    pos.push(p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z)
+    uv.push(t, 0, t, 1)
+    if (i < segments) {
+      const a = i * 2
+      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2)
+    }
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
+  g.setIndex(idx)
+  g.computeVertexNormals()
+  return g
+}
+
 /**
- * Tạo một chiếc nón lá 3D hoàn toàn bằng code.
+ * Tạo một chiếc nón lá Làng Chuông 3D hoàn toàn bằng code.
  * Trả về group + các bộ phận để làm hiệu ứng "đan nón" (vòng nan → lợp lá → quai).
  */
 export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
   const { R, H, RINGS } = HAT
-  const { map, bumpMap } = makeTextures(textureSize)
+  const { map, bumpMap, insideMap } = makeTextures(textureSize)
   map.anisotropy = anisotropy
+  insideMap.anisotropy = anisotropy
 
   const group = new THREE.Group()
   group.name = 'non-la'
 
-  // mặt nón: profile từ vành (dưới) lên đỉnh, hơi phồng nhẹ
+  // mặt nón: thành thẳng, phồng rất nhẹ ở giữa (lá căng trên 16 vòng nan)
   const pts = []
-  const N = 40
+  const N = 48
   for (let i = 0; i <= N; i++) {
     const t = i / N // 0 = vành, 1 = đỉnh
     const r = Math.max(0.0001, R * (1 - t))
-    const y = H * t + Math.sin(Math.PI * t) * 0.025
+    const y = H * t + Math.sin(Math.PI * t) * 0.012
     pts.push(new THREE.Vector2(r, y))
   }
-  const surface = new THREE.LatheGeometry(pts, 160)
+  const surface = new THREE.LatheGeometry(pts, 192)
 
   const clipPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 10)
-  const outerMat = new THREE.MeshStandardMaterial({
+  // lớp dầu bóng quét ngoài cùng (bước 8): màng trong suốt, bóng nhẹ
+  const outerMat = new THREE.MeshPhysicalMaterial({
     map,
     bumpMap,
-    bumpScale: 2.2,
-    roughness: 0.82,
+    bumpScale: 1.6,
+    roughness: 0.62,
     metalness: 0,
-    emissive: new THREE.Color('#5a4120'),
+    clearcoat: 0.35,
+    clearcoatRoughness: 0.45,
+    // lá lụi hơi trong: ánh sáng lọt qua làm nón sáng dịu, không xỉn
+    emissive: new THREE.Color('#6b5530'),
     emissiveMap: map,
-    emissiveIntensity: 0.07,
+    emissiveIntensity: 0.1,
     side: THREE.FrontSide,
     clippingPlanes: [clipPlane],
   })
   const innerMat = new THREE.MeshStandardMaterial({
-    map,
-    color: new THREE.Color('#c4ab7c'),
-    roughness: 0.92,
-    emissive: new THREE.Color('#2e2110'),
-    emissiveMap: map,
-    emissiveIntensity: 0.12,
+    map: insideMap,
+    color: new THREE.Color('#e9dcc0'),
+    roughness: 0.85,
+    emissive: new THREE.Color('#3a2a14'),
+    emissiveMap: insideMap,
+    emissiveIntensity: 0.16,
     side: THREE.BackSide,
     clippingPlanes: [clipPlane],
   })
@@ -169,30 +319,37 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
   const inner = new THREE.Mesh(surface, innerMat)
   group.add(outer, inner)
 
-  // vòng nan tre (nằm ngay dưới lớp lá — nhìn thấy từ bên trong nón)
-  const bambooMat = new THREE.MeshStandardMaterial({ color: '#a8844f', roughness: 0.55, transparent: true })
+  // vòng nan nứa (ngay dưới lớp lá — thấy rõ từ trong lòng nón)
+  const bambooMat = new THREE.MeshStandardMaterial({ color: '#d2b98a', roughness: 0.5, transparent: true })
   const rings = []
   for (let k = 1; k < RINGS; k++) {
     const f = k / RINGS
-    const r = R * f - 0.014
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(Math.max(0.01, r), 0.0065, 6, 120), bambooMat)
+    const r = R * f - 0.012
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(Math.max(0.01, r), 0.0055, 6, 140), bambooMat)
     ring.rotation.x = Math.PI / 2
-    ring.position.y = H * (1 - f) - 0.008
+    ring.position.y = H * (1 - f) - 0.007
     ring.userData.order = k
     rings.push(ring)
     group.add(ring)
   }
 
-  // vành nón
-  const rimMat = new THREE.MeshStandardMaterial({ color: '#8b6a3c', roughness: 0.5 })
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.02, 12, 220), rimMat)
+  // vòng cạp (vòng thứ 16): vòng nứa to, khâu bọc sợi liếc nâu sẫm bóng
+  const rimMat = new THREE.MeshStandardMaterial({ color: '#6b2418', roughness: 0.38 })
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.011, 10, 240), rimMat)
   rim.rotation.x = Math.PI / 2
   rings.push(rim)
   group.add(rim)
 
-  // quai nón (lụa)
-  const ay = H * (1 - 0.62)
-  const ax = R * 0.62 - 0.03
+  // núm chóp bọc lá trắng
+  const tipMat = new THREE.MeshStandardMaterial({ color: '#f7f2e6', roughness: 0.6, transparent: true })
+  const tip = new THREE.Mesh(new THREE.SphereGeometry(0.034, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 0.7, 1), tipMat)
+  tip.position.y = H - 0.018
+  rings.unshift(tip)
+  group.add(tip)
+
+  // quai nón: dải lụa buộc vào hai mảng chỉ nhôi
+  const ay = H * (1 - 0.64)
+  const ax = R * 0.64 - 0.03
   const curve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(-ax, ay, 0),
     new THREE.Vector3(-ax * 0.86, ay - 0.32, 0.06),
@@ -203,12 +360,13 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
     new THREE.Vector3(ax, ay, 0),
   ])
   const strapMat = new THREE.MeshStandardMaterial({
-    color: '#8e2f2a',
-    roughness: 0.38,
-    metalness: 0.05,
+    color: '#9a2f3a',
+    roughness: 0.32,
+    metalness: 0.08,
+    side: THREE.DoubleSide,
     transparent: true,
   })
-  const strap = new THREE.Mesh(new THREE.TubeGeometry(curve, 90, 0.011, 8, false), strapMat)
+  const strap = new THREE.Mesh(ribbonGeometry(curve, 0.05, 120), strapMat)
   group.add(strap)
 
   const localPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 10)
@@ -246,7 +404,7 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
       group.traverse((o) => {
         if (o.geometry) o.geometry.dispose()
       })
-      ;[outerMat, innerMat, bambooMat, rimMat, strapMat].forEach((m) => m.dispose())
+      ;[outerMat, innerMat, bambooMat, rimMat, tipMat, strapMat].forEach((m) => m.dispose())
     },
   }
 }

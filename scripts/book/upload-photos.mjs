@@ -3,7 +3,8 @@
  * Tải ảnh thật (đã chuyển sang .webp) lên kho Supabase "book-assets/image/" rồi ghi
  * scripts/book/out/photos.json (mô tả khung → URL) cho build.mjs dùng.
  *   node scripts/book/upload-photos.mjs <thư mục .webp, cùng cấu trúc với thư mục Drive>
- * Tên file trên kho cố định theo đường dẫn ảnh → chạy lại chỉ ghi đè, không sinh file trùng.
+ * Tên file trên kho theo nội dung ảnh → chạy lại với ảnh không đổi chỉ ghi đè; ảnh đã chỉnh có URL mới.
+ * Ảnh nên chỉnh trước (cắt, xoay, cân màu, tách nền nón): xem scripts/book/lift.swift.
  * Cần SUPABASE_SERVICE_ROLE_KEY trong .env.local (chỉ dùng trên máy, không bao giờ đưa lên web).
  */
 import fs from 'node:fs'
@@ -34,11 +35,13 @@ for (const [hint, rel] of Object.entries(photos)) {
     console.warn(`⚠ thiếu ảnh: ${rel}`)
     continue
   }
-  const name = `image/nl-${crypto.createHash('sha1').update(rel).digest('hex').slice(0, 12)}.webp`
+  // tên theo nội dung file: ảnh chỉnh lại → URL mới (trình duyệt không giữ bản cũ trong cache)
+  const body = fs.readFileSync(file)
+  const name = `image/nl-${crypto.createHash('sha1').update(body).digest('hex').slice(0, 12)}.webp`
   const res = await fetch(`${url}/storage/v1/object/book-assets/${name}`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'x-upsert': 'true', 'Content-Type': 'image/webp', 'Cache-Control': 'max-age=31536000' },
-    body: fs.readFileSync(file),
+    body,
   })
   if (!res.ok) throw new Error(`${rel}: ${res.status} ${await res.text()}`)
   out[hint] = `${url}/storage/v1/object/public/book-assets/${name}`
