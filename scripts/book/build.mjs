@@ -346,7 +346,7 @@ class Flow {
       const ch = capH(cap, CW)
       const y = this.fresh ? this.y : this.y + 6
       const h = Math.min(this.bot - y - 6 - ch, CW * R.std)
-      if (h < 105) break
+      if (h < 150) break
       figure(this.p, this.p.x0, y, CW, h, cap)
       this.pool.shift()
       this.y = y + h + 6 + ch + 18
@@ -635,25 +635,22 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
 
 // ═════════════════════════════════════════ BÌA
 // chỉ có hình nón làng Chuông: ảnh tràn trang những chồng nón trắng trong đình Chuông (ảnh báo, ghi nguồn),
-// lớp tối dần ở trên/dưới để chữ màu kem đọc rõ; ảnh đặt trong viền giấy ngà + chỉ vàng như bìa sách in,
-// để bìa tông tối không chìm vào nền website (cũng tối)
+// lớp tối dần ở trên/dưới để chữ màu kem đọc rõ (nền website xanh lá tre nên bìa nâu tách hẳn khỏi nền)
 {
-  const p = new Page({ hideNumber: true, bg: '#f3e9d4' })
-  const m = 18 // lề giấy ngà quanh ảnh
-  const shade = (y, h, flip) => ({ ...DECO('shade', m, y, W - 2 * m, h, 1), fit: 'fill', rot: flip ? 180 : 0, name: 'Lớp tối' })
+  const p = new Page({ hideNumber: true, bg: '#2b2118' })
+  const shade = (y, h, flip) => ({ ...DECO('shade', 0, y, W, h, 1), fit: 'fill', rot: flip ? 180 : 0, name: 'Lớp tối' })
   const cream = '#fbf4e4'
   p.add(
-    RECT(7, 7, W - 14, H - 14, 'none', { stroke: '#b8924f', sw: 1, name: 'Chỉ vàng' }),
-    IMG(m, m, W - 2 * m, H - 2 * m, ['Ảnh bìa: những chồng nón lá trắng trong đình Chuông — Hà Trang / Báo Văn Hóa', '表紙写真：チュオン村の亭に積まれた白いノンラー'], { name: 'Ảnh bìa' }),
-    shade(m, 360),
-    shade(H - m - 210, 210, true),
+    IMG(0, 0, W, H, ['Ảnh bìa: những chồng nón lá trắng trong đình Chuông — Hà Trang / Báo Văn Hóa', '表紙写真：チュオン村の亭に積まれた白いノンラー'], { name: 'Ảnh bìa' }),
+    shade(0, 360),
+    shade(H - 210, 210, true),
     T(46, 58, 500, 120, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 52, lh: 1.08, tracking: 2.5, color: cream, jaFont: F.jaHead, jaSize: 46, name: 'Tên sách' }),
     T(48, 184, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: '#e7c98f', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
     HL(50, 244, 70, '#e7c98f', 1.4),
-    RECT(46, H - 100, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
-    IMG(52, H - 95, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
-    T(184, H - 96, 360, 34, front.team, { size: 10.5, lh: 1.5, color: 'rgba(251,244,228,.85)', jaFont: F.jaSans, name: 'Thông tin' }),
-    T(W - 260, H - m - 18, 230, 12, ['Ảnh bìa: Hà Trang / Báo Văn Hóa', '表紙写真：ハー・チャン／ヴァンホア紙'], { size: 7.5, align: 'right', color: 'rgba(251,244,228,.55)', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh bìa' })
+    RECT(46, H - 92, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
+    IMG(52, H - 87, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
+    T(184, H - 88, 380, 34, front.team, { size: 10.5, lh: 1.5, color: 'rgba(251,244,228,.85)', jaFont: F.jaSans, name: 'Thông tin' }),
+    T(W - 250, H - 26, 230, 12, ['Ảnh bìa: Hà Trang / Báo Văn Hóa', '表紙写真：ハー・チャン／ヴァンホア紙'], { size: 7.5, align: 'right', color: 'rgba(251,244,228,.55)', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh bìa' })
   )
 }
 

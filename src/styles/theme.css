@@ -18,16 +18,16 @@
   --wine: #7d2f2a;
   --hairline: rgba(59, 42, 30, 0.18);
 
-  /* Nền phía sau cuốn sách — nâu trầm tối như bản đầu (bản sửa lần 1: web nền tối, sách nền sáng) */
-  --bg-1: #3a2719;
-  --bg-2: #1c130d;
-  --bg-3: #0e0907;
-  --vignette: rgba(5, 3, 2, 0.6);
+  /* Nền phía sau cuốn sách — xanh lá tre trầm (khác tông với bìa nâu và trang giấy ngà, không tối đen) */
+  --bg-1: #5d7a5f;
+  --bg-2: #3e5843;
+  --bg-3: #24372b;
+  --vignette: rgba(16, 28, 20, 0.45);
   --book-shadow: 0 40px 70px -18px rgba(0, 0, 0, 0.75), 0 14px 26px -6px rgba(0, 0, 0, 0.45);
 
   /* Giao diện điều khiển (nút, thanh trang, mục lục…) trên nền tối */
-  --ui-bg: rgba(26, 19, 14, 0.74); /* thanh nổi, nút */
-  --ui-surface: rgba(22, 16, 11, 0.95); /* panel, popup, thông báo */
+  --ui-bg: rgba(22, 34, 26, 0.72); /* thanh nổi, nút */
+  --ui-surface: rgba(24, 36, 28, 0.96); /* panel, popup, thông báo */
   --ui-line: rgba(217, 189, 132, 0.22);
   --ui-text: rgba(244, 237, 224, 0.88);
   --ui-text-2: rgba(244, 237, 224, 0.55);
