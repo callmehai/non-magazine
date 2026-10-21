@@ -788,7 +788,7 @@ const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: '
   f.prose(ab.p.slice(0, 1))
   {
     // bản đồ chữ S: bấm vào → phóng tới Làng Chuông, mô hình 3D của làng nổi lên trên ghim
-    const mh = r1(CW * 0.8)
+    const mh = r1(CW * 1.12) // khung dọc: tuyến Hà Nội → Làng Chuông chạy theo chiều bắc – nam
     const cap = ab.images[0]
     const ch = capH(cap, CW)
     f.place(mh + 6 + ch, (p, y) => {
@@ -1220,6 +1220,7 @@ let stripPage = null
       ['Ảnh bìa: Hà Trang, Báo Văn Hóa — bài “Ghé thăm phiên chợ nón làng Chuông” (baovanhoa.vn, 8/5/2026).', '表紙写真：ハー・チャン、ヴァンホア紙 ―「チュオン村の笠市を訪ねて」（baovanhoa.vn、2026年5月8日）。'],
       ['Video trình diễn quốc tế: nghệ nhân Lê Văn Tuy cung cấp.', '国際イベントでの実演動画：職人レー・ヴァン・トゥイ提供。'],
       ['Bản đồ Việt Nam: dữ liệu Natural Earth (phạm vi công cộng), bản theo quan điểm của Việt Nam.', 'ベトナムの地図：Natural Earth のデータ（パブリックドメイン、ベトナムの立場による版）。'],
+      ['Bản đồ hành trình: ảnh vệ tinh Esri World Imagery (Esri, Maxar, Earthstar Geographics) · tuyến đường © OpenStreetMap contributors, định tuyến OSRM · quãng đường theo Google Maps.', '旅の地図：衛星写真 Esri World Imagery（Esri, Maxar, Earthstar Geographics）・ルート © OpenStreetMap contributors、OSRM による経路・距離は Google Maps による。'],
     ]
     const co = { size: 11.5, lh: 1.5, jaSize: 11.5, paraGap: 4 }
     const body = join(credits.slice(1))

@@ -146,162 +146,197 @@
     translate: 0 -3em;
   }
 }
-/* ── hành trình Hà Nội → Làng Chuông ── */
-.cvw-trip__stage {
+/* ── hành trình Hà Nội → Làng Chuông (ảnh vệ tinh) ── */
+.cvw-sat {
   position: absolute;
-  inset: -14% -10% -4%; /* rộng hơn khung: mặt bản đồ nghiêng không lộ mép */
-  transform-origin: 50% 62%;
+  inset: 0;
+  overflow: hidden;
+  background: #3d4a36;
 }
-.cvw-trip__road path {
+.cvw-sat__world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.cvw-sat__world img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cvw-sat__route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.cvw-sat__route path {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 1 1;
 }
-.cvw-trip__casing {
-  stroke: #fffaf0;
-  stroke-dashoffset: calc(1 - var(--road, 0));
+.cvw-sat__ghost {
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-dasharray: 2 6;
 }
-.cvw-trip__lane {
-  stroke: #e6c98f;
-  stroke-dashoffset: calc(1 - var(--road, 0));
-}
-.cvw-trip__done {
-  stroke: #b23a24;
-  stroke-dashoffset: calc(1 - var(--done, 0));
+.cvw-sat__line {
+  stroke: #e8372c;
+  filter: drop-shadow(0 0 1.5px #fff);
 }
 .cvw-trip__fx {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 .cvw-trip__car {
   position: absolute;
   left: 0;
   top: 0;
-  width: 80em;
-  transform-origin: 50% 88%;
+  width: 28em;
+  height: 47.6em;
+  margin: -23.8em 0 0 -14em;
   will-change: transform;
 }
-.cvw-car {
+.cvw-cartop {
   display: block;
   width: 100%;
+  height: 100%;
   overflow: visible;
 }
-.cvw-trip__car.is-driving .cvw-car {
-  animation: cvw-carbob 0.32s ease-in-out infinite alternate;
+.cvw-trip__car.is-driving .cvw-cartop {
+  animation: cvw-rumble 0.18s linear infinite alternate;
 }
-.cvw-trip__car.is-driving .cvw-car__wheel {
-  animation: cvw-spin 0.4s linear infinite;
-}
-.cvw-car__hats {
-  transform-origin: 56px 30px;
-}
-.cvw-trip__car.is-driving .cvw-car__hats {
-  animation: cvw-wobble 0.64s ease-in-out infinite alternate;
-}
-@keyframes cvw-carbob {
+@keyframes cvw-rumble {
   to {
-    translate: 0 -1.6em;
-  }
-}
-@keyframes cvw-spin {
-  to {
-    rotate: 360deg;
-  }
-}
-@keyframes cvw-wobble {
-  from {
-    rotate: -2deg;
-  }
-  to {
-    rotate: 2deg;
+    translate: 0.4em 0;
   }
 }
 .cvw-trip__puff {
   position: absolute;
-  width: 14em;
-  height: 14em;
-  margin: -7em 0 0 -7em;
+  width: 10em;
+  height: 10em;
+  margin: -5em 0 0 -5em;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 36%, #ffffff, #e2ddd3 55%, rgba(170, 162, 150, 0.5) 68%, rgba(170, 162, 150, 0) 72%);
+  background: radial-gradient(circle at 38% 36%, #ffffff, #e4e0d8 55%, rgba(190, 184, 172, 0.45) 68%, rgba(190, 184, 172, 0) 72%);
   animation: cvw-puff 1.15s ease-out forwards;
 }
 @keyframes cvw-puff {
   from {
-    opacity: 0.9;
-    transform: translate(0, 0) scale(0.35);
+    opacity: 0.85;
+    transform: scale(0.4);
   }
   to {
     opacity: 0;
-    transform: translate(var(--dx), -16px) scale(2.1);
+    transform: translate(0, -8em) scale(2.3);
   }
 }
-.cvw-trip__tag {
+.cvw-pin {
   position: absolute;
-  translate: -50% -230%;
-  padding: 0.2em 0.55em;
-  border-radius: 0.35em;
-  background: #fffaf0;
-  box-shadow: 0 0.15em 0.5em rgba(40, 30, 15, 0.25);
-  font-family: 'Patrick Hand', 'Klee One', cursive;
-  font-size: 12.5em;
-  white-space: nowrap;
-  color: #2b2118;
-  animation: cvw-in 0.35s ease-out both;
-}
-.cvw-trip__tag.is-start {
-  translate: -30% 40%;
-}
-.cvw-trip__tag.is-mid {
-  translate: 20% -50%;
-  font-size: 11em;
-  background: rgba(255, 250, 240, 0.85);
-}
-.cvw-trip__pin {
-  position: absolute;
-  width: 26em;
+  width: 18em;
   translate: -50% -100%;
   animation: cvw-drop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) both;
 }
-.cvw-trip__pin svg {
+.cvw-pin svg {
   display: block;
   width: 100%;
   overflow: visible;
+  filter: drop-shadow(0 1.5em 1.5em rgba(0, 0, 0, 0.4));
 }
-.cvw-trip__pin path {
-  fill: #b23a24;
+.cvw-pin path {
+  fill: #e8372c;
   stroke: #fff;
   stroke-width: 1.6;
 }
-.cvw-trip__pin circle {
+.cvw-pin.is-from path {
+  fill: #2b2118;
+}
+.cvw-pin circle {
   fill: #fff;
+}
+.cvw-pin em {
+  position: absolute;
+  left: 50%;
+  bottom: 105%;
+  translate: -50% 0;
+  padding: 0.15em 0.5em;
+  border-radius: 0.3em;
+  background: #fffaf0;
+  box-shadow: 0 0.15em 0.5em rgba(0, 0, 0, 0.3);
+  font:
+    400 12em/1.25 'Patrick Hand',
+    'Klee One',
+    cursive;
+  font-style: normal;
+  white-space: nowrap;
+  color: #2b2118;
 }
 @keyframes cvw-drop {
   from {
     opacity: 0;
-    transform: translateY(-40em) scale(0.6);
+    transform: translateY(-30em) scale(0.6);
   }
+}
+.cvw-trip__tag {
+  position: absolute;
+  translate: 25% -50%;
+  padding: 0.15em 0.5em;
+  border-radius: 0.3em;
+  background: rgba(255, 250, 240, 0.9);
+  box-shadow: 0 0.15em 0.5em rgba(0, 0, 0, 0.3);
+  font:
+    400 11em/1.25 'Patrick Hand',
+    'Klee One',
+    cursive;
+  white-space: nowrap;
+  color: #2b2118;
+  animation: cvw-in 0.35s ease-out both;
+}
+.cvw-trip__km {
+  position: absolute;
+  right: 0;
+  bottom: 5%;
+  padding: 0.12em 0.45em 0.12em 0.6em;
+  border-radius: 0.35em 0 0 0.35em;
+  background: #e8372c;
+  color: #fff;
+  font-size: 13em;
+  font-weight: 700;
+  box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.3);
+}
+.cvw-trip__km b {
+  font-size: 1.7em;
+  font-variant-numeric: tabular-nums;
+}
+.cvw-trip__credit {
+  position: absolute;
+  left: 3%;
+  bottom: 2%;
+  max-width: 64%;
+  font-size: 6.5em;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 .cvw-trip__card {
   position: absolute;
   right: 4%;
-  top: 16%;
-  max-width: 50%;
+  top: 14%;
+  max-width: 52%;
   display: grid;
   gap: 2em;
   padding: 7em 11em 8em;
   border-radius: 3em;
   background: #fff7d6;
-  box-shadow: 0 4em 12em rgba(40, 30, 15, 0.22);
+  box-shadow: 0 4em 12em rgba(0, 0, 0, 0.35);
   rotate: 1.5deg;
-  animation: cvw-in 0.5s 0.35s ease-out both;
+  animation: cvw-in 0.5s 0.2s ease-out both;
 }
 .cvw-trip__card b {
-  font-family: 'Patrick Hand', 'Klee One', cursive;
-  font-weight: 400;
-  font-size: 19em;
+  font:
+    400 19em/1.2 'Patrick Hand',
+    'Klee One',
+    cursive;
   color: #a8321f;
 }
 .cvw-trip__card span {

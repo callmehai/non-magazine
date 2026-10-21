@@ -1,18 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCanvasLang } from '../lang.js'
-import map from './vnmap.json'
-import { reducedMotion } from './webgl.js'
+import { asset } from '../../lib/assets.js'
 import { ensureFont } from '../fonts.js'
+import map from './vnmap.json'
+import trip from './route.json'
+import { reducedMotion } from './webgl.js'
 
 ensureFont('Patrick Hand')
 ensureFont('Klee One')
 
 /**
- * Bản đồ hành trình (mục 1.3): bản đồ Việt Nam chữ S (Natural Earth, bản theo quan điểm Việt Nam: có Hoàng Sa,
- * Trường Sa). Bấm vào → phóng tới Hà Nội, mặt bản đồ nghiêng như trải trên bàn, con đường Hoàn Kiếm → Nguyễn Trãi →
- * Hà Đông → quốc lộ 21B → Làng Chuông hiện dần, chiếc ô tô chở nón bật lên rồi lăn bánh (có khói), tới làng thì
- * ghim rơi xuống. Toạ độ trong vnmap.json là đơn vị bản đồ; xe, khói, nhãn nằm ở lớp trên (không nghiêng),
- * vị trí lấy theo điểm neo trong SVG đã nghiêng.
+ * Bản đồ hành trình (mục 1.3), kiểu video "travel map":
+ *  1. bản đồ Việt Nam chữ S (Natural Earth, bản theo quan điểm Việt Nam: có Hoàng Sa, Trường Sa)
+ *  2. bấm vào → phóng tới Hà Nội, chuyển sang ảnh vệ tinh (Esri World Imagery)
+ *  3. ghim điểm đi (Hồ Hoàn Kiếm) và điểm đến (Làng Chuông); camera sà xuống chiếc ô tô chở nón (nhìn từ trên)
+ *  4. xe lăn bánh theo tuyến đường thật (OSRM / OpenStreetMap, qua Nguyễn Trãi – Hà Đông – QL21B), có khói,
+ *     camera bám theo xe, vạch đỏ vẽ dần sau xe, đồng hồ đếm quãng đường tới 30,2 km (Google Maps)
+ *  5. tới nơi: camera lùi ra thấy cả tuyến, ghim rơi xuống, thẻ ghi chú
+ * route.json: ảnh nền route-map.webp (px), tuyến đường + điểm mốc theo px của ảnh, nw/se = kinh vĩ độ hai góc.
  */
 const L = {
   vi: {
@@ -20,90 +25,74 @@ const L = {
     sea: 'Biển Đông',
     paracel: 'Quần đảo Hoàng Sa',
     spratly: 'Quần đảo Trường Sa',
-    hanoi: 'Hà Nội',
-    hadong: 'Hà Đông',
-    chuong: 'Làng Chuông',
     hint: 'Bấm vào bản đồ: lên xe về Làng Chuông!',
-    start: 'Xuất phát từ Hà Nội',
+    from: 'Hồ Hoàn Kiếm, Hà Nội',
+    mid: 'Hà Đông',
+    to: 'Làng Chuông',
     arrived: 'Tới Làng Chuông rồi!',
-    place: 'xã Phương Trung, thành phố Hà Nội — làng nghề nón lá hơn 300 năm',
+    trip: (km) => `${km} km · khoảng 53 phút đi ô tô theo QL21B`,
+    place: 'xã Phương Trung, thành phố Hà Nội',
+    km: 'km',
     again: 'Đi lại',
     back: 'Toàn cảnh Việt Nam',
+    credit: 'Ảnh vệ tinh: Esri, Maxar, Earthstar Geographics · Tuyến đường: OpenStreetMap / OSRM · Quãng đường: Google Maps',
   },
   ja: {
     country: 'ベトナム',
     sea: '東海（ビエンドン）',
     paracel: 'ホアンサ諸島',
     spratly: 'チュオンサ諸島',
-    hanoi: 'ハノイ',
-    hadong: 'ハドン',
-    chuong: 'チュオン村',
     hint: '地図をクリック：車でチュオン村へ出発！',
-    start: 'ハノイから出発',
+    from: 'ホアンキエム湖（ハノイ）',
+    mid: 'ハドン',
+    to: 'チュオン村',
     arrived: 'チュオン村に到着！',
-    place: 'ハノイ市フオンチュン社 — 300年以上続く笠の村',
+    trip: (km) => `${km} km・国道21B号線経由で車で約53分`,
+    place: 'ハノイ市フオンチュン社',
+    km: 'km',
     again: 'もう一度',
     back: 'ベトナム全図へ',
+    credit: '衛星写真：Esri, Maxar, Earthstar Geographics・ルート：OpenStreetMap / OSRM・距離：Google Maps',
   },
 }
 
+// ── bản đồ chữ S (đơn vị bản đồ của vnmap.json)
 const P = (lat, lon) => [(lon - map.lon0) * map.k * map.cl, (map.lat0 - lat) * map.k]
-// đường đi thật: Hoàn Kiếm → Ngã Tư Sở → Nguyễn Trãi → Hà Đông → Ba La → quốc lộ 21B → Phương Trung
-const ROUTE = [
-  [21.0285, 105.8542],
-  [21.0035, 105.8205],
-  [20.99, 105.8],
-  [20.9715, 105.777],
-  [20.955, 105.759],
-  [20.925, 105.765],
-  [20.9, 105.769],
-  [20.88, 105.772],
-].map(([a, b]) => P(a, b))
-const [HX, HY] = ROUTE[0]
-const [CX, CY] = ROUTE.at(-1)
-const [DX, DY] = ROUTE[3] // Hà Đông
-
-/** đường cong mượt đi qua các điểm (Catmull-Rom → Bézier) */
-function smooth(pts) {
-  let d = `M${pts[0][0]},${pts[0][1]}`
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] ?? pts[i]
-    const [p1, p2] = [pts[i], pts[i + 1]]
-    const p3 = pts[i + 2] ?? p2
-    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]
-    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]
-    d += `C${c1.join(',')} ${c2.join(',')} ${p2.join(',')}`
-  }
-  return d
-}
-const ROUTE_D = smooth(ROUTE)
-
-// trang trí vùng ven đô: ruộng lúa, cây, nhà (vị trí cố định, giả ngẫu nhiên)
-const rnd = (() => {
-  let s = 7
-  return () => (s = (s * 16807) % 2147483647) / 2147483647
-})()
-const FIELDS = Array.from({ length: 46 }, () => {
-  const x = 217 + rnd() * 12
-  const y = 145.5 + rnd() * 6.5
-  return { x, y, w: 0.5 + rnd() * 0.7, h: 0.3 + rnd() * 0.4, r: rnd() * 40 - 20, c: rnd() > 0.5 ? '#b9d07c' : '#a7c56c' }
-}).filter((f) => Math.abs(f.x - 221.9 - (f.y - 148.8) * -0.15) > 0.7)
-const TREES = Array.from({ length: 34 }, () => ({ x: 216.5 + rnd() * 13, y: 141 + rnd() * 11, r: 0.12 + rnd() * 0.12 }))
-const HOUSES = Array.from({ length: 26 }, (_, i) => {
-  const near = i < 16 ? [HX - 1.2, HY + 0.2, 2.6] : [DX - 0.3, DY - 0.2, 1.4]
-  return { x: near[0] + (rnd() - 0.5) * near[2], y: near[1] + (rnd() - 0.5) * near[2] * 0.7, w: 0.18 + rnd() * 0.14 }
-})
-
+const [HX, HY] = P(21.0287, 105.8521)
 const WORLD = { x: 360, y: 380, s: 660 }
-const TRIP = { x: (HX + CX) / 2 + 0.3, y: (HY + CY) / 2 - 0.35, s: 9.4 }
-const T_ZOOM = 1900
-const T_ROAD = 900
-const T_POP = 450
-const T_DRIVE = 4600
+// vùng ảnh vệ tinh trên bản đồ chữ S (để phóng tới đúng chỗ rồi chuyển cảnh)
+const SAT_NW = P(trip.nw[1], trip.nw[0])
+const SAT_SE = P(trip.se[1], trip.se[0])
+const SAT_VIEW = { x: (SAT_NW[0] + SAT_SE[0]) / 2, y: (SAT_NW[1] + SAT_SE[1]) / 2, s: (SAT_SE[1] - SAT_NW[1]) * 0.95 }
 
+// ── tuyến đường trên ảnh vệ tinh (px của ảnh)
+const R = trip.route
+const SEG = R.slice(1).map((p, i) => Math.hypot(p[0] - R[i][0], p[1] - R[i][1]))
+const LEN = SEG.reduce((a, b) => a + b, 0)
+function at(d) {
+  let i = 0
+  while (i < SEG.length - 1 && d > SEG[i]) d -= SEG[i++]
+  const k = Math.min(1, d / (SEG[i] || 1))
+  const [a, b] = [R[i], R[i + 1]]
+  return { x: a[0] + (b[0] - a[0]) * k, y: a[1] + (b[1] - a[1]) * k, ang: (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI }
+}
+const BOX = (() => {
+  const xs = R.map((p) => p[0])
+  const ys = R.map((p) => p[1])
+  return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) }
+})()
+
+const T_ZOOM = 1700
+const T_FADE = 700
+const T_PINS = 900
+const T_DIVE = 1100
+const T_POP = 450
+const T_DRIVE = 7200
+const T_OUT = 1300
+
+const clamp01 = (v) => Math.min(1, Math.max(0, v))
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-const clamp01 = (v) => Math.min(1, Math.max(0, v))
 
 /** nội suy phóng to quanh một điểm: điểm đích trôi đều trên màn hình trong lúc khung nhìn co lại */
 function lerpView(a, b, t) {
@@ -112,20 +101,26 @@ function lerpView(a, b, t) {
   return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, s }
 }
 
+const IDLE = { phase: 'world', sat: 0, cam: null, pins: 0, pop: 0, drive: 0, end: 0 }
+
 export default function MapWidget({ el, interactive, visible }) {
   const lang = useCanvasLang() === 'ja' ? 'ja' : 'vi'
   const t = L[lang]
   const aspect = el.w / el.h
-  const [view, setView] = useState(WORLD)
-  const [phase, setPhase] = useState('world') // world | trip | done | leaving
-  const [k, setK] = useState({ tilt: 0, road: 0, near: 0 })
   const rootRef = useRef(null)
-  const routeRef = useRef(null)
-  const anchorRef = useRef(null)
   const fxRef = useRef(null)
-  const carRef = useRef(null)
   const raf = useRef(0)
+  const [size, setSize] = useState({ w: 500, h: 400 })
+  const [view, setView] = useState(WORLD) // khung nhìn bản đồ chữ S
+  const [st, setSt] = useState(IDLE)
 
+  useEffect(() => {
+    const node = rootRef.current
+    if (!node) return
+    const ro = new ResizeObserver(() => setSize({ w: node.offsetWidth, h: node.offsetHeight }))
+    ro.observe(node)
+    return () => ro.disconnect()
+  }, [])
   useEffect(() => () => cancelAnimationFrame(raf.current), [])
 
   // rời trang thì về lại toàn cảnh (lần sau mở trang người đọc lại được bấm)
@@ -133,136 +128,108 @@ export default function MapWidget({ el, interactive, visible }) {
     if (visible) return
     cancelAnimationFrame(raf.current)
     setView(WORLD)
-    setPhase('world')
-    setK({ tilt: 0, road: 0, near: 0 })
+    setSt(IDLE)
   }, [visible])
 
-  /** toạ độ (px trong khung phần tử) của một điểm bản đồ sau khi mặt bản đồ đã nghiêng */
-  const screenOf = (x, y) => {
-    const a = anchorRef.current
-    const root = rootRef.current
-    if (!a || !root) return null
-    a.setAttribute('cx', x)
-    a.setAttribute('cy', y)
-    const r = a.getBoundingClientRect()
-    const box = root.getBoundingClientRect()
-    const sc = box.width / root.offsetWidth || 1
-    return [(r.left + r.width / 2 - box.left) / sc, (r.top + r.height / 2 - box.top) / sc]
+  // camera trên ảnh vệ tinh: khung vừa cả tuyến, và khung bám xe (gần hơn); tính theo cỡ khung hiện tại
+  const sizeRef = useRef(size)
+  sizeRef.current = size
+  const fitOf = ({ w, h }) => {
+    const m = 140
+    // vừa cả tuyến, nhưng ảnh vệ tinh luôn phủ kín khung (không lộ mép); tâm kẹp trong ảnh
+    const s = Math.max(Math.min(w / (BOX.x1 - BOX.x0 + 2 * m), h / (BOX.y1 - BOX.y0 + 2 * m)), w / trip.w, h / trip.h) || 0.1
+    const hx = w / 2 / s
+    const hy = h / 2 / s
+    const cx = Math.min(trip.w - hx, Math.max(hx, (BOX.x0 + BOX.x1) / 2))
+    const cy = Math.min(trip.h - hy, Math.max(hy, (BOX.y0 + BOX.y1) / 2))
+    return { x: cx, y: cy, s }
   }
+  const fit = useMemo(() => fitOf(size), [size])
 
-  const puff = (x, y, dir) => {
+  const puff = (x, y) => {
     const fx = fxRef.current
     if (!fx) return
     const d = document.createElement('i')
     d.className = 'cvw-trip__puff'
     d.style.left = `${x}px`
     d.style.top = `${y}px`
-    d.style.setProperty('--dx', `${-dir * (14 + Math.random() * 10)}px`)
     fx.appendChild(d)
-    setTimeout(() => d.remove(), 1100)
+    setTimeout(() => d.remove(), 1200)
   }
 
-  /** chạy hành trình: (phóng tới Hà Nội) → nghiêng → đường hiện dần → xe bật lên → xe chạy có khói → tới làng */
-  const runTrip = (withZoom) => {
+  const run = (fromWorld) => {
     cancelAnimationFrame(raf.current)
     fxRef.current?.querySelectorAll('.cvw-trip__puff').forEach((n) => n.remove())
-    setPhase('trip')
-    const from = view
+    if (reducedMotion()) {
+      setView(SAT_VIEW)
+      setSt({ phase: 'done', sat: 1, cam: null, pins: 1, pop: 1, drive: 1, end: 1 })
+      return
+    }
+    const v0 = view
     const t0 = performance.now()
-    const zoom = withZoom ? T_ZOOM : 0
-    const len = routeRef.current?.getTotalLength() ?? 1
+    const tz = fromWorld ? T_ZOOM : 0
     let lastPuff = 0
-    let dir = -1
-    const car = carRef.current
     const frame = (now) => {
       const e = now - t0
-      const kz = zoom ? clamp01(e / zoom) : 1
-      if (zoom) setView(lerpView(from, TRIP, ease(kz)))
-      const tilt = clamp01((e - zoom * 0.55) / 900)
-      const road = clamp01((e - zoom - 200) / T_ROAD)
-      setK({ tilt: easeInOut(tilt), road: easeInOut(road), near: clamp01((e - zoom * 0.5) / (zoom * 0.5 || 1)) })
-      const tc = e - zoom - 200 - T_ROAD
-      if (car && tc > 0) {
-        const pop = clamp01(tc / T_POP)
-        const drive = easeInOut(clamp01((tc - T_POP) / T_DRIVE))
-        const pt = routeRef.current.getPointAtLength(drive * len)
-        const ahead = routeRef.current.getPointAtLength(Math.min(len, drive * len + len * 0.02))
-        const s0 = screenOf(pt.x, pt.y)
-        const s1 = screenOf(ahead.x, ahead.y)
-        if (s0 && s1) {
-          if (Math.abs(s1[0] - s0[0]) > 0.4) dir = s1[0] > s0[0] ? 1 : -1
-          const bounce = pop < 1 ? 1 + Math.sin(pop * Math.PI) * 0.35 : 1
-          car.style.opacity = '1'
-          car.style.transform = `translate(${s0[0]}px, ${s0[1]}px) translate(-50%, -88%) scale(${pop * bounce}) scaleX(${dir})`
-          car.classList.toggle('is-driving', pop >= 1 && drive < 1)
-          if (pop >= 1 && drive < 1 && now - lastPuff > 85) {
-            lastPuff = now
-            puff(s0[0] - dir * 0.07 * root().w, s0[1] - 0.014 * root().w, dir)
-          }
-          car.style.setProperty('--trail', drive)
-        }
-        routeRef.current.parentNode.style.setProperty('--done', drive)
-        if (drive >= 1) {
-          setPhase('done')
-          return
-        }
+      if (tz) setView(lerpView(v0, SAT_VIEW, ease(clamp01(e / tz))))
+      const sat = fromWorld ? clamp01((e - tz + 250) / T_FADE) : 1
+      const e1 = e - tz - (fromWorld ? T_FADE * 0.6 : 0)
+      const pins = clamp01(e1 / 400)
+      const e2 = e1 - T_PINS
+      const dive = easeInOut(clamp01(e2 / T_DIVE))
+      const e3 = e2 - T_DIVE
+      const pop = clamp01(e3 / T_POP)
+      const drive = easeInOut(clamp01((e3 - T_POP) / T_DRIVE))
+      const e4 = e3 - T_POP - T_DRIVE
+      const out = easeInOut(clamp01(e4 / T_OUT))
+      const car = at(drive * LEN)
+      const sz = sizeRef.current
+      const fit = fitOf(sz)
+      const follow = fit.s * 3.2
+      // camera: khung toàn tuyến → sà xuống xe → bám xe → lùi ra khung toàn tuyến
+      const near = { x: car.x, y: car.y, s: follow }
+      const cam = e4 > 0 ? lerpView(near, fit, out) : e3 > 0 ? near : lerpView(fit, near, dive)
+      if (drive > 0 && drive < 1 && now - lastPuff > 70) {
+        lastPuff = now
+        const backA = ((car.ang + 180) * Math.PI) / 180
+        puff((car.x - cam.x) * cam.s + sz.w / 2 + Math.cos(backA) * 16, (car.y - cam.y) * cam.s + sz.h / 2 + Math.sin(backA) * 16)
       }
-      raf.current = requestAnimationFrame(frame)
-    }
-    const root = () => ({ w: rootRef.current?.offsetWidth ?? 500 })
-    if (reducedMotion()) {
-      setView(TRIP)
-      setK({ tilt: 1, road: 1, near: 1 })
-      setPhase('done')
-      requestAnimationFrame(() => {
-        const s = screenOf(CX, CY)
-        if (car && s) {
-          car.style.opacity = '1'
-          car.style.transform = `translate(${s[0]}px, ${s[1]}px) translate(-50%, -88%) scaleX(-1)`
-        }
-      })
-      return
+      const done = e4 >= T_OUT
+      setSt({ phase: done ? 'done' : 'trip', sat, cam: done ? null : cam, pins, pop, drive, end: clamp01(e4 / 500) })
+      if (!done) raf.current = requestAnimationFrame(frame)
     }
     raf.current = requestAnimationFrame(frame)
   }
 
-  const go = () => {
-    if (!interactive || phase !== 'world') return
-    runTrip(true)
-  }
+  const go = () => interactive && visible && st.phase === 'world' && run(true)
   const again = (e) => {
     e.stopPropagation()
-    if (carRef.current) carRef.current.style.opacity = '0'
-    runTrip(false)
+    run(false)
   }
   const back = (e) => {
     e.stopPropagation()
     cancelAnimationFrame(raf.current)
-    if (carRef.current) carRef.current.style.opacity = '0'
-    setPhase('leaving')
-    const from = view
     const t0 = performance.now()
     const frame = (now) => {
-      const kk = clamp01((now - t0) / 1500)
-      setView(lerpView(from, WORLD, ease(kk)))
-      setK({ tilt: 1 - clamp01(kk * 2), road: 1 - clamp01(kk * 3), near: 1 - kk })
-      if (kk < 1) raf.current = requestAnimationFrame(frame)
-      else setPhase('world')
+      const k = clamp01((now - t0) / 1500)
+      setView(lerpView(SAT_VIEW, WORLD, ease(k)))
+      setSt((s) => ({ ...s, phase: k < 1 ? 'leaving' : 'world', sat: 1 - clamp01(k * 3) }))
+      if (k < 1) raf.current = requestAnimationFrame(frame)
+      else setSt(IDLE)
     }
     raf.current = requestAnimationFrame(frame)
   }
 
+  // ── bản đồ chữ S
   const vw = view.s * aspect
   const vb = `${view.x - vw / 2} ${view.y - view.s / 2} ${vw} ${view.s}`
-  const u = view.s / el.h // đơn vị bản đồ trên 1pt của trang
-  const z = WORLD.s / view.s
-  const far = 1 - clamp01((z - 1.2) / 1.5)
-  const near = k.near
-  const label = (x, y, text, size, o = {}) => (
+  const u = view.s / el.h
+  const far = 1 - clamp01((WORLD.s / view.s - 1.2) / 1.5)
+  const label = (x, y, text, sz, o = {}) => (
     <text
       x={x}
       y={y}
-      fontSize={size * u}
+      fontSize={sz * u}
       textAnchor={o.anchor ?? 'middle'}
       className={`cvw-map__label ${o.cls ?? ''}`}
       style={{ letterSpacing: o.track ? `${o.track * u}px` : undefined }}
@@ -270,100 +237,102 @@ export default function MapWidget({ el, interactive, visible }) {
       {text}
     </text>
   )
-  // nhãn trên lớp không nghiêng: vị trí đọc lại mỗi lần vẽ
-  const [tags, setTags] = useState(null)
-  useEffect(() => {
-    if (phase === 'world' || phase === 'leaving' || k.road < 0.6) return setTags(null)
-    setTags({ h: screenOf(HX, HY), d: screenOf(DX, DY), c: screenOf(CX, CY) })
-  }, [phase, k.road, k.tilt, view.s])
+
+  // ── ảnh vệ tinh
+  const cam = st.cam ?? fit
+  const sat = st.sat
+  const toScr = (x, y) => [(x - cam.x) * cam.s + size.w / 2, (y - cam.y) * cam.s + size.h / 2]
+  const car = at(st.drive * LEN)
+  const carScr = toScr(car.x, car.y)
+  const [fx, fy] = toScr(...trip.places.hanoi)
+  const [mx, my] = toScr(...trip.places.hadong)
+  const [tx, ty] = toScr(...trip.places.chuong)
+  const dec = (v) => (lang === 'vi' ? v.replace('.', ',') : v)
+  const pathD = 'M' + R.map((p) => p.join(',')).join('L')
 
   return (
-    <div ref={rootRef} className={`cvw cvw-map cvw-trip is-${phase} ${interactive ? 'is-live' : ''}`} data-no-flip={interactive ? '' : undefined}>
-      <div className="cvw-trip__stage" style={{ transform: k.tilt ? `perspective(900em) rotateX(${k.tilt * 32}deg) scale(${1 + k.tilt * 0.12})` : undefined }}>
-        <svg className="cvw-map__svg" viewBox={vb} preserveAspectRatio="xMidYMid slice" onClick={go} role={interactive ? 'button' : 'img'} aria-label={t.hint}>
-          <rect x={-200} y={-200} width={map.w + 400} height={map.h + 400} className="cvw-map__sea" />
-          <path d={map.neighbors} className="cvw-map__nb" vectorEffect="non-scaling-stroke" />
-          <path d={map.vn} className="cvw-map__vn" vectorEffect="non-scaling-stroke" />
-          <path d={map.hanoi} className="cvw-map__hn" vectorEffect="non-scaling-stroke" style={{ opacity: 0.3 + near * 0.7 }} />
-          <path d={map.rivers} className="cvw-map__river" vectorEffect="non-scaling-stroke" style={{ opacity: 0.4 + near * 0.6 }} />
-          {map.islets.map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={2.2 * u} className="cvw-map__islet" />
-          ))}
-          {/* toàn cảnh */}
-          <g style={{ opacity: far }}>
-            {label(352, 392, t.country, 17, { anchor: 'start', cls: 'is-country', track: 4 })}
-            {label(470, 520, t.sea, 13, { cls: 'is-sea' })}
-            {label(555, 300, t.paracel, 10.5, { cls: 'is-islands' })}
-            {label(640, 585, t.spratly, 10.5, { cls: 'is-islands' })}
-            <circle cx={CX} cy={CY} r={11 * u} className="cvw-map__pulse" />
-            <circle cx={CX} cy={CY} r={4.5 * u} className="cvw-map__dot" />
-          </g>
-          {/* vùng ven đô khi đã phóng: ruộng, cây, nhà, hồ Gươm */}
-          {near > 0 && (
-            <g style={{ opacity: near }}>
-              {FIELDS.map((f, i) => (
-                <rect key={i} x={f.x} y={f.y} width={f.w} height={f.h} fill={f.c} transform={`rotate(${f.r} ${f.x} ${f.y})`} rx={0.05} />
-              ))}
-              {HOUSES.map((h, i) => (
-                <g key={i} transform={`translate(${h.x} ${h.y})`}>
-                  <rect width={h.w} height={h.w * 0.7} fill="#efe5d1" stroke="#a9502c" strokeWidth={0.03} />
-                  <path d={`M${-0.03} 0 L${h.w / 2} ${-h.w * 0.45} L${h.w + 0.03} 0Z`} fill="#b2532e" />
-                </g>
-              ))}
-              {TREES.map((c, i) => (
-                <circle key={i} cx={c.x} cy={c.y} r={c.r} fill="#6f9550" opacity={0.85} />
-              ))}
-              <ellipse cx={HX - 0.12} cy={HY - 0.05} rx={0.16} ry={0.28} fill="#8fc0c9" stroke="#5f97a5" strokeWidth={0.03} />
-            </g>
-          )}
-          {/* con đường: viền trắng, vạch giữa, đoạn xe đã đi tô màu */}
-          <g className="cvw-trip__road" style={{ opacity: k.road ? 1 : 0, '--road': k.road }}>
-            <path d={ROUTE_D} className="cvw-trip__casing" pathLength="1" strokeWidth={7 * u} />
-            <path ref={routeRef} d={ROUTE_D} className="cvw-trip__lane" pathLength="1" strokeWidth={4 * u} />
-            <path d={ROUTE_D} className="cvw-trip__done" pathLength="1" strokeWidth={2.2 * u} />
-          </g>
-          <circle ref={anchorRef} r={0.001} fill="none" />
-        </svg>
-      </div>
+    <div ref={rootRef} className={`cvw cvw-map cvw-trip is-${st.phase} ${interactive ? 'is-live' : ''}`} data-no-flip={interactive ? '' : undefined}>
+      <svg
+        className="cvw-map__svg"
+        viewBox={vb}
+        preserveAspectRatio="xMidYMid slice"
+        onClick={go}
+        role={interactive ? 'button' : 'img'}
+        aria-label={t.hint}
+        style={{ opacity: 1 - sat }}
+      >
+        <rect x={-200} y={-200} width={map.w + 400} height={map.h + 400} className="cvw-map__sea" />
+        <path d={map.neighbors} className="cvw-map__nb" vectorEffect="non-scaling-stroke" />
+        <path d={map.vn} className="cvw-map__vn" vectorEffect="non-scaling-stroke" />
+        <path d={map.hanoi} className="cvw-map__hn" vectorEffect="non-scaling-stroke" />
+        <path d={map.rivers} className="cvw-map__river" vectorEffect="non-scaling-stroke" />
+        {map.islets.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r={2.2 * u} className="cvw-map__islet" />
+        ))}
+        <g style={{ opacity: far }}>
+          {label(352, 392, t.country, 17, { anchor: 'start', cls: 'is-country', track: 4 })}
+          {label(470, 520, t.sea, 13, { cls: 'is-sea' })}
+          {label(555, 300, t.paracel, 10.5, { cls: 'is-islands' })}
+          {label(640, 585, t.spratly, 10.5, { cls: 'is-islands' })}
+          <circle cx={HX} cy={HY} r={11 * u} className="cvw-map__pulse" />
+          <circle cx={HX} cy={HY} r={4.5 * u} className="cvw-map__dot" />
+        </g>
+      </svg>
 
-      {/* lớp trên: nhãn, xe, khói, ghim */}
-      <div ref={fxRef} className="cvw-trip__fx" aria-hidden="true">
-        {tags?.h && (
-          <span className="cvw-trip__tag is-start" style={{ left: tags.h[0], top: tags.h[1] }}>
-            {phase === 'done' ? t.hanoi : t.start}
-          </span>
-        )}
-        {tags?.d && (
-          <span className="cvw-trip__tag is-mid" style={{ left: tags.d[0], top: tags.d[1] }}>
-            {t.hadong}
-          </span>
-        )}
-        {phase === 'done' && tags?.c && (
-          <span className="cvw-trip__pin" style={{ left: tags.c[0], top: tags.c[1] }}>
-            <svg viewBox="-12 -32 24 34">
-              <path d="M0 0 C -5 -9 -11 -13 -11 -21 A 11 11 0 1 1 11 -21 C 11 -13 5 -9 0 0 Z" />
-              <circle cx={0} cy={-21} r={4.2} />
+      {sat > 0 && (
+        <div className="cvw-sat" style={{ opacity: sat }}>
+          <div
+            className="cvw-sat__world"
+            style={{ width: trip.w, height: trip.h, transform: `translate(${size.w / 2 - cam.x * cam.s}px, ${size.h / 2 - cam.y * cam.s}px) scale(${cam.s})` }}
+          >
+            <img src={asset('assets/book/map/route-map.webp')} alt="" draggable="false" />
+            <svg viewBox={`0 0 ${trip.w} ${trip.h}`} className="cvw-sat__route">
+              <path d={pathD} className="cvw-sat__ghost" strokeWidth={5 / cam.s} />
+              <path d={pathD} className="cvw-sat__line" strokeWidth={6 / cam.s} style={{ strokeDasharray: LEN, strokeDashoffset: LEN * (1 - st.drive) }} />
             </svg>
-          </span>
-        )}
-        <div ref={carRef} className="cvw-trip__car" style={{ opacity: 0 }}>
-          <Car />
+          </div>
+          <div ref={fxRef} className="cvw-trip__fx" aria-hidden="true">
+            <Pin x={fx} y={fy} show={st.pins} kind="from" text={t.from} />
+            <Pin x={tx} y={ty} show={st.pins} kind="to" text={t.to} />
+            {st.drive > 0.2 && st.phase === 'trip' && (
+              <span className="cvw-trip__tag" style={{ left: mx, top: my }}>
+                {t.mid}
+              </span>
+            )}
+            {st.pop > 0 && (
+              <div
+                className={`cvw-trip__car ${st.drive > 0 && st.drive < 1 ? 'is-driving' : ''}`}
+                style={{
+                  transform: `translate(${carScr[0]}px, ${carScr[1]}px) rotate(${car.ang + 90}deg) scale(${st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1})`,
+                }}
+              >
+                <CarTop />
+              </div>
+            )}
+          </div>
+          {st.pop > 0 && (
+            <div className="cvw-trip__km">
+              <b>{dec((trip.km * st.drive).toFixed(1))}</b> {t.km}
+            </div>
+          )}
+          <span className="cvw-trip__credit">{t.credit}</span>
         </div>
-      </div>
+      )}
 
-      {interactive && phase === 'world' && <span className="cvw-chip cvw-map__hint">{t.hint}</span>}
-      {phase === 'done' && (
+      {interactive && st.phase === 'world' && <span className="cvw-chip cvw-map__hint">{t.hint}</span>}
+      {st.phase === 'done' && (
         <div className="cvw-trip__card">
           <b>{t.arrived}</b>
+          <span>{t.trip(dec(String(trip.km)))}</span>
           <span>{t.place}</span>
         </div>
       )}
-      {(phase === 'done' || phase === 'trip') && (
+      {(st.phase === 'done' || st.phase === 'trip') && (
         <div className="cvw-trip__btns">
           <button type="button" className="cvw-chip" onClick={back}>
             ← {t.back}
           </button>
-          {phase === 'done' && (
+          {st.phase === 'done' && (
             <button type="button" className="cvw-chip" onClick={again}>
               ↻ {t.again}
             </button>
@@ -374,39 +343,44 @@ export default function MapWidget({ el, interactive, visible }) {
   )
 }
 
-/** ô tô nhỏ kiểu cổ, nóc chở chồng nón lá; bánh xe quay khi chạy */
-function Car() {
+/** ghim điểm đi / điểm đến + nhãn viết tay */
+function Pin({ x, y, show, kind, text }) {
+  if (!show) return null
   return (
-    <svg viewBox="0 0 120 78" className="cvw-car">
-      {/* chồng nón trên nóc */}
-      <g className="cvw-car__hats">
-        <path d="M40 22 L56 6 L72 22 Z" fill="#f6eedb" stroke="#b9a37a" strokeWidth="1" />
-        <path d="M37 26 L56 10 L75 26 Z" fill="#f2e7cf" stroke="#b9a37a" strokeWidth="1" />
-        <path d="M34 30 L56 13 L78 30 Z" fill="#fbf4e4" stroke="#a9502c" strokeWidth="1.2" />
-        <rect x="32" y="29" width="48" height="3" rx="1.5" fill="#7a4a2a" />
-      </g>
-      {/* thân xe */}
-      <path
-        d="M10 58 C10 46 16 42 26 41 L34 32 C36 30 39 29 42 29 L74 29 C78 29 81 30 84 33 L94 42 C104 43 112 47 112 58 Z"
-        fill="#f3e3c3"
-        stroke="#6b4a2e"
-        strokeWidth="2"
-      />
-      <path d="M38 34 L46 34 L46 42 L31 42 Z" fill="#cfe3e6" stroke="#6b4a2e" strokeWidth="1.4" />
-      <path d="M50 34 L72 34 C75 34 77 35 79 37 L84 42 L50 42 Z" fill="#cfe3e6" stroke="#6b4a2e" strokeWidth="1.4" />
-      <rect x="10" y="49" width="102" height="4" fill="#b23a24" />
-      <circle cx="107" cy="50" r="2.6" fill="#ffe7a3" stroke="#6b4a2e" strokeWidth="1" />
-      <rect x="4" y="54" width="8" height="3" rx="1.5" fill="#7d6a58" />
-      {/* bánh */}
-      {[32, 90].map((x) => (
-        <g key={x} transform={`translate(${x} 60)`}>
-          <circle r="11" fill="#3a2a20" />
-          <g className="cvw-car__wheel">
-            <circle r="5.5" fill="#e9dcc0" />
-            <path d="M0 -5.5 V5.5 M-5.5 0 H5.5" stroke="#3a2a20" strokeWidth="1.6" />
-          </g>
-        </g>
+    <span className={`cvw-pin is-${kind}`} style={{ left: x, top: y, opacity: show }}>
+      <svg viewBox="-12 -32 24 34">
+        <path d="M0 0 C -5 -9 -11 -13 -11 -21 A 11 11 0 1 1 11 -21 C 11 -13 5 -9 0 0 Z" />
+        <circle cx={0} cy={-21} r={4.2} />
+      </svg>
+      <em>{text}</em>
+    </span>
+  )
+}
+
+/** ô tô nhìn từ trên xuống (đầu xe hướng lên), trên nóc một chiếc nón lá */
+function CarTop() {
+  return (
+    <svg viewBox="-20 -34 40 68" className="cvw-cartop">
+      <ellipse cx="0" cy="3" rx="17" ry="31" fill="rgba(0,0,0,.28)" />
+      {[
+        [-14, -19],
+        [14, -19],
+        [-14, 18],
+        [14, 18],
+      ].map(([x, y]) => (
+        <rect key={`${x}${y}`} x={x - 3} y={y - 6} width="6" height="12" rx="2" fill="#2b2118" />
       ))}
+      <rect x="-13" y="-31" width="26" height="62" rx="11" fill="#f3e3c3" stroke="#6b4a2e" strokeWidth="1.6" />
+      <rect x="-13" y="-31" width="26" height="9" rx="6" fill="#b23a24" />
+      <path d="M-10 -18 Q0 -23 10 -18 L9 -10 L-9 -10 Z" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth="1" />
+      <path d="M-9 17 L9 17 L10 23 Q0 26 -10 23 Z" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth="1" />
+      {/* nón lá trên nóc: vòng tròn đồng tâm, chóp ở giữa */}
+      <circle cx="0" cy="3" r="11.5" fill="#fbf4e4" stroke="#b9a37a" strokeWidth="1" />
+      <circle cx="0" cy="3" r="8" fill="none" stroke="#d9c7a0" strokeWidth=".8" />
+      <circle cx="0" cy="3" r="4.5" fill="none" stroke="#d9c7a0" strokeWidth=".8" />
+      <circle cx="0" cy="3" r="1.4" fill="#a9502c" />
+      <circle cx="-8" cy="-29" r="2" fill="#ffe7a3" />
+      <circle cx="8" cy="-29" r="2" fill="#ffe7a3" />
     </svg>
   )
 }
