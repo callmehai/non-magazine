@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Tải ảnh thật (đã chuyển sang .webp) lên kho Supabase "book-assets/image/" rồi ghi
+ * Tải ảnh thật (đã chuyển sang .webp; video .mp4, ảnh động .gif) lên kho Supabase "book-assets/image/" rồi ghi
  * scripts/book/out/photos.json (mô tả khung → URL) cho build.mjs dùng.
  *   node scripts/book/upload-photos.mjs <thư mục .webp, cùng cấu trúc với thư mục Drive>
  * Tên file trên kho theo nội dung ảnh → chạy lại với ảnh không đổi chỉ ghi đè; ảnh đã chỉnh có URL mới.
@@ -30,17 +30,22 @@ if (!dir) throw new Error('Cách dùng: node scripts/book/upload-photos.mjs <th�
 const out = {}
 let n = 0
 for (const [hint, rel] of Object.entries(photos)) {
-  const file = path.join(dir, `${rel}.webp`)
+  // mặc định ảnh .webp; video/ảnh động ghi rõ đuôi trong photos.mjs (vd. "video/trinh-dien.mp4")
+  const known = rel.match(/\.(mp4|gif|webm|webp)$/)?.[0]
+  const ext = known ?? '.webp'
+  const file = path.join(dir, known ? rel : `${rel}.webp`)
   if (!fs.existsSync(file)) {
     console.warn(`⚠ thiếu ảnh: ${rel}`)
     continue
   }
   // tên theo nội dung file: ảnh chỉnh lại → URL mới (trình duyệt không giữ bản cũ trong cache)
   const body = fs.readFileSync(file)
-  const name = `image/nl-${crypto.createHash('sha1').update(body).digest('hex').slice(0, 12)}.webp`
+  const type = { '.webp': 'image/webp', '.mp4': 'video/mp4', '.gif': 'image/gif', '.webm': 'video/webm' }[ext]
+  const folder = type.startsWith('video') ? 'video' : 'image'
+  const name = `${folder}/nl-${crypto.createHash('sha1').update(body).digest('hex').slice(0, 12)}${ext}`
   const res = await fetch(`${url}/storage/v1/object/book-assets/${name}`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'x-upsert': 'true', 'Content-Type': 'image/webp', 'Cache-Control': 'max-age=31536000' },
+    headers: { Authorization: `Bearer ${key}`, 'x-upsert': 'true', 'Content-Type': type, 'Cache-Control': 'max-age=31536000' },
     body,
   })
   if (!res.ok) throw new Error(`${rel}: ${res.status} ${await res.text()}`)

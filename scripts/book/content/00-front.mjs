@@ -1,49 +1,41 @@
 /**
- * Phần mở đầu: bìa, lời mở đầu, mục lục.
- * Mỗi đoạn là [tiếng Việt, tiếng Nhật]. Tiếng Việt lấy nguyên từ bản thảo của nhóm
- * (Doc "ND + HT - Nón lá đã sửa"); tiếng Nhật là bản dịch nháp — nhóm sẽ gửi bản chuẩn để thay.
+ * Phần mở đầu: bìa, mục lục, lời mở đầu.
+ * Mỗi đoạn là [tiếng Việt, tiếng Nhật]. Tiếng Việt lấy nguyên văn tab "Mở đầu" (Doc "ND + HT - Nón lá đã sửa",
+ * bản sửa lần 1); tiếng Nhật là bản dịch tạm — nhóm sẽ gửi bản chuẩn để thay.
+ * Mỗi chế độ đọc chỉ hiện một thứ tiếng (yêu cầu của nhóm): không chêm dòng tiếng còn lại.
  * Phiên âm chữ khó: {漢字|かんじ}.
  */
 export const front = {
   title: ['Nón lá Làng Chuông', 'チュオン{村|むら}のノンラー'],
   subtitle: ['Nét đẹp truyền thống Việt Nam', 'ベトナムの{伝統美|でんとうび}'],
-  badge: ['Song ngữ Việt – Nhật', 'ベトナム語・日本語'],
-  team: ['Nhóm tác giả · Ngôn ngữ Nhật · Trường Đại học FPT Hà Nội', 'FPT大学ハノイ校 日本語学科 卒業制作'],
-  coverQuote: [
-    'Từ những chiếc lá mộc mạc làm nên chiếc nón, gìn giữ hồn quê Việt qua bao thế hệ.',
-    '{素朴|そぼく}な葉から生まれるノンラーは、何世代にもわたり、ベトナムの{故郷|ふるさと}の心を受け{継|つ}いでいます。',
-  ],
+  team: ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật Bản\nTrường Đại học FPT Hà Nội · 2026', 'FPT大学ハノイ校 日本語学科\n卒業制作・2026年'],
 }
 
 export const preface = {
   title: ['Lời mở đầu', 'はじめに'],
   paras: [
     [
-      'Từ lâu, chiếc nón lá đã trở thành hình ảnh quen thuộc trong đời sống của người Việt Nam. Từ những hoạt động lao động, sinh hoạt thường ngày đến các dịp lễ hội và biểu diễn văn hóa, chiếc nón hiện diện trong nhiều hoàn cảnh khác nhau. Trải qua thời gian, nón lá không chỉ là một vật dụng gắn bó với cuộc sống mà còn trở thành một hình ảnh tiêu biểu, gợi nhắc đến nét đẹp giản dị và gần gũi của văn hóa Việt Nam.',
+      'Từ lâu, chiếc nón lá đã trở thành hình ảnh quen thuộc trong đời sống của người Việt Nam. Từ những hoạt động lao động, sinh hoạt thường ngày đến các dịp lễ hội và biểu diễn văn hóa, chiếc nón hiện diện trong nhiều hoàn cảnh khác nhau. Trải qua thời gian, nón lá không chỉ là một vật dụng gắn bó với cuộc sống mà còn trở thành hình ảnh tiêu biểu, gợi nhắc đến nét đẹp giản dị và gần gũi của văn hóa Việt Nam.',
       'ノンラー（{葉|は}の{笠|かさ}）は、古くからベトナムの人々の暮らしに{欠|か}かせない{存在|そんざい}です。{日々|ひび}の{労働|ろうどう}や生活から、お祭りや{伝統芸能|でんとうげいのう}の{舞台|ぶたい}まで、さまざまな場面でノンラーを見かけます。長い時間の中で、ノンラーは生活の道具であるだけでなく、ベトナム文化の{素朴|そぼく}で{親|した}しみやすい美しさを思い起こさせる、{代表的|だいひょうてき}なイメージとなりました。',
     ],
     [
-      'Ở Việt Nam, nón lá được làm tại nhiều vùng miền, với những đặc điểm khác nhau về hình dáng, nguyên liệu và cách chế tác. Trong số đó, nón lá làng Chuông, có nguồn gốc từ làng Chuông thuộc Hà Nội, là một sản phẩm thủ công truyền thống được biết đến từ lâu. Qua các thời kỳ, nơi đây từng sản xuất nhiều kiểu nón khác nhau, phục vụ những nhu cầu sử dụng trong đời sống. Ngày nay, chiếc nón lá trắng truyền thống là sản phẩm phổ biến, mang những đặc điểm riêng về cấu tạo, nguyên liệu và kỹ thuật chế tác.',
-      'ベトナムでは各地でノンラーが作られており、形や{材料|ざいりょう}、作り方にそれぞれ{特徴|とくちょう}があります。その中でも、ハノイのチュオン村で生まれた「チュオン村のノンラー」は、古くから知られる{伝統工芸品|でんとうこうげいひん}です。この村では時代ごとにさまざまな種類の笠が作られ、人々の暮らしを支えてきました。現在では、白い{伝統的|でんとうてき}なノンラーが{主力|しゅりょく}となっており、{構造|こうぞう}・材料・{技法|ぎほう}に{独自|どくじ}の特徴をもっています。',
+      'Tùy theo điều kiện tự nhiên, nguồn nguyên liệu và tập quán sinh hoạt, mỗi vùng miền lại sáng tạo nên những kiểu nón mang đặc trưng riêng về hình dáng, cấu tạo cũng như kỹ thuật chế tác. Tại miền Bắc, làng Chuông (thành phố Hà Nội) là một trong những địa phương có nghề làm nón truyền thống nổi tiếng và lâu đời. Nơi đây từng sản xuất nhiều dòng nón khác nhau phục vụ nhu cầu đời sống. Ngày nay, chiếc nón lá trắng truyền thống vẫn là một trong những sản phẩm tiêu biểu của làng Chuông thể hiện kỹ thuật chế tác thủ công được gìn giữ và tiếp nối qua nhiều thế hệ.',
+      '{自然|しぜん}の条件や{材料|ざいりょう}、暮らしの{習慣|しゅうかん}に応じて、各地域ではそれぞれ形・{構造|こうぞう}・{製作技術|せいさくぎじゅつ}に{特徴|とくちょう}のある笠が生み出されてきました。北部では、ハノイ市のチュオン村が、古くから続く{伝統的|でんとうてき}な笠づくりで知られる土地の一つです。この村ではかつて、暮らしの{需要|じゅよう}に応じてさまざまな種類の笠が作られていました。現在でも、白い伝統的なノンラーはチュオン村を代表する製品の一つであり、何世代にもわたって受け継がれてきた手仕事の技を今に伝えています。',
     ],
     [
-      'Với mong muốn giới thiệu đến độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện flipbook “Nón lá Làng Chuông - Nét đẹp truyền thống Việt Nam”. Cuốn sách bắt đầu từ những nét khái quát về nón lá Việt Nam, tiếp đến là nguồn gốc và các kiểu nón tiêu biểu của làng Chuông. Tiếp theo, nội dung tập trung vào cấu tạo, nguyên liệu, dụng cụ và các công đoạn làm nên chiếc nón lá hình chóp truyền thống. Bên cạnh đó, flipbook còn đề cập đến những ghi nhận đối với nón làng Chuông, các hoạt động bảo tồn, phát triển cũng như những thách thức đặt ra trong bối cảnh hiện nay.',
-      '日本の{読者|どくしゃ}の{皆様|みなさま}にチュオン村のノンラーを知っていただきたいという思いから、私たちはフリップブック『チュオン村のノンラー：ベトナムの伝統美』を{制作|せいさく}しました。本書ではまず、ベトナムのノンラー{全体|ぜんたい}の{概要|がいよう}を{紹介|しょうかい}し、次にチュオン村の{由来|ゆらい}と代表的な笠の種類を取り上げます。続いて、{円錐形|えんすいけい}の伝統的なノンラーを作るための構造・材料・道具・{工程|こうてい}を{詳|くわ}しく見ていきます。さらに、チュオン村のノンラーが受けてきた{評価|ひょうか}、{保存|ほぞん}と発展の{取り組|とりく}み、そして現在{直面|ちょくめん}している{課題|かだい}についても{触|ふ}れます。',
+      'Với mong muốn giúp độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện cuốn flipbook “Nón lá làng Chuông - Nét đẹp truyền thống Việt Nam”. Cuốn flipbook gồm ba chương: Chương 1 “Khái quát về nón lá Việt Nam và nón lá Làng Chuông”, Chương 2 “Cấu tạo, nguyên liệu và kỹ thuật làm nón Làng Chuông” và Chương 3 “Những ghi nhận, hoạt động bảo tồn và thách thức đối với nón lá làng Chuông”.',
+      '日本の{読者|どくしゃ}の{皆様|みなさま}に、チュオン村のノンラーの{全体像|ぜんたいぞう}を知り、より深く理解していただきたいという思いから、私たちはフリップブック『チュオン村のノンラー：ベトナムの伝統美』を{制作|せいさく}しました。本書は三つの章からなります。第1章「ベトナムのノンラーとチュオン村のノンラーの{概要|がいよう}」、第2章「チュオン村のノンラーの構造・材料・製作技術」、第3章「チュオン村のノンラーへの{評価|ひょうか}、{保存|ほぞん}の{取|と}り{組|く}みと{課題|かだい}」です。',
     ],
     [
-      'Thông qua việc kết hợp nội dung thuyết minh với hình ảnh thực tế, cuốn flipbook được trình bày theo trình tự từ khái quát đến cụ thể, giúp độc giả dễ dàng theo dõi và tìm hiểu từng nội dung. Đặc biệt, những hình ảnh về nón lá, nguyên liệu, cấu tạo và các công đoạn chế tác sẽ giúp người đọc hình dung rõ hơn về quá trình tạo nên một chiếc nón hoàn chỉnh. Với cách trình bày trực quan, nhóm tác giả mong muốn mang đến một trải nghiệm đọc gần gũi, sinh động và dễ tiếp cận.',
-      '本書は、{解説|かいせつ}と実際の写真を組み合わせ、{全体|ぜんたい}から{細部|さいぶ}へと{順|じゅん}を追って{構成|こうせい}しています。とくに、ノンラーや材料、構造、{製作工程|せいさくこうてい}の写真を通して、一つの笠ができあがるまでの{流|なが}れを具体的にイメージしていただけるでしょう。目で見てわかる{構成|こうせい}によって、{身近|みぢか}で{生|い}き{生|い}きとした、{読|よ}みやすい本を目指しました。',
+      'Thông qua việc kết hợp tư liệu hình ảnh và các đoạn GIF mô tả quá trình chế tác, cuốn flipbook này giúp độc giả hình dung trực quan quy trình làm nón lá truyền thống. Những hình ảnh về thành phẩm, nguyên liệu, các công đoạn chế tác, không gian làng nghề và người làm nón góp phần minh họa, làm rõ thông tin, đồng thời mang đến góc nhìn trực quan về nghề làm nón truyền thống. Với cách trình bày sinh động và dễ tiếp cận, nhóm tác giả mong muốn mang đến cho độc giả một trải nghiệm đọc gần gũi và thú vị.',
+      '本書では、写真資料と製作の様子を{収|おさ}めたGIF{動画|どうが}を組み合わせ、伝統的なノンラーづくりの{流|なが}れを目で見て{理解|りかい}できるようにしました。完成品、材料、製作の工程、{工芸村|こうげいむら}の{風景|ふうけい}、そして笠を作る人々の写真が、内容をわかりやすく伝え、伝統的な笠づくりを{身近|みぢか}に感じさせてくれます。生き生きとした読みやすい{構成|こうせい}で、親しみやすく楽しい読書の時間をお届けできれば幸いです。',
     ],
     [
-      'Hy vọng rằng, qua từng trang sách, độc giả Nhật Bản sẽ có cơ hội khám phá những nét đặc trưng của nón lá làng Chuông và hiểu thêm về một sản phẩm thủ công truyền thống của Việt Nam. Nhóm tác giả xin mời quý độc giả cùng bắt đầu hành trình tìm hiểu về chiếc nón lá làng Chuông qua cuốn flipbook này.',
-      'ページをめくるごとに、チュオン村のノンラーの{魅力|みりょく}を{発見|はっけん}し、ベトナムの伝統工芸への{理解|りかい}を{深|ふか}めていただければ{幸|さいわ}いです。それでは、チュオン村のノンラーをめぐる{旅|たび}を一緒に始めましょう。',
+      'Hy vọng rằng, qua từng trang sách, độc giả Nhật Bản sẽ có cơ hội khám phá những nét đặc trưng của nón lá làng Chuông, đồng thời hiểu thêm về những con người và giá trị văn hóa gắn liền với nghề thủ công truyền thống này. Nhóm tác giả xin mời quý độc giả cùng bắt đầu hành trình tìm hiểu về nón lá làng Chuông qua cuốn flipbook này.',
+      'ページをめくるごとに、チュオン村のノンラーの{魅力|みりょく}を{発見|はっけん}し、この伝統工芸に{携|たずさ}わる人々と、その文化的な{価値|かち}への理解を深めていただければ幸いです。それでは、本書とともに、チュオン村のノンラーをめぐる{旅|たび}を始めましょう。',
     ],
   ],
   sign: ['Hà Nội, tháng 11 năm 2026\nNhóm tác giả', '2026年11月 ハノイにて\n{著者|ちょしゃ}一同'],
-  pull: [
-    '“Từ những chiếc lá mộc mạc làm nên chiếc nón, gìn giữ hồn quê Việt qua bao thế hệ.”',
-    '「素朴な葉から生まれるノンラーは、何世代にもわたりベトナムの故郷の心を受け継いでいます。」',
-  ],
 }
 
 export const tocTitle = ['Mục lục', '{目次|もくじ}']
