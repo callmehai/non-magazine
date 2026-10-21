@@ -1,0 +1,292 @@
+/* Phần tử tương tác trên trang canvas — đơn vị em = 1pt của trang (co giãn theo cỡ sách) */
+.cvw {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-family: 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  color: #2b2118;
+  user-select: none;
+}
+.cvw--loading {
+  background: #efe7d6;
+  border-radius: 6em;
+}
+.cvw-chip {
+  position: absolute;
+  font: inherit;
+  font-size: 10.5em;
+  line-height: 1.3;
+  padding: 0.45em 0.9em;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(43, 33, 24, 0.82);
+  color: #fbf4e6;
+  white-space: nowrap;
+}
+
+/* ── bản đồ ── */
+.cvw-map {
+  overflow: hidden;
+  border-radius: 6em;
+  background: #dfe9e4;
+}
+.cvw-map__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cvw-map.is-live.is-world .cvw-map__svg {
+  cursor: zoom-in;
+}
+.cvw-map__sea {
+  fill: #dfe9e4;
+}
+.cvw-map__nb {
+  fill: #efe7d4;
+  stroke: #d3c4a2;
+  stroke-width: 0.8px;
+}
+.cvw-map__vn {
+  fill: #8fab78;
+  stroke: #56703f;
+  stroke-width: 1px;
+}
+.cvw-map__hn {
+  fill: #b5ca98;
+  stroke: #56703f;
+  stroke-width: 1.2px;
+  stroke-dasharray: 4 3;
+}
+.cvw-map__river {
+  fill: none;
+  stroke: #6fa3b8;
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+}
+.cvw-map__islet {
+  fill: #56703f;
+}
+.cvw-map__label {
+  fill: #2f3d26;
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  pointer-events: none;
+}
+.cvw-map__label.is-country {
+  font-weight: 700;
+  fill: #3f5a33;
+}
+.cvw-map__label.is-sea {
+  font-style: italic;
+  fill: #4f7d8c;
+}
+.cvw-map__label.is-islands {
+  font-style: italic;
+  fill: #3f5a33;
+}
+.cvw-map__label.is-chuong,
+.cvw-map__label.is-city {
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: #f7f1e3;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.cvw-map__label.is-chuong {
+  fill: #a8321f;
+}
+.cvw-map__dot {
+  fill: #b23a24;
+  stroke: #fff;
+  stroke-width: 1.2px;
+  vector-effect: non-scaling-stroke;
+}
+.cvw-map__pulse {
+  fill: rgba(178, 58, 36, 0.28);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cvw-pulse 1.8s ease-out infinite;
+}
+@keyframes cvw-pulse {
+  from {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+.cvw-map__city {
+  fill: #2b2118;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+}
+.cvw-map__leg {
+  stroke: #8c6a33;
+  stroke-width: 1.4px;
+  stroke-dasharray: 5 4;
+}
+.cvw-map__pin path {
+  fill: #b23a24;
+  stroke: #fff;
+  stroke-width: 1.4;
+}
+.cvw-map__pin circle {
+  fill: #fff;
+}
+.cvw-map__hint {
+  right: 4%;
+  bottom: 5%;
+  pointer-events: none;
+  animation: cvw-bob 2.4s ease-in-out infinite;
+}
+@keyframes cvw-bob {
+  50% {
+    translate: 0 -3em;
+  }
+}
+.cvw-map__back {
+  top: 4%;
+  left: 4%;
+  cursor: pointer;
+}
+.cvw-map__back:hover {
+  background: #2b2118;
+}
+.cvw-map__village {
+  position: absolute;
+  cursor: grab;
+  filter: drop-shadow(0 10em 14em rgba(40, 30, 15, 0.35));
+}
+.cvw-map__card {
+  position: absolute;
+  right: 4%;
+  bottom: 4%;
+  max-width: 62%;
+  display: grid;
+  gap: 2em;
+  padding: 7em 10em;
+  border-radius: 6em;
+  background: rgba(251, 247, 238, 0.94);
+  box-shadow: 0 4em 14em rgba(40, 30, 15, 0.18);
+  font-size: 1em;
+  animation: cvw-in 0.5s 0.4s ease-out both;
+}
+.cvw-map__card b {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 15em;
+  color: #a8321f;
+}
+.cvw-map__card span {
+  font-size: 10.5em;
+  line-height: 1.4;
+  color: #4a3b2c;
+}
+.cvw-map__card em {
+  font-size: 9.5em;
+  color: #8a7a64;
+}
+@keyframes cvw-in {
+  from {
+    opacity: 0;
+    translate: 0 6em;
+  }
+}
+
+/* ── ba lớp lá ── */
+.cvw-layers {
+  display: grid;
+  grid-template-columns: 37% 1fr;
+  gap: 10em;
+  align-items: center;
+}
+.cvw-layers__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7em;
+}
+.cvw-layers__item {
+  display: flex;
+  gap: 8em;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  padding: 7em 8em;
+  border: 1px solid transparent;
+  border-radius: 6em;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    opacity 0.25s;
+}
+.cvw-layers__item:disabled {
+  cursor: default;
+}
+.cvw-layers__item:not(:disabled):hover {
+  background: rgba(160, 122, 60, 0.1);
+}
+.cvw-layers__item.is-on {
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  border-color: var(--c);
+}
+.cvw-layers.has-sel .cvw-layers__item:not(.is-on) {
+  opacity: 0.5;
+}
+.cvw-layers__no {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.85em;
+  height: 1.85em;
+  border-radius: 50%;
+  background: var(--c);
+  color: #fff;
+  font-size: 12em;
+  font-weight: 700;
+}
+.cvw-layers__txt {
+  display: grid;
+  gap: 2em;
+}
+.cvw-layers__txt b {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 14em;
+  line-height: 1.25;
+  color: var(--c);
+}
+.cvw-layers__txt span {
+  font-size: 11em;
+  line-height: 1.4;
+  color: #5a4a3a;
+}
+.cvw-layers__stage {
+  position: relative;
+  height: 100%;
+}
+.cvw-layers__still,
+.cvw-layers__gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.cvw-layers__gl {
+  cursor: grab;
+}
+.cvw-layers__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  font-size: 9.5em;
+  color: #8a7a64;
+  white-space: nowrap;
+  pointer-events: none;
+}

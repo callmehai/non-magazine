@@ -928,7 +928,7 @@
 .lightbox {
   position: absolute;
   inset: 0;
-  z-index: 30;
+  z-index: 45; /* trên nút đổi ngôn ngữ (40) để nút đóng không bị che */
   display: grid;
   place-items: center;
   padding: 40px 72px;
@@ -937,25 +937,68 @@
   opacity: 0;
 }
 
-.lightbox figure {
+.lightbox__frame {
+  position: relative;
   margin: 0;
   display: grid;
   justify-items: center;
-  gap: 14px;
+  gap: 12px;
+  padding: 18px 18px 14px;
+  border-radius: 3px;
+  background: #f7f1e3;
+  box-shadow:
+    0 40px 80px -24px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(160, 122, 60, 0.35);
+  animation: lightbox-in 0.4s var(--ease) both;
 }
 
-.lightbox img {
-  max-width: min(88vw, 1100px);
-  max-height: 78vh;
+/* chỉ vàng mảnh bên trong viền giấy */
+.lightbox__frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(160, 122, 60, 0.55);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+}
+
+.lightbox__frame img {
+  display: block;
+  max-width: min(84vw, 1100px);
+  max-height: 72vh;
   object-fit: contain;
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 1px 4px rgba(43, 33, 24, 0.25);
 }
 
-.lightbox figcaption {
+.lightbox__frame figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  width: 100%;
+  max-width: min(84vw, 1100px);
+  padding: 0 4px;
   font-family: var(--font-italic);
   font-style: italic;
-  font-size: 19px;
-  color: rgba(244, 237, 224, 0.88);
+  font-size: 17px;
+  line-height: 1.4;
+  color: #4a3b2c;
+}
+
+.lightbox__count {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #8c6a33;
+  white-space: nowrap;
 }
 
 .lightbox__close {
@@ -981,6 +1024,21 @@
 @media (max-width: 699px) {
   .lightbox {
     padding: 56px 12px;
+  }
+  .lightbox__frame {
+    padding: 10px 10px 8px;
+  }
+  .lightbox__frame::before {
+    inset: 4px;
+  }
+  .lightbox__frame img {
+    max-width: calc(100vw - 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox__frame {
+    animation: none;
   }
 }
 

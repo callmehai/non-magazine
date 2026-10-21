@@ -46,6 +46,12 @@ export const ch2 = {
         [['Lớp mo nang (lớp giữa)', 'モーナン（中層）'], ['Nằm giữa hai lớp lá lụi, có tác dụng làm lớp đệm, tăng độ chắc chắn và hỗ trợ duy trì hình dáng thân nón. Nhờ lớp mo nang, phần lá lợp có độ dày cần thiết mà vẫn giữ được đặc điểm nhẹ của sản phẩm.', '二層のライ葉の間に入り、{緩衝材|かんしょうざい}として笠を{補強|ほきょう}し、{胴|どう}の形を保つ{助|たす}けをします。モーナンのおかげで、葺き葉は必要な{厚|あつ}みをもちながらも、軽さを{失|うしな}いません。']],
         [['Lớp lá lụi (lớp trong)', 'ライ葉（内層）'], ['Nằm ở mặt trong của nón, có tác dụng che phủ lớp mo nang, hoàn thiện lòng nón và tạo bề mặt gọn gàng. Lớp này góp phần bảo vệ phần vật liệu bên trong, đồng thời tăng tính thẩm mỹ cho sản phẩm.', '笠の内側にあり、モーナンを{覆|おお}って内側を仕上げ、すっきりとした面をつくります。中の材料を守ると同時に、製品の美しさも高めます。']],
       ],
+      // một dòng tóm tắt cho mô hình 3D ba lớp (bấm vào lớp nào thì lớp đó sáng màu)
+      short: [
+        ['Che nắng, che mưa và tạo diện mạo cho nón', '日差しや雨を防ぎ、笠の表情をつくる'],
+        ['Lớp đệm giúp nón chắc chắn, giữ dáng mà vẫn nhẹ', '笠を丈夫にし、軽さを保ったまま形を支える'],
+        ['Che lớp mo nang, hoàn thiện lòng nón', 'モーナンを覆い、笠の内側を仕上げる'],
+      ],
       outro: [
         'Như vậy, ba lớp vật liệu có chức năng bổ trợ cho nhau trong cấu tạo của nón lá Làng Chuông. Lớp lá ngoài đảm nhiệm việc che chắn và tạo bề mặt, lớp mo nang góp phần tăng độ chắc chắn, còn lớp lá trong giúp hoàn thiện mặt trong của nón. Sự kết hợp này tạo nên phần lá lợp vừa nhẹ nhàng, vừa có độ ổn định cần thiết trong quá trình sử dụng.',
         'このように、三層の材料はチュオン村のノンラーの構造の中で{互|たが}いに{補|おぎな}い合っています。外の葉は守りと表面を、モーナンは強さを、内の葉は内側の仕上げを担います。この組み合わせによって、軽く、しかも使うときに必要な安定さをもつ葺き葉ができあがるのです。',

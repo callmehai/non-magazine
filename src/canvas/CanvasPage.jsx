@@ -1,9 +1,22 @@
-import { memo, useContext } from 'react'
+import { createContext, lazy, memo, Suspense, useContext, useEffect, useMemo, useState } from 'react'
 import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
-import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby } from './lang.js'
+import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby, plainText } from './lang.js'
+import { t } from '../lib/i18n.js'
 import { PAPER_BASE, paperOf } from './papers.js'
+
+// bản đồ, mô hình 3D… chỉ tải khi trang có phần tử tương tác
+const Widget = lazy(() => import('./widgets/index.jsx'))
+
+// ảnh bấm để xem lớn (chế độ đọc; trừ ảnh tràn ngang trang như bìa, ảnh mở chương): cả trang dùng chung một danh sách để ← → chuyển ảnh trong lightbox
+const ZoomList = createContext(null)
+const zoomable = (el) =>
+  el.type === 'image' && !!el.src && el.name !== 'Họa tiết' && !/logo/i.test(`${el.name} ${el.hint}`) && el.w < PAGE_W * 0.95 && el.w * el.h < PAGE_W * PAGE_H * 0.8
+const captionOf = (el, lang) => {
+  const c = plainText(lang === 'ja' ? el.hintJa || el.hint : el.hint)
+  return /^GIF\b/.test(c) ? '' : c
+}
 
 /**
  * Vẽ một trang "canvas" (dữ liệu JSON do editor tạo) — dùng chung cho editor và flipbook.
@@ -15,25 +28,42 @@ import { PAPER_BASE, paperOf } from './papers.js'
  * mode: "read" (flipbook — link, video chạy được) | "edit" (editor — chỉ hiển thị)
  * renderEl(el, node): editor bọc thêm vùng chọn quanh từng phần tử
  * side: "left" | "right" — mẫu nền (page.paper) đặt họa tiết ở mép ngoài trang
+ * el.anim = { kind: "fade" | "grow", delay, dur } (giây): mỗi lần trang được lật tới, phần tử chạy hiệu ứng
+ * xuất hiện (chỉ ở chế độ đọc; editor và ảnh thu nhỏ luôn hiện đủ)
  */
 function CanvasPage({ page, mode = 'read', renderEl, visible, side = 'right' }) {
   const paper = paperOf(page.paper)
+  const animated = mode === 'read' && (page.elements || []).some((el) => el.anim)
+  // run tăng mỗi lần trang hiện ra → phần tử có hiệu ứng được dựng lại để chạy lại từ đầu
+  const [run, setRun] = useState(0)
+  useEffect(() => {
+    if (animated && visible) setRun((r) => r + 1)
+  }, [animated, visible])
+  const animCls = animated ? (run ? ' is-play' : ' is-wait') : ''
+  const lang = useCanvasLang()
+  const zoom = useMemo(
+    () =>
+      mode === 'read' ? (page.elements || []).filter(zoomable).map((el) => ({ id: el.id, src: el.src, alt: el.alt, caption: captionOf(el, lang) })) : null,
+    [page.elements, mode, lang]
+  )
   return (
-    <div className={`cv-page is-${side}`} style={{ background: page.bg || '#ffffff' }}>
-      {paper && (
-        <div className="cv-paper" aria-hidden="true">
-          <img className="cv-paper__base" src={asset(PAPER_BASE)} alt="" draggable="false" />
-          {paper.layers.map((l) => (
-            <img key={l.at} className={`cv-paper__deco is-${l.at}`} src={asset(l.src)} alt="" draggable="false" />
-          ))}
-        </div>
-      )}
-      {page.bgImage && <img className="cv-page__bg" src={asset(page.bgImage)} alt="" draggable="false" />}
-      {(page.elements || []).map((el) => {
-        const node = <Element key={el.id} el={el} mode={mode} visible={visible} />
-        return renderEl ? renderEl(el, node) : node
-      })}
-    </div>
+    <ZoomList.Provider value={zoom}>
+      <div className={`cv-page is-${side}${animCls}`} style={{ background: page.bg || '#ffffff' }}>
+        {paper && (
+          <div className="cv-paper" aria-hidden="true">
+            <img className="cv-paper__base" src={asset(PAPER_BASE)} alt="" draggable="false" />
+            {paper.layers.map((l) => (
+              <img key={l.at} className={`cv-paper__deco is-${l.at}`} src={asset(l.src)} alt="" draggable="false" />
+            ))}
+          </div>
+        )}
+        {page.bgImage && <img className="cv-page__bg" src={asset(page.bgImage)} alt="" draggable="false" />}
+        {(page.elements || []).map((el) => {
+          const node = <Element key={animated && el.anim ? `${el.id}:${run}` : el.id} el={el} mode={mode} visible={visible} />
+          return renderEl ? renderEl(el, node) : node
+        })}
+      </div>
+    </ZoomList.Provider>
   )
 }
 
@@ -51,8 +81,20 @@ export function boxStyle(el) {
 }
 
 export function Element({ el, mode, visible }) {
+  const anim =
+    el.anim && mode === 'read'
+      ? {
+          '--anim-delay': `${el.anim.delay ?? 0}s`,
+          '--anim-dur': `${el.anim.dur ?? 0.6}s`,
+        }
+      : null
   return (
-    <div className={`cv-el cv-el--${el.type}`} data-id={el.id} style={boxStyle(el)}>
+    <div
+      className={`cv-el cv-el--${el.type}`}
+      data-id={el.id}
+      data-anim={anim ? el.anim.kind : undefined}
+      style={anim ? { ...boxStyle(el), ...anim } : boxStyle(el)}
+    >
       <ElementBody el={el} mode={mode} visible={visible} />
     </div>
   )
@@ -71,13 +113,15 @@ function ElementBody({ el, mode, visible }) {
     case 'line':
       return <LineBody el={el} />
     case 'image':
-      return el.src ? (
-        <img className="cv-img" src={asset(el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover' }} />
-      ) : (
-        <PhotoPlaceholder el={el} />
-      )
+      return el.src ? <ImageBody el={el} /> : <PhotoPlaceholder el={el} />
     case 'video':
       return <VideoBody el={el} mode={mode} visible={visible} />
+    case 'widget':
+      return (
+        <Suspense fallback={null}>
+          <Widget el={el} mode={mode} visible={visible} />
+        </Suspense>
+      )
     case 'group':
       return (
         <div
@@ -165,6 +209,20 @@ function PageLink({ el, mode, className = '', children }) {
   )
 }
 
+/** ảnh; ở chế độ đọc bấm vào thì mở lightbox (khung phóng to) */
+function ImageBody({ el }) {
+  const list = useContext(ZoomList)
+  const { openLightbox } = useContext(MagazineContext)
+  const img = <img className="cv-img" src={asset(el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover' }} />
+  const i = list ? list.findIndex((z) => z.id === el.id) : -1
+  if (i < 0 || !openLightbox) return img
+  return (
+    <button type="button" className="cv-zoom" onClick={() => openLightbox(list, i)} aria-label={list[i].caption || t('zoomImage')} title={t('zoomImage')}>
+      {img}
+    </button>
+  )
+}
+
 /** Khung ảnh tạm: ghi rõ cần ảnh gì (el.hint / el.hintJa) để nhóm kéo ảnh thật vào thay */
 function PhotoPlaceholder({ el }) {
   const lang = useCanvasLang()
@@ -202,7 +260,11 @@ function RubyText({ text }) {
 function ShapeBody({ el }) {
   const { w, h } = el
   const sw = el.stroke ? el.strokeWidth || 1 : 0
-  const common = { fill: el.fill || 'none', stroke: el.stroke || 'none', strokeWidth: sw }
+  const common = {
+    fill: el.fill || 'none',
+    stroke: el.stroke || 'none',
+    strokeWidth: sw,
+  }
   let shape
   if (el.shape === 'ellipse') shape = <ellipse cx={w / 2} cy={h / 2} rx={w / 2} ry={h / 2} {...common} />
   else if (el.shape === 'triangle') shape = <polygon points={`0,${h} ${w / 2},0 ${w},${h}`} {...common} />

@@ -3,7 +3,7 @@ import Icon from './common/Icon.jsx'
 import { asset } from '../lib/assets.js'
 import { t } from '../lib/i18n.js'
 
-/** Xem ảnh gallery cỡ lớn. ← → để chuyển ảnh, Esc để đóng. */
+/** Xem ảnh cỡ lớn trong khung (ảnh gallery, ảnh trên trang canvas). ← → để chuyển ảnh, Esc để đóng. */
 export default function Lightbox({ state, onChange, onClose }) {
   const closeRef = useRef(null)
   const open = !!state
@@ -38,9 +38,19 @@ export default function Lightbox({ state, onChange, onClose }) {
   if (!open || !img) return null
   return (
     <div className="lightbox" role="dialog" aria-modal="true" aria-label={img.caption || img.alt || t('image')} onClick={onClose}>
-      <figure onClick={(e) => e.stopPropagation()}>
+      {/* khung tranh: viền giấy ngà, chỉ vàng mảnh bên trong, chú thích và số thứ tự ảnh nằm trong khung */}
+      <figure key={index} className="lightbox__frame" onClick={(e) => e.stopPropagation()}>
         <img src={asset(img.src)} alt={img.alt || img.caption || ''} />
-        {img.caption && <figcaption>{img.caption}</figcaption>}
+        {(img.caption || images.length > 1) && (
+          <figcaption>
+            {img.caption && <span>{img.caption}</span>}
+            {images.length > 1 && (
+              <span className="lightbox__count">
+                {index + 1} / {images.length}
+              </span>
+            )}
+          </figcaption>
+        )}
       </figure>
       <button ref={closeRef} type="button" className="ctrl lightbox__close" onClick={onClose} aria-label={t('closeImage')}>
         <Icon name="close" />

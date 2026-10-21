@@ -139,7 +139,9 @@ const TRI = shape('triangle')
 const HL = (x, y, w, stroke = C.line, sw = 0.6) => ({ id: id(), type: 'line', x: r1(x), y: r1(y - 2), w: r1(w), h: 4, rot: 0, x1: 0, y1: 0.5, x2: 1, y2: 0.5, stroke, strokeWidth: sw, name: 'Đường kẻ' })
 const VL = (x, y, h, stroke = C.line, sw = 0.6) => ({ id: id(), type: 'line', x: r1(x - 2), y: r1(y), w: 4, h: r1(h), rot: 0, x1: 0.5, y1: 0, x2: 0.5, y2: 1, stroke, strokeWidth: sw, name: 'Đường kẻ' })
 const join = (paras) => [paras.map((q) => q[0]).join('\n'), paras.map((q) => q[1]).join('\n')]
-const isPhoto = (el) => el && ((el.type === 'image' && el.name !== 'Họa tiết') || el.type === 'video')
+/** phần tử tương tác (bản đồ, mô hình 3D) — xem src/canvas/widgets */
+const WIDGET = (x, y, w, h, kind, o = {}) => ({ id: id(), type: 'widget', kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, name: o.name ?? 'Phần tử tương tác', ...o.data })
+const isPhoto = (el) => el && ((el.type === 'image' && el.name !== 'Họa tiết') || el.type === 'video' || el.type === 'widget')
 
 // ── trang
 const pages = []
@@ -717,7 +719,16 @@ const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: '
   const ab = vg.about
   mark(3, ab.h, f.block(ab.h, ab.id), ab.id)
   f.prose(ab.p.slice(0, 1))
-  f.figure(ab.images[0], { ratio: R.wide })
+  {
+    // bản đồ chữ S: bấm vào → phóng tới Làng Chuông, mô hình 3D của làng nổi lên trên ghim
+    const mh = r1(CW * 0.8)
+    const cap = ab.images[0]
+    const ch = capH(cap, CW)
+    f.place(mh + 6 + ch, (p, y) => {
+      p.add(WIDGET(p.x0, y, CW, mh, 'map', { name: 'Bản đồ tương tác' }))
+      p.add(T(p.x0, y + mh + 6, CW, ch, cap, { ...capOpt, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+    })
+  }
   f.prose(ab.p.slice(1))
   f.row(ab.images.slice(1))
 
@@ -790,24 +801,11 @@ let stripPage = null
   mark(3, ly.h, f.block(ly.h, ly.id), ly.id)
   f.prose([ly.intro])
   {
-    const coneH = 96
-    const dH = coneH * (1 + 2 * 0.8) + 34
-    f.place(dH, (p, y) => {
-      const dx = p.x0 + 184
-      const dw = p.cw - 184
-      const fill = ['#e6c991', '#d2b17c', '#f1e2bf']
-      const stroke = ['#8c5a32', '#a4865a', '#b9a37a']
-      for (let i = 0; i < 3; i++) {
-        const cy = y + i * coneH * 0.8
-        const cwid = dw * (1 - i * 0.15)
-        const cx = dx + (dw - cwid) / 2
-        p.add(TRI(cx, cy, cwid, coneH, fill[i], { stroke: stroke[i], sw: i === 0 ? 1.6 : 1, opacity: 0.92 }), ELL(cx, cy + coneH - 10, cwid, 20, fill[i], { stroke: stroke[i], sw: 1, opacity: 0.92 }))
-        const item = ly.items[i]
-        const lyy = cy + coneH * 0.4
-        p.add(ELL(p.x0, lyy, 24, 24, ACC[2]), T(p.x0, lyy + 4.5, 24, 15, [String(i + 1), null], { size: 11.5, weight: 700, color: '#fff', align: 'center', lh: 1.2, name: 'Số' }), T(p.x0 + 32, lyy, 148, 44, item[0], { font: F.head, size: 15, weight: 700, color: ACC[2], lh: 1.3, jaFont: F.jaHead, jaSize: 14.5, name: 'Lớp' }))
-      }
-      p.add(T(dx, y + dH - 16, dw, 16, ['Minh họa cấu trúc tách lớp, không theo tỷ lệ thực tế', '層を分けた構造のイメージ図（実寸ではありません）'], { size: 12, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích sơ đồ' }))
-    })
+    // mô hình 3D ba lớp: bấm vào lớp nào thì lớp đó sáng màu (chữ trong danh sách lấy từ ly.items + ly.short)
+    const lh = 250
+    f.place(lh, (p, y) =>
+      p.add(WIDGET(p.x0, y, CW, lh, 'layers', { name: 'Mô hình 3 lớp lá', data: { items: ly.items.map((it, i) => ({ name: it[0].map(strip), note: ly.short[i] })) } }))
+    )
   }
   ly.items.forEach((item, i) => {
     const w = CW - 40
@@ -938,7 +936,8 @@ let stripPage = null
     // ảnh trang phải: khung lớn nhất còn vừa chỗ (chữ trang phải ước bằng phần dư sau trang trái)
     const restH = Math.max(0, textH(join(s.text), CW, { size: 15.5, lh: BODY.lh, jaSize: jaPt(15.5, 1.14), paraGap: 8 }) - (BOT - stepFlow.y))
     const roomR = BOT - TOP - restH - 40 - ch
-    const ph = pw * ((n === 1 ? [R.wide, R.cin] : [R.por, R.std]).find((r) => pw * r <= roomR) ?? (n === 1 ? R.cin : R.std))
+    // trang phải còn trống nhiều (chữ đã nằm gọn trang trái) → ảnh dọc lớn cho kín trang
+    const ph = pw * ((n === 1 ? [R.por, R.std, R.wide, R.cin] : [R.por, R.std]).find((r) => pw * r <= roomR) ?? (n === 1 ? R.cin : R.std))
     stepFlow.prose(s.text, { size: 15.5, keep: () => (stepFlow.p === p ? 0 : ph + 6 + ch + 20) })
     if (stepFlow.p === p) stepFlow.page()
     const rp = stepFlow.p
@@ -1124,9 +1123,10 @@ let stripPage = null
       ['NGUỒN ẢNH', '写真の出典'],
       ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
       ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Quân đội nhân dân (nón lá sen; dao cắt lá) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・人民軍隊紙（蓮の葉の笠・小刀）・ベトナムネット（シンガポール首相夫人）'],
-      ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng) · bản đồ nền Hà Nội (Anewplayer, CC BY-SA 4.0)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）・ハノイの地図（Anewplayer、CC BY-SA 4.0）'],
+      ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）'],
       ['Ảnh bìa: Hà Trang, Báo Văn Hóa — bài “Ghé thăm phiên chợ nón làng Chuông” (baovanhoa.vn, 8/5/2026).', '表紙写真：ハー・チャン、ヴァンホア紙 ―「チュオン村の笠市を訪ねて」（baovanhoa.vn、2026年5月8日）。'],
       ['Video trình diễn quốc tế: nghệ nhân Lê Văn Tuy cung cấp.', '国際イベントでの実演動画：職人レー・ヴァン・トゥイ提供。'],
+      ['Bản đồ Việt Nam: dữ liệu Natural Earth (phạm vi công cộng), bản theo quan điểm của Việt Nam.', 'ベトナムの地図：Natural Earth のデータ（パブリックドメイン、ベトナムの立場による版）。'],
     ]
     const co = { size: 11.5, lh: 1.5, jaSize: 11.5, paraGap: 4 }
     const body = join(credits.slice(1))
@@ -1182,11 +1182,17 @@ let stripPage = null
   y += 30
   const rowH = (BOT - y - 12) / stepPages.length
   const lineX = p.x0 + 26
-  p.add(VL(lineX, y + 20, rowH * (stepPages.length - 1), acc, 1.2))
+  // dải tiến trình (ý Minh Ánh): lật tới trang thì dải màu chạy dọc xuống, chạy tới công đoạn nào hiện công đoạn đó
+  const run = 0.35 * (stepPages.length - 1)
+  const at = (i) => 0.25 + (run * i) / (stepPages.length - 1)
+  const anim = (kind, delay, dur) => (el) => ({ ...el, anim: { kind, delay: r1(delay), dur } })
+  p.add(VL(lineX, y + 20, rowH * (stepPages.length - 1), C.line, 2.4))
+  p.add(anim('grow', at(0), run)({ ...VL(lineX, y + 20, rowH * (stepPages.length - 1), acc, 2.4), name: 'Dải tiến trình' }))
   stepPages.forEach((s, i) => {
     const ry = y + i * rowH
     const nm = s.finish ? [`${s.label[0]} · ${s.name[0]}`, `${strip(s.label[1])}・${strip(s.name[1])}`] : s.name
     const go = `#p${s.page}` // bấm cả dòng công đoạn → lật tới trang của công đoạn đó
+    const show = anim('fade', at(i), 0.5)
     p.add(
       ELL(lineX - 20, ry, 40, 40, s.finish ? C.cream : acc, { stroke: acc, sw: 1.4 }),
       T(lineX - 20, ry + 9, 40, 22, [s.finish ? '✦' : String(s.no), null], { font: F.head, size: 18, weight: 700, align: 'center', color: s.finish ? acc : '#fff', lh: 1.2, name: 'Số bước' }),
@@ -1195,6 +1201,7 @@ let stripPage = null
       T(p.x1 - 70, ry + 6, 70, 20, [`tr. ${s.page}`, `${s.page}ページ`], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, name: 'Số trang' }),
       RECT(lineX - 26, ry - 6, p.x1 - lineX + 34, 54, 'none', { radius: 6, link: go, alt: `${strip(nm[0])} — tr. ${s.page}`, name: 'Dòng công đoạn' })
     )
+    p.els.splice(-6, 6, ...p.els.slice(-6).map(show))
   })
 }
 
