@@ -540,7 +540,7 @@ class Flow {
    * o = { h, num, paras, images: [cap | { video: cap }], title (cho khung Đọc thêm) }
    */
   story(o) {
-    const underHead = this.head?.p === this.p && this.head.y === this.y && this.p?.side === 'left'
+    const underHead = (o.here || (this.head?.p === this.p && this.head.y === this.y)) && this.p?.side === 'left'
     if (!underHead) this.unit()
     const L = this.p
     let y = this.y
@@ -1199,9 +1199,9 @@ let stripRight = null
   const pr = ch.process
   mark(2, pr.title, f.section('2.3', pr.title), '2.3')
   const lf = pr.leaf
-  mark(3, lf.h, f.block(lf.h, lf.id), lf.id)
-  f.prose(lf.p)
-  f.row(lf.images)
+  f.y = blockHead(f.p, f.y, lf.h, lf.id)
+  mark(3, lf.h, f.p, lf.id)
+  f.story({ here: true, paras: lf.p, images: lf.images, title: lf.h })
   f.end()
 
   // dải tên công đoạn: trang trái của một trang đôi, trang phải là ảnh tràn trang; rồi mỗi công đoạn một trang đôi
@@ -1436,13 +1436,12 @@ let stripRight = null
   const e = ending
   const f = new Flow(9, ['KẾT LUẬN', 'まとめ'], [...POOL[9]])
   mark(1, e.conclusion.title, f.section(null, e.conclusion.title), '—')
-  f.prose(e.conclusion.p)
+  f.story({ paras: e.conclusion.p, title: e.conclusion.title })
   f.end()
 
   f.runLabel = ['LƯU Ý', 'ご注意'] // đầu trang mọi trang của phần này (không chỉ trang đầu)
-  f.unit()
-  f.y = sectionHead(f.p, TOP, null, e.notice.title)
-  f.prose(e.notice.p)
+  f.section(null, e.notice.title)
+  f.story({ paras: e.notice.p, title: e.notice.title })
   f.end()
 
   f.runLabel = ['TÀI LIỆU THAM KHẢO', '参考文献']
@@ -1570,6 +1569,20 @@ let stripRight = null
   // cuối đường: chiếc nón hoàn thiện + lời viết tay
   Rp.add(anim('pop', 4.1, 0.7)({ ...DECO('non', xr - 95, 70, 190, 165, 1), name: 'Hình vẽ' }))
   Rp.add(anim('fade', 4.4, 0.6)(T(Rp.x0, 116, 280, 60, ch2.process.done, { font: F.hand, size: 24, lh: 1.25, jaSize: 20, color: acc, jaFont: F.jaHand, name: 'Lời kết' })))
+  // mỗi cặp trang công đoạn: hình vẽ dụng cụ của bước (giống trạm trên bản đồ) + hàng chấm tiến trình 8 bước,
+  // chấm của bước đang xem tô màu, bấm chấm nào lật tới bước đó
+  stepPages.forEach((s) => {
+    const pg = pages[s.page - 1]
+    const hl = pg.els.find((e) => e.type === 'line' && e.name === 'Đường kẻ' && e.y > TOP && e.y < 320)
+    const dy = hl ? hl.y + 2 : TOP + 120
+    pg.add({ ...DECO(ICON[s.finish ? 0 : s.no], pg.x1 - 92, TOP - 6, 92, 92, 0.95), name: 'Hình vẽ' })
+    stepPages.forEach((t, j) => {
+      const x = pg.x1 - (stepPages.length - j) * 16
+      const on = t === s
+      pg.add(ELL(x, dy - 5, 10, 10, on ? acc : '#fbf6ea', { stroke: acc, sw: 1.2, link: on ? undefined : `#p${t.page}`, alt: `${strip(t.name[0])} — tr. ${t.page}`, name: 'Chấm tiến trình' }))
+    })
+  })
+
   // mặt trống đồng in mờ vắt ngang gáy sách: mỗi trang một nửa → hai trang liền một khối (ý Minh Ánh: họa tiết nối hai trang)
   const ds = 470
   L.els.unshift({ ...DECO('dong-son', W - ds / 2, 300, ds, ds, 0.13), name: 'Hình vẽ' })

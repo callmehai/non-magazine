@@ -53,6 +53,25 @@
   right: 50.6%;
 }
 
+/* mép sách: các tờ giấy xếp chồng ở hai mép ngoài (dày theo số trang đã đọc / còn lại) */
+.book__stack {
+  position: absolute;
+  top: 0.35%;
+  bottom: 0.35%;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg, #f3ead6 0 1px, #d9ccb0 1px 2px);
+  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.45);
+  transition: width 0.6s var(--ease);
+}
+.book__stack.is-left {
+  right: 100%;
+  border-radius: 3px 0 0 3px;
+}
+.book__stack.is-right {
+  left: 100%;
+  border-radius: 0 3px 3px 0;
+}
+
 /* StPageFlip: lớp gốc do thư viện tạo */
 .book-root.stf__parent {
   position: relative;

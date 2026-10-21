@@ -86,7 +86,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       showCover: true,
       usePortrait: true,
       drawShadow: true,
-      maxShadowOpacity: 0.45,
+      maxShadowOpacity: 0.6,
       flippingTime: settings.flipDuration ?? 950,
       mobileScrollSupport: true,
       swipeDistance: 24,

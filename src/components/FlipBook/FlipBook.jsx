@@ -70,6 +70,20 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   const loadFrom = visible[0] - 3
   const loadTo = visible[visible.length - 1] + 4
 
+  // Giải mã sẵn ảnh của vài trang sắp lật tới: không để ảnh mới giải mã đúng lúc trang bắt đầu cong (giật khung hình)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      for (let i = Math.max(0, current - 2); i <= Math.min(count - 1, current + 6); i++)
+        pageEls[i]?.querySelectorAll('img').forEach((img) => img.decode?.().catch(() => {}))
+    }, 120)
+    return () => clearTimeout(t)
+  }, [current, count, pageEls])
+
+  // Mép sách: lớp giấy xếp chồng hai bên, dày theo số trang đã đọc / còn lại (như cầm cuốn sách thật)
+  const progress = count > 1 ? current / (count - 1) : 0
+  const stackMax = Math.max(4, layout.pageW * 0.014)
+  const stacks = layout.orientation === 'landscape'
+
   return (
     <div
       className={`book ${entered ? 'is-entered' : ''} ${zoomed ? 'is-zoomed' : ''} orientation-${layout.orientation}`}
@@ -82,6 +96,8 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
     >
       <div className="book__shift" style={{ transform: offset ? `translate3d(${offset}px,0,0)` : undefined }}>
         <div className="book__shadow" aria-hidden="true" data-alone={shadowAlone ? aloneSide : undefined} />
+        {stacks && progress > 0.02 && current < count - 1 && <div className="book__stack is-left" aria-hidden="true" style={{ width: stackMax * progress + 1 }} />}
+        {stacks && progress < 0.98 && current > 0 && <div className="book__stack is-right" aria-hidden="true" style={{ width: stackMax * (1 - progress) + 1 }} />}
         <div ref={hostRef} className="book__host" />
       </div>
       {pageEls.map((el, i) =>

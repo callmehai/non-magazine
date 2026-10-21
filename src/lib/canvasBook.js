@@ -12,6 +12,8 @@ export async function loadCanvasBook(config, slug, { draft = false } = {}) {
   const res = draft ? await store.loadBook(slug) : await store.loadPublished(slug)
   if (!res) throw new Error(`Sách "${slug}" chưa được xuất bản`)
   const list = res.pages
+  // bản nháp chỉ đọc được khi đã đăng nhập editor; không có trang thì báo lỗi rõ ràng (thư viện lật trang không chạy với sách rỗng)
+  if (!list?.length) throw new Error(draft ? 'Bản nháp chỉ xem được khi đã đăng nhập trang biên tập (#/admin).' : `Sách "${slug}" chưa có trang nào`)
   ensureFontsFor(list) // font Google chỉ tải cho những font sách thật sự dùng
   const n = list.length
   const pages = list.map((p, i) => ({

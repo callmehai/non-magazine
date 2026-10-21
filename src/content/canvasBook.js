@@ -23,7 +23,7 @@ const canvasBook = {
   settings: {
     // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật
     direction: 'ltr',
-    flipDuration: 950,
+    flipDuration: 800,
     // nhóm chưa chọn nhạc (bản sửa lần 1: "tạm chưa làm nhạc") → tắt nhạc nền, chỉ còn tiếng lật trang
     backgroundMusic: false,
     enableSound: true,

@@ -9,7 +9,8 @@ import './review.css'
 
 const QS = new URLSearchParams(location.search)
 const PW = Number(QS.get('pw')) || 520 // bề rộng một trang trên trang soát (px); ?pw=440&cols=2 để xem 2 pair mỗi hàng
-const SRC = `${import.meta.env.BASE_URL}scripts/book/out/book.json`
+// ?file=book-review.json → soát một bản chụp cố định (agent soát trong khi bản build chính vẫn đang được sửa)
+const SRC = `${import.meta.env.BASE_URL}scripts/book/out/${new URLSearchParams(location.search).get('file') || 'book.json'}`
 const CTX = { openLightbox: null, reducedMotion: true, onPageAudioPlay: null, goToPage: null }
 
 /**
