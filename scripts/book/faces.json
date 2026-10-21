@@ -1,0 +1,572 @@
+{
+"Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn": {
+"a": 0.75,
+"f": [
+0.273,
+0.388,
+0.326,
+0.427
+],
+"n": 1
+},
+"Ảnh toàn trang: nón lá trên cánh đồng lúa": {
+"a": 0.75,
+"f": [
+0.139,
+0.41,
+0.765,
+0.499
+],
+"n": 4
+},
+"Ảnh mở chương: thiếu nữ áo dài đội nón lá giữa cánh đồng": {
+"a": 0.75,
+"f": [
+0.34,
+0.432,
+0.624,
+0.507
+],
+"n": 2
+},
+"Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": {
+"a": 0.6672,
+"f": [
+0.175,
+0.058,
+0.587,
+0.465
+],
+"n": 2
+},
+"Nón lá bên tà áo dài": {
+"a": 0.75,
+"f": [
+0.268,
+0.37,
+0.697,
+0.444
+],
+"n": 3
+},
+"Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu": {
+"a": 1.3333,
+"f": [
+0.425,
+0.191,
+0.504,
+0.298
+],
+"n": 1
+},
+"Nghệ nhân Lê Văn Tuy nối vành nứa vào khung nón": {
+"a": 0.75,
+"f": [
+0.485,
+0.274,
+0.63,
+0.383
+],
+"n": 1
+},
+"Lá tươi được vò qua cát": {
+"a": 0.75,
+"f": [
+0.012,
+0.257,
+0.089,
+0.315
+],
+"n": 1
+},
+"Lá lụi phơi trên triền đê": {
+"a": 0.75,
+"f": [
+0.772,
+0.523,
+0.831,
+0.567
+],
+"n": 1
+},
+"Nghệ nhân ngồi là lá bên bếp điện": {
+"a": 0.75,
+"f": [
+0.465,
+0.441,
+0.537,
+0.495
+],
+"n": 1
+},
+"Nghệ nhân khâu nón, đặt nghiêng khung giữa hai đầu gối": {
+"a": 0.75,
+"f": [
+0.431,
+0.199,
+0.598,
+0.325
+],
+"n": 1
+},
+"Khâu viền vành nón": {
+"a": 0.75,
+"f": [
+0.441,
+0.368,
+0.566,
+0.462
+],
+"n": 1
+},
+"Chỉ màu luồn trong lòng nón": {
+"a": 0.75,
+"f": [
+0.281,
+0.282,
+0.449,
+0.408
+],
+"n": 1
+},
+"Nghệ nhân luồn sợi chỉ màu vào lòng nón": {
+"a": 0.75,
+"f": [
+0.369,
+0.319,
+0.512,
+0.427
+],
+"n": 1
+},
+"Chân dung nghệ nhân Lê Văn Tuy": {
+"a": 1.5025,
+"f": [
+0.359,
+0.114,
+0.449,
+0.249
+],
+"n": 1
+},
+"Nghệ nhân Tạ Thu Hương cùng sản phẩm sáng tạo": {
+"a": 0.75,
+"f": [
+0.396,
+0.444,
+0.545,
+0.556
+],
+"n": 1
+},
+"Người nghệ nhân lớn tuổi": {
+"a": 0.75,
+"f": [
+0.243,
+0.245,
+0.559,
+0.367
+],
+"n": 2
+},
+"Đôi bàn tay người thợ": {
+"a": 0.75,
+"f": [
+0.019,
+0.461,
+0.098,
+0.521
+],
+"n": 1
+},
+"Hai thiếu nữ áo dài cầm nón lá trong đình Chuông": {
+"a": 0.75,
+"f": [
+0.682,
+0.434,
+0.773,
+0.502
+],
+"n": 1
+},
+"video: trình diễn quốc tế (ảnh đại diện)": {
+"a": 1.7778,
+"f": [
+0.488,
+0.183,
+0.592,
+0.368
+],
+"n": 1
+},
+"Nón lá trắng bên tà áo dài trước sân đình Chuông": {
+"a": 0.75,
+"f": [
+0.279,
+0.407,
+0.824,
+0.499
+],
+"n": 4
+},
+"Người bán nón trao đổi trong phiên chợ Chuông lúc tờ mờ sáng": {
+"a": 1.5,
+"f": [
+0.269,
+0.2,
+0.365,
+0.344
+],
+"n": 1
+},
+"Người phụ nữ đội nón giữa cánh đồng — tranh tại Bảo tàng Mỹ thuật Việt Nam": {
+"a": 1.3284,
+"f": [
+0.662,
+0.524,
+0.697,
+0.57
+],
+"n": 1
+},
+"Người bán nón giữa những chồng nón trắng ở chợ Chuông": {
+"a": 1.5,
+"f": [
+0.493,
+0.368,
+0.568,
+0.48
+],
+"n": 1
+},
+"Bó vòng nứa vót sẵn bày bán ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.389,
+0.225,
+0.451,
+0.272
+],
+"n": 1
+},
+"Khuôn nón bày bán ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.664,
+0.187,
+0.769,
+0.266
+],
+"n": 1
+},
+"Sợi len màu để luồn nhôi bày bán ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.763,
+0.004,
+0.849,
+0.069
+],
+"n": 1
+},
+"Lá lụi bày bán trước cổng đình Chuông": {
+"a": 0.75,
+"f": [
+0.458,
+0.399,
+0.527,
+0.45
+],
+"n": 1
+},
+"Khung nón bày bán ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.22,
+0.132,
+0.323,
+0.209
+],
+"n": 1
+},
+"Người bán nón bên những chồng nón trắng ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.297,
+0.236,
+0.893,
+0.375
+],
+"n": 2
+},
+"Bài báo “Người dệt hồn quê lên vành nón lá” về nghệ nhân Lê Văn Tuy": {
+"a": 0.75,
+"f": [
+0.65,
+0.24,
+0.709,
+0.285
+],
+"n": 1
+},
+"Phiên chợ bán lá lụi trước cổng đình Chuông": {
+"a": 0.75,
+"f": [
+0.038,
+0.377,
+0.108,
+0.43
+],
+"n": 1
+},
+"Niềm vui của người bán nón trong phiên chợ Chuông": {
+"a": 1.5,
+"f": [
+0.423,
+0.161,
+0.951,
+0.43
+],
+"n": 2
+},
+"Người mua kẻ bán tấp nập trong phiên chợ nón Chuông": {
+"a": 0.75,
+"f": [
+0.35,
+0.417,
+0.399,
+0.455
+],
+"n": 1
+},
+"Người bán lá lụi ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.238,
+0.251,
+0.808,
+0.441
+],
+"n": 2
+},
+"Khung nón xếp chồng ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.359,
+0.141,
+0.674,
+0.275
+],
+"n": 2
+},
+"Người bán nón bên chồng nón ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.266,
+0.1,
+0.952,
+0.359
+],
+"n": 3
+},
+"Người vác hàng rời phiên chợ Chuông": {
+"a": 1.5,
+"f": [
+0.487,
+0.295,
+0.917,
+0.959
+],
+"n": 3
+},
+"Nụ cười người thợ làng Chuông bên chiếc nón": {
+"a": 0.75,
+"f": [
+0.46,
+0.349,
+0.619,
+0.468
+],
+"n": 1
+},
+"Người bán đếm nón cho khách ở chợ Chuông": {
+"a": 1.5,
+"f": [
+0.263,
+0.292,
+0.356,
+0.432
+],
+"n": 1
+},
+"Người bán xếp nón trên phố làng Chuông": {
+"a": 1.5,
+"f": [
+0.531,
+0.253,
+0.616,
+0.38
+],
+"n": 1
+},
+"Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí": {
+"a": 0.6622,
+"f": [
+0.506,
+0.345,
+0.588,
+0.399
+],
+"n": 1
+},
+"Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet": {
+"a": 1.5371,
+"f": [
+0.302,
+0.188,
+0.634,
+0.361
+],
+"n": 2
+},
+"Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ": {
+"a": 0.5694,
+"f": [
+0.48,
+0.141,
+0.773,
+0.308
+],
+"n": 1
+},
+"Nghệ nhân giới thiệu khung nón đã lên đủ vành": {
+"a": 1.3333,
+"f": [
+0.406,
+0.157,
+0.502,
+0.286
+],
+"n": 1
+},
+"Người bán phân loại lá lụi ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.146,
+0.301,
+0.779,
+0.515
+],
+"n": 2
+},
+"Những chồng nón cao bên đường trong phiên chợ Chuông": {
+"a": 0.75,
+"f": [
+0.406,
+0.515,
+0.457,
+0.553
+],
+"n": 1
+},
+"Người bán xếp nón bên cánh cửa gỗ cũ": {
+"a": 0.75,
+"f": [
+0.519,
+0.4,
+0.585,
+0.45
+],
+"n": 1
+},
+"Nghệ nhân Phạm Trần Canh — ảnh: Báo Thể thao & Văn hóa": {
+"a": 1.3333,
+"f": [
+0.379,
+0.235,
+0.632,
+0.572
+],
+"n": 1
+},
+"Ảnh toàn trang: những chiếc khung nón xếp chồng ở chợ Chuông": {
+"a": 0.75,
+"f": [
+0.474,
+0.36,
+0.54,
+0.41
+],
+"n": 1
+},
+"Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông": {
+"a": 0.75,
+"f": [
+0.888,
+0.551,
+1.004,
+0.638
+],
+"n": 1
+},
+"Nón lá trắng và tà áo dài trước sân đình Chuông": {
+"a": 0.75,
+"f": [
+0.279,
+0.407,
+0.824,
+0.499
+],
+"n": 4
+},
+"Người thợ làng Chuông bên những chiếc nón": {
+"a": 0.75,
+"f": [
+0.424,
+0.379,
+0.62,
+0.526
+],
+"n": 1
+},
+"Ảnh toàn trang: nón lá làm duyên cho tà áo dài trong đình Chuông": {
+"a": 0.75,
+"f": [
+0.306,
+0.414,
+0.394,
+0.479
+],
+"n": 1
+},
+"Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà": {
+"a": 1.3333,
+"f": [
+0.262,
+0.285,
+0.714,
+0.603
+],
+"n": 6
+},
+"Du khách vẽ trang trí nón tại một cơ sở làng Chuông": {
+"a": 0.75,
+"f": [
+0.556,
+0.176,
+0.696,
+0.281
+],
+"n": 1
+},
+"Người thợ khâu nón ngay trong nếp nhà": {
+"a": 0.4611,
+"f": [
+0.221,
+0.22,
+0.413,
+0.308
+],
+"n": 1
+}
+}

@@ -28,8 +28,8 @@ export const ch3 = {
         '何世代にもわたって受け継がれてきたその名声は、現代にもさまざまな形で認められています。「ノン・チュオン」という名前は、知的財産局から{団体商標|だんたいしょうひょう}の{証明|しょうめい}を受け、伝統的な製品の名前が守られるようになりました。2021年には「チュオン村のノンラー」がOCOP³の四つ星に{格付|かくづ}けされ、その後、職人レー・ヴァン・トゥイとター・トゥー・フオンの製品も四つ星を{獲得|かくとく}して、工芸村の製品の品質と価値を示しています。',
       ],
       [
-        'Không chỉ sản phẩm, bản thân nghề làm nón cũng được ghi nhận ở cấp độ làng nghề. Năm 2008, làng Chuông cùng sáu làng khác thuộc xã Phương Trung, gồm Liên Tân, Tân Tiến, Quang Trung, Mã Kiều, Tây Sơn và Tân Dân, đã được UBND thành phố Hà Nội công nhận làng nghề. Bên cạnh đó, tính đến cuối năm 2013, các làng này tiếp tục được ghi nhận là làng nghề thủ công truyền thống của địa phương.',
-        '製品だけでなく、笠づくりそのものも工芸村として認められています。2008年、チュオン村はフオンチュン{社|しゃ}の他の6つの村（リエンタン、タンティエン、クアンチュン、マーキエウ、タイソン、タンザン）とともに、ハノイ市人民委員会から工芸村に{認定|にんてい}されました。さらに2013年末までに、これらの村は地域の伝統手工芸村としても認められています。',
+        'Không chỉ sản phẩm, bản thân nghề làm nón cũng được ghi nhận ở cấp độ làng nghề. Năm 2008, làng Chuông cùng sáu làng khác thuộc xã Phương Trung (cũ), gồm Liên Tân, Tân Tiến, Quang Trung, Mã Kiều, Tây Sơn và Tân Dân, đã được UBND thành phố Hà Nội công nhận làng nghề. Bên cạnh đó, tính đến cuối năm 2013, các làng này tiếp tục được ghi nhận là làng nghề thủ công truyền thống của địa phương.',
+        '製品だけでなく、笠づくりそのものも工芸村として認められています。2008年、チュオン村は{旧|きゅう}フオンチュン{社|しゃ}の他の6つの村（リエンタン、タンティエン、クアンチュン、マーキエウ、タイソン、タンザン）とともに、ハノイ市人民委員会から工芸村に{認定|にんてい}されました。さらに2013年末までに、これらの村は地域の伝統手工芸村としても認められています。',
       ],
       [
         'Những sự ghi nhận ấy không chỉ đánh dấu vị thế của nón Chuông và nghề làm nón mà còn góp phần tạo nền tảng cho các hoạt động gìn giữ và phát triển làng nghề trong đời sống hiện nay.',
@@ -39,7 +39,7 @@ export const ch3 = {
     notes: [
       ['¹ Đinh Hạnh (chủ biên), Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội, NXB Hà Nội, 2019, tr. 122.', '¹ ディン・ハイン編『タンロン＝ハノイの代表的な手工芸村』ハノイ出版社、2019年、122頁。'],
       ['² Nón Huế: Loại nón lá truyền thống nổi tiếng của vùng cố đô Huế (miền Trung Việt Nam), đặc trưng bởi dáng nón thanh mảnh, nhẹ và đường khâu tinh xảo. Tiêu biểu là nón bài thơ.', '² フエの笠：ベトナム中部の古都フエの有名な伝統的ノンラー。細身で軽く、縫い目が{精巧|せいこう}なのが特徴。代表は「{詩|し}の笠」。'],
-      ['³ OCOP (One Commune One Product - Mỗi xã một sản phẩm): Chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.', '³ OCOP（{一村一品|いっそんいっぴん}）：地域の{特産品|とくさんひん}を育てるためのベトナムの{制度|せいど}。製品は1〜5つ星で評価・格付けされる。'],
+      ['³ OCOP (Chương trình Mỗi xã một sản phẩm): Chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.', '³ OCOP（{一村一品|いっそんいっぴん}）：地域の{特産品|とくさんひん}を育てるためのベトナムの{制度|せいど}。製品は1〜5つ星で評価・格付けされる。'],
     ],
     images: [
       ['Giấy chứng nhận OCOP 4 sao cho nón chùm của cơ sở Lê Văn Tuy', 'レー・ヴァン・トゥイ工房の笠に与えられたOCOP四つ星の認定証'],
@@ -92,7 +92,10 @@ export const ch3 = {
       {
         h: ['Đổi mới sản phẩm và mở rộng công năng', '製品の革新と用途の拡大'],
         p: [['Bên cạnh nón lá truyền thống, nghệ nhân làng Chuông đã phát triển thêm nhiều mẫu như nón thêu, nón vẽ, nón lụa, nón mini và các sản phẩm trang trí. Công năng của chiếc nón cũng được mở rộng từ vật dụng che nắng, che mưa sang phụ kiện áo dài, đạo cụ biểu diễn, quà lưu niệm và vật trang trí. Sự đổi mới này cho thấy sản phẩm nón làng Chuông đang được điều chỉnh để phù hợp hơn với nhu cầu sử dụng hiện nay.', '伝統的なノンラーに加え、チュオン村の職人たちは{刺繍|ししゅう}の笠、絵付けの笠、絹の笠、ミニ笠、{装飾品|そうしょくひん}など、多くの新しい製品を生み出してきました。笠の用途も、日差しや雨を{避|さ}ける道具から、アオザイの{装身具|そうしんぐ}、舞台の小道具、お{土産|みやげ}、インテリアへと広がっています。こうした革新は、チュオン村の笠が今の{需要|じゅよう}により合うよう変わりつつあることを示しています。']],
-        image: ['Nón thêu, nón vẽ, nón lụa, nón mini', '刺繍・絵付け・絹・ミニの笠'],
+        images: [
+          ['Nón thêu, nón vẽ, nón lụa, nón mini', '刺繍・絵付け・絹・ミニの笠'],
+          ['Bức tường nón vẽ cờ đỏ sao vàng tại một cơ sở làng Chuông', 'チュオン村の工房に飾られた、金星紅旗を描いた笠の壁'],
+        ],
       },
       {
         h: ['Từ chợ làng đến thị trường rộng hơn', '村の市場から広い世界へ'],
@@ -109,11 +112,15 @@ export const ch3 = {
       {
         h: ['Gắn làng nghề với trải nghiệm, du lịch và giáo dục', '体験・観光・教育との結びつき'],
         p: [
-          ['Để nghề nón không chỉ được biết đến qua những sản phẩm hoàn chỉnh, các hoạt động giới thiệu và trải nghiệm nghề cũng ngày càng được chú trọng. Năm 2024, Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP - làng nghề Nón Chuông được thành lập, tạo thêm không gian trưng bày, quảng bá và đưa sản phẩm của người làm nghề đến gần hơn với người dân và du khách.', '笠づくりを完成品だけでなく、その技を通して知ってもらうため、紹介や体験の活動にも力が入れられています。2024年には「ノン・チュオン工芸村OCOP製品の創作デザイン・紹介・PR・販売センター」が{設立|せつりつ}され、職人の製品を展示・PRし、地域の人々や観光客により身近に届ける場が生まれました。'],
+          ['Để nghề nón không chỉ được biết đến qua những sản phẩm hoàn chỉnh, các hoạt động giới thiệu và trải nghiệm nghề cũng ngày càng được chú trọng. Năm 2024, Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông được thành lập, tạo thêm không gian trưng bày, quảng bá và đưa sản phẩm của người làm nghề đến gần hơn với người dân và du khách.', '笠づくりを完成品だけでなく、その技を通して知ってもらうため、紹介や体験の活動にも力が入れられています。2024年には「ノン・チュオン工芸村OCOP製品の創作デザイン・紹介・PR・販売センター」が{設立|せつりつ}され、職人の製品を展示・PRし、地域の人々や観光客により身近に届ける場が生まれました。'],
           ['Tại làng Chuông, một số gia đình và cơ sở sản xuất còn kết hợp làm nghề với hoạt động trải nghiệm, giúp học sinh và du khách quan sát quy trình chế tác, trực tiếp thử các công đoạn như khâu, vẽ hoặc trang trí nón.', 'チュオン村では、笠づくりと体験活動を組み合わせる家庭や工房もあり、学生や観光客が製作の様子を見学し、縫う、描く、飾るといった工程を実際に体験できます。'],
-          ['Không chỉ dừng lại ở những trải nghiệm thực tế, việc giới thiệu giá trị nghề truyền thống còn được mở rộng thông qua hoạt động giáo dục cộng đồng. Tháng 7/2026, chuyên đề “Nón làng Chuông - Từ di sản truyền thống đến giá trị kinh tế hiện đại” được triển khai tại Trung tâm Học tập cộng đồng xã Thanh Oai, một trong ba mô hình điểm của thành phố Hà Nội trong năm 2026.', '体験だけでなく、地域の教育活動を通しても、伝統工芸の価値が伝えられています。2026年7月には、ハノイ市の2026年の三つのモデル事業の一つであるタインオアイ社コミュニティ学習センターで、{講座|こうざ}「チュオン村の笠：伝統遺産から現代の経済価値へ」が開かれました。'],
+          ['Không chỉ dừng lại ở những trải nghiệm thực tế, việc giới thiệu giá trị nghề truyền thống còn được mở rộng thông qua hoạt động giáo dục cộng đồng. Tháng 7/2026, chuyên đề “Nón làng Chuông – Từ di sản truyền thống đến giá trị kinh tế hiện đại” được triển khai tại Trung tâm Học tập cộng đồng xã Thanh Oai, một trong ba mô hình điểm của thành phố Hà Nội trong năm 2026.', '体験だけでなく、地域の教育活動を通しても、伝統工芸の価値が伝えられています。2026年7月には、ハノイ市の2026年の三つのモデル事業の一つであるタインオアイ社コミュニティ学習センターで、{講座|こうざ}「チュオン村の笠：伝統遺産から現代の経済価値へ」が開かれました。'],
         ],
-        image: ['Trải nghiệm làm nón tại nhà nghệ nhân Lê Văn Tuy', '職人レー・ヴァン・トゥイの工房での体験'],
+        // trái: đoạn về Trung tâm OCOP (2024) · phải: trải nghiệm + giáo dục cộng đồng
+        images: [
+          ['Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông', 'ノン・チュオン工芸村OCOP製品の創作デザイン・紹介・PR・販売センター'],
+          ['Biển “Lớp học giữ nghề nón làng Chuông”', '「チュオン村の笠づくりを守る教室」の看板'],
+        ],
       },
     ],
   },
@@ -133,7 +140,7 @@ export const ch3 = {
           ['Nghề nón làng Chuông vẫn được duy trì tại nhiều gia đình, nhưng việc thu hút thế hệ trẻ tiếp nối nghề đang trở thành một khó khăn. Theo chia sẻ của nghệ nhân Lê Văn Tuy, số người trẻ học nghề ngày càng ít, trong khi những người thợ lành nghề đang dần lớn tuổi. Nhiều người trẻ lựa chọn học tập hoặc làm những công việc khác có thu nhập ổn định hơn.', 'チュオン村の笠づくりは今も多くの家庭で続けられていますが、若い世代に受け継いでもらうことが難しくなっています。職人レー・ヴァン・トゥイによれば、技を学ぶ若者は年々減り、熟練の職人は{高齢化|こうれいか}しています。多くの若者は進学や、より安定した収入の得られる別の仕事を選んでいます。'],
           ['Việc thiếu người kế nghiệp có nguy cơ ảnh hưởng đến quá trình truyền nghề. Những kỹ thuật như chọn lá, tạo khuôn, khâu và hoàn thiện nón đòi hỏi sự khéo léo cùng kinh nghiệm được tích lũy qua nhiều năm thực hành. Nếu không có đủ người tiếp nối, một số kỹ năng truyền thống có thể dần bị mai một.', '後継者が足りないと、技の{伝承|でんしょう}が{危|あや}うくなります。葉選び、型づくり、縫い付け、仕上げといった技は、器用さと長年の{修練|しゅうれん}で積み重ねた経験を必要とします。受け継ぐ人が十分にいなければ、伝統的な技のいくつかは少しずつ{失|うしな}われてしまうかもしれません。'],
         ],
-        image: ['Người nghệ nhân lớn tuổi', '高齢の職人'],
+        images: [['Người thợ làng Chuông bên những chiếc nón', 'ノンラーに囲まれたチュオン村の職人']],
       },
       {
         h: ['Thu nhập từ nghề còn hạn chế', '収入の少なさ'],
@@ -141,7 +148,10 @@ export const ch3 = {
           ['Thu nhập từ nghề làm nón làng Chuông còn chưa tương xứng với thời gian và công sức của người thợ. Để hoàn thành một chiếc nón, người làm nghề phải trải qua nhiều công đoạn thủ công. Theo thông tin ghi nhận tại địa phương, một chiếc nón thông thường có thể mất khoảng 6 giờ để hoàn thiện, trong khi những chiếc nón đẹp, đòi hỏi kỹ thuật tỉ mỉ hơn có thể mất đến 10 giờ, thậm chí 2 ngày. Giá bán nón thông thường dao động từ 50.000 đến 120.000 đồng/chiếc. Tuy nhiên, thu nhập của người làm nón thường chỉ khoảng 3 triệu đồng/tháng, những tháng thuận lợi có thể đạt 5 triệu đồng.', 'チュオン村の笠づくりの収入は、職人がかける時間と手間に見合っていません。一つの笠を完成させるには、多くの手作業の工程を{経|へ}なければなりません。地元で聞いた話では、普通の笠は仕上げるのに約6時間、より細やかな技を要する美しい笠は10時間、ときには2日かかります。普通の笠の{値段|ねだん}は1つ5万〜12万ドンほどですが、職人の収入は月に約300万ドン、よい月でも500万ドンほどにすぎません。'],
           ['Sự chênh lệch giữa thời gian lao động và thu nhập khiến việc gắn bó lâu dài với nghề trở thành một lựa chọn khó khăn, nhất là đối với những người trẻ có thêm nhiều cơ hội việc làm khác.', '働く時間と収入の{差|さ}が、この仕事を長く続けることを難しい選択にしています。ほかにも多くの仕事の{機会|きかい}がある若者にとっては、なおさらです。'],
         ],
-        image: ['Đôi bàn tay người thợ', '職人の手'],
+        images: [
+          ['Đôi bàn tay người thợ', '職人の手'],
+          ['Người bán đếm nón cho khách ở chợ Chuông', 'チュオンの市場で客のために笠を数える売り手'],
+        ],
       },
       {
         h: ['Khi chiếc nón phải tìm lại chỗ đứng trong đời sống hiện đại', '現代の暮らしの中で{居場所|いばしょ}を探す笠'],
@@ -149,7 +159,7 @@ export const ch3 = {
           ['Từng là vật dụng quen thuộc để che nắng, che mưa, nón lá ngày nay không còn được sử dụng phổ biến như trước. Sự phát triển của các phương tiện giao thông cùng những lựa chọn như mũ bảo hiểm, mũ vải hay ô dù đã góp phần làm thay đổi thói quen sử dụng của người dân. Bên cạnh đó, nón Chuông còn phải cạnh tranh với các loại nón nhựa, nón sản xuất công nghiệp có giá chỉ khoảng 15.000 đồng/chiếc. Khi người mua khó phân biệt được nón thủ công truyền thống với các sản phẩm sản xuất công nghiệp, sự chênh lệch về giá càng khiến nón Chuông gặp bất lợi trong việc tiêu thụ.', 'かつては日差しや雨を避けるおなじみの道具だったノンラーも、今では以前ほど使われなくなりました。乗り物の発達や、ヘルメット、布の帽子、{傘|かさ}といった選択肢が、人々の習慣を変えたのです。さらにチュオンの笠は、1つわずか1万5千ドンほどのプラスチックや工業製品の笠とも{競争|きょうそう}しなければなりません。買う人が伝統的な手づくりの笠と工業製品を見分けにくいため、値段の差がチュオンの笠の販売をいっそう{不利|ふり}にしています。'],
           ['Trước những thay đổi ấy, nón Chuông đang tìm thêm chỗ đứng trong lĩnh vực thời trang, biểu diễn, trang trí và du lịch. Đây vừa là cơ hội, vừa là thách thức. Những công dụng mới có thể mở ra hướng phát triển cho nón Chuông, nhưng đồng thời cũng đòi hỏi người làm nghề phải tiếp tục đổi mới để đáp ứng nhu cầu thị trường mà vẫn giữ được những nét đặc trưng của sản phẩm truyền thống.', 'こうした変化を受けて、チュオンの笠はファッション、舞台、インテリア、観光の分野に新しい居場所を求めています。それは{好機|こうき}であると同時に、課題でもあります。新しい用途は笠に発展の道を開くかもしれませんが、職人には、伝統的な製品の特徴を守りながら、市場の需要に応えて革新を続けることが求められます。'],
         ],
-        image: ['Hai thiếu nữ áo dài cầm nón lá trong đình Chuông', 'チュオン村の亭でノンラーを手にするアオザイ姿の二人'],
+        images: [['Gian hàng nón nhiều màu sắc ở làng Chuông', 'チュオン村の色とりどりの笠の店']],
       },
     ],
     outro: [
@@ -172,7 +182,7 @@ export const ending = {
         '現代の暮らしの中で、チュオン村のノンラーは需要や市場に合わせて変わりつつあります。白い伝統的なノンラーに加え、形や{装飾|そうしょく}、用途を広げた製品が生まれ、文化活動や体験型観光を通して紹介されています。しかし、販路、職人の収入、後継者不足といった課題は、今も生産の{継続|けいぞく}に{影響|えいきょう}を与えています。チュオンの笠の伝統的な特徴を守るには、製品の革新と、ふさわしい発展の道を探ることが{欠|か}かせないのです。',
       ],
       [
-        'Cuốn flipbook này được biên soạn nhằm cung cấp tài liệu giới thiệu và các thông tin tham khảo bằng tiếng Nhật về nón lá làng Chuông. Thông qua việc tổng hợp thông tin và hình ảnh thực tế, nhóm biên soạn mong muốn giới thiệu sản phẩm này đến những độc giả Nhật Bản quan tâm nón lá và các sản phẩm thủ công truyền thống của Việt Nam.',
+        'Cuốn sách này được biên soạn nhằm cung cấp tài liệu giới thiệu và các thông tin tham khảo bằng tiếng Nhật về nón lá làng Chuông. Thông qua việc tổng hợp thông tin và hình ảnh thực tế, nhóm biên soạn mong muốn giới thiệu sản phẩm này đến những độc giả Nhật Bản quan tâm nón lá và các sản phẩm thủ công truyền thống của Việt Nam.',
         '本書は、チュオン村のノンラーについて、日本語で読める紹介と{参考|さんこう}{情報|じょうほう}を提供することを目的に{編集|へんしゅう}しました。情報と実際の写真をまとめることで、ノンラーやベトナムの伝統工芸に関心のある日本の読者の{皆様|みなさま}に、この笠をお届けできれば幸いです。',
       ],
     ],
@@ -185,11 +195,11 @@ export const ending = {
     title: ['Lưu ý về nội dung', '内容についての注意'],
     p: [
       [
-        'Cuốn flipbook tập trung giới thiệu những đặc điểm tiêu biểu của nón lá làng Chuông, đặc biệt là chiếc nón lá trắng truyền thống được sản xuất phổ biến hiện nay. Do giới hạn về phạm vi tìm hiểu và nguồn tư liệu, nội dung có thể chưa phản ánh đầy đủ tất cả các loại nón, kỹ thuật chế tác và những thay đổi của sản phẩm qua từng thời kỳ.',
+        'Cuốn sách tập trung giới thiệu những đặc điểm tiêu biểu của nón lá làng Chuông, đặc biệt là chiếc nón lá trắng truyền thống được sản xuất phổ biến hiện nay. Do giới hạn về phạm vi tìm hiểu và nguồn tư liệu, nội dung có thể chưa phản ánh đầy đủ tất cả các loại nón, kỹ thuật chế tác và những thay đổi của sản phẩm qua từng thời kỳ.',
         '本書は、チュオン村のノンラーの代表的な特徴、とくに現在{盛|さか}んに作られている白い伝統的なノンラーを中心に紹介しています。調査の範囲や資料に限りがあるため、すべての笠の種類、製作技術、時代ごとの製品の変化を{網羅|もうら}できていない場合があります。',
       ],
       [
-        'Bên cạnh đó, một số kỹ thuật và công đoạn làm nón có thể khác nhau giữa các hộ sản xuất hoặc thay đổi theo thời gian. Nhóm biên soạn đã cố gắng lựa chọn, đối chiếu và tổng hợp những thông tin phù hợp với phạm vi giới thiệu của flipbook. Các thông tin được chọn lọc dựa trên việc tham khảo tư liệu sách, báo, tạp chí, kết hợp với điều tra thực địa, quan sát thực tế và phỏng vấn các nghệ nhân. Tuy nhiên, nội dung chắc hẳn vẫn có thể còn những thiếu sót. Chúng tôi rất mong nhận được sự thông cảm và những ý kiến đóng góp từ quý độc giả.',
+        'Bên cạnh đó, một số kỹ thuật và công đoạn làm nón có thể khác nhau giữa các hộ sản xuất hoặc thay đổi theo thời gian. Nhóm biên soạn đã cố gắng lựa chọn, đối chiếu và tổng hợp những thông tin phù hợp với phạm vi giới thiệu của cuốn sách. Các thông tin được chọn lọc dựa trên việc tham khảo tư liệu sách, báo, tạp chí, kết hợp với điều tra thực địa, quan sát thực tế và phỏng vấn các nghệ nhân. Tuy nhiên, nội dung chắc hẳn vẫn có thể còn những thiếu sót. Chúng tôi rất mong nhận được sự thông cảm và những ý kiến đóng góp từ quý độc giả.',
         'また、笠づくりの技術や工程の中には、工房によって異なったり、時代とともに変わったりするものもあります。私たちは、本書の紹介の範囲にふさわしい情報を選び、照らし合わせ、まとめるよう努めました。情報は、書籍・新聞・雑誌などの資料に加え、{現地調査|げんちちょうさ}、観察、職人へのインタビューをもとに選んでいます。それでも、至らない点が残っているかもしれません。ご理解とご意見をいただければ幸いです。',
       ],
       [
@@ -197,8 +207,8 @@ export const ending = {
         '現地調査やインタビューで得た情報は、本書での使用について、ご本人の{許可|きょか}をいただいています。本書はFPT大学ハノイ校日本語学科の学生による卒業制作であり、商業的・政治的な目的では使用しません。また、制作にあたっては、著作権を{侵害|しんがい}しないことをお約束します。',
       ],
       [
-        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn flipbook này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email: nonla09092026@gmail.com.',
-        '最後に、本書をお読みくださった皆様に心より{感謝|かんしゃ}申し上げます。ご意見・ご感想は、メールアドレス nonla09092026@gmail.com までお寄せください。',
+        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn sách này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email:\nnonla09092026@gmail.com',
+        '最後に、本書をお読みくださった皆様に心より{感謝|かんしゃ}申し上げます。ご意見・ご感想は、下記のメールアドレスまでお寄せください。\nnonla09092026@gmail.com',
       ],
     ],
   },

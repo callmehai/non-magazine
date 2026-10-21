@@ -76,7 +76,8 @@ export function measurePage(page, W, H) {
   }
 
   const issues = []
-  const texts = content.filter((e) => e.type === 'text' && e.lines?.length)
+  // chữ nền (số mục in mờ phía sau tiêu đề…) là trang trí, không soát tràn / đè
+  const texts = content.filter((e) => e.type === 'text' && e.lines?.length && !isBackdrop(e.name))
   for (const e of texts) {
     const bottom = Math.max(...e.lines.map((q) => q.y + q.h))
     if (bottom > e.box.y + e.box.h + 3) issues.push(`chữ tràn khung "${e.name}" (${Math.round(bottom - e.box.y - e.box.h)}pt): ${e.text.slice(0, 40)}…`)
@@ -86,7 +87,8 @@ export function measurePage(page, W, H) {
   const hit = (a, b) => Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > 4 && Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > 3
   for (const e of texts) {
     for (const o of content) {
-      if (o === e || isBackdrop(o.name) || o.type === 'shape') continue
+      // phần tử xoay (ảnh polaroid) có khung bao lớn hơn hình thật → không soát đè
+      if (o === e || isBackdrop(o.name) || o.type === 'shape' || /rotate/.test(o.node.style.transform + e.node.style.transform)) continue
       const rects = o.lines ?? [o.box]
       if (e.lines.some((q) => rects.some((r) => hit(q, r)))) issues.push(`"${e.name}" đè lên "${o.name || o.type}"`)
     }

@@ -4,6 +4,7 @@ import { CanvasLang } from '../canvas/lang.js'
 import { MagazineContext } from '../lib/context.js'
 import { ensureFontsFor } from '../canvas/fonts.js'
 import { measurePage, spreadIssues } from './measure.js'
+import { setLang } from '../lib/i18n.js'
 import '../canvas/canvas.css'
 import './review.css'
 
@@ -20,6 +21,8 @@ const CTX = { openLightbox: null, reducedMotion: true, onPageAudioPlay: null, go
  * Kết quả đo cũng nằm ở window.__review để agent review / script đọc.
  */
 export default function ReviewSheet({ lang }) {
+  // nhãn giao diện (nút "Đọc thêm"…) theo đúng ngôn ngữ đang soát, như trang đọc thật — đặt trước khi vẽ trang
+  setLang(lang)
   const [pages, setPages] = useState(null)
   const [report, setReport] = useState(null)
   useEffect(() => {

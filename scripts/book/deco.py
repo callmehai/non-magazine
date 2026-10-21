@@ -104,14 +104,17 @@ def lotus(cx, cy, s=1.0):
 
 
 def cloud(cx, cy, s=1.0, mirror=False):
-    """mây cuộn kiểu hoa văn Việt"""
+    """mây cuộn kiểu hoa văn Việt: dải mây mảnh, hai đầu cuộn tròn vào trong, nét đôi"""
     k = -1 if mirror else 1
     X = lambda v: f(cx + k * v * s)
     Y = lambda v: f(cy + v * s)
-    return (f'<path d="M{X(-60)} {Y(10)} C {X(-60)} {Y(-8)}, {X(-40)} {Y(-14)}, {X(-30)} {Y(-4)} C {X(-26)} {Y(-26)}, {X(4)} {Y(-30)}, {X(10)} {Y(-10)} '
-            f'C {X(18)} {Y(-24)}, {X(44)} {Y(-18)}, {X(42)} {Y(0)} C {X(58)} {Y(-2)}, {X(66)} {Y(14)}, {X(54)} {Y(20)} L {X(-52)} {Y(20)} C {X(-62)} {Y(18)}, {X(-62)} {Y(12)}, {X(-60)} {Y(10)} Z" fill="{IVORY}"/>'
-            f'<path d="M{X(-30)} {Y(-4)} C {X(-26)} {Y(6)}, {X(-12)} {Y(6)}, {X(-12)} {Y(-2)} C {X(-12)} {Y(-8)}, {X(-20)} {Y(-8)}, {X(-20)} {Y(-3)}" stroke-width="1"/>'
-            f'<path d="M{X(10)} {Y(-10)} C {X(12)} {Y(2)}, {X(28)} {Y(2)}, {X(28)} {Y(-6)} C {X(28)} {Y(-12)}, {X(20)} {Y(-12)}, {X(20)} {Y(-7)}" stroke-width="1"/>')
+    spiral = lambda x, y, r, d: (f'<path d="M{X(x)} {Y(y)} C {X(x + d * r)} {Y(y)}, {X(x + d * r)} {Y(y - r)}, {X(x)} {Y(y - r)} '
+                                 f'C {X(x - d * r * 0.6)} {Y(y - r)}, {X(x - d * r * 0.6)} {Y(y - r * 0.45)}, {X(x - d * r * 0.1)} {Y(y - r * 0.45)}" stroke-width="1.1"/>')
+    body = (f'<path d="M{X(-58)} {Y(4)} C {X(-60)} {Y(-14)}, {X(-36)} {Y(-20)}, {X(-26)} {Y(-8)} C {X(-22)} {Y(-30)}, {X(8)} {Y(-34)}, {X(14)} {Y(-14)} '
+            f'C {X(22)} {Y(-26)}, {X(46)} {Y(-22)}, {X(46)} {Y(-4)} C {X(58)} {Y(-6)}, {X(64)} {Y(6)}, {X(56)} {Y(12)} '
+            f'C {X(30)} {Y(10)}, {X(-30)} {Y(10)}, {X(-58)} {Y(4)} Z" fill="{IVORY}" stroke-width="1.1"/>')
+    inner = (f'<path d="M{X(-50)} {Y(4)} C {X(-20)} {Y(1)}, {X(24)} {Y(1)}, {X(50)} {Y(7)}" stroke-width="0.7" opacity=".6"/>')
+    return body + inner + spiral(-26, -8, 9, 1) + spiral(14, -14, 11, 1) + spiral(46, -4, 7, -1)
 
 
 os.makedirs(OUT, exist_ok=True)
@@ -168,7 +171,7 @@ for i in range(60):
 svg('dong-son', (400, 400), '\n'.join(d), sw=1.1)
 
 # 4. mây
-svg('cloud', (140, 60), cloud(70, 34), sw=1.3)
+svg('cloud', (140, 60), cloud(70, 38), sw=1.1)
 
 # 5. sen + lá sen (góc trang / in mờ)
 body = [lotus(110, 120, 1.1), f'<path d="M30 230 C 60 196, 160 196, 190 230 C 150 222, 70 222, 30 230 Z" fill="{SAGE}"/>',

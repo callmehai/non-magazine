@@ -7,7 +7,7 @@ export const ch1 = {
   label: ['Chương 1', '第1{章|しょう}'],
   title: ['Khái quát về nón lá Việt Nam\nvà nón lá Làng Chuông', 'ベトナムのノンラーと\nチュオン{村|むら}のノンラーの{概要|がいよう}'],
   lead: [
-    'Nhắc đến nón lá Việt Nam, nhiều người thường hình dung ngay đến chiếc nón trắng hình chóp quen thuộc. Tuy nhiên, nón lá không chỉ có một kiểu dáng duy nhất mà còn bao gồm nhiều loại khác nhau, mỗi loại mang những đặc điểm riêng về hình dáng, công dụng và giá trị văn hóa. Để hiểu rõ hơn về sự đa dạng ấy, Chương 1 sẽ đưa độc giả tìm hiểu những đặc điểm cơ bản của nón lá Việt Nam, các kiểu nón tiêu biểu, những dấu tích lịch sử và ý nghĩa văn hóa gắn liền với chiếc nón. Từ bức tranh tổng quan đó, chương tiếp tục giới thiệu về nón lá làng Chuông (Hà Nội) là một đại diện tiêu biểu của nón lá truyền thống ở miền Bắc để tìm hiểu khái quát về làng nghề và các sản phẩm nón truyền thống, đặc biệt là chiếc nón lá trắng hình chóp - đối tượng tìm hiểu trọng tâm của cuốn flipbook.',
+    'Nhắc đến nón lá Việt Nam, nhiều người thường hình dung ngay đến chiếc nón trắng hình chóp quen thuộc. Tuy nhiên, nón lá không chỉ có một kiểu dáng duy nhất mà còn bao gồm nhiều loại khác nhau, mỗi loại mang những đặc điểm riêng về hình dáng, công dụng và giá trị văn hóa. Để hiểu rõ hơn về sự đa dạng ấy, Chương 1 sẽ đưa độc giả tìm hiểu những đặc điểm cơ bản của nón lá Việt Nam, các kiểu nón tiêu biểu, những dấu tích lịch sử và ý nghĩa văn hóa gắn liền với chiếc nón. Từ bức tranh tổng quan đó, chương tiếp tục giới thiệu về nón lá làng Chuông (Hà Nội) là một đại diện tiêu biểu của nón lá truyền thống ở miền Bắc để tìm hiểu khái quát về làng nghề và các sản phẩm nón truyền thống, đặc biệt là chiếc nón lá trắng hình chóp – đối tượng tìm hiểu trọng tâm của cuốn sách.',
     'ベトナムのノンラーと{聞|き}くと、多くの人はまず、おなじみの白い{円錐形|えんすいけい}の{笠|かさ}を思い{浮|う}かべるでしょう。しかしノンラーには一つの形だけでなくさまざまな{種類|しゅるい}があり、それぞれが形・{用途|ようと}・文化的{価値|かち}に{独自|どくじ}の{特徴|とくちょう}をもっています。その{多様性|たようせい}をより深く知るために、第1章ではまず、ベトナムのノンラーの基本的な特徴、代表的な笠の種類、歴史に残る{痕跡|こんせき}、そして笠に結びついた文化的な意味を見ていきます。そのうえで、北部の伝統的なノンラーを代表するハノイのチュオン村の笠を取り上げ、{工芸村|こうげいむら}と伝統的な笠、とくに本書の中心となる白い円錐形のノンラーについて紹介します。',
   ],
 
@@ -74,7 +74,7 @@ export const ch1 = {
           [['Nón bài thơ', '{詩|し}の笠（ノン・バイトー）'], ['Làng Tây Hồ, thành phố Huế', 'フエ市タイホー村']],
           [['Nón lá sen', '{蓮|はす}の葉の笠'], ['Thành phố Huế', 'フエ市']],
           [['Nón lá bàng', 'バンの葉の笠'], ['Huế', 'フエ']],
-          [['Nón ngựa Phú Gia', 'フーザーの{馬|うま}の笠'], ['Thôn Phú Gia, xã Xuân An, tỉnh Gia Lai (Bình Định cũ)', 'ザーライ{省|しょう}スアンアン{社|しゃ}フーザー村（旧ビンディン省）']],
+          [['Nón ngựa Phú Gia', 'フーザーの{馬|うま}の笠'], ['Phú Gia, Gia Lai (Bình Định cũ)', 'ザーライ{省|しょう}フーザー村（旧ビンディン省）']],
           [['Nón lá làng Chuông', 'チュオン村のノンラー'], ['Làng Chuông, xã Thanh Oai, Hà Nội', 'ハノイ市タインオアイ社チュオン村']],
         ],
       },
@@ -115,8 +115,8 @@ export const ch1 = {
           when: ['2500–3000 năm trước', '2500〜3000年前'],
           name: ['Hình khắc trên hai món cổ vật', '二つの古美術品に刻まれた図像'],
           text: [
-            'Hình ảnh tiền thân của chiếc nón lá được cho là hình chạm khắc trên hai món cổ vật có niên đại 2500–3000 năm là trống đồng Ngọc Lũ và thạp đồng Đào Thịnh. Dấu vết này không cho biết cụ thể về hình dáng nón, nhưng cho thấy chất liệu nón có thể là lông chim hay tàu lá dày như lá cọ.',
-            'ノンラーの{原型|げんけい}とされるのは、2500〜3000年前のゴックルー銅鼓とダオティン銅壺に刻まれた図像です。笠の形まではわかりませんが、素材が鳥の羽や、ヤシの葉のような厚い葉であった可能性を示しています。',
+            'Hình người đội vật che đầu khắc trên trống đồng Ngọc Lũ và thạp đồng Đào Thịnh: dấu vết sớm nhất của tiền thân chiếc nón lá.',
+            'ゴックルー銅鼓とダオティン銅壺に刻まれた、頭に{被|かぶ}り{物|もの}をつけた人の姿。ノンラーの{原型|げんけい}のもっとも古い{痕跡|こんせき}です。',
           ],
         },
         {
@@ -165,7 +165,7 @@ export const ch1 = {
         h: ['Từ nón lá nói chung đến nón lá làng Chuông nói riêng', 'ノンラー全般からチュオン村のノンラーへ'],
         p: [
           [
-            'Bên cạnh sự biến đổi trong hình dáng và cách tiếp cận, giá trị của nón lá còn được duy trì thông qua nghề làm nón truyền thống ở nhiều địa phương. Trong số những địa phương còn duy trì nghề làm nón, làng Chuông thuộc huyện Thanh Oai, Hà Nội là một làng nghề tiêu biểu gắn với quá trình lưu truyền và phát triển nghề làm nón qua nhiều thế hệ. Tại đây, những nguyên liệu mộc mạc được kết hợp với kỹ thuật thủ công của người thợ để tạo nên những chiếc nón lá mang đặc điểm riêng của làng.',
+            'Bên cạnh sự biến đổi trong hình dáng và cách tiếp cận, giá trị của nón lá còn được duy trì thông qua nghề làm nón truyền thống ở nhiều địa phương. Trong số những địa phương còn duy trì nghề làm nón, làng Chuông ở Thanh Oai, Hà Nội là một làng nghề tiêu biểu gắn với quá trình lưu truyền và phát triển nghề làm nón qua nhiều thế hệ. Tại đây, những nguyên liệu mộc mạc được kết hợp với kỹ thuật thủ công của người thợ để tạo nên những chiếc nón lá mang đặc điểm riêng của làng.',
             '形や受け止め方が変わる一方で、ノンラーの価値は各地の伝統的な笠づくりによって{守|まも}られてきました。今も笠づくりを{続|つづ}ける地域の中で、ハノイ・タインオアイのチュオン村は、何世代にもわたって技を{伝|つた}え発展させてきた代表的な工芸村です。ここでは{素朴|そぼく}な材料と職人の手仕事が{合|あ}わさり、村ならではの特徴をもつノンラーが生まれています。',
           ],
         ],
@@ -182,8 +182,8 @@ export const ch1 = {
       h: ['Khái quát về Làng Chuông', 'チュオン村の{概要|がいよう}'],
       p: [
         [
-          'Làng Chuông nằm tại xã Phương Trung, thành phố Hà Nội, cách trung tâm Thủ đô khoảng 40 km về phía Tây. Đây là làng nghề nổi tiếng với truyền thống làm nón lá từ hơn 300 năm trước. Nghề làm nón đã được duy trì qua nhiều thế hệ, trở thành hoạt động gắn liền với đời sống kinh tế, sinh hoạt và văn hóa của người dân địa phương.',
-          'チュオン村はハノイ市フオンチュン社にあり、{首都|しゅと}の中心から西へ約40kmの場所に位置します。300年以上前から続くノンラーづくりで知られる工芸村です。笠づくりは何世代にもわたって受け継がれ、村の人々の経済・生活・文化と{切|き}り{離|はな}せない営みとなっています。',
+          'Làng Chuông nằm tại xã Thanh Oai (trước đây là xã Phương Trung, huyện Thanh Oai), thành phố Hà Nội, cách trung tâm Thủ đô khoảng 30 km về phía Tây Nam. Đây là làng nghề nổi tiếng với truyền thống làm nón lá từ hơn 300 năm trước. Nghề làm nón đã được duy trì qua nhiều thế hệ, trở thành hoạt động gắn liền với đời sống kinh tế, sinh hoạt và văn hóa của người dân địa phương.',
+          'チュオン村はハノイ市タインオアイ社（旧タインオアイ県フオンチュン社）にあり、{首都|しゅと}の中心から南西へ約30kmの場所に位置します。300年以上前から続くノンラーづくりで知られる工芸村です。笠づくりは何世代にもわたって受け継がれ、村の人々の経済・生活・文化と{切|き}り{離|はな}せない営みとなっています。',
         ],
         [
           'Nghề làm nón Làng Chuông không chỉ phục vụ đời sống hằng ngày mà còn ghi dấu ấn đậm nét trong lịch sử địa phương và dân tộc. Theo cuốn Hỏi đáp về làng nghề truyền thống Việt Nam (Hoàng Đức Nhuận và cộng sự, 2009): “Nón Làng Chuông vốn rất đẹp lại bền, từng được lựa chọn làm cống vật tiến dâng lên Hoàng hậu, Công chúa bởi vẻ đẹp rất riêng được làm nên từ những bàn tay tài hoa, khéo léo của các nghệ nhân lành nghề”.',
@@ -199,7 +199,7 @@ export const ch1 = {
         ],
       ],
       images: [
-        ['Bản đồ Làng Chuông (xã Phương Trung, Hà Nội)', 'チュオン村の地図（ハノイ市フオンチュン社）'],
+        ['Bản đồ hành trình từ trung tâm Hà Nội tới Làng Chuông (xã Thanh Oai, Hà Nội)', 'ハノイ中心部からチュオン村（ハノイ市タインオアイ社）への道のり'],
         ['Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)', '1896年、ハノイの笠屋 — 写真：アンドレ・サル（フランス国立図書館）'],
         ['Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam', 'タインオアイ（ハノイ）のノンラー（1999年）— ベトナム女性博物館所蔵'],
       ],
@@ -276,7 +276,7 @@ export const ch1 = {
         ],
       },
       outro: [
-        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, flipbook giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo - nguyên liệu - kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
+        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong cuốn sách vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, cuốn sách giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, cuốn sách cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
         '本書では、チュオン村の伝統的な円錐形のノンラーを主に取り上げます。先のとがった特徴的な形をもち、ベトナム女性のイメージと結びついた笠だからです。文化的価値と{実用性|じつようせい}に加え、この笠はOCOP（{一村一品|いっそんいっぴん}）の{四|よっ}つ{星|ぼし}にも{認定|にんてい}され、地域の伝統工芸品としての価値が認められています。また、現在この村でもっとも多く作られている笠でもあります。そこで本書は、チュオン村のノンラーの概要を紹介したうえで、{概要|がいよう}と特徴、構造・材料・製作技術、そして生産工程という三つの内容を通して、伝統的な円錐形のノンラーの特徴を明らかにします。それによって、ノンラーの全体像、笠づくりの工程、そしてチュオン村の職人の技と腕前の特色をお伝えします。',
       ],
     },
