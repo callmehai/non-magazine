@@ -59,6 +59,21 @@
   text-underline-offset: 0.2em;
 }
 
+/* link tới trang khác trong sách (mục lục…): không gạch chân, rê chuột thì hiện gạch mảnh */
+.cv-link--page {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cv-link--page:hover p,
+.cv-link--page:focus-visible p {
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.25em;
+}
+
 .cv-svg {
   display: block;
   width: 100%;

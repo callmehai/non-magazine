@@ -1,4 +1,5 @@
-import { memo } from 'react'
+import { memo, useContext } from 'react'
+import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
 import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby } from './lang.js'
@@ -111,6 +112,23 @@ function TextBody({ el, mode }) {
       ))}
     </div>
   )
+  // link trong sách: "#p12" = lật tới trang 12 (số trang in trên sách), ví dụ dòng mục lục
+  const { goToPage } = useContext(MagazineContext)
+  const page = mode === 'read' && goToPage && /^#p(\d+)$/.exec(el.link || '')
+  if (page) {
+    return (
+      <a
+        className="cv-link cv-link--page"
+        href={el.link}
+        onClick={(e) => {
+          e.preventDefault()
+          goToPage(Number(page[1]) - 1)
+        }}
+      >
+        {body}
+      </a>
+    )
+  }
   if (el.link && mode === 'read') {
     return (
       <a className="cv-link" href={el.link} target="_blank" rel="noreferrer">

@@ -593,21 +593,7 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   )
 }
 
-// ═════════════════════════════════════════ TRANG LÓT + TRANG TÊN SÁCH
-photoPage(['Ảnh trang lót: hai thiếu nữ áo dài cầm nón lá bên hiên đình Chuông', '見返し写真：チュオン村の亭の軒下でノンラーを持つアオザイの女性'])
-{
-  const p = new Page({ hideNumber: true, bg: C.cream })
-  p.add(
-    DECO('non-line', W / 2 - 70, 200, 140, 75, 0.6),
-    T(60, 300, W - 120, 100, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 34, lh: 1.15, tracking: 2.5, align: 'center', color: C.title, jaFont: F.jaHead, jaSize: 32, name: 'Tên sách' }),
-    T(60, 404, W - 120, 40, front.subtitle.map(strip), { font: F.script, size: 26, lh: 1.3, align: 'center', color: ACC[0], jaFont: F.jaHead, jaSize: 20, name: 'Tên phụ' }),
-    HL(W / 2 - 30, 470, 60, ACC[0], 1.2),
-    T(60, H - 150, W - 120, 60, front.team, { size: 12.5, jaFont: F.jaSans, lh: 1.7, tracking: 1, align: 'center', color: C.muted, name: 'Thông tin' })
-  )
-}
-
-// ═════════════════════════════════════════ MỤC LỤC (cặp trang, điền sau khi biết số trang)
-toLeft(['Ảnh toàn trang: chiếc nón lá trắng Làng Chuông (trang ảnh trước mục lục)', '全面写真：チュオン村の白いノンラー'])
+// ═════════════════════════════════════════ MỤC LỤC (cặp trang 2–3: mở bìa là thấy ngay, điền sau khi biết số trang)
 const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true }), new Page({ chapter: 0, bg: C.cream, hideNumber: true })]
 
 // ═════════════════════════════════════════ LỜI MỞ ĐẦU
@@ -1191,51 +1177,59 @@ let stripPage = null
   stepPages.forEach((s, i) => {
     const ry = y + i * rowH
     const nm = s.finish ? [`${s.label[0]} · ${s.name[0]}`, `${strip(s.label[1])}・${strip(s.name[1])}`] : s.name
+    const go = `#p${s.page}` // bấm tên công đoạn → lật tới trang của công đoạn đó
     p.add(
       ELL(lineX - 20, ry, 40, 40, s.finish ? C.cream : acc, { stroke: acc, sw: 1.4 }),
-      T(lineX - 20, ry + 9, 40, 22, [s.finish ? '✦' : String(s.no), null], { font: F.head, size: 18, weight: 700, align: 'center', color: s.finish ? acc : '#fff', lh: 1.2, name: 'Số bước' }),
-      T(lineX + 36, ry + 1, p.cw - 130, 26, nm, { font: F.head, size: 20, weight: 700, color: C.ink, lh: 1.25, jaFont: F.jaHead, jaSize: 19, name: 'Tên bước' }),
-      T(lineX + 36, ry + 27, p.cw - 130, 18, s.sub, { size: 13, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Phụ đề' }),
-      T(p.x1 - 70, ry + 6, 70, 20, [`tr. ${s.page}`, `${s.page}ページ`], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, name: 'Số trang' })
+      T(lineX - 20, ry + 9, 40, 22, [s.finish ? '✦' : String(s.no), null], { font: F.head, size: 18, weight: 700, align: 'center', color: s.finish ? acc : '#fff', lh: 1.2, link: go, name: 'Số bước' }),
+      T(lineX + 36, ry + 1, p.cw - 130, 26, nm, { font: F.head, size: 20, weight: 700, color: C.ink, lh: 1.25, jaFont: F.jaHead, jaSize: 19, link: go, name: 'Tên bước' }),
+      T(lineX + 36, ry + 27, p.cw - 130, 18, s.sub, { size: 13, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, link: go, name: 'Phụ đề' }),
+      T(p.x1 - 70, ry + 6, 70, 20, [`tr. ${s.page}`, `${s.page}ページ`], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, link: go, name: 'Số trang' })
     )
   })
 }
 
 // ═════════════════════════════════════════ MỤC LỤC (điền sau khi biết số trang)
 {
-  let pi = 0
-  let p = tocPages[0]
   const head = (pg) => {
     pg.add(T(pg.x0, 70, 320, 44, tocTitle.map(strip), { font: F.head, size: 34, lh: 1.2, color: C.title, jaFont: F.jaHead, name: 'Tiêu đề' }), HL(pg.x0, 124, 56, ACC[0], 1.4))
     return 150
   }
-  let y = head(p)
-  for (const a of anchors) {
-    const acc = ACC[{ '01': 1, '02': 2, '03': 3 }[a.label] ?? (a.label[0] === '1' ? 1 : a.label[0] === '2' ? 2 : a.label[0] === '3' ? 3 : 9)]
-    const pg = String(a.page).padStart(2, '0')
+  const rows = anchors.map((a) => {
     const title = a.title.map((s) => (s ? strip(s).replace(/\n/g, ' ') : s))
     const o = a.level === 1 ? { font: F.head, size: 17.5, lh: 1.3, jaSize: 17 } : a.level === 2 ? { size: 14, lh: 1.4, jaSize: 14 } : { size: 13, lh: 1.4, jaSize: 13 }
     const indent = a.level === 1 ? 50 : a.level === 2 ? 88 : 126
-    const th = textH(title, p.cw - indent - 56, o)
-    const need = th + (a.level === 1 ? 20 : 7)
-    if (y + need > BOT && pi === 0) {
-      p = tocPages[++pi]
-      y = TOP + 8
+    const th = textH(title, CW - indent - 56, o)
+    return { a, title, o, indent, th, need: a.level === 1 ? th + 20 : th + 7 }
+  })
+  // ngắt sang trang phải ở đầu một chương sao cho hai trang dài gần bằng nhau
+  const sum = (list) => list.reduce((n, r) => n + r.need, 0)
+  let cut = rows.length
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i].a.level !== 1) continue
+    if (Math.max(sum(rows.slice(0, i)), sum(rows.slice(i))) < Math.max(sum(rows.slice(0, cut)), sum(rows.slice(cut)))) cut = i
+  }
+  rows.forEach((r, i) => (r.page = i < cut ? 0 : 1))
+  let y = head(tocPages[0])
+  let p = tocPages[0]
+  for (const r of rows) {
+    if (r.page === 1 && p === tocPages[0]) {
+      // trang phải nối tiếp, không lặp tiêu đề; dòng đầu ngang hàng dòng đầu trang trái
+      p = tocPages[1]
+      y = 150
     }
+    const { a, title, o, indent, th } = r
+    const acc = ACC[{ '01': 1, '02': 2, '03': 3 }[a.label] ?? (a.label[0] === '1' ? 1 : a.label[0] === '2' ? 2 : a.label[0] === '3' ? 3 : 9)]
+    const pg = String(a.page).padStart(2, '0')
+    const go = `#p${a.page}` // bấm dòng mục lục → lật tới trang đó
     if (a.level === 1) {
       y += 12
-      p.add(T(p.x0, y - 3, 44, 26, [a.label, null], { font: F.head, size: 21, color: acc, lh: 1.1, name: 'Số chương' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: C.ink, jaFont: F.jaHead, name: 'Mục lục' }), T(p.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 15, color: acc, align: 'right', lh: 1.3, name: 'Số trang' }))
+      p.add(T(p.x0, y - 3, 44, 26, [a.label, null], { font: F.head, size: 21, color: acc, lh: 1.1, link: go, name: 'Số chương' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: C.ink, jaFont: F.jaHead, link: go, name: 'Mục lục' }), T(p.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 15, color: acc, align: 'right', lh: 1.3, link: go, name: 'Số trang' }))
       y += th + 8
     } else {
-      p.add(T(p.x0 + indent - 40, y, 38, 18, [a.label, null], { size: a.level === 2 ? 13.5 : 12.5, color: acc, weight: 700, lh: 1.4, name: 'Số mục' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: a.level === 2 ? C.ink2 : C.muted, jaFont: F.jaSans, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 13, color: C.muted, align: 'right', lh: 1.4, name: 'Số trang' }))
+      p.add(T(p.x0 + indent - 40, y, 38, 18, [a.label, null], { size: a.level === 2 ? 13.5 : 12.5, color: acc, weight: 700, lh: 1.4, link: go, name: 'Số mục' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: a.level === 2 ? C.ink2 : C.muted, jaFont: F.jaSans, link: go, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 13, color: C.muted, align: 'right', lh: 1.4, link: go, name: 'Số trang' }))
       y += th + 7
     }
-  }
-  if (y > BOT) console.warn(`⚠ Mục lục tràn: ${Math.round(y)} > ${Math.round(BOT)}`)
-  // trang mục lục còn trống phía dưới → ảnh nón
-  if (BOT - y > 220) {
-    const h = Math.min(BOT - y - 30, CW * R.wide)
-    p.add(IMG(p.x0, BOT - h, CW, h, ['Nón lá trắng làng Chuông (ảnh tách nền)', 'チュオン村の白いノンラー（背景を切り抜いた写真）'], { fit: 'contain', name: 'Ảnh' }))
+    if (y > BOT) console.warn(`⚠ Mục lục tràn: ${Math.round(y)} > ${Math.round(BOT)}`)
   }
 }
 

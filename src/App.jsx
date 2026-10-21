@@ -271,13 +271,15 @@ export default function App({ magazine: source }) {
   }, [reducedMotion])
 
   const pauseMusic = music.pause
+  const flipTo = book.flipTo
   const ctx = useMemo(
     () => ({
       openLightbox: (images, index) => setLightbox({ images, index }),
       reducedMotion,
       onPageAudioPlay: pauseMusic,
+      goToPage: flipTo,
     }),
-    [reducedMotion, pauseMusic]
+    [reducedMotion, pauseMusic, flipTo]
   )
 
   const back = { onClick: book.prev, disabled: currentPage === 0, 'aria-label': t('prevPage') }
@@ -341,6 +343,7 @@ export default function App({ magazine: source }) {
             <Controls
               pageLabel={pageLabel}
               total={count}
+              onGoTo={selectPage}
               progress={(lastVisible + 1) / count}
               canPrev={currentPage > 0}
               canNext={lastVisible < count - 1}
