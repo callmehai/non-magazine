@@ -136,6 +136,8 @@ function T(x, y, w, h, pair, o = {}) {
   return el
 }
 const FILL_LEADING = new Set(['Đoạn văn', 'Mô tả', 'Tiểu sử', 'Ghi chú', 'Mô tả lớp', 'Đoạn dẫn'])
+// tâm khung theo ảnh (khóa = chú thích tiếng Việt)
+const POS = {}
 const IMG = (x, y, w, h, hint, o = {}) => ({
   id: id(),
   type: 'image',
@@ -145,6 +147,9 @@ const IMG = (x, y, w, h, hint, o = {}) => ({
   h: r1(h),
   rot: 0,
   src: o.src ?? PHOTOS[hint?.[0]] ?? '',
+  ...(o.srcJa ? { srcJa: o.srcJa } : {}),
+  // tâm khung ảnh (object-position) cho ảnh có người: giữ mặt trong khung khi cắt theo tỉ lệ khung cố định
+  ...((o.pos ?? POS[hint?.[0]]) ? { pos: o.pos ?? POS[hint?.[0]] } : {}),
   fit: o.fit ?? 'cover',
   hint: hint?.[0] ?? '',
   hintJa: hint?.[1] ?? '',
@@ -859,7 +864,8 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
     T(48, 184, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: '#e7c98f', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
     HL(50, 244, 70, '#e7c98f', 1.4),
     RECT(46, H - 92, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
-    IMG(52, H - 87, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
+    // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
+    IMG(52, H - 87, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
     T(184, H - 88, 380, 34, front.team, { size: 10.5, lh: 1.5, color: 'rgba(251,244,228,.85)', jaFont: F.jaSans, name: 'Thông tin' }),
     T(W - 250, H - 26, 230, 12, ['Ảnh bìa: Hà Trang / Báo Văn Hóa', '表紙写真：ハー・チャン／ヴァンホア紙'], { size: 7.5, align: 'right', color: 'rgba(251,244,228,.55)', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh bìa' })
   )
@@ -955,9 +961,19 @@ let contentsPage
   const hi = ch.history
   mark(2, hi.title, f.section('1.2', hi.title), '1.2')
   const tr = hi.traces
-  f.block(tr.h)
+  // trang trái: tiêu đề mục + "Dấu tích" + đoạn văn (chú thích cuối trang cùng trang) + ảnh hai cổ vật nhóm yêu cầu;
+  // trang phải: dòng thời gian
+  f.y = blockHead(f.p, f.y, tr.h)
   f.notes(tr.notes)
-  f.prose(tr.p)
+  f.prose(tr.p, { free: true })
+  f.page()
+  f.row(
+    [
+      ['Trống đồng Ngọc Lũ — Bảo tàng Lịch sử Quốc gia (ảnh: Wikimedia Commons)', 'ゴックルー銅鼓 — ベトナム国立歴史博物館（写真：ウィキメディア・コモンズ）'],
+      ['Thạp đồng Đào Thịnh — Bảo tàng Lịch sử Quốc gia (ảnh: Daderot, CC0)', 'ダオティン銅甕 — ベトナム国立歴史博物館（写真：Daderot、CC0）'],
+    ],
+    { ratio: R.std }
+  )
   {
     const whenW = 112
     const tlOff = whenW + 16
@@ -1459,7 +1475,7 @@ let stripRight = null
       ['NGUỒN ẢNH', '写真の出典'],
       ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
       ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Quân đội nhân dân (nón lá sen; dao cắt lá) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・人民軍隊紙（蓮の葉の笠・小刀）・ベトナムネット（シンガポール首相夫人）'],
-      ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）'],
+      ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · thạp đồng Đào Thịnh (Daderot, CC0) · trống đồng Ngọc Lũ (phạm vi công cộng) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・ダオティン銅甕（Daderot、CC0）・ゴックルー銅鼓（パブリックドメイン）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）'],
       ['Ảnh bìa: Hà Trang, Báo Văn Hóa — bài “Ghé thăm phiên chợ nón làng Chuông” (baovanhoa.vn, 8/5/2026).', '表紙写真：ハー・チャン、ヴァンホア紙 ―「チュオン村の笠市を訪ねて」（baovanhoa.vn、2026年5月8日）。'],
       ['Video trình diễn quốc tế: nghệ nhân Lê Văn Tuy cung cấp.', '国際イベントでの実演動画：職人レー・ヴァン・トゥイ提供。'],
       ['Chân dung nghệ nhân Phạm Trần Canh: Báo Thể thao & Văn hóa (thethaovanhoa.vn) · gian hàng nón làng Chuông tại hội chợ: Báo Đại biểu Nhân dân (daibieunhandan.vn, 2025).', '職人ファム・チャン・カインの写真：テータオ＆ヴァンホア紙（thethaovanhoa.vn）・見本市のチュオン村の笠のブース：ダイビエウニャンザン紙（daibieunhandan.vn、2025年）。'],
@@ -1725,6 +1741,28 @@ function settle(p) {
     bands.forEach((b, i) => i && shift(b.els, add * i))
   }
 }
+// trang chỉ có chữ còn chỗ ở đáy → một hình vẽ nét mảnh theo chương (họa tiết nón / tre / sen theo góp ý của nhóm),
+// trang không còn trơn chữ và không để dải trống
+const VIGNETTE = { 0: 'still-non', 1: 'non', 2: 'tool-quay-non', 3: 'lotus-pond', 9: 'still-non' }
+function vignette(p) {
+  if (p.fixed || p.hasImg || p.els.some((e) => e.type === 'image' && e.name === 'Hình vẽ')) return
+  // chú thích cuối trang (và gạch ngắn phía trên nó) neo đáy, không tính là nội dung
+  const foot = p.els.find((e) => e.name === 'Chú thích' && e.y > BOT - 200)
+  const footTop = foot ? foot.y - 16 : BOT
+  const content = p.els.filter((e) => !DECOR.has(e.name) && e.y >= TOP - 10 && e.y < footTop)
+  if (!content.length) return
+  const bottom = Math.max(...content.map((e) => e.y + e.h))
+  const anchoredTop = footTop
+  const room = anchoredTop - bottom - 24
+  if (room < 64) return
+  // ít chỗ thì chỉ một chiếc nón nhỏ làm hoa văn cuối trang
+  const name = room < 110 ? 'non' : VIGNETTE[p.chapter] ?? 'non'
+  const ratio = name === 'still-non' ? 310 / 640 : name === 'lotus-pond' ? 1 : name === 'non' ? 260 / 300 : 1
+  const h = Math.min(room, 200)
+  const w = Math.min(p.cw, h / ratio)
+  p.add({ ...DECO(name, p.x0 + (p.cw - w) / 2, bottom + 24 + (room - h) / 2, w, h, 0.9), name: 'Hình vẽ' })
+}
+pages.forEach(vignette)
 pages.forEach(settle)
 
 // ── kiểm tra: chữ vượt đáy trang

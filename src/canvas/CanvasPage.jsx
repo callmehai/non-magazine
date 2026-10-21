@@ -264,7 +264,9 @@ function PageLink({ el, mode, className = '', children }) {
 function ImageBody({ el }) {
   const list = useContext(ZoomList)
   const { openLightbox } = useContext(MagazineContext)
-  const img = <img className="cv-img" src={asset(el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover' }} />
+  const lang = useCanvasLang()
+  // el.srcJa: ảnh riêng cho bản tiếng Nhật (ví dụ logo không kèm chữ tiếng Việt)
+  const img = <img className="cv-img" src={asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover', objectPosition: el.pos }} />
   const i = list ? list.findIndex((z) => z.id === el.id) : -1
   if (i < 0 || !openLightbox) return img
   return (

@@ -168,6 +168,9 @@ export const photos = {
   "Bức tường nón vẽ cờ đỏ sao vàng tại một cơ sở làng Chuông": "Chương 3/IMG_3788",
   "Nghệ nhân Phạm Trần Canh — ảnh: Báo Thể thao & Văn hóa": "online/pham-tran-canh",
   "Gian hàng nón làng Chuông tại một hội chợ triển lãm năm 2025 — ảnh: Báo Đại biểu Nhân dân": "online/non-hoi-cho-2025",
+  "Trống đồng Ngọc Lũ — Bảo tàng Lịch sử Quốc gia (ảnh: Wikimedia Commons)": "online/trong-dong-ngoc-lu",
+  "Thạp đồng Đào Thịnh — Bảo tàng Lịch sử Quốc gia (ảnh: Daderot, CC0)": "online/thap-dong-dao-thinh",
+  "Logo FPT Education": "online/logo-fpt-edu",
   // ảnh dọc làm trang ảnh tràn trang (mỗi ảnh dùng một lần)
   "Ảnh toàn trang: những chiếc khung nón xếp chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3138",
   "Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3175",
