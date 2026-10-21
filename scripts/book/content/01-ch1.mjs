@@ -211,7 +211,7 @@ export const ch1 = {
         'Nghề làm nón Làng Chuông đã được duy trì qua nhiều thế hệ, gắn liền với đời sống sinh hoạt và hoạt động sản xuất của người dân địa phương. Theo thời gian, cùng với sự phát triển của đời sống hiện đại và nhu cầu thị trường thay đổi, các sản phẩm nón của Làng Chuông đã linh hoạt chuyển mình về kiểu dáng, chất liệu và công dụng. Bên cạnh việc duy trì sản xuất nón lá chóp truyền thống, các nghệ nhân nơi đây đã sáng tạo thêm nhiều dòng sản phẩm mới, kết hợp tinh tế giữa kỹ thuật thủ công lâu đời và chất liệu hiện đại:',
         'チュオン村の笠づくりは何世代にもわたり、村人の生活と生産に結びついてきました。現代の暮らしの発展や市場の{変化|へんか}に合わせて、村の笠は形・素材・用途を{柔軟|じゅうなん}に変えてきました。伝統的な円錐形のノンラーを作り続ける一方で、職人たちは長い歴史をもつ手仕事の技と現代的な素材を巧みに組み合わせ、新しい製品を数多く生み出しています。',
       ],
-      hero: ['Ảnh lớn: nhiều chiếc nón Làng Chuông xếp cạnh nhau hoặc nghệ nhân đang làm nón', '大きな写真：並べられたチュオン村の笠、または笠を作る職人'],
+      hero: ['Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu', 'さまざまな笠が並ぶ展示室で、笠の骨組みを手にするチュオン村の職人'],
       list: [
         {
           name: ['Nón lá chóp truyền thống', '伝統的な円錐形のノンラー'],

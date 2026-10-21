@@ -315,8 +315,8 @@ class Flow {
     const ch = capH(cap, CW)
     for (const r of [R.wide, R.cin, R.pan]) {
       const need = CW * r + 6 + ch
-      if (this.room >= need + 12) {
-        const y = Math.max(this.y + 12, this.bot - need)
+      if (this.room >= need + 4) {
+        const y = Math.max(this.y + Math.min(12, this.room - need), this.bot - need)
         figure(this.p, this.p.x0, y, CW, CW * r, cap)
         this.pool.shift()
         this.y = y + need + 18
@@ -540,6 +540,8 @@ const POOL = {
     ['Nón ba tầm làng Chuông', 'チュオン村のバータム笠'],
     ['Nón lụa nhiều màu tại một cơ sở làng Chuông', 'チュオン村の工房の色とりどりの絹の笠'],
     ['Bốn bạn trẻ áo dài cùng nón lá ở đình Chuông', 'チュオン村の亭で、ノンラーを手にするアオザイ姿の四人'],
+    ['Phiên chợ nón Chuông đông đúc', 'にぎわうチュオンの笠市場'],
+    ['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンの笠市場'],
   ],
 }
 
@@ -576,20 +578,23 @@ const anchors = [] // { level, label, title, page }
 const mark = (level, title, page, label) => anchors.push({ level, title, page: page.n, label })
 
 // ═════════════════════════════════════════ BÌA
-// chỉ có hình chiếc nón làng Chuông (ảnh nhóm chụp, đã tách nền) trên nền giấy, họa tiết nét mảnh
+// chỉ có hình nón làng Chuông: ảnh tràn trang những chồng nón trắng trong đình Chuông (ảnh báo, ghi nguồn),
+// lớp tối dần ở trên/dưới để chữ màu kem đọc rõ
 {
-  const p = new Page({ hideNumber: true, bg: C.paper })
-  const brown = '#5b4128'
+  const p = new Page({ hideNumber: true, bg: '#2b2118' })
+  const shade = (y, h, flip) => ({ ...DECO('shade', 0, y, W, h, 1), fit: 'fill', rot: flip ? 180 : 0, name: 'Lớp tối' })
+  const cream = '#fbf4e4'
   p.add(
-    DECO('bamboo', -10, 40, 150, 330, 0.28),
-    DECO('lotus', W - 170, H - 300, 160, 230, 0.32),
-    IMG(-20, 300, W + 40, 420, ['Ảnh bìa: chiếc nón lá chóp truyền thống làng Chuông (ảnh tách nền)', '表紙写真：チュオン村の伝統的な円錐形のノンラー'], { fit: 'contain', name: 'Ảnh bìa' }),
-    T(48, 70, 500, 120, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 52, lh: 1.08, tracking: 2.5, color: brown, jaFont: F.jaHead, jaSize: 46, name: 'Tên sách' }),
-    T(50, 196, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: ACC[0], jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
-    HL(52, 258, 70, ACC[0], 1.4),
-    RECT(48, H - 94, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
-    IMG(54, H - 89, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
-    T(186, H - 89, 360, 34, front.team, { size: 10.5, lh: 1.5, color: '#6d5640', jaFont: F.jaSans, name: 'Thông tin' })
+    IMG(0, 0, W, H, ['Ảnh bìa: những chồng nón lá trắng trong đình Chuông — Hà Trang / Báo Văn Hóa', '表紙写真：チュオン村の亭に積まれた白いノンラー'], { name: 'Ảnh bìa' }),
+    shade(0, 360),
+    shade(H - 210, 210, true),
+    T(46, 58, 500, 120, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 52, lh: 1.08, tracking: 2.5, color: cream, jaFont: F.jaHead, jaSize: 46, name: 'Tên sách' }),
+    T(48, 184, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: '#e7c98f', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
+    HL(50, 244, 70, '#e7c98f', 1.4),
+    RECT(46, H - 92, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
+    IMG(52, H - 87, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo' }),
+    T(184, H - 88, 380, 34, front.team, { size: 10.5, lh: 1.5, color: 'rgba(251,244,228,.85)', jaFont: F.jaSans, name: 'Thông tin' }),
+    T(W - 250, H - 26, 230, 12, ['Ảnh bìa: Hà Trang / Báo Văn Hóa', '表紙写真：ハー・チャン／ヴァンホア紙'], { size: 7.5, align: 'right', color: 'rgba(251,244,228,.55)', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh bìa' })
   )
 }
 
@@ -723,23 +728,25 @@ const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true }), new P
   f.y = blockHead(f.p, f.y, ty.h, ty.id)
   f.figure(ty.hero, { ratio: R.cin })
   f.prose([ty.intro])
-  const iw = 168
-  const tx = iw + 20
-  const to = { size: 16, lh: 1.55, jaSize: jaPt(16) }
-  const nameOf = (t) => textH(t.name, CW - tx, { size: S.card, font: F.head, lh: 1.25 })
+  // mỗi kiểu nón một trang kiểu catalog: ảnh có nền khổ ngang 3:2 hết bề ngang, tên nón, mô tả bên dưới
+  // (ảnh nhóm chụp cùng một nền — sàn gạch ở nhà nghệ nhân — nên cả nhóm cùng một kiểu ảnh)
+  const ph = CW * R.wide
+  const to = { size: 15.5, lh: 1.6, jaSize: jaPt(15.5) }
+  const no = { size: 24, font: F.head, lh: 1.25, jaSize: 22 }
   const typeCards = (list, imgHint) =>
     f.cards(
       list,
-      (t) => Math.max(nameOf(t) + 8 + textH(t.text, CW - tx, to), iw),
+      (t) => ph + 20 + textH(t.name, CW, no) + 10 + textH(t.text, CW, to),
       (p, y, t) => {
-        const nh = nameOf(t)
-        p.add(IMG(p.x0, y, iw, iw, imgHint(t), { fit: 'cover' }))
-        p.add(T(p.x0 + tx, y - 2, CW - tx, nh, t.name, { font: F.head, size: S.card, weight: 700, color: ACC[1], lh: 1.25, jaFont: F.jaHead, name: 'Tên nón' }))
-        p.add(T(p.x0 + tx, y + nh + 8, CW - tx, textH(t.text, CW - tx, to), t.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
+        const nh = textH(t.name, CW, no)
+        p.add(IMG(p.x0, y, CW, ph, imgHint(t), { fit: 'cover' }))
+        y += ph + 20
+        p.add(T(p.x0, y, CW, nh, t.name, { ...no, weight: 700, color: ACC[1], jaFont: F.jaHead, name: 'Tên nón' }))
+        p.add(T(p.x0, y + nh + 10, CW, textH(t.text, CW, to), t.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
       },
-      { gap: 26 }
+      { gap: 40 }
     )
-  typeCards(ty.list, (t) => [`${t.name[0]} — ảnh tách nền`, `${strip(t.name[1])} — 背景を切り抜いた写真`])
+  typeCards(ty.list, (t) => [`${t.name[0]} — ảnh sản phẩm`, `${strip(t.name[1])} — 製品写真`])
   f.block(ty.styled.h)
   typeCards(ty.styled.list, (t) => [`${t.name[0]} — ảnh sản phẩm`, `${strip(t.name[1])} — 製品写真`])
   f.note(ty.outro, { italic: false })
@@ -944,7 +951,7 @@ let stripPage = null
   const STEP_MEDIA = {
     1: { gif: ['GIF công đoạn rẽ lá', '葉のばしのGIF'], photos: [['Tay nghệ nhân rẽ từng chiếc lá', '葉を一枚ずつのばす職人の手']] },
     2: { gif: ['GIF công đoạn là lá', '葉のアイロンがけのGIF'], photos: [['Nghệ nhân ngồi là lá bên bếp điện', '電気コンロのそばで葉にアイロンをかける職人']] },
-    3: { gif: ['GIF công đoạn bứt vòng', '輪づくりのGIF'], photos: [['Nối các vành nứa và đặt vào khuôn 16 vòng', 'ヌア竹の輪をつないで型にはめる'], ['Khuôn nón với các vòng nứa nhìn từ trên xuống', '上から見た、ヌア竹の輪をはめた型']] },
+    3: { gif: ['GIF công đoạn bứt vòng', '輪づくりのGIF'], photos: [['Khuôn nón — nơi đặt lần lượt 16 vành nứa', '16本のヌア竹の輪を順にはめていく笠の型'], ['Khuôn nón với các vòng nứa nhìn từ trên xuống', '上から見た、ヌア竹の輪をはめた型']] },
     4: { gif: ['GIF công đoạn quay nón', '葺き込みのGIF'], photos: [['Xếp từng lớp lá lụi lên khuôn', 'ライ葉を一枚ずつ型に重ねる'], ['Trải đều lá quanh khung nón', '骨組みの周りに葉を均等に広げる']] },
     5: { gif: ['GIF công đoạn khâu nón', '縫い付けのGIF'], photos: [['Cận cảnh mũi kim, sợi cước xuyên qua lớp lá', '葉の層を通る針と糸のクローズアップ'], ['Nghệ nhân khâu nón, đặt nghiêng khung giữa hai đầu gối', '型を両ひざの間に斜めに置いて笠を縫う職人']] },
     6: { gif: ['GIF công đoạn nức nón', '縁縫いのGIF'], photos: [['Cắt lá thừa và khâu viền vành nón', '余分な葉を切り、縁を縫う'], ['Khâu viền vành nón', 'つばの縁を縫う']] },
@@ -1118,12 +1125,14 @@ let stripPage = null
       ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
       ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Quân đội nhân dân (nón lá sen; dao cắt lá) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・人民軍隊紙（蓮の葉の笠・小刀）・ベトナムネット（シンガポール首相夫人）'],
       ['Wikimedia Commons: nón ngựa và nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng) · bản đồ nền Hà Nội (Anewplayer, CC BY-SA 4.0)', 'ウィキメディア・コモンズ：馬の笠とタインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）・ハノイの地図（Anewplayer、CC BY-SA 4.0）'],
+      ['Ảnh bìa: Hà Trang, Báo Văn Hóa — bài “Ghé thăm phiên chợ nón làng Chuông” (baovanhoa.vn, 8/5/2026).', '表紙写真：ハー・チャン、ヴァンホア紙 ―「チュオン村の笠市を訪ねて」（baovanhoa.vn、2026年5月8日）。'],
       ['Video trình diễn quốc tế: nghệ nhân Lê Văn Tuy cung cấp.', '国際イベントでの実演動画：職人レー・ヴァン・トゥイ提供。'],
     ]
     const co = { size: 11.5, lh: 1.5, jaSize: 11.5, paraGap: 4 }
     const body = join(credits.slice(1))
     const hh = textH(body, CW, co)
     f.place(22 + hh, (p, y) => p.add(T(p.x0, y + 10, p.cw, 16, credits[0], { size: S.label, tracking: 2.4, weight: 700, color: ACC[9], jaFont: F.jaSans, name: 'Nhóm' }), T(p.x0, y + 32, p.cw, hh, body, { ...co, color: C.ink2, jaFont: F.jaSans, name: 'Nguồn ảnh' })))
+    f.end()
   }
 
   // trang kết: giảng viên hướng dẫn, thành viên, email
