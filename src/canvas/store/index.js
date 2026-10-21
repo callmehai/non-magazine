@@ -8,7 +8,7 @@
  *   onAuthChange(cb)                  → huỷ đăng ký (sync)
  *   loadBook(slug)                    → { book: { id, slug, title, settings }, pages: Page[] }   (bản nháp)
  *   loadPublished(slug)               → { book, pages } | null   (bản đã xuất bản, cho người đọc)
- *   savePage(id, data, version)       → { version }    (data = { bg, bgImage, template, hideNumber, elements })
+ *   savePage(id, data, version)       → { version }    (data = { bg, bgImage, paper, template, hideNumber, elements })
  *   addPage(bookId, data, position)   → Page
  *   deletePage(id) ; movePage(id, position)
  *   listVersions(pageId)              → [{ id, data, at, by }]   (bản cũ của trang, mới nhất trước — tự ghi ~5 phút/bản khi lưu)
@@ -19,7 +19,7 @@
  *   joinPresence(bookId, me, onChange)              → { update(state), leave() }  (sync)
  *   publish(bookId)                   → { publishedAt }
  *
- * Page = { id, position, version, updatedAt, updatedBy, bg, bgImage, template, hideNumber, elements }
+ * Page = { id, position, version, updatedAt, updatedBy, bg, bgImage, paper, template, hideNumber, elements }
  */
 
 let storePromise
@@ -44,6 +44,7 @@ export function between(a, b) {
 export const pageData = (p) => ({
   bg: p.bg,
   bgImage: p.bgImage ?? null,
+  paper: p.paper ?? null, // mẫu nền (src/canvas/papers.js)
   template: p.template ?? null,
   hideNumber: !!p.hideNumber,
   elements: p.elements || [],

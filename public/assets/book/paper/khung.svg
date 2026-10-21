@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" preserveAspectRatio="none" fill="none" stroke="#b08d57" stroke-width="1" stroke-linecap="round">
+  <!-- khung viền mảnh hai nét, góc có hình thoi nhỏ — trang mục lục -->
+  <rect x="24" y="24" width="547" height="794" rx="2" opacity=".75"/>
+  <rect x="30" y="30" width="535" height="782" rx="2" opacity=".4"/>
+  <g transform="translate(24 24)"><path d="M0 34 V8 Q0 0 8 0 H34" /><path d="M10 40 V14 Q10 10 14 10 H40" opacity=".6"/><path d="M20 15 L25 20 L20 25 L15 20 Z" fill="#b08d57" fill-opacity=".5"/><path d="M27 20 H52 M20 27 V52" opacity=".55"/></g>
+  <g transform="translate(571 24) scale(-1 1)"><path d="M0 34 V8 Q0 0 8 0 H34" /><path d="M10 40 V14 Q10 10 14 10 H40" opacity=".6"/><path d="M20 15 L25 20 L20 25 L15 20 Z" fill="#b08d57" fill-opacity=".5"/><path d="M27 20 H52 M20 27 V52" opacity=".55"/></g>
+  <g transform="translate(24 818) scale(1 -1)"><path d="M0 34 V8 Q0 0 8 0 H34" /><path d="M10 40 V14 Q10 10 14 10 H40" opacity=".6"/><path d="M20 15 L25 20 L20 25 L15 20 Z" fill="#b08d57" fill-opacity=".5"/><path d="M27 20 H52 M20 27 V52" opacity=".55"/></g>
+  <g transform="translate(571 818) scale(-1 -1)"><path d="M0 34 V8 Q0 0 8 0 H34" /><path d="M10 40 V14 Q10 10 14 10 H40" opacity=".6"/><path d="M20 15 L25 20 L20 25 L15 20 Z" fill="#b08d57" fill-opacity=".5"/><path d="M27 20 H52 M20 27 V52" opacity=".55"/></g>
+</svg>

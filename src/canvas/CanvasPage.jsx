@@ -3,6 +3,7 @@ import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
 import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby } from './lang.js'
+import { PAPER_BASE, paperOf } from './papers.js'
 
 /**
  * Vẽ một trang "canvas" (dữ liệu JSON do editor tạo) — dùng chung cho editor và flipbook.
@@ -13,10 +14,20 @@ import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby } from './lan
  *
  * mode: "read" (flipbook — link, video chạy được) | "edit" (editor — chỉ hiển thị)
  * renderEl(el, node): editor bọc thêm vùng chọn quanh từng phần tử
+ * side: "left" | "right" — mẫu nền (page.paper) đặt họa tiết ở mép ngoài trang
  */
-function CanvasPage({ page, mode = 'read', renderEl, visible }) {
+function CanvasPage({ page, mode = 'read', renderEl, visible, side = 'right' }) {
+  const paper = paperOf(page.paper)
   return (
-    <div className="cv-page" style={{ background: page.bg || '#ffffff' }}>
+    <div className={`cv-page is-${side}`} style={{ background: page.bg || '#ffffff' }}>
+      {paper && (
+        <div className="cv-paper" aria-hidden="true">
+          <img className="cv-paper__base" src={asset(PAPER_BASE)} alt="" draggable="false" />
+          {paper.layers.map((l) => (
+            <img key={l.at} className={`cv-paper__deco is-${l.at}`} src={asset(l.src)} alt="" draggable="false" />
+          ))}
+        </div>
+      )}
       {page.bgImage && <img className="cv-page__bg" src={asset(page.bgImage)} alt="" draggable="false" />}
       {(page.elements || []).map((el) => {
         const node = <Element key={el.id} el={el} mode={mode} visible={visible} />
@@ -52,7 +63,11 @@ function ElementBody({ el, mode, visible }) {
     case 'text':
       return <TextBody el={el} mode={mode} />
     case 'shape':
-      return <ShapeBody el={el} />
+      return (
+        <PageLink el={el} mode={mode} className="cv-link--row">
+          <ShapeBody el={el} />
+        </PageLink>
+      )
     case 'line':
       return <LineBody el={el} />
     case 'image':
@@ -112,21 +127,11 @@ function TextBody({ el, mode }) {
       ))}
     </div>
   )
-  // link trong sách: "#p12" = lật tới trang 12 (số trang in trên sách), ví dụ dòng mục lục
-  const { goToPage } = useContext(MagazineContext)
-  const page = mode === 'read' && goToPage && /^#p(\d+)$/.exec(el.link || '')
-  if (page) {
+  if (isPageLink(el.link)) {
     return (
-      <a
-        className="cv-link cv-link--page"
-        href={el.link}
-        onClick={(e) => {
-          e.preventDefault()
-          goToPage(Number(page[1]) - 1)
-        }}
-      >
+      <PageLink el={el} mode={mode}>
         {body}
-      </a>
+      </PageLink>
     )
   }
   if (el.link && mode === 'read') {
@@ -137,6 +142,27 @@ function TextBody({ el, mode }) {
     )
   }
   return body
+}
+
+const isPageLink = (link) => /^#p\d+$/.test(link || '')
+
+/** link trong sách: "#p12" = lật tới trang 12 (số trang in trên sách) — dòng mục lục, dải công đoạn… */
+function PageLink({ el, mode, className = '', children }) {
+  const { goToPage } = useContext(MagazineContext)
+  if (mode !== 'read' || !goToPage || !isPageLink(el.link)) return children
+  return (
+    <a
+      className={`cv-link cv-link--page ${className}`}
+      href={el.link}
+      aria-label={el.alt || undefined}
+      onClick={(e) => {
+        e.preventDefault()
+        goToPage(Number(el.link.slice(2)) - 1)
+      }}
+    >
+      {children}
+    </a>
+  )
 }
 
 /** Khung ảnh tạm: ghi rõ cần ảnh gì (el.hint / el.hintJa) để nhóm kéo ảnh thật vào thay */

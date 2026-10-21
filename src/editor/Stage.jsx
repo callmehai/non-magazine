@@ -14,7 +14,7 @@ const SNAP_DIRS = { top: true, left: true, bottom: true, right: true, center: tr
  * - nhấp đúp vào chữ để sửa; thả ảnh từ máy tính hoặc từ cột trái vào trang
  * Trong lúc kéo, Moveable sửa thẳng style (mượt); thả tay mới ghi vào dữ liệu (onCommit) = một bước undo.
  */
-export default function Stage({ page, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles, onOpenVideo, onEnterGroup }) {
+export default function Stage({ page, side, zoom, selectedIds, editingId, readOnly, onSelect, onCommit, onStartEdit, onEndEdit, onDropData, onDropFiles, onOpenVideo, onEnterGroup }) {
   const wrapRef = useRef(null)
   const pageRef = useRef(null)
   const moveableRef = useRef(null)
@@ -235,6 +235,7 @@ export default function Stage({ page, zoom, selectedIds, editingId, readOnly, on
             <CanvasPage
               page={page}
               mode="edit"
+              side={side}
               renderEl={(el, node) => (el.id === editingId ? <EditableText key={el.id} el={el} onDone={(text) => onEndEdit(el.id, text)} /> : node)}
             />
           )}

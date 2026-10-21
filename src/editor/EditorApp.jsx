@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getStore, between, pageData } from '../canvas/store/index.js'
-import { clonePageData, newElement, withIds, uid, ungroupElement, groupElements, PAGE_W, PAGE_H } from '../canvas/model.js'
+import { clonePageData, newElement, withIds, uid, ungroupElement, groupElements, pageSide, PAGE_W, PAGE_H } from '../canvas/model.js'
+import canvasBook from '../content/canvasBook.js'
 import { compressImage, fitBox, videoPoster, videoFrame } from '../canvas/media.js'
 import { ensureFont, ensureFontsFor, boldWeight } from '../canvas/fonts.js'
 import { lockHolder, holdersByPage } from '../canvas/locks.js'
@@ -863,6 +864,7 @@ function BookEditor({ store, user, onSignOut }) {
           {page ? (
             <Stage
               page={page}
+              side={['left', 'back'].includes(pageSide(pageIndex + 1, pages.length, canvasBook.settings.direction)) ? 'left' : 'right'}
               zoom={zoom}
               selectedIds={selectedIds}
               editingId={editingId}

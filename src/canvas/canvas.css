@@ -59,7 +59,7 @@
   text-underline-offset: 0.2em;
 }
 
-/* link tới trang khác trong sách (mục lục…): không gạch chân, rê chuột thì hiện gạch mảnh */
+/* link tới trang khác trong sách: không gạch chân */
 .cv-link--page {
   display: block;
   height: 100%;
@@ -67,11 +67,15 @@
   cursor: pointer;
 }
 
-.cv-link--page:hover p,
-.cv-link--page:focus-visible p {
-  text-decoration: underline;
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.25em;
+/* khối phủ cả một dòng (mục lục, dải công đoạn): rê chuột thì cả dòng sáng nền lên */
+.cv-link--row {
+  border-radius: 0.4em;
+  transition: background-color 0.2s;
+}
+
+.cv-link--row:hover,
+.cv-link--row:focus-visible {
+  background: rgba(160, 122, 60, 0.12);
 }
 
 .cv-svg {
@@ -269,4 +273,80 @@
   font-size: 11em;
   line-height: 1.45;
   letter-spacing: 0.01em;
+}
+
+/* ── mẫu nền trang (page.paper, xem papers.js): giấy ngà + họa tiết nét mảnh ở mép ngoài trang */
+.cv-paper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cv-paper__base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv-paper__deco {
+  position: absolute;
+  display: block;
+}
+
+/* trang bên trái: họa tiết sang mép trái, lật đối xứng */
+.cv-page.is-left .cv-paper__deco:not(.is-watermark):not(.is-frame) {
+  transform: scaleX(-1);
+}
+
+.cv-paper__deco.is-top {
+  top: -14em;
+  right: -16em;
+  width: 165em;
+  opacity: 0.5;
+}
+
+.cv-page.is-left .cv-paper__deco.is-top {
+  right: auto;
+  left: -16em;
+}
+
+.cv-paper__deco.is-watermark {
+  left: 50%;
+  bottom: 70em;
+  width: 330em;
+  opacity: 0.12;
+  transform: translateX(-50%);
+}
+
+.cv-paper__deco.is-foot {
+  right: 38em;
+  bottom: 52em;
+  width: 120em;
+  opacity: 0.4;
+}
+
+.cv-paper__deco.is-foot-leaf {
+  right: -14em;
+  bottom: 28em;
+  width: 130em;
+  opacity: 0.32;
+}
+
+.cv-page.is-left .cv-paper__deco.is-foot {
+  right: auto;
+  left: 38em;
+}
+
+.cv-page.is-left .cv-paper__deco.is-foot-leaf {
+  right: auto;
+  left: -14em;
+}
+
+.cv-paper__deco.is-frame {
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }

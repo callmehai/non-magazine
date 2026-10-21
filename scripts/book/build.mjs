@@ -132,7 +132,7 @@ const IMG = (x, y, w, h, hint, o = {}) => ({
 })
 const VIDEO = (x, y, w, h, src, o = {}) => ({ id: id(), type: 'video', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src, ...(o.poster ? { poster: o.poster } : {}), name: o.name ?? 'Video' })
 const DECO = (name, x, y, w, h, opacity = 0.55) => ({ id: id(), type: 'image', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src: `assets/book/deco/${name}.svg`, fit: 'contain', opacity, name: 'Họa tiết' })
-const shape = (kind) => (x, y, w, h, fill, o = {}) => ({ id: id(), type: 'shape', shape: kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, fill, ...(o.stroke ? { stroke: o.stroke, strokeWidth: o.sw ?? 0.8 } : {}), ...(o.radius ? { radius: o.radius } : {}), ...(o.opacity != null ? { opacity: o.opacity } : {}), name: o.name ?? 'Hình' })
+const shape = (kind) => (x, y, w, h, fill, o = {}) => ({ id: id(), type: 'shape', shape: kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, fill, ...(o.stroke ? { stroke: o.stroke, strokeWidth: o.sw ?? 0.8 } : {}), ...(o.radius ? { radius: o.radius } : {}), ...(o.opacity != null ? { opacity: o.opacity } : {}), ...(o.link ? { link: o.link } : {}), ...(o.alt ? { alt: o.alt } : {}), name: o.name ?? 'Hình' })
 const RECT = shape('rect')
 const ELL = shape('ellipse')
 const TRI = shape('triangle')
@@ -151,6 +151,7 @@ class Page {
     this.hideNumber = !!o.hideNumber
     this.els = []
     this.chapter = o.chapter ?? 0
+    this.paper = o.paper // mẫu nền (src/canvas/papers.js); bỏ trống = tự chọn lúc xuất
     this.hasImg = false
     pages.push(this)
   }
@@ -485,10 +486,10 @@ class Flow {
 const POOL = {
   0: [
     ['Nón lá trắng bên tà áo dài trước sân đình Chuông', 'チュオン村の亭の前で、アオザイとともに並ぶ白いノンラー'],
-    ['Ba thiếu nữ áo dài ngắm nón lá trên bậc thềm đình Chuông', 'チュオン村の亭の石段で、ノンラーを眺めるアオザイ姿の三人'],
-    ['Đội nón lá dạo bước trước cổng đình Chuông', 'ノンラーをかぶってチュオン村の亭の門の前を歩く'],
+    ['Người bán nón trao đổi trong phiên chợ Chuông lúc tờ mờ sáng', '夜明け前のチュオンの笠市場で、笠をやりとりする売り手たち'],
+    ['Người thợ chằm nón, từng mũi kim xuyên qua lớp lá', '葉を一針ずつ縫い留める笠職人'],
     ['Lòng nón lá trắng với chỉ nhôi đỏ – xanh', '赤と青のニョイの糸が見える白いノンラーの内側'],
-    ['Nón lụa nhiều màu xếp chồng tại làng Chuông', 'チュオン村に積み重ねられた色とりどりの絹の笠'],
+    ['Niềm vui của người bán nón trong phiên chợ Chuông', 'チュオンの笠市場で笑顔を見せる売り手たち'],
   ],
   1: [
     ['Các kiểu nón cổ trưng bày tại Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館に展示された古いノンラー'],
@@ -499,8 +500,7 @@ const POOL = {
     ['Người phụ nữ đội nón giữa cánh đồng — tranh tại Bảo tàng Mỹ thuật Việt Nam', '田んぼでノンラーをかぶる女性 — ベトナム美術博物館の絵画'],
     ['Phiên chợ nón Chuông họp từ sáng sớm', '早朝から開かれるチュオンの笠市場'],
     ['Nón trắng xếp thành từng chồng ở chợ Chuông', 'チュオンの市場に積み重ねられた白い笠'],
-    ['Bốn bạn trẻ đội nón lá trước cổng đình Chuông', 'チュオン村の亭の門の前で、ノンラーをかぶる四人の若者'],
-    ['Nón lá trắng trưng bày tại Bảo tàng Dân tộc học Việt Nam', 'ベトナム民族学博物館に展示された白いノンラー'],
+    ['Người bán nón giữa những chồng nón trắng ở chợ Chuông', 'チュオンの市場で白い笠の山に囲まれた売り手'],
     ['Nón cổ có trang trí hoa văn — Bảo tàng Phụ nữ Việt Nam', '模様で飾られた古い笠 — ベトナム女性博物館'],
     ['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンの笠市場'],
     ['Người mua kẻ bán tấp nập trong phiên chợ nón Chuông', '売り手と買い手でにぎわうチュオンの笠市場'],
@@ -529,19 +529,19 @@ const POOL = {
     ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レー・ヴァン・トゥイの展示スペース'],
     ['Giấy khen của Bảo tàng Dân tộc học Việt Nam tặng ông Lê Văn Tuy', 'ベトナム民族学博物館からレー・ヴァン・トゥイ氏に贈られた表彰状'],
     ['Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy', 'レー・ヴァン・トゥイ氏の「ベトナム工芸村職人」認定証'],
-    ['Du khách cùng trải nghiệm làm nón tại một cơ sở làng Chuông', 'チュオン村の工房で笠づくりを体験する観光客'],
-    ['Không gian trải nghiệm làm nón tại làng Chuông', 'チュオン村の笠づくり体験の場'],
-    ['Phiên chợ nón Chuông đông đúc', '大勢の人でにぎわうチュオンの笠市場'],
+    ['Bàn tay người bán nâng chồng nón trắng', '白い笠の束を持ち上げる売り手の手'],
+    ['Người vác nón rời phiên chợ Chuông', '笠を担いで市場をあとにする人'],
+    ['Chợ nón Chuông họp từ lúc tờ mờ sáng', '夜明け前から開かれるチュオンの笠市場'],
   ],
   9: [
     ['Nón chùm — sản phẩm OCOP 4 sao của cơ sở Lê Văn Tuy', '束ね笠 — レー・ヴァン・トゥイ工房のOCOP四つ星製品'],
     ['Nón lá hai mặt lụa xanh ngọc nhìn từ trong lòng nón', '内側から見た、両面に翡翠色の絹を張った笠'],
     ['Phiên chợ bán lá lụi trước cổng đình Chuông', 'チュオン村の亭の門前で開かれるライ葉の市'],
     ['Nón ba tầm làng Chuông', 'チュオン村のバータム笠'],
-    ['Nón lụa nhiều màu tại một cơ sở làng Chuông', 'チュオン村の工房の色とりどりの絹の笠'],
-    ['Bốn bạn trẻ áo dài cùng nón lá ở đình Chuông', 'チュオン村の亭で、ノンラーを手にするアオザイ姿の四人'],
-    ['Phiên chợ nón Chuông đông đúc', 'にぎわうチュオンの笠市場'],
-    ['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンの笠市場'],
+    ['Nụ cười người thợ làng Chuông bên chiếc nón', '笠を手に笑顔を見せるチュオン村の職人'],
+    ['Người bán đếm nón cho khách ở chợ Chuông', 'チュオンの市場で客のために笠を数える売り手'],
+    ['Bó mo nang được buộc lại trước khi mang ra chợ', '市場へ運ぶ前に束ねられるモーナン'],
+    ['Người bán xếp nón trên phố làng Chuông', 'チュオン村の通りで笠を並べる売り手'],
   ],
 }
 
@@ -599,7 +599,7 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
 }
 
 // ═════════════════════════════════════════ MỤC LỤC (cặp trang 2–3: mở bìa là thấy ngay, điền sau khi biết số trang)
-const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true }), new Page({ chapter: 0, bg: C.cream, hideNumber: true })]
+const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: 'khung' }), new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: 'khung' })]
 
 // ═════════════════════════════════════════ LỜI MỞ ĐẦU
 {
@@ -622,7 +622,7 @@ const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true }), new P
   const ch = ch1
   const { left } = chapterOpener(ch, {
     main: ['Ảnh mở chương: thiếu nữ áo dài đội nón lá giữa cánh đồng', '章扉写真：田んぼの中、アオザイ姿でノンラーをかぶる女性'],
-    alt: ['Ảnh toàn trang: nón lá trên cánh đồng lúa', '全面写真：田んぼの中のノンラー'],
+    alt: ['Ảnh toàn trang: nón lá xếp chồng ở chợ Chuông', '全面写真：チュオンの市場に積まれたノンラー'],
   })
   mark(1, ch.title, left, '01')
   const f = new Flow(1, ch.label, [...POOL[1]])
@@ -1186,13 +1186,14 @@ let stripPage = null
   stepPages.forEach((s, i) => {
     const ry = y + i * rowH
     const nm = s.finish ? [`${s.label[0]} · ${s.name[0]}`, `${strip(s.label[1])}・${strip(s.name[1])}`] : s.name
-    const go = `#p${s.page}` // bấm tên công đoạn → lật tới trang của công đoạn đó
+    const go = `#p${s.page}` // bấm cả dòng công đoạn → lật tới trang của công đoạn đó
     p.add(
       ELL(lineX - 20, ry, 40, 40, s.finish ? C.cream : acc, { stroke: acc, sw: 1.4 }),
-      T(lineX - 20, ry + 9, 40, 22, [s.finish ? '✦' : String(s.no), null], { font: F.head, size: 18, weight: 700, align: 'center', color: s.finish ? acc : '#fff', lh: 1.2, link: go, name: 'Số bước' }),
-      T(lineX + 36, ry + 1, p.cw - 130, 26, nm, { font: F.head, size: 20, weight: 700, color: C.ink, lh: 1.25, jaFont: F.jaHead, jaSize: 19, link: go, name: 'Tên bước' }),
-      T(lineX + 36, ry + 27, p.cw - 130, 18, s.sub, { size: 13, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, link: go, name: 'Phụ đề' }),
-      T(p.x1 - 70, ry + 6, 70, 20, [`tr. ${s.page}`, `${s.page}ページ`], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, link: go, name: 'Số trang' })
+      T(lineX - 20, ry + 9, 40, 22, [s.finish ? '✦' : String(s.no), null], { font: F.head, size: 18, weight: 700, align: 'center', color: s.finish ? acc : '#fff', lh: 1.2, name: 'Số bước' }),
+      T(lineX + 36, ry + 1, p.cw - 130, 26, nm, { font: F.head, size: 20, weight: 700, color: C.ink, lh: 1.25, jaFont: F.jaHead, jaSize: 19, name: 'Tên bước' }),
+      T(lineX + 36, ry + 27, p.cw - 130, 18, s.sub, { size: 13, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Phụ đề' }),
+      T(p.x1 - 70, ry + 6, 70, 20, [`tr. ${s.page}`, `${s.page}ページ`], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, name: 'Số trang' }),
+      RECT(lineX - 26, ry - 6, p.x1 - lineX + 34, 54, 'none', { radius: 6, link: go, alt: `${strip(nm[0])} — tr. ${s.page}`, name: 'Dòng công đoạn' })
     )
   })
 }
@@ -1229,13 +1230,16 @@ let stripPage = null
     const { a, title, o, indent, th } = r
     const acc = ACC[{ '01': 1, '02': 2, '03': 3 }[a.label] ?? (a.label[0] === '1' ? 1 : a.label[0] === '2' ? 2 : a.label[0] === '3' ? 3 : 9)]
     const pg = String(a.page).padStart(2, '0')
-    const go = `#p${a.page}` // bấm dòng mục lục → lật tới trang đó
+    // cả dòng (số mục + tên + số trang) là một khối bấm: rê chuột sáng cả dòng, bấm → lật tới trang đó
+    const row = (pg, ry, rh, dx = 0) => RECT(pg.x0 + dx - 8, ry, pg.cw - dx + 16, rh, 'none', { radius: 4, link: `#p${a.page}`, alt: `${a.label === '—' ? '' : a.label + ' '}${title[0]} — tr. ${a.page}`, name: 'Dòng mục lục' })
     if (a.level === 1) {
       y += 12
-      p.add(T(p.x0, y - 3, 44, 26, [a.label, null], { font: F.head, size: 21, color: acc, lh: 1.1, link: go, name: 'Số chương' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: C.ink, jaFont: F.jaHead, link: go, name: 'Mục lục' }), T(p.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 15, color: acc, align: 'right', lh: 1.3, link: go, name: 'Số trang' }))
+      p.add(T(p.x0, y - 3, 44, 26, [a.label, null], { font: F.head, size: 21, color: acc, lh: 1.1, name: 'Số chương' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: C.ink, jaFont: F.jaHead, name: 'Mục lục' }), T(p.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 15, color: acc, align: 'right', lh: 1.3, name: 'Số trang' }))
+      p.add(row(p, y - 6, th + 10))
       y += th + 8
     } else {
-      p.add(T(p.x0 + indent - 40, y, 38, 18, [a.label, null], { size: a.level === 2 ? 13.5 : 12.5, color: acc, weight: 700, lh: 1.4, link: go, name: 'Số mục' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: a.level === 2 ? C.ink2 : C.muted, jaFont: F.jaSans, link: go, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 13, color: C.muted, align: 'right', lh: 1.4, link: go, name: 'Số trang' }))
+      p.add(T(p.x0 + indent - 40, y, 38, 18, [a.label, null], { size: a.level === 2 ? 13.5 : 12.5, color: acc, weight: 700, lh: 1.4, name: 'Số mục' }), T(p.x0 + indent, y, p.cw - indent - 56, th, title, { ...o, color: a.level === 2 ? C.ink2 : C.muted, jaFont: F.jaSans, name: 'Mục lục' }), T(p.x1 - 44, y, 44, 18, [pg, null], { size: 13, color: C.muted, align: 'right', lh: 1.4, name: 'Số trang' }))
+      p.add(row(p, y - 3, th + 5, indent - 40))
       y += th + 7
     }
     if (y > BOT) console.warn(`⚠ Mục lục tràn: ${Math.round(y)} > ${Math.round(BOT)}`)
@@ -1253,7 +1257,18 @@ const textOnly = pages.filter((p) => !p.hasImg && p.els.filter((e) => e.type ===
 if (textOnly.length) console.warn(`ℹ Trang chỉ có chữ: ${textOnly.join(', ')}`)
 
 // ── xuất
-const out = pages.map((p) => ({ bg: p.bg, bgImage: null, template: null, hideNumber: p.hideNumber, elements: p.els }))
+// mẫu nền giấy ngà + họa tiết (góp ý hình thức: nền trắng ngà xuyên suốt, trang nào cũng có họa tiết):
+// trang ảnh tràn trang / nền tối thì thôi; trang chỉ có chữ → sen in mờ giữa trang;
+// còn lại đổi theo cặp trang (hai trang đối diện cùng một mẫu, họa tiết đối xứng ở mép ngoài)
+const SPREAD_PAPERS = ['tre', 'non', 'giay']
+function paperFor(p) {
+  if (p.paper !== undefined) return p.paper
+  if (p.bg === '#2b2118') return null
+  if (p.els.some((e) => e.type === 'image' && e.x <= 0 && e.y <= 0 && e.w >= W - 1 && e.h >= H - 1)) return null
+  if (!p.hasImg) return 'sen'
+  return SPREAD_PAPERS[Math.floor(p.n / 2) % SPREAD_PAPERS.length]
+}
+const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: p.els }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })
 fs.writeFileSync(path.join(here, 'out', 'book.json'), JSON.stringify({ pages: out }, null, 1))
 const counts = out.map((p, i) => `${i + 1}:${p.elements.length}`).join(' ')

@@ -18,6 +18,7 @@ export function clonePageData(page) {
   return {
     bg: page.bg,
     bgImage: page.bgImage,
+    paper: page.paper,
     template: page.template,
     elements: (page.elements || []).map(withIds),
   }

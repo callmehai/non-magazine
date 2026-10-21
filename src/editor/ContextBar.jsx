@@ -2,6 +2,7 @@ import FontPicker from './FontPicker.jsx'
 import { ColorButton, Popover, Stepper, Slider, NumberField, IconBtn, UploadButton } from './ui.jsx'
 import { boldWeight } from '../canvas/fonts.js'
 import { pageSide } from '../canvas/model.js'
+import { PAPERS } from '../canvas/papers.js'
 import canvasBook from '../content/canvasBook.js'
 
 const BOOK_DIRECTION = canvasBook.settings.direction
@@ -40,6 +41,14 @@ function PageBar({ page, pageNumber, pageCount, docColors, onPageChange, onUploa
       </span>
       <span className="ed-ctx__sep" />
       <span className="ed-ctx__text">Nền</span>
+      <select className="ed-select" value={page.paper || ''} onChange={(e) => onPageChange({ paper: e.target.value || null })} title="Mẫu nền trang">
+        <option value="">Màu trơn</option>
+        {PAPERS.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.name}
+          </option>
+        ))}
+      </select>
       <ColorButton value={page.bg} onChange={(bg) => onPageChange({ bg }, 'bg')} docColors={docColors} title="Màu nền trang" />
       <UploadButton accept="image/*" className="ed-cbtn" onFiles={async ([f]) => onPageChange({ bgImage: await onUpload(f, 'image') })}>
         {page.bgImage ? 'Đổi ảnh nền' : 'Ảnh nền'}

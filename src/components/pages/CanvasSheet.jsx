@@ -8,7 +8,7 @@ export default function CanvasSheet({ page, index, total, side, visible, variant
   const tone = luminance(page.data.bg) < 140 ? 'light' : 'dark'
   return (
     <article className={`canvas-sheet side-${side}`} aria-label={t('pageOf', { n: index + 1, total })}>
-      <CanvasPage page={page.data} mode={isThumb ? 'edit' : 'read'} visible={visible} />
+      <CanvasPage page={page.data} mode={isThumb ? 'edit' : 'read'} visible={visible} side={side === 'left' ? 'left' : 'right'} />
       {page.folio && !isThumb && (
         <span className={`cv-folio is-${tone}`} aria-hidden="true">
           {String(page.folio).padStart(2, '0')}

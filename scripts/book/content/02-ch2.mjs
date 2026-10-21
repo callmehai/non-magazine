@@ -50,7 +50,7 @@ export const ch2 = {
         'Như vậy, ba lớp vật liệu có chức năng bổ trợ cho nhau trong cấu tạo của nón lá Làng Chuông. Lớp lá ngoài đảm nhiệm việc che chắn và tạo bề mặt, lớp mo nang góp phần tăng độ chắc chắn, còn lớp lá trong giúp hoàn thiện mặt trong của nón. Sự kết hợp này tạo nên phần lá lợp vừa nhẹ nhàng, vừa có độ ổn định cần thiết trong quá trình sử dụng.',
         'このように、三層の材料はチュオン村のノンラーの構造の中で{互|たが}いに{補|おぎな}い合っています。外の葉は守りと表面を、モーナンは強さを、内の葉は内側の仕上げを担います。この組み合わせによって、軽く、しかも使うときに必要な安定さをもつ葺き葉ができあがるのです。',
       ],
-      image: ['Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá', '葺きかけの笠：葉の間からのぞくモーナンの層'],
+      image: ['Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá', '葺きかけの笠：葉の間からモーナンの層がのぞく'],
     },
     frame: {
       id: '2.1.2',
