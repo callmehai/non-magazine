@@ -43,6 +43,7 @@ export const FONT_LIST = [
   { family: 'Bebas Neue', group: 'Latin', weights: [400] },
   { family: 'Dancing Script', group: 'Latin', weights: [400, 700] },
   { family: 'Great Vibes', group: 'Latin', weights: [400] },
+  { family: 'Patrick Hand', group: 'Latin', weights: [400] }, // chữ viết tay (sổ tay hành trình), có dấu tiếng Việt
 ]
 
 export const FONT_GROUPS = {

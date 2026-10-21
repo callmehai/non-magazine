@@ -146,46 +146,182 @@
     translate: 0 -3em;
   }
 }
-.cvw-map__back {
-  top: 4%;
-  left: 4%;
-  cursor: pointer;
-}
-.cvw-map__back:hover {
-  background: #2b2118;
-}
-.cvw-map__village {
+/* ── hành trình Hà Nội → Làng Chuông ── */
+.cvw-trip__stage {
   position: absolute;
-  cursor: grab;
-  filter: drop-shadow(0 10em 14em rgba(40, 30, 15, 0.35));
+  inset: -14% -10% -4%; /* rộng hơn khung: mặt bản đồ nghiêng không lộ mép */
+  transform-origin: 50% 62%;
 }
-.cvw-map__card {
+.cvw-trip__road path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 1;
+}
+.cvw-trip__casing {
+  stroke: #fffaf0;
+  stroke-dashoffset: calc(1 - var(--road, 0));
+}
+.cvw-trip__lane {
+  stroke: #e6c98f;
+  stroke-dashoffset: calc(1 - var(--road, 0));
+}
+.cvw-trip__done {
+  stroke: #b23a24;
+  stroke-dashoffset: calc(1 - var(--done, 0));
+}
+.cvw-trip__fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cvw-trip__car {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80em;
+  transform-origin: 50% 88%;
+  will-change: transform;
+}
+.cvw-car {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.cvw-trip__car.is-driving .cvw-car {
+  animation: cvw-carbob 0.32s ease-in-out infinite alternate;
+}
+.cvw-trip__car.is-driving .cvw-car__wheel {
+  animation: cvw-spin 0.4s linear infinite;
+}
+.cvw-car__hats {
+  transform-origin: 56px 30px;
+}
+.cvw-trip__car.is-driving .cvw-car__hats {
+  animation: cvw-wobble 0.64s ease-in-out infinite alternate;
+}
+@keyframes cvw-carbob {
+  to {
+    translate: 0 -1.6em;
+  }
+}
+@keyframes cvw-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes cvw-wobble {
+  from {
+    rotate: -2deg;
+  }
+  to {
+    rotate: 2deg;
+  }
+}
+.cvw-trip__puff {
+  position: absolute;
+  width: 14em;
+  height: 14em;
+  margin: -7em 0 0 -7em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 36%, #ffffff, #e2ddd3 55%, rgba(170, 162, 150, 0.5) 68%, rgba(170, 162, 150, 0) 72%);
+  animation: cvw-puff 1.15s ease-out forwards;
+}
+@keyframes cvw-puff {
+  from {
+    opacity: 0.9;
+    transform: translate(0, 0) scale(0.35);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), -16px) scale(2.1);
+  }
+}
+.cvw-trip__tag {
+  position: absolute;
+  translate: -50% -230%;
+  padding: 0.2em 0.55em;
+  border-radius: 0.35em;
+  background: #fffaf0;
+  box-shadow: 0 0.15em 0.5em rgba(40, 30, 15, 0.25);
+  font-family: 'Patrick Hand', 'Klee One', cursive;
+  font-size: 12.5em;
+  white-space: nowrap;
+  color: #2b2118;
+  animation: cvw-in 0.35s ease-out both;
+}
+.cvw-trip__tag.is-start {
+  translate: -30% 40%;
+}
+.cvw-trip__tag.is-mid {
+  translate: 20% -50%;
+  font-size: 11em;
+  background: rgba(255, 250, 240, 0.85);
+}
+.cvw-trip__pin {
+  position: absolute;
+  width: 26em;
+  translate: -50% -100%;
+  animation: cvw-drop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+.cvw-trip__pin svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.cvw-trip__pin path {
+  fill: #b23a24;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+.cvw-trip__pin circle {
+  fill: #fff;
+}
+@keyframes cvw-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-40em) scale(0.6);
+  }
+}
+.cvw-trip__card {
   position: absolute;
   right: 4%;
-  bottom: 4%;
-  max-width: 62%;
+  top: 16%;
+  max-width: 50%;
   display: grid;
   gap: 2em;
-  padding: 7em 10em;
-  border-radius: 6em;
-  background: rgba(251, 247, 238, 0.94);
-  box-shadow: 0 4em 14em rgba(40, 30, 15, 0.18);
-  font-size: 1em;
-  animation: cvw-in 0.5s 0.4s ease-out both;
+  padding: 7em 11em 8em;
+  border-radius: 3em;
+  background: #fff7d6;
+  box-shadow: 0 4em 12em rgba(40, 30, 15, 0.22);
+  rotate: 1.5deg;
+  animation: cvw-in 0.5s 0.35s ease-out both;
 }
-.cvw-map__card b {
-  font-family: 'Playfair Display', 'Shippori Mincho', serif;
-  font-size: 15em;
+.cvw-trip__card b {
+  font-family: 'Patrick Hand', 'Klee One', cursive;
+  font-weight: 400;
+  font-size: 19em;
   color: #a8321f;
 }
-.cvw-map__card span {
+.cvw-trip__card span {
   font-size: 10.5em;
   line-height: 1.4;
   color: #4a3b2c;
 }
-.cvw-map__card em {
-  font-size: 9.5em;
-  color: #8a7a64;
+.cvw-trip__btns {
+  position: absolute;
+  top: 4%;
+  left: 4%;
+  display: flex;
+  gap: 6em;
+}
+.cvw-trip__btns .cvw-chip {
+  position: static;
+  cursor: pointer;
+}
+.cvw-trip__btns .cvw-chip:hover {
+  background: #2b2118;
 }
 @keyframes cvw-in {
   from {

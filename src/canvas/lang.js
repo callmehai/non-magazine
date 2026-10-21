@@ -24,6 +24,7 @@ const JA_EQUIV = {
   'Be Vietnam Pro': 'Noto Sans JP',
   Montserrat: 'Noto Sans JP',
   'Bebas Neue': 'Noto Sans JP',
+  'Patrick Hand': 'Klee One',
 }
 
 /** font của khối chữ theo ngôn ngữ (ưu tiên jaFont nếu người thiết kế đặt riêng) */
