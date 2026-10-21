@@ -152,4 +152,15 @@ export const photos = {
   "Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)": "online/hang-non-1896",
   "Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam": "online/non-thanh-oai-1999",
   "Dao, kéo cắt lá": "online/dao-cat-la",
+  // ảnh lấp trang đôi (bổ sung 2026-10-22)
+  "Phiên chợ Chuông họp từ khi trời còn tối, người bán ngồi giữa nón và lá": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3154",
+  "Chiếc nón trắng vừa hoàn thiện": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón cô dâu(1)",
+  "Người thợ khâu những mũi cuối trên thân nón": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/IMG_7438",
+  "Nghệ nhân giới thiệu khung nón đã lên đủ vành": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
+  "Đôi bàn tay người thợ luồn chỉ nhôi trong lòng nón": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Đôi bàn tay người thợ 2",
+  "Người bán phân loại lá lụi ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3256",
+  "Những chồng nón cao bên đường trong phiên chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3212",
+  "Người bán xếp nón bên cánh cửa gỗ cũ": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3207",
+  "Gian hàng nón nhiều màu sắc ở làng Chuông": "Chương 3/IMG_7271",
+  "Mua bán lá và vành nón trong phiên chợ Chuông": "Chương 3/Không gian chợ nón/Hđ buôn bán",
 }

@@ -12,7 +12,12 @@ const Widget = lazy(() => import('./widgets/index.jsx'))
 // ảnh bấm để xem lớn (chế độ đọc; trừ ảnh tràn ngang trang như bìa, ảnh mở chương): cả trang dùng chung một danh sách để ← → chuyển ảnh trong lightbox
 const ZoomList = createContext(null)
 const zoomable = (el) =>
-  el.type === 'image' && !!el.src && el.name !== 'Họa tiết' && !/logo/i.test(`${el.name} ${el.hint}`) && el.w < PAGE_W * 0.95 && el.w * el.h < PAGE_W * PAGE_H * 0.8
+  el.type === 'image' &&
+  !!el.src &&
+  !['Họa tiết', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang'].includes(el.name) &&
+  !/logo/i.test(`${el.name} ${el.hint}`) &&
+  el.w < PAGE_W * 0.95 &&
+  el.w * el.h < PAGE_W * PAGE_H * 0.8
 const captionOf = (el, lang) => {
   const c = plainText(lang === 'ja' ? el.hintJa || el.hint : el.hint)
   return /^GIF\b/.test(c) ? '' : c
