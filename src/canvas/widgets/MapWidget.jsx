@@ -12,13 +12,25 @@ ensureFont('Klee One')
 /**
  * Bản đồ hành trình (mục 1.3), kiểu video "travel map":
  *  1. bản đồ Việt Nam chữ S (Natural Earth, bản theo quan điểm Việt Nam: có Hoàng Sa, Trường Sa)
- *  2. bấm vào → phóng tới Hà Nội, chuyển sang ảnh vệ tinh (Esri World Imagery)
+ *  2. bấm vào → phóng tới Hà Nội, chuyển sang bản đồ đường phố sáng màu kiểu Google Maps / TravelBoast
+ *     (vẽ sẵn từ dữ liệu OpenStreetMap: đường, sông hồ, công viên; tên quận huyện đặt theo ngôn ngữ đang xem)
  *  3. ghim điểm đi (Hồ Hoàn Kiếm) và điểm đến (Làng Chuông); camera sà xuống chiếc ô tô chở nón (nhìn từ trên)
  *  4. xe lăn bánh theo tuyến đường thật (OSRM / OpenStreetMap, qua Nguyễn Trãi – Hà Đông – QL21B), có khói,
  *     camera bám theo xe, vạch đỏ vẽ dần sau xe, đồng hồ đếm quãng đường tới 30,2 km (Google Maps)
  *  5. tới nơi: camera lùi ra thấy cả tuyến, ghim rơi xuống, thẻ ghi chú
- * route.json: ảnh nền route-map.webp (px), tuyến đường + điểm mốc theo px của ảnh, nw/se = kinh vĩ độ hai góc.
+ * route.json: hệ px của bản đồ nền (route-street.webp vẽ ở 1,5 lần hệ px này), tuyến đường + điểm mốc theo px của ảnh, nw/se = kinh vĩ độ hai góc.
  */
+// tên vùng in trên bản đồ: [kinh độ, vĩ độ, tiếng Việt, tiếng Nhật]
+const AREAS = [
+  [105.8, 21.032, 'CẦU GIẤY', 'カウザイ'],
+  [105.828, 21.017, 'ĐỐNG ĐA', 'ドンダー'],
+  [105.806, 20.995, 'THANH XUÂN', 'タインスアン'],
+  [105.853, 20.976, 'HOÀNG MAI', 'ホアンマイ'],
+  [105.76, 21.015, 'NAM TỪ LIÊM', 'ナムトゥリエム'],
+  [105.835, 20.925, 'THANH TRÌ', 'タインチー'],
+  [105.79, 20.865, 'THANH OAI', 'タインオアイ'],
+  [105.878, 21.005, 'Sông Hồng', 'ホン川'],
+]
 const L = {
   vi: {
     country: 'VIỆT NAM',
@@ -35,7 +47,8 @@ const L = {
     km: 'km',
     again: 'Đi lại',
     back: 'Toàn cảnh Việt Nam',
-    credit: 'Ảnh vệ tinh: Esri, Maxar, Earthstar Geographics · Tuyến đường: OpenStreetMap / OSRM · Quãng đường: Google Maps',
+    credit: 'Bản đồ: © OpenStreetMap contributors · Tuyến đường: OSRM · Quãng đường: Google Maps',
+    areas: AREAS.map((a) => a[2]),
   },
   ja: {
     country: 'ベトナム',
@@ -52,7 +65,8 @@ const L = {
     km: 'km',
     again: 'もう一度',
     back: 'ベトナム全図へ',
-    credit: '衛星写真：Esri, Maxar, Earthstar Geographics・ルート：OpenStreetMap / OSRM・距離：Google Maps',
+    credit: '地図：© OpenStreetMap contributors・ルート：OSRM・距離：Google Maps',
+    areas: AREAS.map((a) => a[3]),
   },
 }
 
@@ -76,6 +90,19 @@ function at(d) {
   const [a, b] = [R[i], R[i + 1]]
   return { x: a[0] + (b[0] - a[0]) * k, y: a[1] + (b[1] - a[1]) * k, ang: (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI }
 }
+const merY = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360))
+const geo = (lon, lat) => [
+  ((lon - trip.nw[0]) / (trip.se[0] - trip.nw[0])) * trip.w,
+  ((merY(trip.nw[1]) - merY(lat)) / (merY(trip.nw[1]) - merY(trip.se[1]))) * trip.h,
+]
+const AREA_PX = AREAS.map(([lon, lat]) => geo(lon, lat))
+// hướng xe: nhìn trước / sau một đoạn trên tuyến cho mượt (không giật ở mỗi khúc gấp)
+function heading(d) {
+  const a = at(Math.max(0, d - 22))
+  const b = at(Math.min(LEN, d + 22))
+  return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI
+}
+const PARK = LEN - 70 // xe dừng ngay trước ghim Làng Chuông (không đè lên ghim / nhãn)
 const BOX = (() => {
   const xs = R.map((p) => p[0])
   const ys = R.map((p) => p[1])
@@ -85,12 +112,19 @@ const BOX = (() => {
 const T_ZOOM = 1700
 const T_FADE = 700
 const T_PINS = 900
-const T_DIVE = 1100
+const T_DIVE = 1800
 const T_POP = 450
-const T_DRIVE = 7200
-const T_OUT = 1300
+const T_DRIVE = 16000 // xe đi chậm, camera ở xa (góp ý: nhanh quá, chóng mặt)
+const T_OUT = 1800
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v))
+/** khung nhìn luôn nằm trong ảnh nền (không lộ mép trống khi camera bám xe ở gần rìa bản đồ) */
+function inside(v, { w, h }) {
+  const s = Math.max(v.s, w / trip.w, h / trip.h)
+  const hx = w / 2 / s
+  const hy = h / 2 / s
+  return { x: Math.min(trip.w - hx, Math.max(hx, v.x)), y: Math.min(trip.h - hy, Math.max(hy, v.y)), s }
+}
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
@@ -135,14 +169,13 @@ export default function MapWidget({ el, interactive, visible }) {
   const sizeRef = useRef(size)
   sizeRef.current = size
   const fitOf = ({ w, h }) => {
-    const m = 140
-    // vừa cả tuyến, nhưng ảnh vệ tinh luôn phủ kín khung (không lộ mép); tâm kẹp trong ảnh
-    const s = Math.max(Math.min(w / (BOX.x1 - BOX.x0 + 2 * m), h / (BOX.y1 - BOX.y0 + 2 * m)), w / trip.w, h / trip.h) || 0.1
-    const hx = w / 2 / s
-    const hy = h / 2 / s
-    const cx = Math.min(trip.w - hx, Math.max(hx, (BOX.x0 + BOX.x1) / 2))
-    const cy = Math.min(trip.h - hy, Math.max(hy, (BOX.y0 + BOX.y1) / 2))
-    return { x: cx, y: cy, s }
+    // vừa cả tuyến trong khung, chừa lề (px màn hình) cho ghim + nhãn ở trên, nút ở góc, chữ nguồn ở dưới;
+    // bản đồ nền luôn phủ kín khung (không lộ mép)
+    const top = 84
+    const bot = 40
+    const side = 40
+    const s = Math.min((w - 2 * side) / (BOX.x1 - BOX.x0), (h - top - bot) / (BOX.y1 - BOX.y0)) || 0.1
+    return inside({ x: (BOX.x0 + BOX.x1) / 2, y: (BOX.y0 + BOX.y1) / 2 - (top - bot) / 2 / s, s }, { w, h })
   }
   const fit = useMemo(() => fitOf(size), [size])
 
@@ -182,16 +215,16 @@ export default function MapWidget({ el, interactive, visible }) {
       const drive = easeInOut(clamp01((e3 - T_POP) / T_DRIVE))
       const e4 = e3 - T_POP - T_DRIVE
       const out = easeInOut(clamp01(e4 / T_OUT))
-      const car = at(drive * LEN)
+      const car = at(drive * PARK)
       const sz = sizeRef.current
       const fit = fitOf(sz)
-      const follow = fit.s * 3.2
+      const follow = fit.s * 1.8
       // camera: khung toàn tuyến → sà xuống xe → bám xe → lùi ra khung toàn tuyến
       const near = { x: car.x, y: car.y, s: follow }
-      const cam = e4 > 0 ? lerpView(near, fit, out) : e3 > 0 ? near : lerpView(fit, near, dive)
+      const cam = inside(e4 > 0 ? lerpView(near, fit, out) : e3 > 0 ? near : lerpView(fit, near, dive), sz)
       if (drive > 0 && drive < 1 && now - lastPuff > 70) {
         lastPuff = now
-        const backA = ((car.ang + 180) * Math.PI) / 180
+        const backA = ((heading(drive * PARK) + 180) * Math.PI) / 180
         puff((car.x - cam.x) * cam.s + sz.w / 2 + Math.cos(backA) * 16, (car.y - cam.y) * cam.s + sz.h / 2 + Math.sin(backA) * 16)
       }
       const done = e4 >= T_OUT
@@ -242,7 +275,8 @@ export default function MapWidget({ el, interactive, visible }) {
   const cam = st.cam ?? fit
   const sat = st.sat
   const toScr = (x, y) => [(x - cam.x) * cam.s + size.w / 2, (y - cam.y) * cam.s + size.h / 2]
-  const car = at(st.drive * LEN)
+  const car = at(st.drive * PARK)
+  const carAng = heading(st.drive * PARK)
   const carScr = toScr(car.x, car.y)
   const [fx, fy] = toScr(...trip.places.hanoi)
   const [mx, my] = toScr(...trip.places.hadong)
@@ -273,7 +307,7 @@ export default function MapWidget({ el, interactive, visible }) {
           {label(352, 392, t.country, 17, { anchor: 'start', cls: 'is-country', track: 4 })}
           {label(470, 520, t.sea, 13, { cls: 'is-sea' })}
           {label(555, 300, t.paracel, 10.5, { cls: 'is-islands' })}
-          {label(640, 585, t.spratly, 10.5, { cls: 'is-islands' })}
+          {label(612, 585, t.spratly, 10.5, { cls: 'is-islands' })}
           <circle cx={HX} cy={HY} r={11 * u} className="cvw-map__pulse" />
           <circle cx={HX} cy={HY} r={4.5 * u} className="cvw-map__dot" />
         </g>
@@ -285,10 +319,15 @@ export default function MapWidget({ el, interactive, visible }) {
             className="cvw-sat__world"
             style={{ width: trip.w, height: trip.h, transform: `translate(${size.w / 2 - cam.x * cam.s}px, ${size.h / 2 - cam.y * cam.s}px) scale(${cam.s})` }}
           >
-            <img src={asset('assets/book/map/route-map.webp')} alt="" draggable="false" />
+            <img src={asset('assets/book/map/route-street.webp')} alt="" draggable="false" />
             <svg viewBox={`0 0 ${trip.w} ${trip.h}`} className="cvw-sat__route">
+              {AREA_PX.map(([x, y], i) => (
+                <text key={i} x={x} y={y} className={`cvw-sat__area ${i === AREAS.length - 1 ? 'is-water' : ''}`} fontSize={Math.max(9, size.w / 40) / cam.s}>
+                  {t.areas[i]}
+                </text>
+              ))}
               <path d={pathD} className="cvw-sat__ghost" strokeWidth={5 / cam.s} />
-              <path d={pathD} className="cvw-sat__line" strokeWidth={6 / cam.s} style={{ strokeDasharray: LEN, strokeDashoffset: LEN * (1 - st.drive) }} />
+              <path d={pathD} className="cvw-sat__line" strokeWidth={6 / cam.s} style={{ strokeDasharray: LEN, strokeDashoffset: LEN - (st.phase === 'done' ? LEN : st.drive * PARK) }} />
             </svg>
           </div>
           <div ref={fxRef} className="cvw-trip__fx" aria-hidden="true">
@@ -301,16 +340,16 @@ export default function MapWidget({ el, interactive, visible }) {
             )}
             {st.pop > 0 && (
               <div
-                className={`cvw-trip__car ${st.drive > 0 && st.drive < 1 ? 'is-driving' : ''}`}
+                className="cvw-trip__car"
                 style={{
-                  transform: `translate(${carScr[0]}px, ${carScr[1]}px) rotate(${car.ang + 90}deg) scale(${st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1})`,
+                  transform: `translate(${carScr[0]}px, ${carScr[1]}px) rotate(${carAng + 90}deg) scale(${st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1})`,
                 }}
               >
                 <CarTop />
               </div>
             )}
           </div>
-          {st.pop > 0 && (
+          {st.pop > 0 && st.phase !== 'done' && (
             <div className="cvw-trip__km">
               <b>{dec((trip.km * st.drive).toFixed(1))}</b> {t.km}
             </div>
@@ -321,7 +360,16 @@ export default function MapWidget({ el, interactive, visible }) {
 
       {interactive && st.phase === 'world' && <span className="cvw-chip cvw-map__hint">{t.hint}</span>}
       {st.phase === 'done' && (
-        <div className="cvw-trip__card">
+        <div
+          className="cvw-trip__card"
+          style={{
+            // thẻ "tới nơi" gắn ngay cạnh ghim Làng Chuông (cuối tuyến), không trôi giữa bản đồ
+            left: tx < size.w / 2 ? tx + 62 : undefined,
+            right: tx < size.w / 2 ? undefined : size.w - tx + 62,
+            top: Math.min(size.h - 30, Math.max(70, ty - 18)),
+            maxWidth: Math.max(140, (tx < size.w / 2 ? size.w - tx : tx) - 74),
+          }}
+        >
           <b>{t.arrived}</b>
           <span>{t.trip(dec(String(trip.km)))}</span>
           <span>{t.place}</span>

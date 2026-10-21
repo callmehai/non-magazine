@@ -216,7 +216,7 @@ export const ch1 = {
         {
           name: ['Nón lá chóp truyền thống', '伝統的な円錐形のノンラー'],
           text: [
-            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non) đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có hai màu màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng và các đường khâu tương đối đều. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
+            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non) đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có hai màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng và các đường khâu tương đối đều. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
             '先のとがった円錐形の笠で、{処理|しょり}したライ葉（若いヤシの葉）を16本のヌア竹の輪に縫い付けて作ります。色は明るい白か{象牙色|ぞうげいろ}の二色が多く、葉の表面は{平|たい}らで、{縫|ぬ}い{目|め}もよくそろっています。軽くて使いやすいため、日常使いにも贈り物にも選ばれています。',
           ],
         },

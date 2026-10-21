@@ -1,4 +1,4 @@
-import { createContext, lazy, memo, Suspense, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, lazy, memo, Suspense, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
@@ -14,7 +14,7 @@ const ZoomList = createContext(null)
 const zoomable = (el) =>
   el.type === 'image' &&
   !!el.src &&
-  !['Họa tiết', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang'].includes(el.name) &&
+  !['Họa tiết', 'Hình vẽ', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang'].includes(el.name) &&
   !/logo/i.test(`${el.name} ${el.hint}`) &&
   el.w < PAGE_W * 0.95 &&
   el.w * el.h < PAGE_W * PAGE_H * 0.8
@@ -97,6 +97,7 @@ export function Element({ el, mode, visible }) {
     <div
       className={`cv-el cv-el--${el.type}`}
       data-id={el.id}
+      data-name={el.name || undefined}
       data-anim={anim ? el.anim.kind : undefined}
       style={anim ? { ...boxStyle(el), ...anim } : boxStyle(el)}
     >
@@ -121,6 +122,8 @@ function ElementBody({ el, mode, visible }) {
       return el.src ? <ImageBody el={el} /> : <PhotoPlaceholder el={el} />
     case 'video':
       return <VideoBody el={el} mode={mode} visible={visible} />
+    case 'more':
+      return <MoreBody el={el} mode={mode} />
     case 'widget':
       return (
         <Suspense fallback={null}>
@@ -169,8 +172,10 @@ function TextBody({ el, mode }) {
   // editor đang xem tiếng Nhật mà khối này chưa dịch → hiện mờ bản tiếng Việt để biết còn thiếu
   const missing = mode === 'edit' && !hasLang(el, lang)
   const shown = missing ? 'vi' : lang
+  const ref = useRef(null)
+  useFillLeading(ref, el, shown, mode === 'read' && el.fillLeading)
   const body = (
-    <div className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''}`} style={textStyle(el, shown)} lang={shown}>
+    <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
         <p key={i}>{p ? <RubyText text={p} /> : '\u00a0'}</p>
       ))}
@@ -191,6 +196,47 @@ function TextBody({ el, mode }) {
     )
   }
   return body
+}
+
+/**
+ * el.fillLeading (đoạn văn do builder đặt): khung chữ được tính theo bản dài hơn trong hai ngôn ngữ, nên bản ngắn hơn
+ * (thường là tiếng Nhật) để hở đáy khung. Ở chế độ đọc, đo chữ thật rồi giãn dòng cho vừa khít khung
+ * (giới hạn: tiếng Nhật tới 1.95, tiếng Việt tới 1.8) — không để khoảng trắng dưới đoạn văn.
+ */
+function useFillLeading(ref, el, lang, on) {
+  useLayoutEffect(() => {
+    const node = ref.current
+    if (!on || !node) return
+    const base = el.lineHeight || 1.5
+    const max = lang === 'ja' ? 1.95 : 1.8
+    const fit = () => {
+      node.style.lineHeight = String(base)
+      const box = node.clientHeight
+      let lh = base
+      for (let i = 0; i < 3; i++) {
+        const ps = node.children
+        if (!ps.length || !box) return
+        const used = ps[ps.length - 1].getBoundingClientRect().bottom - ps[0].getBoundingClientRect().top
+        if (used >= box * 0.985) break
+        // khoảng cách đoạn không giãn theo dòng → lặp vài lần cho sát
+        lh = Math.min(max, lh * (1 + (box - used) / used))
+        node.style.lineHeight = String(lh)
+        if (lh >= max) break
+      }
+      // lỡ vượt khung thì lùi lại một chút
+      while (lh > base && node.children.length && node.children[node.children.length - 1].getBoundingClientRect().bottom > node.getBoundingClientRect().bottom + 0.5) {
+        lh = Math.max(base, lh - 0.02)
+        node.style.lineHeight = String(lh)
+      }
+    }
+    fit()
+    let alive = true
+    document.fonts?.ready.then(() => alive && fit())
+    return () => {
+      alive = false
+      node.style.lineHeight = ''
+    }
+  }, [ref, el, lang, on])
 }
 
 const isPageLink = (link) => /^#p\d+$/.test(link || '')
@@ -244,8 +290,26 @@ function PhotoPlaceholder({ el }) {
   )
 }
 
+/** nút "Đọc thêm": trang chỉ để đoạn tóm tắt, toàn văn mục này mở trong khung đọc (el.title/titleJa, el.paras/parasJa) */
+function MoreBody({ el, mode }) {
+  const lang = useCanvasLang()
+  const { openReader } = useContext(MagazineContext)
+  const ja = lang === 'ja' && el.parasJa?.length
+  const open = () =>
+    openReader?.({ title: plainText(ja ? el.titleJa || el.title : el.title), paras: (ja ? el.parasJa : el.paras).map(plainText), lang: ja ? 'ja' : 'vi' })
+  return (
+    <button type="button" className="cv-more" style={{ '--c': el.color || '#a07a3c' }} onClick={mode === 'read' ? open : undefined} tabIndex={mode === 'read' ? 0 : -1}>
+      <svg viewBox="0 0 20 16" aria-hidden="true">
+        <path d="M2 3 C 5 1.5, 8 1.5, 10 3 C 12 1.5, 15 1.5, 18 3 L 18 14 C 15 12.5, 12 12.5, 10 14 C 8 12.5, 5 12.5, 2 14 Z M10 3 L10 14" />
+      </svg>
+      <span>{t('readMore')}</span>
+      <i aria-hidden="true">→</i>
+    </button>
+  )
+}
+
 /** {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css) */
-function RubyText({ text }) {
+export function RubyText({ text }) {
   const parts = parseRuby(text)
   if (parts.length === 1 && typeof parts[0] === 'string') return text
   return parts.map((p, i) =>

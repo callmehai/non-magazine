@@ -1072,3 +1072,91 @@
   --font-serif: 'Playfair Display', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
   --font-italic: 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
 }
+
+/* ── đọc thêm: toàn văn một mục trong khung giấy ngà ──────────────── */
+.reader {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  padding: 40px 24px;
+  background: rgba(10, 7, 5, 0.86);
+  animation: fade-in 0.3s var(--ease) both;
+  opacity: 0;
+}
+
+.reader__sheet {
+  position: relative;
+  width: min(680px, 92vw);
+  max-height: min(84vh, 900px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 44px 52px 40px;
+  border-radius: 3px;
+  background: #f7f1e3 center / cover;
+  color: #2b2118;
+  box-shadow:
+    0 40px 80px -24px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(160, 122, 60, 0.35);
+  animation: lightbox-in 0.4s var(--ease) both;
+}
+
+.reader__deco {
+  position: absolute;
+  right: 28px;
+  top: 22px;
+  width: 92px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.reader__title {
+  margin: 0 110px 18px 0;
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.25;
+  color: #7a5c38;
+}
+
+.reader__title::after {
+  content: '';
+  display: block;
+  width: 56px;
+  margin-top: 14px;
+  border-top: 1.5px solid #a07a3c;
+}
+
+.reader__body p {
+  margin: 0 0 14px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+.reader__sheet[lang='ja'] .reader__body p {
+  font-family: 'Noto Serif JP', serif;
+  line-height: 1.9;
+}
+
+.reader__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+@media (max-width: 600px) {
+  .reader__sheet {
+    padding: 32px 22px 28px;
+  }
+  .reader__deco {
+    width: 64px;
+    right: 14px;
+  }
+  .reader__title {
+    margin-right: 70px;
+    font-size: 23px;
+  }
+}

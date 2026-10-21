@@ -36,6 +36,19 @@ export const preface = {
     ],
   ],
   sign: ['Hà Nội, tháng 11 năm 2026\nNhóm tác giả', '2026年11月 ハノイにて\n{著者|ちょしゃ}一同'],
+  // tóm tắt in trên trang (toàn văn mở bằng nút "Đọc thêm"), theo góp ý: lời mở đầu gọn trong 1 cặp trang
+  summary: [
+    'Chiếc nón lá gắn bó với người Việt từ cánh đồng đến sân khấu lễ hội, và làng Chuông (Hà Nội) là một trong những nơi giữ nghề làm nón lâu đời nhất miền Bắc. Qua ảnh thật và những đoạn GIF từng công đoạn, cuốn sách mời độc giả Nhật Bản cùng về làng Chuông, xem chiếc nón lá trắng ra đời từ đôi tay người thợ.',
+    'ノンラーは、田んぼから祭りの{舞台|ぶたい}まで、ベトナムの人々の暮らしに{寄|よ}り{添|そ}ってきました。ハノイのチュオン村は、北部で古くから笠づくりを守り続けてきた村の一つです。本書では写真と工程のGIFで、白いノンラーが職人の手から生まれるまでを、日本の{読者|どくしゃ}の皆様にご案内します。',
+  ],
+  photo: ['Nụ cười người thợ làng Chuông bên chiếc nón', '笠を手に笑顔を見せるチュオン村の職人'],
+  contentsTitle: ['Trong cuốn sách này', '本書の{構成|こうせい}'],
+  chapters: [
+    { icon: 'non', text: ['Nón lá trong đời sống, lịch sử và chân dung làng Chuông', '暮らしと歴史の中のノンラー、そしてチュオン村の{横顔|よこがお}'] },
+    { icon: 'tool-quay-non', text: ['Ba lớp lá, mười sáu vành nứa và tám công đoạn làm nên một chiếc nón', '三層の葉、十六本の輪、八つの工程から生まれる一枚の笠'] },
+    { icon: 'lotus-pond', text: ['Những ghi nhận, nỗ lực bảo tồn và thách thức của nghề nón hôm nay', '評価と保存の取り組み、そして今日の笠づくりが向き合う課題'] },
+  ],
+  turn: ['Mời bạn lật trang, cùng về làng Chuông →', 'さあ、ページをめくってチュオン村へ →'],
 }
 
 export const tocTitle = ['Mục lục', '{目次|もくじ}']

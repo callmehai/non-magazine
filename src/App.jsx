@@ -8,6 +8,7 @@ import LoadingIntro from './components/Intro/LoadingIntro.jsx'
 import SceneBackground from './components/Scene/SceneBackground.jsx'
 import Hint from './components/Hint.jsx'
 import Lightbox from './components/Lightbox.jsx'
+import Reader from './components/Reader.jsx'
 import Icon from './components/common/Icon.jsx'
 import { useFlipBook } from './hooks/useFlipBook.js'
 import { useBookLayout } from './hooks/useBookLayout.js'
@@ -71,18 +72,17 @@ export default function App({ magazine: source }) {
   const flipFile = useMemo(() => (hasAsset(settings.flipSound) ? asset(settings.flipSound) : null), [settings.flipSound])
 
   const onFlipStart = useCallback(
-    (pf) => {
+    () => {
       if (!soundOnRef.current) return
-      const cur = pf.getCurrentPageIndex()
       if (flipFile) {
         const a = new Audio(flipFile)
         a.volume = 0.6
         a.play().catch(() => {})
       } else {
-        playFlipSound({ hard: cur <= 1 || cur >= count - 2 })
+        playFlipSound()
       }
     },
-    [flipFile, count]
+    [flipFile]
   )
 
   // ───────────── sách
@@ -190,6 +190,7 @@ export default function App({ magazine: source }) {
 
   // ───────────── panel, lightbox, fullscreen
   const [lightbox, setLightbox] = useState(null)
+  const [reader, setReader] = useState(null)
   const fullscreen = useFullscreen(appRef)
   const idle = useIdle(3200, panelOpen || phase !== 'reading')
   const [overControls, setOverControls] = useState(false)
@@ -220,7 +221,7 @@ export default function App({ magazine: source }) {
         else fullscreen.exit()
       },
     },
-    phase === 'reading' && !lightbox
+    phase === 'reading' && !lightbox && !reader
   )
 
   // Ctrl + lăn chuột (và pinch trên trackpad) = zoom
@@ -275,6 +276,7 @@ export default function App({ magazine: source }) {
   const ctx = useMemo(
     () => ({
       openLightbox: (images, index) => setLightbox({ images, index }),
+      openReader: setReader,
       reducedMotion,
       onPageAudioPlay: pauseMusic,
       goToPage: flipTo,
@@ -366,6 +368,7 @@ export default function App({ magazine: source }) {
 
           <ThumbnailPanel open={panelOpen} magazine={magazine} visible={visible} onSelect={selectPage} onClose={() => setPanelOpen(false)} rtl={rtl} />
           <Lightbox state={lightbox} onChange={setLightbox} onClose={() => setLightbox(null)} />
+          <Reader state={reader} onClose={() => setReader(null)} />
 
           {phase !== 'reading' && (
             <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase === 'leaving'} leaving={phase === 'leaving'} onOpen={openMagazine} />

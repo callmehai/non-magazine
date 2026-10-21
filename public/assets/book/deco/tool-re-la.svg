@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none" stroke="#8a6a3c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(-8 80 120)"><path d="M80 150 C 74 110, 76 60, 80 14 C 84 60, 86 110, 80 150 Z" fill="#efe2c4"/><path d="M80 140 L 80 24" stroke-width="0.6" opacity=".5"/></g>
+<g transform="rotate(-4 80 120)"><path d="M80 150 C 74 110, 76 60, 80 14 C 84 60, 86 110, 80 150 Z" fill="#efe2c4"/><path d="M80 140 L 80 24" stroke-width="0.6" opacity=".5"/></g>
+<g transform="rotate(0 80 120)"><path d="M80 150 C 74 110, 76 60, 80 14 C 84 60, 86 110, 80 150 Z" fill="#efe2c4"/><path d="M80 140 L 80 24" stroke-width="0.6" opacity=".5"/></g>
+<g transform="rotate(4 80 120)"><path d="M80 150 C 74 110, 76 60, 80 14 C 84 60, 86 110, 80 150 Z" fill="#efe2c4"/><path d="M80 140 L 80 24" stroke-width="0.6" opacity=".5"/></g>
+<g transform="rotate(8 80 120)"><path d="M80 150 C 74 110, 76 60, 80 14 C 84 60, 86 110, 80 150 Z" fill="#efe2c4"/><path d="M80 140 L 80 24" stroke-width="0.6" opacity=".5"/></g>
+<path d="M66 104 C 74 110, 86 110, 94 104" stroke="#b4533a" stroke-width="2"/>
+<path d="M100 60 C 120 66, 140 64, 152 56 C 140 76, 118 78, 100 60 Z" fill="#d3dfc3"/>
+</svg>

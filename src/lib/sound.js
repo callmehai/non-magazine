@@ -35,58 +35,48 @@ function noiseBuffer(c) {
   return noise
 }
 
-/** Tiếng giấy sột soạt khi lật trang. `hard` = bìa cứng, thêm tiếng "bộp" trầm. */
-export function playFlipSound({ hard = false, volume = 0.6 } = {}) {
+/** Tiếng giấy sột soạt khi lật trang: nhẹ, trầm vừa phải, không có tiếng "bộp" (góp ý: mở sách nghe "đập đập" rất khó chịu). */
+export function playFlipSound({ volume = 0.35 } = {}) {
   const c = getAudioContext()
   if (!c) return
   if (c.state === 'suspended') c.resume().catch(() => {})
   const t = c.currentTime + 0.01
-  const dur = hard ? 0.55 : 0.48
+  const dur = 0.42
 
   const src = c.createBufferSource()
   src.buffer = noiseBuffer(c)
-  src.playbackRate.value = 0.9 + Math.random() * 0.2
+  src.playbackRate.value = 0.9 + Math.random() * 0.15
 
   const band = c.createBiquadFilter()
   band.type = 'bandpass'
-  band.Q.value = 0.8
-  band.frequency.setValueAtTime(700, t)
-  band.frequency.exponentialRampToValueAtTime(3400, t + dur * 0.4)
-  band.frequency.exponentialRampToValueAtTime(1200, t + dur)
+  band.Q.value = 0.6
+  band.frequency.setValueAtTime(900, t)
+  band.frequency.exponentialRampToValueAtTime(2200, t + dur * 0.45)
+  band.frequency.exponentialRampToValueAtTime(1100, t + dur)
 
   const high = c.createBiquadFilter()
   high.type = 'highpass'
-  high.frequency.value = 280
+  high.frequency.value = 420
 
-  // biên độ "lạo xạo": đường cong ngẫu nhiên trên nền envelope
+  const low = c.createBiquadFilter()
+  low.type = 'lowpass'
+  low.frequency.value = 4200
+
+  // một đường cong mềm (lên chậm, xuống chậm), dao động nhỏ cho có chất giấy — không giật cục
   const env = c.createGain()
-  const steps = 48
+  const steps = 64
   const curve = new Float32Array(steps)
   for (let i = 0; i < steps; i++) {
     const p = i / (steps - 1)
-    const shape = Math.pow(Math.sin(Math.PI * Math.min(1, p * 1.25)), 1.6)
-    curve[i] = Math.max(0.0001, shape * (0.65 + Math.random() * 0.35) * volume * 0.55)
+    const shape = Math.pow(Math.sin(Math.PI * p), 2)
+    curve[i] = Math.max(0.0001, shape * (0.85 + Math.random() * 0.15) * volume * 0.5)
   }
   env.gain.setValueAtTime(0.0001, t)
   env.gain.setValueCurveAtTime(curve, t, dur)
 
-  src.connect(band).connect(high).connect(env).connect(c.destination)
+  src.connect(band).connect(high).connect(low).connect(env).connect(c.destination)
   src.start(t)
   src.stop(t + dur + 0.05)
-
-  if (hard) {
-    const o = c.createOscillator()
-    const g = c.createGain()
-    o.type = 'sine'
-    o.frequency.setValueAtTime(110, t + dur * 0.75)
-    o.frequency.exponentialRampToValueAtTime(48, t + dur * 0.75 + 0.18)
-    g.gain.setValueAtTime(0.0001, t + dur * 0.75)
-    g.gain.exponentialRampToValueAtTime(0.28 * volume, t + dur * 0.75 + 0.012)
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.75 + 0.25)
-    o.connect(g).connect(c.destination)
-    o.start(t + dur * 0.75)
-    o.stop(t + dur * 0.75 + 0.3)
-  }
 }
 
 function impulse(c, seconds = 3.2, decay = 2.6) {

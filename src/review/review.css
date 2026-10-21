@@ -1,0 +1,65 @@
+body {
+  background: #3e5843;
+}
+.rv {
+  display: grid;
+  gap: 28px;
+  justify-content: center;
+  padding: 16px 16px 80px;
+  font: 14px/1.45 'Be Vietnam Pro', sans-serif;
+  color: #f4efe2;
+}
+.rv-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #24372b;
+}
+.rv-pair {
+  display: grid;
+  gap: 6px;
+}
+.rv-spread {
+  display: flex;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.rv-page {
+  position: relative;
+  width: calc(var(--pw) * 1px);
+  overflow: hidden;
+}
+.rv-page.is-empty {
+  background: transparent;
+}
+.rv-no {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 12px;
+}
+.rv-issues {
+  margin: 0;
+  padding: 6px 12px 6px 28px;
+  border-radius: 6px;
+  background: #7a2a1e;
+}
+.rv-ok {
+  margin: 0;
+  color: #b9d3b0;
+}
+.rv-msg {
+  color: #fff;
+  padding: 24px;
+}
+/* trang soát: phần tử có hiệu ứng xuất hiện hiện ở trạng thái cuối */
+.rv .cv-page .cv-el[data-anim] {
+  opacity: 1 !important;
+  animation: none !important;
+  clip-path: none !important;
+}

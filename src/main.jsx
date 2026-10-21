@@ -47,6 +47,12 @@ if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#
       </StrictMode>
     )
   )
+} else if (import.meta.env.DEV && params.has('measure')) {
+  // ?measure=1 → đo chiều cao thật của từng khối chữ trong bản build, ghi scripts/book/out/measure.json (chỉ khi chạy dev)
+  import('./review/MeasureSheet.jsx').then(({ default: MeasureSheet }) => root.render(<MeasureSheet />))
+} else if (import.meta.env.DEV && params.has('review')) {
+  // ?review=1&lang=vi|ja → trang soát từng cặp trang của bản build scripts/book/out/book.json (chỉ khi chạy dev)
+  import('./review/ReviewSheet.jsx').then(({ default: ReviewSheet }) => root.render(<ReviewSheet lang={params.get('lang') === 'ja' ? 'ja' : 'vi'} />))
 } else if (bookParam === 'tap-chi') {
   setLang(magazine.lang)
   document.title = 'NÓN — Dấu ấn trên đỉnh đầu'

@@ -98,9 +98,12 @@ export const ch3 = {
         h: ['Từ chợ làng đến thị trường rộng hơn', '村の市場から広い世界へ'],
         p: [
           ['Chợ Chuông từ lâu đã gắn bó với hoạt động sản xuất và buôn bán nón lá của người dân địa phương. Chợ thường họp vào các ngày mùng 4, 10, 14, 20, 24 và 30 âm lịch hằng tháng, với hoạt động mua bán diễn ra từ sáng sớm. Tại đây, người dân bày bán các nguyên liệu và vật dụng làm nón như lá nón, cạp nón, cước, vòng nứa, cùng những chiếc nón đã hoàn thiện. Nón thường được xếp thành từng chồng, phân loại theo kiểu dáng, kích thước để thuận tiện cho việc lựa chọn và mua bán. Chợ không chỉ phục vụ nhu cầu sản xuất của người dân trong làng mà còn là nơi các thương lái thu mua nón để đưa đến nhiều địa phương khác, góp phần duy trì hoạt động tiêu thụ sản phẩm của làng nghề.', 'チュオン市場は、古くから村の人々の笠づくりと{商|あきな}いに結びついてきました。市場は毎月、旧暦の4・10・14・20・24・30日に開かれ、早朝から取引が始まります。ここでは笠の葉、縁の輪、ナイロン糸、ヌア竹の輪といった笠づくりの材料や道具と、完成した笠が売られます。笠は形や大きさごとに{積|つ}み{重|かさ}ねられ、選びやすく、売り買いしやすいようになっています。市場は村の人々の生産を支えるだけでなく、{仲買人|なかがいにん}が笠を買い取って各地へ運ぶ場でもあり、工芸村の製品の{流通|りゅうつう}を支えています。'],
-          ['Từ những phiên chợ truyền thống, nón làng Chuông hiện còn được giới thiệu tại hội chợ, triển lãm, sự kiện văn hóa và các chương trình quảng bá làng nghề. Sản phẩm cũng từng xuất hiện tại một số sự kiện lớn như SEA Games và APEC. Bên cạnh đó, một số cơ sở sản xuất đã sử dụng mạng xã hội và các nền tảng trực tuyến để giới thiệu sản phẩm, nhận đơn hàng và tiếp cận khách hàng ngoài địa phương. Nón Chuông cũng đã được đưa đến một số thị trường quốc tế như Trung Quốc, Hàn Quốc, Nhật Bản, Đức,...', '伝統的な市場から出発したチュオン村の笠は、今では見本市や展覧会、文化イベント、工芸村のPR{企画|きかく}でも紹介されています。SEA GamesやAPECといった大きな{催|もよお}しにも登場しました。また、SNSやオンラインのサービスで製品を紹介し、注文を受け、地域の外の客に届ける工房もあります。チュオンの笠は、中国、韓国、日本、ドイツなど、海外の市場にも届けられています。'],
+          ['Từ những phiên chợ truyền thống, nón làng Chuông hiện còn được giới thiệu tại hội chợ, triển lãm, sự kiện văn hóa và các chương trình quảng bá làng nghề. Sản phẩm cũng từng xuất hiện tại một số sự kiện lớn như SEA Games và APEC. Bên cạnh đó, một số cơ sở sản xuất đã sử dụng mạng xã hội và các nền tảng trực tuyến để giới thiệu sản phẩm, nhận đơn hàng và tiếp cận khách hàng ngoài địa phương. Nón Chuông cũng đã được đưa đến một số thị trường quốc tế như Trung Quốc, Hàn Quốc, Nhật Bản, Đức…', '伝統的な市場から出発したチュオン村の笠は、今では見本市や展覧会、文化イベント、工芸村のPR{企画|きかく}でも紹介されています。SEA GamesやAPECといった大きな{催|もよお}しにも登場しました。また、SNSやオンラインのサービスで製品を紹介し、注文を受け、地域の外の客に届ける工房もあります。チュオンの笠は、中国、韓国、日本、ドイツなど、海外の市場にも届けられています。'],
         ],
-        image: ['Mua bán nón trong phiên chợ Chuông', 'チュオンの市場での笠の売り買い'],
+        images: [
+          ['Gian hàng nón làng Chuông tại một hội chợ triển lãm năm 2025 — ảnh: Báo Đại biểu Nhân dân', '2025年の見本市に出展したチュオン村の笠のブース — 写真：ダイビエウニャンザン紙'],
+          ['Mua bán nón trong phiên chợ Chuông', 'チュオンの市場での笠の売り買い'],
+        ],
         video: ['Video: nón lá làng Chuông trên sàn diễn thời trang quốc tế — nguồn: nghệ nhân Lê Văn Tuy', '動画：海外のファッションショーに登場したチュオン村のノンラー — 提供：職人レー・ヴァン・トゥイ'],
       },
       {
@@ -194,7 +197,7 @@ export const ending = {
         '現地調査やインタビューで得た情報は、本書での使用について、ご本人の{許可|きょか}をいただいています。本書はFPT大学ハノイ校日本語学科の学生による卒業制作であり、商業的・政治的な目的では使用しません。また、制作にあたっては、著作権を{侵害|しんがい}しないことをお約束します。',
       ],
       [
-        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn flipbook này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email: nonla09092026@gmail.com',
+        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn flipbook này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email: nonla09092026@gmail.com.',
         '最後に、本書をお読みくださった皆様に心より{感謝|かんしゃ}申し上げます。ご意見・ご感想は、メールアドレス nonla09092026@gmail.com までお寄せください。',
       ],
     ],

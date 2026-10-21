@@ -17,7 +17,7 @@ export const photos = {
   // mở chương
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá giữa cánh đồng": "Chương 1/Tại làng Chuông/IMG_3610",
   "Ảnh mở chương: đôi bàn tay nghệ nhân khâu nón trên khuôn": "Chương 2/Tại làng Chuông/2.1. Cấu tạo của nón lá/2.1.1 Cấu trúc 3 lớp lá lợp/Lớp lá lụi ngoài/IMG_7418",
-  "Ảnh mở chương: nghệ nhân cao tuổi bên chiếc nón — giữ nghề cho mai sau": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Ảnh em bé cầm nón",
+  "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Ảnh em bé cầm nón",
   // chương 1
   "Nón lá trong đời sống thường ngày: che nắng, che mưa khi lao động": "Chương 1/BTHN/IMG_20261002_150751",
   "Nón lá bên tà áo dài": "Chương 1/Tại làng Chuông/IMG_3549",
@@ -163,4 +163,13 @@ export const photos = {
   "Người bán xếp nón bên cánh cửa gỗ cũ": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3207",
   "Gian hàng nón nhiều màu sắc ở làng Chuông": "Chương 3/IMG_7271",
   "Mua bán lá và vành nón trong phiên chợ Chuông": "Chương 3/Không gian chợ nón/Hđ buôn bán",
+  "Người bán ngồi giữa lá, vành và nón trong phiên chợ Chuông": "Chương 3/IMG_7038",
+  "Du khách nước ngoài học làm nón trong một xưởng ở làng Chuông": "Chương 3/IMG_3741",
+  "Bức tường nón vẽ cờ đỏ sao vàng tại một cơ sở làng Chuông": "Chương 3/IMG_3788",
+  "Nghệ nhân Phạm Trần Canh — ảnh: Báo Thể thao & Văn hóa": "online/pham-tran-canh",
+  "Gian hàng nón làng Chuông tại một hội chợ triển lãm năm 2025 — ảnh: Báo Đại biểu Nhân dân": "online/non-hoi-cho-2025",
+  // ảnh dọc làm trang ảnh tràn trang (mỗi ảnh dùng một lần)
+  "Ảnh toàn trang: những chiếc khung nón xếp chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3138",
+  "Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3175",
+  "Ảnh toàn trang: phiên chợ lá lụi lúc tờ mờ sáng": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3152",
 }
