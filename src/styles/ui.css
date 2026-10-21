@@ -88,7 +88,7 @@
 .controls__progress span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-deep));
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold-2));
   transform-origin: left;
   transition: transform 0.9s var(--ease);
 }
@@ -556,7 +556,7 @@
   aspect-ratio: var(--ratio, 720 / 1020);
   overflow: hidden;
   border-radius: 2px;
-  box-shadow: 0 6px 16px -8px rgba(90, 64, 24, 0.35);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.8);
   outline: 1px solid var(--ui-line);
   transition: transform 0.3s var(--ease), outline-color 0.3s;
   pointer-events: none;
@@ -831,10 +831,10 @@
 @keyframes open-glow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(217, 189, 132, 0.3), 0 10px 26px -12px rgba(90, 64, 24, 0.35);
+    box-shadow: 0 0 0 0 rgba(217, 189, 132, 0.3), 0 10px 26px -12px rgba(0, 0, 0, 0.6);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(217, 189, 132, 0), 0 10px 26px -12px rgba(90, 64, 24, 0.35);
+    box-shadow: 0 0 0 10px rgba(217, 189, 132, 0), 0 10px 26px -12px rgba(0, 0, 0, 0.6);
   }
 }
 

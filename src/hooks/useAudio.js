@@ -99,9 +99,13 @@ export function useAudio(src, { loop = false, volume: initialVolume = 0.8, track
  * Nhạc nền: dùng file trong magazine.js nếu có,
  * nếu chưa có file thì phát bản nhạc ngũ cung tổng hợp (Web Audio).
  */
+// play() trả true để giao diện không mời người đọc "bấm để bật âm thanh"
+const NO_MUSIC = { playing: false, play: async () => true, pause: () => {}, toggle: () => {}, available: false, source: 'off' }
+
 export function useBackgroundMusic(settings) {
   const path = settings.backgroundMusic
-  const hasFile = hasAsset(path)
+  const off = path === false // sách tắt nhạc nền: không phát file, cũng không dùng nhạc tổng hợp
+  const hasFile = !off && hasAsset(path)
   const file = useAudio(hasFile ? asset(path) : null, { loop: true, volume: settings.musicVolume ?? 0.5, trackTime: false })
 
   const synthRef = useRef(null)
@@ -111,13 +115,13 @@ export function useBackgroundMusic(settings) {
   const [synthBlocked, setSynthBlocked] = useState(false)
 
   useEffect(() => {
-    if (hasFile) return
+    if (hasFile || off) return
     synthRef.current = createAmbient()
     return () => {
       synthRef.current?.stop()
       synthRef.current = null
     }
-  }, [hasFile])
+  }, [hasFile, off])
 
   useEffect(() => {
     synthRef.current?.setVolume(synthMuted ? 0 : synthVolume)
@@ -140,6 +144,7 @@ export function useBackgroundMusic(settings) {
     setSynthPlaying(false)
   }, [])
 
+  if (off) return NO_MUSIC
   if (hasFile) return { ...file, title: settings.backgroundMusicTitle || t('music'), source: 'file' }
   return {
     playing: synthPlaying,

@@ -292,8 +292,8 @@ button {
 }
 
 .langswitch button.is-on {
-  background: var(--ui-strong);
-  color: #fdf8ea;
+  background: var(--ui-accent);
+  color: var(--brown-2);
 }
 
 /* tên số báo bên phải nhường chỗ cho nút ngôn ngữ */

@@ -24,9 +24,8 @@ const canvasBook = {
     // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật
     direction: 'ltr',
     flipDuration: 950,
-    backgroundMusic: 'assets/audio/background.mp3',
-    backgroundMusicTitle: 'Bèo dạt mây trôi',
-    musicVolume: 0.5,
+    // nhóm chưa chọn nhạc (bản sửa lần 1: "tạm chưa làm nhạc") → tắt nhạc nền, chỉ còn tiếng lật trang
+    backgroundMusic: false,
     enableSound: true,
     flipSound: 'assets/audio/page-flip.mp3',
     intro: true,
