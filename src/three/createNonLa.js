@@ -235,37 +235,6 @@ function mulberry32(a) {
   }
 }
 
-/** quai nón: dải lụa dẹt (không phải ống tròn), mặt dải quay vào trong; twist = độ xoắn nhẹ ở giữa dải (radian) */
-function ribbonGeometry(curve, width, segments, twist = 0) {
-  const pos = []
-  const uv = []
-  const idx = []
-  const z = new THREE.Vector3(0, 0, 1)
-  for (let i = 0; i <= segments; i++) {
-    const t = i / segments
-    const p = curve.getPointAt(t)
-    const tan = curve.getTangentAt(t)
-    const side = z
-      .clone()
-      .sub(tan.clone().multiplyScalar(tan.dot(z)))
-      .normalize()
-      .applyAxisAngle(tan, Math.sin(Math.PI * t) * twist)
-      .multiplyScalar(width / 2)
-    pos.push(p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z)
-    uv.push(t, 0, t, 1)
-    if (i < segments) {
-      const a = i * 2
-      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2)
-    }
-  }
-  const g = new THREE.BufferGeometry()
-  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
-  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
-  g.setIndex(idx)
-  g.computeVertexNormals()
-  return g
-}
-
 /**
  * Tạo một chiếc nón lá Làng Chuông 3D hoàn toàn bằng code.
  * Trả về group + các bộ phận để làm hiệu ứng "đan nón" (vòng nan → lợp lá → quai).
@@ -353,18 +322,8 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
   // buộc vào giữa mảng chỉ nhôi (vòng 11,5/16 tính từ chóp)
   const ay = H * (1 - 0.72)
   const ax = R * 0.72 - 0.03
-  // dải lụa rủ mềm: ra khỏi mảng nhôi gần như thẳng xuống rồi võng thành hình chữ U, hơi lệch một bên
-  const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-ax, ay, 0),
-    new THREE.Vector3(-ax * 0.97, ay - 0.2, 0.02),
-    new THREE.Vector3(-ax * 0.84, ay - 0.48, 0.06),
-    new THREE.Vector3(-ax * 0.52, ay - 0.74, 0.11),
-    new THREE.Vector3(-ax * 0.04, ay - 0.84, 0.14),
-    new THREE.Vector3(ax * 0.46, ay - 0.76, 0.12),
-    new THREE.Vector3(ax * 0.82, ay - 0.5, 0.07),
-    new THREE.Vector3(ax * 0.97, ay - 0.21, 0.02),
-    new THREE.Vector3(ax, ay, 0),
-  ])
+  // quai lụa mềm: võng hình chữ U giữa hai điểm buộc; hướng võng (góc quanh trục nối hai điểm buộc) bám theo
+  // trọng lực qua một lò xo có giảm chấn → xoay nón thì quai lắc trễ rồi lắng lại, lúc đứng yên vẫn đung đưa khẽ
   const strapMat = new THREE.MeshPhysicalMaterial({
     color: '#a3313c',
     roughness: 0.55,
@@ -374,8 +333,54 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
     side: THREE.DoubleSide,
     transparent: true,
   })
-  const strap = new THREE.Mesh(ribbonGeometry(curve, 0.038, 160, 0.5), strapMat)
+  const SEG = 120
+  const DEPTH = 0.84
+  const strapGeo = new THREE.BufferGeometry()
+  const strapPos = new Float32Array((SEG + 1) * 6)
+  const strapUv = []
+  const strapIdx = []
+  for (let i = 0; i <= SEG; i++) {
+    strapUv.push(i / SEG, 0, i / SEG, 1)
+    if (i < SEG) strapIdx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2)
+  }
+  strapGeo.setAttribute('position', new THREE.BufferAttribute(strapPos, 3))
+  strapGeo.setAttribute('uv', new THREE.Float32BufferAttribute(strapUv, 2))
+  strapGeo.setIndex(strapIdx)
+  const rib = Array.from({ length: SEG + 1 }, () => new THREE.Vector3())
+  const tan = new THREE.Vector3()
+  const side = new THREE.Vector3()
+  const layStrap = (angle) => {
+    const dy = -Math.cos(angle)
+    const dz = Math.sin(angle)
+    for (let i = 0; i <= SEG; i++) {
+      const t = i / SEG
+      const sn = Math.sin(Math.PI * t)
+      const sag = DEPTH * Math.pow(sn, 0.75) // ra khỏi mảng nhôi gần như thẳng xuống, đáy chữ U tròn
+      rib[i].set(-ax + 2 * ax * t, ay, 0)
+      rib[i].x *= 1 - 0.16 * sn
+      rib[i].y += dy * sag
+      rib[i].z += dz * sag + 0.04 * sn
+    }
+    // mặt dải lụa quay vào lòng chữ U: bề rộng theo pháp tuyến của mặt phẳng võng, xoắn nhẹ ở giữa
+    const nx = 0
+    const ny = -dz
+    const nz = dy
+    for (let i = 0; i <= SEG; i++) {
+      tan.subVectors(rib[Math.min(i + 1, SEG)], rib[Math.max(i - 1, 0)]).normalize()
+      side.set(nx, -ny, -nz).applyAxisAngle(tan, Math.sin((Math.PI * i) / SEG) * 0.5).multiplyScalar(0.019)
+      const p = rib[i]
+      strapPos.set([p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z], i * 6)
+    }
+    strapGeo.attributes.position.needsUpdate = true
+    strapGeo.computeVertexNormals()
+    strapGeo.computeBoundingSphere()
+  }
+  layStrap(0)
+  const strap = new THREE.Mesh(strapGeo, strapMat)
   group.add(strap)
+  const swing = { a: 0, v: 0 }
+  const qInv = new THREE.Quaternion()
+  const g = new THREE.Vector3()
 
   const localPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 10)
 
@@ -407,6 +412,21 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
     setStrap(p) {
       strap.visible = p > 0
       strapMat.opacity = p
+    },
+    /** gọi mỗi khung hình (sau khi cập nhật matrixWorld): quai võng theo trọng lực, lắc trễ khi xoay nón */
+    updateStrap(dt, time, motion = 1) {
+      if (!strap.visible) return
+      group.getWorldQuaternion(qInv).invert()
+      g.set(0, -1, 0).applyQuaternion(qInv)
+      const target = THREE.MathUtils.clamp(Math.atan2(g.z, -g.y), -1.15, 1.15) + Math.sin(time * 1.1) * 0.05 * motion
+      if (!motion) swing.a = target
+      else {
+        swing.v += (-18 * (swing.a - target) - 3.2 * swing.v) * dt
+        swing.a += swing.v * dt
+      }
+      if (Math.abs(swing.a - (swing.last ?? 99)) < 1e-4) return
+      swing.last = swing.a
+      layStrap(swing.a)
     },
     dispose() {
       group.traverse((o) => {

@@ -286,6 +286,7 @@ export class HeroScene {
 
     pivot.updateMatrixWorld(true)
     this.hat.setReveal(this.leafP ?? 1)
+    this.hat.updateStrap(dt, time, motion)
 
     // vũng sáng + chùm sáng tắt dần khi vào chế độ đọc
     const glow = 1 - m
