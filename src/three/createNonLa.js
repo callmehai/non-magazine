@@ -181,39 +181,36 @@ function makeTextures(size = 2048) {
     c.stroke()
   }
 
-  // ── chỉ nhôi trong lòng nón: hai mảng đối nhau, chỉ đỏ đan zíc zắc giữa hai vòng nan, chỉ xanh bắt chéo ở giữa
+  // ── chỉ nhôi trong lòng nón: hai mảng phẳng đối nhau, dài theo vòng nón, sát phía vành (theo ảnh nón cô dâu nhóm gửi):
+  // chỉ đỏ căng chéo giữa hai vòng nan thành lưới mắt cáo, hai đầu thưa dần; giữa mảng là dải chỉ xanh xen trắng đan chéo
   const nhoi = (cx) => {
-    const y1 = h * (9 / 16)
-    const y2 = h * (11.5 / 16)
-    const half = w * 0.075
-    const slant = half * 0.45
-    // chỉ đỏ: nhiều sợi song song, nửa trái nghiêng một chiều, nửa phải nghiêng chiều ngược → hình chữ V dẹt
-    const lines = 40
-    for (let i = 0; i < lines; i++) {
-      const t = i / (lines - 1)
-      const x = cx - half + t * half * 2
-      const dir = t < 0.5 ? 1 : -1
-      n.strokeStyle = `rgb(${190 + rand() * 30},${18 + rand() * 14},${20 + rand() * 10})`
-      n.lineWidth = 3.4 * k
+    const y1 = h * (9.5 / 16)
+    const y2 = h * (13.5 / 16)
+    const half = w * 0.055
+    // u: -1..1 dọc theo vòng nón, v: 0 (phía chóp)..1 (phía vành)
+    const at = (u, v) => [cx + u * half, y1 + v * (y2 - y1)]
+    const thread = (u0, u1, color, width) => {
+      n.strokeStyle = color
+      n.lineWidth = width * k
       n.beginPath()
-      n.moveTo(x, y1)
-      n.lineTo(x + slant * dir, y2)
+      n.moveTo(...at(u0, 0))
+      n.lineTo(...at(u1, 1))
       n.stroke()
     }
-    // chỉ xanh bắt chéo ở giữa mảng
-    for (let i = 0; i < 16; i++) {
-      const x = cx - half * 0.4 + (i / 15) * half * 0.8
-      n.strokeStyle = '#1d2c9e'
-      n.lineWidth = 3.4 * k
-      n.beginPath()
-      n.moveTo(x + slant * 0.5, y1 + (y2 - y1) * 0.12)
-      n.lineTo(x - slant * 0.5, y2 - (y2 - y1) * 0.12)
-      n.stroke()
+    const red = () => `rgb(${215 + rand() * 25},${38 + rand() * 24},${40 + rand() * 16})`
+    const lean = 0.9
+    for (const side of [-1, 1]) {
+      for (let u = 0.12; u < 0.8; u += 0.045) {
+        const p = side * u
+        thread(p, p + side * lean, red(), 2.4)
+        thread(p + side * lean, p, red(), 2.4)
+      }
     }
-    // sợi chỉ chặn trên hai vòng nan
-    n.fillStyle = '#b8261f'
-    n.fillRect(cx - half, y1 - 1.5 * k, half * 2, 3 * k)
-    n.fillRect(cx - half + slant, y2 - 1.5 * k, half * 2 - slant * 2, 3 * k)
+    for (let u = -0.42; u <= -0.08; u += 0.04) {
+      thread(u, u + lean * 0.55, '#2234b8', 2.6)
+      thread(u + lean * 0.55, u, '#2234b8', 2.6)
+      thread(u + 0.02, u + 0.02 + lean * 0.55, 'rgba(255,250,240,0.9)', 1.4)
+    }
   }
   nhoi(w * 0.25)
   nhoi(w * 0.75)
@@ -238,8 +235,8 @@ function mulberry32(a) {
   }
 }
 
-/** quai nón: dải lụa dẹt (không phải ống tròn), mặt dải quay vào trong */
-function ribbonGeometry(curve, width, segments) {
+/** quai nón: dải lụa dẹt (không phải ống tròn), mặt dải quay vào trong; twist = độ xoắn nhẹ ở giữa dải (radian) */
+function ribbonGeometry(curve, width, segments, twist = 0) {
   const pos = []
   const uv = []
   const idx = []
@@ -248,7 +245,12 @@ function ribbonGeometry(curve, width, segments) {
     const t = i / segments
     const p = curve.getPointAt(t)
     const tan = curve.getTangentAt(t)
-    const side = z.clone().sub(tan.clone().multiplyScalar(tan.dot(z))).normalize().multiplyScalar(width / 2)
+    const side = z
+      .clone()
+      .sub(tan.clone().multiplyScalar(tan.dot(z)))
+      .normalize()
+      .applyAxisAngle(tan, Math.sin(Math.PI * t) * twist)
+      .multiplyScalar(width / 2)
     pos.push(p.x - side.x, p.y - side.y, p.z - side.z, p.x + side.x, p.y + side.y, p.z + side.z)
     uv.push(t, 0, t, 1)
     if (i < segments) {
@@ -348,25 +350,31 @@ export function createNonLa({ textureSize = 2048, anisotropy = 4 } = {}) {
   group.add(tip)
 
   // quai nón: dải lụa buộc vào hai mảng chỉ nhôi
-  const ay = H * (1 - 0.64)
-  const ax = R * 0.64 - 0.03
+  // buộc vào giữa mảng chỉ nhôi (vòng 11,5/16 tính từ chóp)
+  const ay = H * (1 - 0.72)
+  const ax = R * 0.72 - 0.03
+  // dải lụa rủ mềm: ra khỏi mảng nhôi gần như thẳng xuống rồi võng thành hình chữ U, hơi lệch một bên
   const curve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(-ax, ay, 0),
-    new THREE.Vector3(-ax * 0.86, ay - 0.32, 0.06),
-    new THREE.Vector3(-ax * 0.5, ay - 0.66, 0.12),
-    new THREE.Vector3(0, ay - 0.8, 0.15),
-    new THREE.Vector3(ax * 0.5, ay - 0.66, 0.12),
-    new THREE.Vector3(ax * 0.86, ay - 0.32, 0.06),
+    new THREE.Vector3(-ax * 0.97, ay - 0.2, 0.02),
+    new THREE.Vector3(-ax * 0.84, ay - 0.48, 0.06),
+    new THREE.Vector3(-ax * 0.52, ay - 0.74, 0.11),
+    new THREE.Vector3(-ax * 0.04, ay - 0.84, 0.14),
+    new THREE.Vector3(ax * 0.46, ay - 0.76, 0.12),
+    new THREE.Vector3(ax * 0.82, ay - 0.5, 0.07),
+    new THREE.Vector3(ax * 0.97, ay - 0.21, 0.02),
     new THREE.Vector3(ax, ay, 0),
   ])
-  const strapMat = new THREE.MeshStandardMaterial({
-    color: '#9a2f3a',
-    roughness: 0.32,
-    metalness: 0.08,
+  const strapMat = new THREE.MeshPhysicalMaterial({
+    color: '#a3313c',
+    roughness: 0.55,
+    sheen: 1,
+    sheenRoughness: 0.4,
+    sheenColor: new THREE.Color('#f0a0a8'),
     side: THREE.DoubleSide,
     transparent: true,
   })
-  const strap = new THREE.Mesh(ribbonGeometry(curve, 0.05, 120), strapMat)
+  const strap = new THREE.Mesh(ribbonGeometry(curve, 0.038, 160, 0.5), strapMat)
   group.add(strap)
 
   const localPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 10)
