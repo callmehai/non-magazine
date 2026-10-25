@@ -24,8 +24,11 @@ const canvasBook = {
     // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật
     direction: 'ltr',
     flipDuration: 800,
-    // nhóm chưa chọn nhạc (bản sửa lần 1: "tạm chưa làm nhạc") → tắt nhạc nền, chỉ còn tiếng lật trang
-    backgroundMusic: false,
+    // nhạc nền: Trống cơm, đàn tranh độc tấu của Nguyên Kỳ (YouTube h47j_MyM3Us, giấy phép CC BY → phải ghi tên người chơi)
+    // (bản Cò lả bên thuê gửi là bản thu có bản quyền của Alternate Universe Orchestra, chưa xin phép nên không dùng)
+    backgroundMusic: 'assets/audio/trong-com.mp3',
+    backgroundMusicTitle: { vi: 'Trống cơm (đàn tranh) — Nguyên Kỳ · CC BY', ja: '民謡「チョンコム」（ダン・チャン）— グエン・キー · CC BY' },
+    musicVolume: 0.3,
     enableSound: true,
     flipSound: 'assets/audio/page-flip.mp3',
     intro: true,

@@ -135,6 +135,11 @@ export function setLang(next) {
   document.documentElement.lang = lang
 }
 
+/** Chữ hai thứ tiếng trong dữ liệu ({ vi, ja }) → bản theo ngôn ngữ đang dùng; chuỗi thường giữ nguyên */
+export function tr(v) {
+  return v && typeof v === 'object' ? (v[lang] ?? v.vi) : v
+}
+
 export function t(key, vars) {
   const s = STRINGS[lang][key] ?? STRINGS.vi[key] ?? key
   return vars ? s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m)) : s

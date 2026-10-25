@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createAmbient } from '../lib/sound.js'
 import { asset, hasAsset } from '../lib/assets.js'
-import { t } from '../lib/i18n.js'
+import { t, tr } from '../lib/i18n.js'
 
 /**
  * Điều khiển một file âm thanh (HTMLAudioElement).
@@ -145,7 +145,7 @@ export function useBackgroundMusic(settings) {
   }, [])
 
   if (off) return NO_MUSIC
-  if (hasFile) return { ...file, title: settings.backgroundMusicTitle || t('music'), source: 'file' }
+  if (hasFile) return { ...file, title: tr(settings.backgroundMusicTitle) || t('music'), source: 'file' }
   return {
     playing: synthPlaying,
     play: synthPlay,
