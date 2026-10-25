@@ -93,8 +93,9 @@ export const ch3 = {
         h: ['Đổi mới sản phẩm và mở rộng công năng', '製品の革新と用途の拡大'],
         p: [['Bên cạnh nón lá truyền thống, nghệ nhân làng Chuông đã phát triển thêm nhiều mẫu như nón thêu, nón vẽ, nón lụa, nón mini và các sản phẩm trang trí. Công năng của chiếc nón cũng được mở rộng từ vật dụng che nắng, che mưa sang phụ kiện áo dài, đạo cụ biểu diễn, quà lưu niệm và vật trang trí. Sự đổi mới này cho thấy sản phẩm nón làng Chuông đang được điều chỉnh để phù hợp hơn với nhu cầu sử dụng hiện nay.', '伝統的なノンラーに加え、チュオン村の職人たちは{刺繍|ししゅう}の笠、絵付けの笠、絹の笠、ミニ笠、{装飾品|そうしょくひん}など、多くの新しい製品を生み出してきました。笠の用途も、日差しや雨を{避|さ}ける道具から、アオザイの{装身具|そうしんぐ}、舞台の小道具、お{土産|みやげ}、インテリアへと広がっています。こうした革新は、チュオン村の笠が今の{需要|じゅよう}により合うよう変わりつつあることを示しています。']],
         images: [
-          ['Nón thêu, nón vẽ, nón lụa, nón mini', '刺繍・絵付け・絹・ミニの笠'],
           ['Bức tường nón vẽ cờ đỏ sao vàng tại một cơ sở làng Chuông', 'チュオン村の工房に飾られた、金星紅旗を描いた笠の壁'],
+          ['Nón lá hai mặt lụa xanh ngọc nhìn từ trong lòng nón', '内側から見た、青緑の絹を両面に張ったノンラー'],
+          ['Nón thêu, nón vẽ, nón lụa, nón mini', '刺繍・絵付け・絹・ミニの笠'],
         ],
       },
       {
@@ -140,7 +141,7 @@ export const ch3 = {
           ['Nghề nón làng Chuông vẫn được duy trì tại nhiều gia đình, nhưng việc thu hút thế hệ trẻ tiếp nối nghề đang trở thành một khó khăn. Theo chia sẻ của nghệ nhân Lê Văn Tuy, số người trẻ học nghề ngày càng ít, trong khi những người thợ lành nghề đang dần lớn tuổi. Nhiều người trẻ lựa chọn học tập hoặc làm những công việc khác có thu nhập ổn định hơn.', 'チュオン村の笠づくりは今も多くの家庭で続けられていますが、若い世代に受け継いでもらうことが難しくなっています。職人レー・ヴァン・トゥイによれば、技を学ぶ若者は年々減り、熟練の職人は{高齢化|こうれいか}しています。多くの若者は進学や、より安定した収入の得られる別の仕事を選んでいます。'],
           ['Việc thiếu người kế nghiệp có nguy cơ ảnh hưởng đến quá trình truyền nghề. Những kỹ thuật như chọn lá, tạo khuôn, khâu và hoàn thiện nón đòi hỏi sự khéo léo cùng kinh nghiệm được tích lũy qua nhiều năm thực hành. Nếu không có đủ người tiếp nối, một số kỹ năng truyền thống có thể dần bị mai một.', '後継者が足りないと、技の{伝承|でんしょう}が{危|あや}うくなります。葉選び、型づくり、縫い付け、仕上げといった技は、器用さと長年の{修練|しゅうれん}で積み重ねた経験を必要とします。受け継ぐ人が十分にいなければ、伝統的な技のいくつかは少しずつ{失|うしな}われてしまうかもしれません。'],
         ],
-        images: [['Người thợ làng Chuông bên những chiếc nón', 'ノンラーに囲まれたチュオン村の職人']],
+        images: [['Người thợ chằm nón, từng mũi kim xuyên qua lớp lá', '葉を一針ずつ縫い留める笠職人']],
       },
       {
         h: ['Thu nhập từ nghề còn hạn chế', '収入の少なさ'],
@@ -159,7 +160,10 @@ export const ch3 = {
           ['Từng là vật dụng quen thuộc để che nắng, che mưa, nón lá ngày nay không còn được sử dụng phổ biến như trước. Sự phát triển của các phương tiện giao thông cùng những lựa chọn như mũ bảo hiểm, mũ vải hay ô dù đã góp phần làm thay đổi thói quen sử dụng của người dân. Bên cạnh đó, nón Chuông còn phải cạnh tranh với các loại nón nhựa, nón sản xuất công nghiệp có giá chỉ khoảng 15.000 đồng/chiếc. Khi người mua khó phân biệt được nón thủ công truyền thống với các sản phẩm sản xuất công nghiệp, sự chênh lệch về giá càng khiến nón Chuông gặp bất lợi trong việc tiêu thụ.', 'かつては日差しや雨を避けるおなじみの道具だったノンラーも、今では以前ほど使われなくなりました。乗り物の発達や、ヘルメット、布の帽子、{傘|かさ}といった選択肢が、人々の習慣を変えたのです。さらにチュオンの笠は、1つわずか1万5千ドンほどのプラスチックや工業製品の笠とも{競争|きょうそう}しなければなりません。買う人が伝統的な手づくりの笠と工業製品を見分けにくいため、値段の差がチュオンの笠の販売をいっそう{不利|ふり}にしています。'],
           ['Trước những thay đổi ấy, nón Chuông đang tìm thêm chỗ đứng trong lĩnh vực thời trang, biểu diễn, trang trí và du lịch. Đây vừa là cơ hội, vừa là thách thức. Những công dụng mới có thể mở ra hướng phát triển cho nón Chuông, nhưng đồng thời cũng đòi hỏi người làm nghề phải tiếp tục đổi mới để đáp ứng nhu cầu thị trường mà vẫn giữ được những nét đặc trưng của sản phẩm truyền thống.', 'こうした変化を受けて、チュオンの笠はファッション、舞台、インテリア、観光の分野に新しい居場所を求めています。それは{好機|こうき}であると同時に、課題でもあります。新しい用途は笠に発展の道を開くかもしれませんが、職人には、伝統的な製品の特徴を守りながら、市場の需要に応えて革新を続けることが求められます。'],
         ],
-        images: [['Gian hàng nón nhiều màu sắc ở làng Chuông', 'チュオン村の色とりどりの笠の店']],
+        images: [
+          ['Gian hàng nón nhiều màu sắc ở làng Chuông', 'チュオン村の色とりどりの笠の店'],
+          ['Nón lá treo trang trí trên phố', '通りに飾られたノンラー'],
+        ],
       },
     ],
     outro: [

@@ -144,7 +144,7 @@ export const ch2 = {
       ],
       images: [
         ['Lá tươi được vò qua cát', '砂でもむ生の葉'],
-        ['Lá lụi phơi trên triền đê', '堤防に干されたライ葉'],
+        ['Người làng gỡ và chọn từng bó lá lụi trên sân gạch', 'れんがの庭でライ葉の束をほどき、選り分ける村の人々'],
       ],
     },
     stepsH: { id: '2.3.2', h: ['Quy trình dựng và hoàn thiện nón', '笠の組み立てと仕上げの工程'] },
