@@ -253,7 +253,7 @@ export class HeroScene {
     const pivot = this.hatPivot
     pivot.position.lerpVectors(new THREE.Vector3(0, -0.02, 0), readPos, m)
     pivot.scale.setScalar(THREE.MathUtils.lerp(this.mobile ? 0.56 : 0.64, narrow ? 0.62 : 0.78, m))
-    pivot.rotation.x = THREE.MathUtils.lerp(0.36, 0.5, m) + Math.sin(time * 0.6) * 0.03 * motion
+    pivot.rotation.x = THREE.MathUtils.lerp(0.24, 0.5, m) + Math.sin(time * 0.6) * 0.03 * motion
     pivot.rotation.z = THREE.MathUtils.lerp(0.06, -0.28, m)
     pivot.position.y += Math.sin(time * 0.8) * 0.03 * motion
     this.hat.group.rotation.y += dt * (0.35 - 0.2 * m) * (motion || 0.0)

@@ -6,7 +6,7 @@ import { MiniScene } from './miniScene.js'
  * Bấm (không kéo) vào một lớp → lớp đó sáng màu và nhô ra, hai lớp kia mờ đi. onSelect(i | null) báo cho giao diện.
  */
 const R = 1
-const H = 0.82
+const H = 0.7 // cùng dáng thấp như nón 3D ở sảnh (HAT.H 0,72): nón thật không nhọn hoắt
 const GAP = 0.9
 
 function texture(kind) {

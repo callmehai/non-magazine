@@ -2,9 +2,10 @@ import * as THREE from 'three'
 
 /**
  * Kích thước nón (đơn vị scene): bán kính vành và chiều cao chóp.
- * Nón Chuông: vành ~41cm, cao ~18–19cm → chóp khá dốc, thành thẳng.
+ * Nón Chuông: thành thẳng, góc đỉnh ~100° (nhìn ngang không nhọn hoắt). Bên thuê góp ý dáng cũ (cao 0,86 bán kính) nhọn
+ * quá so với nón thật → hạ còn 0,78 (nhìn nghiêng từ trên còn thấp hơn); hình vẽ 2D (scripts/book/deco.py) cùng tỉ lệ.
  */
-export const HAT = { R: 1, H: 0.86, RINGS: 16 }
+export const HAT = { R: 1, H: 0.78, RINGS: 16 }
 
 let cachedTextures = null
 

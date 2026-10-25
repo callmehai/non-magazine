@@ -35,6 +35,11 @@ def poly(pts, close=False):
 
 # ── nón lá 3/4 (nhìn hơi từ trên): thân nón, các vòng, nan chạy dọc, vành đôi, quai lụa
 def non(cx, cy_apex, rx, height, tilt=0.26, strap=True, wash=IVORY, rings=9, ribs=True):
+    # dáng nón Chuông thật: góc đỉnh ~100°, cao ≈ 0,7 bán kính vành (nhìn hơi từ trên còn thấp hơn) — không vẽ chóp nhọn.
+    # Giữ nguyên vị trí vành, hạ đỉnh xuống.
+    h2 = min(height, rx * 0.68)
+    cy_apex += height - h2
+    height = h2
     ry = rx * tilt
     by = cy_apex + height  # tâm vành
     parts = []
@@ -57,7 +62,8 @@ def non(cx, cy_apex, rx, height, tilt=0.26, strap=True, wash=IVORY, rings=9, rib
     parts.append(f'<path d="{poly(arc_pts(cx, by, rx, ry, 0, 180, 60))}"/>')
     parts.append(f'<path d="{poly(arc_pts(cx, by + 2.4, rx * 0.985, ry * 0.95, 4, 176, 60))}" stroke-width="0.9" opacity=".7"/>')
     # chóp
-    parts.append(f'<circle cx="{f(cx)}" cy="{f(cy_apex)}" r="1.8" fill="{INK}" stroke="none"/>')
+    # núm chóp tròn (bông chỉ khâu chóp), không để đỉnh nhọn hoắt
+    parts.append(f'<circle cx="{f(cx)}" cy="{f(cy_apex + 1)}" r="{f(max(2.2, rx * 0.04))}" fill="{wash}" stroke-width="0.9"/>')
     if strap:
         # quai lụa mềm buông dưới vành
         l, r_ = cx - rx * 0.42, cx + rx * 0.42
@@ -121,6 +127,16 @@ os.makedirs(OUT, exist_ok=True)
 
 # 1. nón lá đơn (dùng nhiều nơi)
 svg('non', (300, 260), non(150, 18, 140, 150))
+
+# 1b. nón lá chỉ nét (chân trang giấy "non"): cùng dáng thấp như trên — đỉnh y 42, vành y 132, bán kính 138
+ax, ay, by_, rx_ = 160, 42, 132, 138
+nl = [f'<path d="M{ax} {ay + 2} L {ax - rx_} {by_} Q {ax} {by_ + 40}, {ax + rx_} {by_} L {ax} {ay + 2} Z"/>',
+      f'<ellipse cx="{ax}" cy="{by_}" rx="{rx_}" ry="16" opacity=".6"/>',
+      f'<circle cx="{ax}" cy="{ay + 3}" r="4" fill="{IVORY}" stroke-width="1"/>']
+ribs = ' '.join(f'M{ax} {ay + 6} L {f(ax + rx_ * math.cos(math.radians(a)))} {f(by_ + 16 * math.sin(math.radians(a)) + 2)}' for a in (32, 58, 80, 100, 122, 148))
+rings_ = ' '.join(f'M{f(ax - rx_ * t)} {f(ay + (by_ - ay) * t)} Q {ax} {f(ay + (by_ - ay) * t + 16 * t * 1.2)}, {f(ax + rx_ * t)} {f(ay + (by_ - ay) * t)}' for t in (i / 7 for i in range(1, 7)))
+nl.append(f'<g opacity=".45"><path d="{ribs}"/><path d="{rings_}"/></g>')
+svg('non-line', (320, 170), '\n'.join(nl), sw=1.2)
 
 # 2. tĩnh vật: chồng nón + nón nghiêng + tre + lá (chân trang, mục lục)
 body = []
