@@ -182,7 +182,7 @@ export const ending = {
         '現代の暮らしの中で、チュオン村のノンラーは需要や市場に合わせて変わりつつあります。白い伝統的なノンラーに加え、形や{装飾|そうしょく}、用途を広げた製品が生まれ、文化活動や体験型観光を通して紹介されています。しかし、販路、職人の収入、後継者不足といった課題は、今も生産の{継続|けいぞく}に{影響|えいきょう}を与えています。チュオンの笠の伝統的な特徴を守るには、製品の革新と、ふさわしい発展の道を探ることが{欠|か}かせないのです。',
       ],
       [
-        'Cuốn sách này được biên soạn nhằm cung cấp tài liệu giới thiệu và các thông tin tham khảo bằng tiếng Nhật về nón lá làng Chuông. Thông qua việc tổng hợp thông tin và hình ảnh thực tế, nhóm biên soạn mong muốn giới thiệu sản phẩm này đến những độc giả Nhật Bản quan tâm nón lá và các sản phẩm thủ công truyền thống của Việt Nam.',
+        'Cuốn flipbook này được biên soạn nhằm cung cấp tài liệu giới thiệu và các thông tin tham khảo bằng tiếng Nhật về nón lá làng Chuông. Thông qua việc tổng hợp thông tin và hình ảnh thực tế, nhóm biên soạn mong muốn giới thiệu sản phẩm này đến những độc giả Nhật Bản quan tâm nón lá và các sản phẩm thủ công truyền thống của Việt Nam.',
         '本書は、チュオン村のノンラーについて、日本語で読める紹介と{参考|さんこう}{情報|じょうほう}を提供することを目的に{編集|へんしゅう}しました。情報と実際の写真をまとめることで、ノンラーやベトナムの伝統工芸に関心のある日本の読者の{皆様|みなさま}に、この笠をお届けできれば幸いです。',
       ],
     ],
@@ -195,11 +195,11 @@ export const ending = {
     title: ['Lưu ý về nội dung', '内容についての注意'],
     p: [
       [
-        'Cuốn sách tập trung giới thiệu những đặc điểm tiêu biểu của nón lá làng Chuông, đặc biệt là chiếc nón lá trắng truyền thống được sản xuất phổ biến hiện nay. Do giới hạn về phạm vi tìm hiểu và nguồn tư liệu, nội dung có thể chưa phản ánh đầy đủ tất cả các loại nón, kỹ thuật chế tác và những thay đổi của sản phẩm qua từng thời kỳ.',
-        '本書は、チュオン村のノンラーの代表的な特徴、とくに現在{盛|さか}んに作られている白い伝統的なノンラーを中心に紹介しています。調査の範囲や資料に限りがあるため、すべての笠の種類、製作技術、時代ごとの製品の変化を{網羅|もうら}できていない場合があります。',
+        'Cuốn flipbook tập trung giới thiệu những đặc điểm tiêu biểu của nón lá làng Chuông, đặc biệt là chiếc nón lá hình chóp truyền thống được sản xuất phổ biến hiện nay. Do giới hạn về phạm vi tìm hiểu và nguồn tư liệu, nội dung có thể chưa phản ánh đầy đủ tất cả các loại nón, kỹ thuật chế tác và những thay đổi của sản phẩm qua từng thời kỳ.',
+        '本書は、チュオン村のノンラーの代表的な特徴、とくに現在{盛|さか}んに作られている伝統的な円錐形のノンラーを中心に紹介しています。調査の範囲や資料に限りがあるため、すべての笠の種類、製作技術、時代ごとの製品の変化を{網羅|もうら}できていない場合があります。',
       ],
       [
-        'Bên cạnh đó, một số kỹ thuật và công đoạn làm nón có thể khác nhau giữa các hộ sản xuất hoặc thay đổi theo thời gian. Nhóm biên soạn đã cố gắng lựa chọn, đối chiếu và tổng hợp những thông tin phù hợp với phạm vi giới thiệu của cuốn sách. Các thông tin được chọn lọc dựa trên việc tham khảo tư liệu sách, báo, tạp chí, kết hợp với điều tra thực địa, quan sát thực tế và phỏng vấn các nghệ nhân. Tuy nhiên, nội dung chắc hẳn vẫn có thể còn những thiếu sót. Chúng tôi rất mong nhận được sự thông cảm và những ý kiến đóng góp từ quý độc giả.',
+        'Bên cạnh đó, một số kỹ thuật và công đoạn làm nón có thể khác nhau giữa các hộ sản xuất hoặc thay đổi theo thời gian. Nhóm biên soạn đã cố gắng lựa chọn, đối chiếu và tổng hợp những thông tin phù hợp với phạm vi giới thiệu của flipbook. Các thông tin được chọn lọc dựa trên việc tham khảo tư liệu sách, báo, tạp chí, kết hợp với điều tra thực địa, quan sát thực tế và phỏng vấn các nghệ nhân. Tuy nhiên, nội dung chắc hẳn vẫn có thể còn những thiếu sót. Chúng tôi rất mong nhận được sự thông cảm và những ý kiến đóng góp từ quý độc giả.',
         'また、笠づくりの技術や工程の中には、工房によって異なったり、時代とともに変わったりするものもあります。私たちは、本書の紹介の範囲にふさわしい情報を選び、照らし合わせ、まとめるよう努めました。情報は、書籍・新聞・雑誌などの資料に加え、{現地調査|げんちちょうさ}、観察、職人へのインタビューをもとに選んでいます。それでも、至らない点が残っているかもしれません。ご理解とご意見をいただければ幸いです。',
       ],
       [
@@ -207,7 +207,7 @@ export const ending = {
         '現地調査やインタビューで得た情報は、本書での使用について、ご本人の{許可|きょか}をいただいています。本書はFPT大学ハノイ校日本語学科の学生による卒業制作であり、商業的・政治的な目的では使用しません。また、制作にあたっては、著作権を{侵害|しんがい}しないことをお約束します。',
       ],
       [
-        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn sách này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email:\nnonla09092026@gmail.com',
+        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn flipbook này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email:\nnonla09092026@gmail.com',
         '最後に、本書をお読みくださった皆様に心より{感謝|かんしゃ}申し上げます。ご意見・ご感想は、下記のメールアドレスまでお寄せください。\nnonla09092026@gmail.com',
       ],
     ],
@@ -235,9 +235,10 @@ export const ending = {
     title: ['Tài liệu tham khảo', '{参考文献|さんこうぶんけん}'],
     items: [
       ['Đinh Hạnh (chủ biên). (2019). Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội. NXB Hà Nội.', 'ディン・ハイン編（2019）『タンロン＝ハノイの代表的な手工芸村』ハノイ出版社。'],
-      ['Hoàng Đức Nhuận và cộng sự. (2009). Hỏi đáp về làng nghề truyền thống Việt Nam.', 'ホアン・ドゥック・ニュアン{他|ほか}（2009）『ベトナムの伝統工芸村Q&A』。'],
-      ['Vũ Từ Trang & Oger. (2020). Tư liệu về nghề làm nón làng Chuông.', 'ヴー・トゥー・チャン、オジェ（2020）チュオン村の笠づくりに関する資料。'],
-      ['Nghề đẹp quê hương.', '『ふるさとの美しい手仕事』。'],
+      ['Hoàng Đức Nhuận và cộng sự. (2009). Hỏi đáp về làng nghề truyền thống Việt Nam. NXB Quân đội nhân dân.', 'ホアン・ドゥック・ニュアン{他|ほか}（2009）『ベトナムの伝統工芸村Q&A』人民軍隊出版社。'],
+      ['Vũ Từ Trang, Henri Oger. (2020). Nghề cổ nước Việt – Từ truyền thống đến hiện đại. NXB Phụ nữ Việt Nam.', 'ヴー・トゥー・チャン、アンリ・オジェ（2020）『ベトナムの古い手仕事：伝統から現代へ』ベトナム女性出版社。'],
+      ['Nguyễn Vỵ. (1977). Nghề đẹp quê hương. Ty Văn hóa Thông tin Hà Sơn Bình.', 'グエン・ヴィー（1977）『ふるさとの美しい手仕事』ハーソンビン{省|しょう}文化情報{局|きょく}。'],
+      ['Hữu Ngọc (chủ biên). Từ điển văn hóa cổ truyền Việt Nam. NXB Kim Đồng.', 'フウ・ゴック編『ベトナム{伝統文化辞典|でんとうぶんかじてん}』キムドン出版社。'],
       ['Báo Tuổi Trẻ, Báo Dân trí, VietNamNet, VnExpress, Báo Người Lao Động, Báo Quân đội nhân dân — các bài viết về nón lá và làng Chuông.', 'トゥオイチェー紙、ザンチー紙、ベトナムネット、VnExpress、グオイラオドン紙、人民軍隊紙 ― ノンラーとチュオン村に関する記事。'],
       ['Hà Nội hào hoa thanh lịch: Người dệt hồn quê lên vành nón lá.', '「{華|はな}やかで{上品|じょうひん}なハノイ：笠に故郷の心を{織|お}り{込|こ}む人」（記事）。'],
       ['Làng Chuông: Sáng tạo trên vành nón cũ.', '「チュオン村：古い笠に生まれる新しい創作」（記事）。'],

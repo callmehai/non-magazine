@@ -13,8 +13,8 @@ export const ch2 = {
   // chương mở đầu bằng ba đoạn dẫn: đoạn 1 ở trang mở chương, hai đoạn sau đầu nội dung
   intro: [
     [
-      'Nhằm giúp người đọc có cái nhìn toàn diện và sâu sắc hơn về hành trình hình thành nên chiếc nón lá truyền thống, Chương 2 sẽ tập trung giới thiệu chi tiết từng khía cạnh trong quy trình chế tác tại Làng Chuông. Nội dung chương bắt đầu bằng việc trình bày đặc điểm cấu tạo 3 lớp đặc trưng của nón, tiếp đó giới thiệu hệ thống nguyên liệu đầu vào như lá nón, vòng tre, chỉ khâu, và đi sâu vào từng bước trong quy trình kỹ thuật thủ công từ sơ chế lá, uốn vành, khâu nón cho đến giai đoạn hoàn thiện sản phẩm.',
-      '伝統的なノンラーができあがるまでの{道|みち}のりを、より{幅広|はばひろ}く深く理解していただくために、第2章ではチュオン村での製作工程を一つひとつ詳しく紹介します。まずノンラー特有の三層構造を説明し、次に葉、竹の輪、縫い糸などの材料を紹介したうえで、葉の下ごしらえ、輪づくり、縫い付けから仕上げまで、手仕事の工程を順に見ていきます。',
+      'Nhằm giúp người đọc có cái nhìn toàn diện và sâu sắc hơn về hành trình hình thành nên chiếc nón lá truyền thống, Chương 2 sẽ tập trung giới thiệu chi tiết từng khía cạnh trong quy trình chế tác tại Làng Chuông. Nội dung chương bắt đầu bằng việc trình bày đặc điểm cấu tạo 3 lớp đặc trưng của nón, tiếp đó giới thiệu các nguyên liệu như lá lụi, vòng nứa¹, chỉ khâu, và đi sâu vào từng bước trong quy trình kỹ thuật thủ công từ sơ chế lá, uốn vành, khâu nón cho đến giai đoạn hoàn thiện sản phẩm.',
+      '伝統的なノンラーができあがるまでの{道|みち}のりを、より{幅広|はばひろ}く深く理解していただくために、第2章ではチュオン村での製作工程を一つひとつ詳しく紹介します。まずノンラー特有の三層構造を説明し、次にライ葉、ヌア竹の輪¹、縫い糸などの材料を紹介したうえで、葉の下ごしらえ、輪づくり、縫い付けから仕上げまで、手仕事の工程を順に見ていきます。',
     ],
     [
       'Thông qua việc kết nối giữa yếu tố vật liệu, cấu trúc và thao tác kỹ thuật, chương này không chỉ phác họa rõ nét bức tranh toàn cảnh về quy trình sản xuất nón Làng Chuông, mà còn tôn vinh giá trị lao động đã được gìn giữ qua nhiều thế hệ.',
@@ -22,20 +22,22 @@ export const ch2 = {
     ],
   ],
 
+  notes: [['¹ Cây nứa: Loài cây cùng họ với tre, thân mỏng, gióng dài, thường mọc thành bụi ở rừng. Thân cây nứa đã chặt, chẻ ra, dùng để đan phên, đan lát hoặc làm đồ thủ công.', '¹ ヌア竹：竹の{仲間|なかま}で、{幹|みき}が{薄|うす}く{節|ふし}と節の間が長く、森に{群生|ぐんせい}する。切って{割|わ}った幹は、{壁|かべ}や{編|あ}み{物|もの}、手工芸品に使われる。']],
+
   // ── 2.1
   structure: {
     id: '2.1',
     title: ['Cấu tạo của nón lá Làng Chuông', 'チュオン村のノンラーの構造'],
     intro: [
-      'Nón lá Làng Chuông gồm hai phần chính: phần lá lợp và phần khung nón. Phần lá lợp tạo nên bề mặt bên ngoài và bên trong của nón, trong khi phần khung giúp định hình dáng chóp và nâng đỡ thân nón. Sự kết hợp giữa hai phần tạo nên chiếc nón có vẻ ngoài thanh mảnh nhưng vẫn chắc chắn, và độ bền cao trong quá trình sử dụng.',
-      'チュオン村のノンラーは、「{葺|ふ}き{葉|ば}」と「{骨組|ほねぐ}み」の二つの部分からできています。葺き葉は笠の{外側|そとがわ}と{内側|うちがわ}の{面|めん}をつくり、骨組みは円錐の形を{保|たも}って笠全体を{支|ささ}えます。この二つが合わさることで、{細身|ほそみ}で軽やかに見えながらも、丈夫で長持ちする笠になるのです。',
+      'Nón lá Làng Chuông gồm hai phần chính: phần khung nón và phần lá lợp. Phần khung có chức năng định hình dáng chóp, nâng đỡ và duy trì hình dáng của nón, trong khi đó phần lá lợp tạo nên bề mặt bên ngoài của nón. Sự kết hợp giữa hai phần tạo nên chiếc nón có vẻ ngoài thanh mảnh nhưng vẫn chắc chắn, và độ bền cao trong quá trình sử dụng.',
+      'チュオン村のノンラーは、「{骨組|ほねぐ}み」と「{葺|ふ}き{葉|ば}」の二つの部分からできています。骨組みは円錐の形をつくり、笠を{支|ささ}えてその形を{保|たも}ち、葺き葉は笠の{外側|そとがわ}の{面|めん}をつくります。この二つが合わさることで、{細身|ほそみ}で軽やかに見えながらも、丈夫で長持ちする笠になるのです。',
     ],
     parts: [
-      [['Phần lá lợp', '葺き葉'], ['Gồm ba lớp vật liệu xếp chồng lên nhau, bao gồm lớp lá lụi bên ngoài, lớp mo nang ở giữa và lớp lá lụi bên trong. Các lớp này góp phần che chắn, tạo độ ổn định và hoàn thiện bề mặt nón.', '外側のライ葉、中間のモーナン（竹皮）、内側のライ葉という三層の材料を重ねたものです。これらの層が日差しや雨を{防|ふせ}ぎ、笠を安定させ、表面を{仕上|しあ}げます。']],
       [['Phần khung nón', '骨組み'], ['Gồm 16 vành nứa có đường kính giảm dần từ đáy lên chóp. Các vành được sắp xếp theo dáng nón, giúp định hình và nâng đỡ phần lá lợp.', '下から頂に向かって直径が小さくなる、16本のヌア竹の輪からなります。輪は笠の形に{沿|そ}って{並|なら}び、形を整え、葺き葉を支えます。']],
+      [['Phần lá lợp', '葺き葉'], ['Gồm ba lớp vật liệu xếp chồng lên nhau, bao gồm lớp lá lụi bên ngoài, lớp mo nang ở giữa và lớp lá lụi bên trong. Các lớp này góp phần che chắn, tạo độ ổn định và hoàn thiện bề mặt nón.', '外側のライ葉、中間のモーナン（竹皮）、内側のライ葉という三層の材料を重ねたものです。これらの層が日差しや雨を{防|ふせ}ぎ、笠を安定させ、表面を{仕上|しあ}げます。']],
     ],
     layers: {
-      id: '2.1.1',
+      id: '2.1.2',
       h: ['Cấu trúc lợp lá ba lớp', '三層の{葺|ふ}き{構造|こうぞう}'],
       intro: [
         'Nón lá Làng Chuông sử dụng cấu trúc lợp ba lớp vật liệu xếp chồng lên nhau, gồm lớp lá lụi bên ngoài, lớp mo nang ở giữa và lớp lá lụi bên trong. Mỗi lớp đảm nhiệm một chức năng riêng, góp phần tạo nên độ bền và tính thẩm mỹ của chiếc nón.',
@@ -59,17 +61,13 @@ export const ch2 = {
       image: ['Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá', '葺きかけの笠：葉の間からモーナンの層がのぞく'],
     },
     frame: {
-      id: '2.1.2',
+      id: '2.1.1',
       h: ['Cấu trúc khung 16 vòng', '16{本|ほん}の{輪|わ}の骨組み'],
       p: [
         [
           'Phần khung nón Làng Chuông gồm 16 vòng được làm bằng nứa, có chức năng định hình, nâng đỡ lớp lá và duy trì dáng chóp của nón. Các vành được bố trí từ dưới lên trên, với đường kính giảm dần theo độ thuôn của thân nón. Phần vành dưới có kích thước lớn hơn, tạo độ rộng cho nón, trong khi các vành phía trên nhỏ dần để hình thành độ dốc và phần chóp nhọn.',
           'チュオン村のノンラーの骨組みは、ヌア竹で作った16本の輪からなり、形を整え、葉を支え、円錐の形を保つ役割をもっています。輪は下から上へ、笠の{傾斜|けいしゃ}に合わせて直径が少しずつ小さくなるように配置されます。下の大きな輪が笠の広がりをつくり、上の小さな輪が{勾配|こうばい}ととがった頂をつくります。',
         ],
-      ],
-      note: [
-        'Chú thích: Cây nứa – nguyên liệu được sử dụng để làm vành nón Làng Chuông. Loài cây cùng họ với tre, thân mỏng, gióng dài, thường mọc thành bụi ở rừng. Thân cây nứa đã chặt, chẻ ra, dùng để đan phên, đan lát hoặc làm đồ thủ công; thanh nứa rất dẻo, thích hợp để đan rổ, sàng.',
-        '{注|ちゅう}：ヌア竹 ― チュオン村の笠の輪に使われる材料です。竹の{仲間|なかま}で、{幹|みき}が{薄|うす}く{節|ふし}と節の間が長く、森に{群生|ぐんせい}します。切って{割|わ}った幹は、{壁|かべ}や{編|あ}み{物|もの}、手工芸品に使われます。とてもしなやかで、{籠|かご}やふるいを編むのに{適|てき}しています。',
       ],
       after: [
         [
