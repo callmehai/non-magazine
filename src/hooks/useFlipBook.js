@@ -153,12 +153,20 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     let sleeping = false
     let idle = 0
     let alive = true
+    // hiệu ứng lật bắt đầu lúc vòng lặp đang ngủ: StPageFlip lấy mốc bắt đầu = khung hình cuối trước khi ngủ (đã cũ),
+    // khung đầu tiên tính ra hiệu ứng "đã chạy xong" → trang nhảy luôn, không lật → đặt lại mốc theo khung hình thật
+    // (stale: từ lúc ngủ đến khung hình đầu tiên sau khi thức, render.timer vẫn là mốc cũ)
+    let stale = false
+    let restart = false
     const step = (t) => {
       if (!alive) return
+      if (restart && render.animation) render.animation.startedAt = t
+      restart = false
+      stale = false
       renderOnce(t)
       const busy = pf.getState() !== 'read' || render.animation || redrawRef.current > 0
       idle = busy ? 0 : idle + 1
-      if (idle > 20) sleeping = true
+      if (idle > 20) sleeping = stale = true
       else requestAnimationFrame(step)
     }
     const wake = () => {
@@ -176,6 +184,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     requestAnimationFrame(step)
     const startAnimation = render.startAnimation.bind(render)
     render.startAnimation = (...a) => {
+      if (stale) restart = true
       wake()
       return startAnimation(...a)
     }
