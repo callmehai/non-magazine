@@ -497,3 +497,18 @@
 .cv-more:hover i {
   transform: translateX(0.25em);
 }
+
+/* hình vẽ xoay chậm (el.spin): vòng nón in mờ sau bản đồ tám chặng */
+@keyframes cv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.cv-img.is-spin {
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-img.is-spin {
+    animation: none !important;
+  }
+}

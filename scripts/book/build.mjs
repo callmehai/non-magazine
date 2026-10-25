@@ -2137,8 +2137,9 @@ let stripRight = null
 
   // mười sáu vòng nón in mờ vắt ngang gáy sách: mỗi trang một nửa → hai trang liền một khối (ý Minh Ánh: họa tiết nối hai trang)
   const ds = 560
-  L.els.unshift({ ...DECO('vong-non', W - ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
-  Rp.els.unshift({ ...DECO('vong-non', -ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
+  // xoay chậm (góp ý: cho vòng nón nền xoay tròn thì ấn tượng hơn) — hai nửa cùng nhịp nên vẫn liền một khối qua gáy
+  L.els.unshift({ ...DECO('vong-non', W - ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ', spin: 80 })
+  Rp.els.unshift({ ...DECO('vong-non', -ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ', spin: 80 })
 }
 
 // ═════════════════════════════════════════ BA THẺ CHƯƠNG trong lời mở đầu (điền sau khi biết trang chương)

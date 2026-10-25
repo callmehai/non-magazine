@@ -274,13 +274,17 @@ function ImageBody({ el }) {
   const c = el.crop
   // phóng quanh điểm (x, y) rồi dời điểm đó về giữa ô (giới hạn để ảnh vẫn phủ kín ô)
   const mid = (v) => Math.min(Math.max(v / 100, 0.5 / (c?.z || 1)), 1 - 0.5 / (c?.z || 1))
+  // el.spin = số giây một vòng: xoay chậm mãi. Mốc theo đồng hồ chung (không theo lúc gắn ảnh) → hai nửa một hình
+  // vắt qua gáy sách (mỗi trang một nửa) luôn cùng góc, liền một khối
+  const [spinDelay] = useState(() => (el.spin ? `-${((performance.now() / 1000) % el.spin).toFixed(2)}s` : undefined))
+  const spin = el.spin ? { animation: `cv-spin ${el.spin}s linear ${spinDelay} infinite` } : null
   const pic = (
     <img
-      className="cv-img"
+      className={`cv-img ${spin ? 'is-spin' : ''}`}
       src={asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
       alt={el.alt || ''}
       draggable="false"
-      style={c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos }}
+      style={c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
     />
   )
   const img = c ? <span className="cv-crop">{pic}</span> : pic
