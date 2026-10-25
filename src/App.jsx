@@ -5,6 +5,7 @@ import { ZOOM_LEVELS } from './components/Controls/ZoomControls.jsx'
 import ThumbnailPanel from './components/ThumbnailPanel/ThumbnailPanel.jsx'
 import AudioPlayer from './components/AudioPlayer/AudioPlayer.jsx'
 import LoadingIntro from './components/Intro/LoadingIntro.jsx'
+import VillageBackdrop from './components/Scene/VillageBackdrop.jsx'
 import SceneBackground from './components/Scene/SceneBackground.jsx'
 import Hint from './components/Hint.jsx'
 import Lightbox from './components/Lightbox.jsx'
@@ -298,7 +299,9 @@ export default function App({ magazine: source }) {
           className={`app phase-${phase} ${uiHidden ? 'ui-hidden' : ''} ${reducedMotion ? 'reduced-motion' : ''}`}
           style={{ '--ratio': `${settings.pageWidth} / ${settings.pageHeight}` }}
         >
-          <div className="backdrop" aria-hidden="true" />
+          <div className="backdrop" aria-hidden="true">
+            <VillageBackdrop reducedMotion={reducedMotion} />
+          </div>
           <SceneBackground
             mode={phase === 'intro' ? 'intro' : 'reading'}
             replayKey={replayKey}

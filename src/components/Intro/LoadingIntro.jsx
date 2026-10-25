@@ -25,6 +25,7 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
     <div className={`intro ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
       {/* key theo tên: đổi ngôn ngữ thì cả tên lẫn dòng phụ cùng chạy lại hiệu ứng hiện chữ */}
       <div className="intro__text" key={`${magazine.title}|${magazine.subtitle}`}>
+        <p className="intro__kicker">{t('introKicker')}</p>
         <h1 className={`intro__title ${long ? 'is-long' : ''}`} aria-label={magazine.title}>
           {words.map((w, wi) => (
             <span key={wi} className="intro__word" aria-hidden="true">
@@ -38,6 +39,13 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
         </h1>
         <p className="intro__subtitle">{magazine.subtitle}</p>
       </div>
+
+      {/* câu ca dao về nón Chuông (moodboard Khánh Huyền) + ghi chú cảnh nền là minh họa */}
+      <figure className="intro__cadao">
+        <blockquote>{t('introCadao')}</blockquote>
+        <figcaption>{t('introCadaoBy')}</figcaption>
+      </figure>
+      <p className="intro__scene">{t('introScene')}</p>
 
       <div className="intro__foot" role="status" aria-live="polite">
         {ready ? (

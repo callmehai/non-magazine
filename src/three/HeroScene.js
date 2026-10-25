@@ -293,8 +293,8 @@ export class HeroScene {
     this.pool.material.opacity = 0.55 * glow * clamp01(this.introTime / 0.8)
     this.pool.position.set(pivot.position.x, pivot.position.y - 0.5, pivot.position.z)
     this.pool.visible = glow > 0.01
-    this.beam.material.uniforms.uOpacity.value = 0.22 * glow * clamp01(this.introTime / 1.2)
-    this.beam.visible = glow > 0.01
+    // chùm đèn kiểu bảo tàng bỏ đi: sảnh giờ là sân đình lúc chiều, nắng chiếu ngược từ sau nón (VillageBackdrop)
+    this.beam.visible = false
 
     this.dust.update(time * motion, dt, THREE.MathUtils.lerp(0.9, 0.7, m))
 

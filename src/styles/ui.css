@@ -706,6 +706,82 @@
   transition: opacity 1s var(--ease), visibility 1s;
 }
 
+.intro__kicker {
+  margin: 0 0 18px;
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: 0.42em;
+  margin-right: -0.42em;
+  text-transform: uppercase;
+  color: var(--ui-accent);
+  opacity: 0;
+  animation: fade-in 1.4s var(--ease) 0.2s forwards;
+}
+
+/* ca dao: hai câu lục bát xếp như đề thơ trên tranh, góc trái dưới, trên nền sân tối */
+.intro__cadao {
+  position: absolute;
+  left: clamp(20px, 4vw, 64px);
+  bottom: clamp(24px, 6vh, 64px);
+  margin: 0;
+  max-width: 340px;
+  text-align: left;
+  opacity: 0;
+  animation: fade-in 1.6s var(--ease) 1.4s forwards;
+}
+
+.intro__cadao blockquote {
+  margin: 0;
+  white-space: pre-line;
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.5;
+  color: rgba(255, 236, 184, 0.86);
+}
+
+/* câu lục thụt vào, câu bát sát lề */
+.intro__cadao blockquote::first-line {
+  word-spacing: 0.02em;
+}
+
+.intro__cadao figcaption {
+  margin-top: 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(224, 142, 0, 0.85);
+}
+
+.intro__cadao figcaption::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: currentColor;
+}
+
+.intro__scene {
+  position: absolute;
+  right: clamp(20px, 4vw, 64px);
+  bottom: clamp(24px, 6vh, 64px);
+  margin: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 236, 184, 0.45);
+  opacity: 0;
+  animation: fade-in 1.6s var(--ease) 1.6s forwards;
+}
+
+@media (max-width: 760px) {
+  .intro__cadao,
+  .intro__scene {
+    display: none;
+  }
+}
+
 .intro__foot {
   min-height: 58px;
   display: grid;
@@ -1159,4 +1235,10 @@
     margin-right: 70px;
     font-size: 23px;
   }
+}
+
+/* chữ Nhật không in nghiêng (trình duyệt chỉ nghiêng giả, rất xấu) */
+html[lang='ja'] .intro__cadao blockquote {
+  font-style: normal;
+  letter-spacing: 0.04em;
 }
