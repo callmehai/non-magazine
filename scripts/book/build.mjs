@@ -1158,8 +1158,19 @@ let contents = null
   const sg = { size: 16, lh: 1.45, font: F.hand, jaSize: 15 }
   const sh = textH(preface.sign, 260, sg)
   f.place(sh, (pg, y) => pg.add(T(pg.x1 - 260, y, 260, sh, preface.sign, { ...sg, align: 'right', color: C.ink2, jaFont: F.jaHand, name: 'Ký tên' })), 26)
-  f.place(26, (pg, y) => pg.add(T(pg.x0, y, pg.cw, 26, preface.turn, { font: F.hand, size: 19, lh: 1.3, jaSize: 17, color: ACC[0], align: 'right', jaFont: F.jaHand, name: 'Lời mời' })))
   f.end()
+  // lời mời lật trang: góc dưới trang PHẢI cuối Lời mở đầu, ngay mép người đọc sẽ lật (đặt ở trang trái là sai: còn trang phải chưa đọc)
+  const q = pages[pages.length - 1]
+  const ty = BOT - 24
+  for (const e of q.els) {
+    if (e.name !== 'Hình vẽ' || e.y + e.h <= ty - 8) continue
+    const k = Math.max(0.5, (ty - 8 - e.y) / e.h) // thu nhỏ hình vẽ chân trang, giữ đáy và tâm ngang
+    e.x = r1(e.x + (e.w * (1 - k)) / 2)
+    e.w = r1(e.w * k)
+    e.h = r1(e.h * k)
+    e.y = r1(ty - 8 - e.h)
+  }
+  q.add(T(q.x0, ty, q.cw, 26, preface.turn, { font: F.hand, size: 19, lh: 1.3, jaSize: 17, color: ACC[0], align: 'right', jaFont: F.jaHand, name: 'Lời mời' }))
 }
 
 // ═════════════════════════════════════════ CHƯƠNG 1
@@ -1904,22 +1915,66 @@ let stripRight = null
     const hh = textH(ref, CW - 34, ro)
     f.place(hh, (p, y) => p.add(T(p.x0, y, 30, 18, [`[${i + 1}]`, null], { size: 12, color: ACC[9], weight: 700, lh: 1.5, name: 'Số' }), T(p.x0 + 34, y, p.cw - 34, hh, ref, { ...ro, color: C.ink2, jaFont: F.jaSans, name: 'Tài liệu' })), 12)
   })
-  // nguồn ảnh lấy từ báo chí / kho ảnh mở (ảnh còn lại do nhóm tự chụp)
+  // nguồn ảnh: trang riêng (trang phải) — bảng hai cột "nguồn | ảnh nào", chia nhóm báo chí / kho ảnh mở / video, bản đồ
+  // (góp ý: khối chữ dày nửa trên, nửa dưới trống → trình bày lại cho đẹp). Ảnh còn lại do nhóm tự chụp.
   {
-    const credits = [
-      ['NGUỒN ẢNH', '写真の出典'],
-      ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
-      ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Lao Động (nón lá bàng; nón ngựa) · Báo Quân đội nhân dân (nón lá sen; nón lá làng Chuông ở mục 1.1; dao cắt lá; nón thúng — ảnh Hồng Phúc) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・ラオドン紙（バンの葉の笠・馬の笠）・人民軍隊紙（蓮の葉の笠・1.1節のチュオン村のノンラー・小刀・ノン・トゥン ― 写真：ホン・フック）・ベトナムネット（シンガポール首相夫人）'],
-      ['Wikimedia Commons: nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · thạp đồng Đào Thịnh (Daderot, CC0) · trống đồng Ngọc Lũ (phạm vi công cộng) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng)', 'ウィキメディア・コモンズ：タインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・ダオティン銅甕（Daderot、CC0）・ゴックルー銅鼓（パブリックドメイン）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）'],
-      ['Video nón lá trên sàn diễn thời trang quốc tế (mục 3.2): nghệ nhân Lê Văn Tuy cung cấp.', '海外のファッションショーのノンラーの動画（3.2節）：職人レー・ヴァン・トゥイ提供。'],
-      ['Chân dung nghệ nhân Phạm Trần Canh: Báo Thể thao & Văn hóa (thethaovanhoa.vn) · gian hàng nón làng Chuông tại hội chợ: Báo Đại biểu Nhân dân (daibieunhandan.vn, 2025).', '職人ファム・チャン・カインの写真：テータオ＆ヴァンホア紙（thethaovanhoa.vn）・見本市のチュオン村の笠のブース：ダイビエウニャンザン紙（daibieunhandan.vn、2025年）。'],
-      ['Bản đồ Việt Nam: dữ liệu Natural Earth (phạm vi công cộng), bản theo quan điểm của Việt Nam.', 'ベトナムの地図：ナチュラルアースのデータ（パブリックドメイン、ベトナムの立場による版）。'],
-      ['Bản đồ hành trình: nền bản đồ vẽ từ dữ liệu © OpenStreetMap contributors (ODbL) · định tuyến OSRM · quãng đường theo Google Maps.', '旅の地図：© オープンストリートマップの貢献者のデータから作成・距離はグーグルマップによる。'],
+    const groups = [
+      [['BÁO CHÍ', '新聞・ウェブメディア'], [
+        [['Báo Tuổi Trẻ', 'トゥオイチェー紙'], ['Nhà hát Ba Nón Lá · Tổng thống Hàn Quốc', '三つのノンラー劇場・韓国大統領']],
+        [['Báo Dân trí', 'ザンチー紙'], ['Thời trang', 'ファッション']],
+        [['Báo Người Lao Động', 'グオイラオドン紙'], ['Nón bài thơ', '詩の笠']],
+        [['Báo Lao Động', 'ラオドン紙'], ['Nón lá bàng · nón ngựa', 'バンの葉の笠・馬の笠']],
+        [['Báo Quân đội nhân dân', '人民軍隊紙'], ['Nón lá sen · nón lá làng Chuông (mục 1.1) · dao cắt lá · nón thúng (ảnh Hồng Phúc)', '蓮の葉の笠・1.1節のチュオン村のノンラー・小刀・ノン・トゥン（写真：ホン・フック）']],
+        [['VietNamNet', 'ベトナムネット'], ['Phu nhân Thủ tướng Singapore', 'シンガポール首相夫人']],
+        [['Báo Thể thao & Văn hóa', 'テータオ＆ヴァンホア紙'], ['Chân dung nghệ nhân Phạm Trần Canh (thethaovanhoa.vn)', '職人ファム・チャン・カインの写真（thethaovanhoa.vn）']],
+        [['Báo Đại biểu Nhân dân', 'ダイビエウニャンザン紙'], ['Gian hàng nón làng Chuông tại hội chợ (daibieunhandan.vn, 2025)', '見本市のチュオン村の笠のブース（daibieunhandan.vn、2025年）']],
+      ]],
+      [['KHO ẢNH MỞ · WIKIMEDIA COMMONS', 'ウィキメディア・コモンズ'], [
+        [['Nón Thanh Oai', 'タインオアイの笠'], ['Daderot, CC0 · hiện vật Bảo tàng Phụ nữ Việt Nam', 'Daderot、CC0・ベトナム女性博物館所蔵']],
+        [['Thạp đồng Đào Thịnh', 'ダオティン銅甕'], ['Daderot, CC0', 'Daderot、CC0']],
+        [['Trống đồng Ngọc Lũ', 'ゴックルー銅鼓'], ['Phạm vi công cộng', 'パブリックドメイン']],
+        [['Hàng bán nón Hà Nội, 1896', '1896年ハノイの笠屋'], ['André Salles, BnF · phạm vi công cộng', 'アンドレ・サル、フランス国立図書館・パブリックドメイン']],
+      ]],
+      [['VIDEO VÀ BẢN ĐỒ', '動画・地図'], [
+        [['Video trình diễn (mục 3.2)', 'ファッションショーの動画（3.2節）'], ['Nón lá trên sàn diễn thời trang quốc tế — nghệ nhân Lê Văn Tuy cung cấp', '海外のファッションショーのノンラー — 職人レー・ヴァン・トゥイ提供']],
+        [['Bản đồ Việt Nam', 'ベトナムの地図'], ['Dữ liệu Natural Earth (phạm vi công cộng), bản theo quan điểm của Việt Nam', 'ナチュラルアースのデータ（パブリックドメイン、ベトナムの立場による版）']],
+        [['Bản đồ hành trình', '旅の地図'], ['Nền bản đồ từ dữ liệu © OpenStreetMap contributors (ODbL) · định tuyến OSRM · quãng đường theo Google Maps', '© オープンストリートマップの貢献者のデータから作成・距離はグーグルマップによる']],
+      ]],
     ]
-    const co = { size: 12.5, lh: 1.5, jaSize: 12.5, paraGap: 5 }
-    const body = join(credits.slice(1))
-    const hh = textH(body, CW, co)
-    f.place(22 + hh, (p, y) => p.add(T(p.x0, y + 10, p.cw, 16, credits[0], { size: S.label, tracking: 2.4, weight: 700, color: ACC[9], jaFont: F.jaSans, name: 'Nhóm' }), T(p.x0, y + 32, p.cw, hh, body, { ...co, color: C.ink2, jaFont: F.jaSans, name: 'Nguồn ảnh' })))
+    const note = ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。']
+    f.page()
+    const p = f.p
+    const y0 = sectionHead(p, TOP, null, ['Nguồn ảnh', '写真の出典'], ['Ghi công hình ảnh', '写真と資料の提供'])
+    const lw = 132
+    const dw = p.cw - lw - 14
+    // cỡ chữ lớn nhất mà cả bảng vừa trang
+    const layout = (size, draw) => {
+      const o = { size, lh: 1.4, jaSize: size }
+      let y = y0 - 6
+      const nh = textH(note, p.cw, o)
+      if (draw) p.add(T(p.x0, y, p.cw, nh, note, { ...o, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Ghi chú' }))
+      y += nh + 10
+      for (const [label, rows] of groups) {
+        if (draw) p.add(T(p.x0, y, p.cw, 16, label, { size: S.label - 1, tracking: 2.2, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm' }))
+        y += 20
+        rows.forEach(([src, what], i) => {
+          const h = Math.max(textH(src, lw, { ...o, weight: 700 }), textH(what, dw, o))
+          if (draw) {
+            if (i) p.add(HL(p.x0, y - 2.5, p.cw, C.line, 0.4))
+            p.add(
+              T(p.x0, y, lw, h, src, { ...o, weight: 700, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }),
+              T(p.x0 + lw + 14, y, dw, h, what, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Ảnh' })
+            )
+          }
+          y += h + 5
+        })
+        y += 8
+      }
+      return y
+    }
+    const size = 12
+    f.y = layout(size, true)
+    p.fixed = true
     f.end()
   }
 
