@@ -2111,17 +2111,27 @@ let stripRight = null
   // cuối đường: chiếc nón hoàn thiện + lời viết tay
   Rp.add(anim('pop', 4.1, 0.7)({ ...DECO('non', xr - 95, 70, 190, 165, 1), name: 'Hình vẽ' }))
   Rp.add(anim('fade', 4.4, 0.6)(T(Rp.x0, 116, 280, 60, ch2.process.done, { font: F.hand, size: 24, lh: 1.25, jaSize: 20, color: acc, jaFont: F.jaHand, name: 'Lời kết' })))
-  // mỗi cặp trang công đoạn: hình vẽ dụng cụ của bước (giống trạm trên bản đồ) + hàng chấm tiến trình 8 bước,
-  // chấm của bước đang xem tô màu, bấm chấm nào lật tới bước đó
+  // mỗi cặp trang công đoạn: hình vẽ dụng cụ của bước (giống trạm trên bản đồ) + hàng số bước 1–8 có lời mời bấm
+  // (góp ý: chấm trơn không số, không chữ → không ai biết bấm vào để nhảy bước, phải tự đếm). Bước đang xem tô màu.
   stepPages.forEach((s) => {
     const pg = pages[s.page - 1]
     const hl = pg.els.find((e) => e.type === 'line' && e.name === 'Đường kẻ' && e.y > TOP && e.y < 320)
     const dy = hl ? hl.y + 2 : TOP + 120
     pg.add({ ...DECO(ICON[s.finish ? 0 : s.no], pg.x1 - 92, TOP - 6, 92, 92, 0.95), name: 'Hình vẽ' })
+    const d = 23
+    const step = 27
+    const x0 = pg.x1 - stepPages.length * step + (step - d)
+    pg.add(T(x0 - 190, dy - 8, 180, 18, ['Bấm số để chuyển bước →', '番号をクリックで工程へ →'], { font: F.hand, size: 15.5, lh: 1.1, jaSize: 12, align: 'right', color: acc, jaFont: F.jaHand, name: 'Lời mời bấm' }))
     stepPages.forEach((t, j) => {
-      const x = pg.x1 - (stepPages.length - j) * 16
+      const x = x0 + j * step
       const on = t === s
-      pg.add(ELL(x, dy - 5, 10, 10, on ? acc : '#fbf6ea', { stroke: acc, sw: 1.2, link: on ? undefined : `#p${t.page}`, alt: `${strip(t.name[0])} — tr. ${t.page}`, name: 'Chấm tiến trình' }))
+      const alt = `${j + 1}. ${strip(t.name[0])} — tr. ${t.page}`
+      pg.add(
+        ELL(x, dy - d / 2, d, d, on ? acc : '#fbf6ea', { stroke: acc, sw: 1.1, name: 'Số bước tròn' }),
+        T(x, dy - 7.6, d, 15, [String(j + 1), null], { size: 12.5, weight: 700, lh: 1.2, align: 'center', color: on ? '#fff' : acc, name: 'Số trên chấm' }),
+        // lớp bấm nằm trên cùng: bấm vào số hay viền đều lật được
+        RECT(x - 2, dy - d / 2 - 2, d + 4, d + 4, 'none', { radius: d, link: on ? undefined : `#p${t.page}`, alt, name: 'Chấm tiến trình' })
+      )
     })
   })
 
