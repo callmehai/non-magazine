@@ -300,7 +300,7 @@ export default function App({ magazine: source }) {
           style={{ '--ratio': `${settings.pageWidth} / ${settings.pageHeight}` }}
         >
           <div className="backdrop" aria-hidden="true">
-            <VillageBackdrop reducedMotion={reducedMotion} />
+            <VillageBackdrop reducedMotion={reducedMotion} active={phase === 'intro'} />
           </div>
           <SceneBackground
             mode={phase === 'intro' ? 'intro' : 'reading'}

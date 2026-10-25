@@ -68,8 +68,9 @@ def non(cx, cy_apex, rx, height, tilt=0.26, strap=True, wash=IVORY, rings=9, rib
         # quai lụa mềm buông dưới vành
         l, r_ = cx - rx * 0.42, cx + rx * 0.42
         y0 = by + ry * 0.85
-        parts.append(f'<path d="M{f(l)} {f(y0)} C {f(l + 6)} {f(y0 + rx * 0.62)}, {f(r_ - 6)} {f(y0 + rx * 0.62)}, {f(r_)} {f(y0)}" stroke="{RED}" stroke-width="1.6"/>')
-        parts.append(f'<path d="M{f(l + 4)} {f(y0 + 1)} C {f(l + 10)} {f(y0 + rx * 0.56)}, {f(r_ - 10)} {f(y0 + rx * 0.56)}, {f(r_ - 4)} {f(y0 + 1)}" stroke="{RED}" stroke-width="0.8" opacity=".6"/>')
+        # võng vừa phải (≈0,4 bán kính) để quai nằm gọn trong khung hình, không bị cắt mất phần dưới
+        parts.append(f'<path d="M{f(l)} {f(y0)} C {f(l + 6)} {f(y0 + rx * 0.42)}, {f(r_ - 6)} {f(y0 + rx * 0.42)}, {f(r_)} {f(y0)}" stroke="{RED}" stroke-width="1.6"/>')
+        parts.append(f'<path d="M{f(l + 4)} {f(y0 + 1)} C {f(l + 10)} {f(y0 + rx * 0.37)}, {f(r_ - 10)} {f(y0 + rx * 0.37)}, {f(r_ - 4)} {f(y0 + 1)}" stroke="{RED}" stroke-width="0.8" opacity=".6"/>')
     return '\n'.join(parts)
 
 
@@ -195,6 +196,20 @@ body = [lotus(110, 120, 1.1), f'<path d="M30 230 C 60 196, 160 196, 190 230 C 15
         lotus(186, 168, 0.6)]
 svg('lotus-pond', (240, 240), '\n'.join(body))
 
+# 5b. tre già măng mọc (chương 3: ghi nhận, bảo tồn, truyền nghề cho lớp sau) — hai cây tre già + mầm măng ở gốc
+body = [bamboo(92, 26, 214, lean=10, leaves=((0.55, -1), (0.72, 1), (0.9, -1))),
+        bamboo(132, 58, 214, lean=-8, leaves=((0.5, 1), (0.74, -1), (0.92, 1)))]
+# măng: búp nhọn nhiều lớp bẹ ôm nhau, màu đất nung nhạt
+mx, my = 168, 214
+body.append(f'<path d="M{mx - 16} {my} C {mx - 14} {my - 22}, {mx - 6} {my - 40}, {mx + 2} {my - 52} C {mx + 6} {my - 38}, {mx + 14} {my - 20}, {mx + 16} {my} Z" fill="{CLAY}"/>')
+for i in range(4):
+    yy = my - 8 - i * 11
+    w = 15 - i * 3.2
+    body.append(f'<path d="M{f(mx - w)} {f(yy + 4)} Q {f(mx)} {f(yy - 6)} {f(mx + w)} {f(yy + 4)}" stroke-width="0.9"/>')
+body.append(f'<path d="M{mx - 26} {my - 1} q 5 -14 10 -2 M{mx + 22} {my - 1} q 4 -10 8 0" stroke-width="0.8"/>')
+body.append(f'<path d="M30 {my + 2} C 90 {my - 4}, 160 {my + 6}, 212 {my + 1}" stroke-width="1" opacity=".6"/>')
+svg('tre-mang', (240, 240), '\n'.join(body))
+
 # ── dụng cụ / công đoạn (mỗi hình trong ô 160×160)
 tools = {}
 # rẽ lá: bó lá lụi dài buộc giữa + một lá đang được vuốt phẳng
@@ -218,16 +233,19 @@ for i, r in enumerate((60, 50, 40, 31, 22, 14)):
 t.append(f'<ellipse cx="80" cy="70" rx="44" ry="15" stroke-width="1.2"/><ellipse cx="80" cy="50" rx="30" ry="10" stroke-width="1.1"/>')
 t.append(f'<path d="M80 30 L 80 120" stroke-width="0.6" opacity=".4"/>')
 tools['but-vong'] = t
-# quay nón: khuôn nón hình chóp có nan và các vòng, lá xếp lên một phần
-t = [f'<path d="M80 18 L 20 132 L 140 132 Z" fill="{IVORY}" stroke="none"/>']
-for i in range(1, 9):
-    y = 18 + 114 * i / 9
-    hw = 60 * i / 9
-    t.append(f'<path d="M{f(80 - hw)} {f(y)} Q 80 {f(y + hw * 0.18)} {f(80 + hw)} {f(y)}" stroke-width="0.8"/>')
-for x in (20, 50, 80, 110, 140):
-    t.append(f'<path d="M80 18 L {x} 132" stroke-width="0.7" opacity=".6"/>')
-t.append(f'<path d="M80 18 L 20 132 Q 80 152 140 132 Z"/>')
-t.append(f'<path d="M80 24 L 46 120 Q 62 126 74 128 Z" fill="{SAGE}" opacity=".9"/>')
+# quay nón: khuôn nón dáng thấp (cao ≈ 0,7 bán kính như nón thật) có 8 gọng, các vòng, lá xếp lên một phần
+ax, ay, by_, rx_ = 80, 70, 122, 70
+t = [f'<path d="M{ax} {ay} L {ax - rx_} {by_} Q {ax} {by_ + 22} {ax + rx_} {by_} Z" fill="{IVORY}" stroke="none"/>']
+for i in range(1, 8):
+    k = i / 8
+    t.append(f'<path d="M{f(ax - rx_ * k)} {f(ay + (by_ - ay) * k)} Q {ax} {f(ay + (by_ - ay) * k + 22 * k)} {f(ax + rx_ * k)} {f(ay + (by_ - ay) * k)}" stroke-width="0.8"/>')
+for a in (198, 222, 246, 270, 294, 318, 342):
+    x = ax + rx_ * math.cos(math.radians(a - 180))
+    y = by_ + 11 * math.sin(math.radians(a - 180)) * -1
+    t.append(f'<path d="M{ax} {ay + 3} L {f(x)} {f(by_ + 11 * abs(math.sin(math.radians(a))))}" stroke-width="0.7" opacity=".6"/>')
+t.append(f'<path d="M{ax} {ay} L {ax - rx_} {by_} Q {ax} {by_ + 22} {ax + rx_} {by_} Z"/>')
+t.append(f'<path d="M{ax - 2} {ay + 4} L {ax - 46} {by_ - 6} Q {ax - 26} {by_ + 6} {ax - 6} {by_ + 9} Z" fill="{SAGE}" opacity=".9"/>')
+t.append(f'<circle cx="{ax}" cy="{ay + 1}" r="3.2" fill="{IVORY}" stroke-width="1"/>')
 tools['quay-non'] = t
 # khâu nón: kim + sợi cước uốn lượn + đoạn vành
 t = [f'<path d="M24 120 Q 80 96 136 120" stroke-width="2"/>', f'<path d="M26 126 Q 80 102 134 126" stroke-width="1" opacity=".6"/>',

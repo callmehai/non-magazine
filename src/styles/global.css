@@ -87,22 +87,29 @@ button {
   will-change: transform; /* mỗi lớp một lớp GPU: rê chuột chỉ dịch lớp, không vẽ lại */
 }
 
-/* từng cây tre gần đung đưa quanh gốc, lệch nhịp nhau */
-.village__culm {
-  transform-box: view-box;
-  animation: culm-sway 7s ease-in-out infinite alternate;
+.village__layer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
 }
 
-@keyframes culm-sway {
+/* bụi tre gần đung đưa: nghiêng cả lớp ảnh quanh gốc (GPU), không vẽ lại từng lá */
+.village__layer.is-near img {
+  transform-origin: 8% 100%;
+  animation: grove-sway 8s ease-in-out infinite alternate;
+}
+
+@keyframes grove-sway {
   from {
-    transform: rotate(-0.7deg);
+    transform: rotate(-0.6deg);
   }
   to {
-    transform: rotate(1deg);
+    transform: rotate(0.8deg);
   }
 }
 
-.village__leaves svg {
+.village__leaves img {
   position: absolute;
   top: -4%;
   opacity: 0.75;
@@ -142,16 +149,13 @@ button {
   opacity: 1;
 }
 
-.phase-reading .village__leaves {
-  display: none;
-}
-
-/* lúc đọc cảnh đã mờ: dừng tre đung đưa để trình duyệt khỏi vẽ lại lớp mờ mỗi khung hình (máy đỡ nóng) */
-.phase-reading .village__culm {
+/* lúc đọc cảnh đã mờ: dừng tre đung đưa để lớp mờ chỉ tính một lần (máy đỡ nóng) */
+.phase-reading .village__layer.is-near img,
+.phase-leaving .village__layer.is-near img {
   animation-play-state: paused;
 }
 
-.reduced-motion .village__culm {
+.reduced-motion .village__layer.is-near img {
   animation: none;
 }
 

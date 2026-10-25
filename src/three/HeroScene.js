@@ -32,7 +32,7 @@ export class HeroScene {
     this.pointerSmooth = new THREE.Vector2()
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' })
-    this.fullDpr = Math.min(window.devicePixelRatio || 1, this.mobile ? 1.5 : 1.75)
+    this.fullDpr = Math.min(window.devicePixelRatio || 1, this.mobile ? 1.25 : 1.5) // màn Retina: 1,5 đủ nét cho nón, đỡ nóng máy
     renderer.setPixelRatio(this.fullDpr)
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -97,7 +97,7 @@ export class HeroScene {
     this.beam = makeBeam()
     scene.add(this.beam)
 
-    this.dust = createDust(this.mobile ? 260 : 620)
+    this.dust = createDust(this.mobile ? 160 : 320)
     scene.add(this.dust.points)
 
     this.resize = this.resize.bind(this)
@@ -122,6 +122,7 @@ export class HeroScene {
     this.camera.updateProjectionMatrix()
     this.size = { w, h }
     this.lastInput = performance.now() // đổi cỡ xoá canvas → vẽ lại dù đang đứng hình
+    this.wake?.()
   }
 
   onPointerDown(e) {
@@ -159,9 +160,22 @@ export class HeroScene {
   setPointer(x, y) {
     this.pointer.set(x, y)
     this.lastInput = performance.now()
+    this.wake()
+  }
+
+  /** bật lại vòng lặp vẽ sau khi đã ngủ (đang đọc, không đụng chuột) */
+  wake() {
+    if (!this.sleeping || this.disposed) return
+    this.sleeping = false
+    this.renderer.setAnimationLoop(this.tick)
   }
 
   setMode(mode) {
+    // React gọi setMode ở mọi lần render → chỉ đánh thức khi chế độ thật sự đổi
+    if (mode !== this.mode) {
+      this.lastInput = performance.now()
+      this.wake()
+    }
     this.mode = mode
     if (mode === 'reading') {
       if (!this.introDone) {
@@ -175,6 +189,7 @@ export class HeroScene {
   /** Chạy lại màn "đan nón" từ đầu (nút "Xem lại nón 3D") */
   replay() {
     this.mode = 'intro'
+    this.wake()
     this.introDone = false
     this.applyIntro(this.reducedMotion ? T.end : 0)
     if (this.reducedMotion) this.finishIntro()
@@ -211,8 +226,17 @@ export class HeroScene {
     const settled = this.mode === 'reading' && this.modeT >= 1 && !this.drag.active
     this.setLowPower(settled)
     // đang đọc mà không đụng chuột vài giây → đứng hình (khung cuối vẫn nằm trên canvas), không tốn GPU
-    if (settled && timestamp - (this.lastInput ?? 0) > IDLE_MS) return
-    if (settled && timestamp - (this.lastFrame ?? 0) < 1000 / 30 - 2) return
+    // (dừng hẳn vòng lặp: rAF rỗng vẫn bắt trình duyệt dựng khung hình — wake() bật lại khi có thao tác)
+    if (settled && timestamp - (this.lastInput ?? 0) > IDLE_MS) {
+      this.renderer.setAnimationLoop(null)
+      this.sleeping = true
+      return
+    }
+    // nhịp vẽ: màn 120Hz sẽ gọi tick 120 lần/giây — nón xoay chậm nên không cần. Đang kéo xoay / vừa rê chuột / đang
+    // chuyển cảnh: 60 khung/giây; nón tự xoay yên ở sảnh: 30; lúc đọc: 30 (đo ở bản build: CPU trang giảm gần một nửa)
+    const lively = this.drag.active || !this.introDone || (this.modeT > 0 && this.modeT < 1) || timestamp - (this.lastInput ?? 0) < 1500
+    const fps = settled || !lively ? 30 : 60
+    if (timestamp - (this.lastFrame ?? 0) < 1000 / fps - 2) return
     this.lastFrame = timestamp
     this.timer.update(timestamp)
     const dt = Math.min(this.timer.getDelta(), 0.05)
@@ -247,9 +271,7 @@ export class HeroScene {
     // nón chính: giữa màn hình → góc trên bên trái
     const { halfH, halfW } = this.halfExtents(5 + 0.8)
     const narrow = this.camera.aspect < 0.9
-    const readPos = narrow
-      ? new THREE.Vector3(-halfW * 0.62, halfH * 0.78, -0.8)
-      : new THREE.Vector3(-halfW * 0.8, halfH * 0.5, -0.8)
+    const readPos = narrow ? new THREE.Vector3(-halfW * 0.62, halfH * 0.78, -0.8) : new THREE.Vector3(-halfW * 0.8, halfH * 0.5, -0.8)
     const pivot = this.hatPivot
     pivot.position.lerpVectors(new THREE.Vector3(0, -0.02, 0), readPos, m)
     pivot.scale.setScalar(THREE.MathUtils.lerp(this.mobile ? 0.56 : 0.64, narrow ? 0.62 : 0.78, m))
@@ -302,6 +324,7 @@ export class HeroScene {
   }
 
   dispose() {
+    this.disposed = true
     this.renderer.setAnimationLoop(null)
     this.ro.disconnect()
     this.canvas.removeEventListener('pointerdown', this.onPointerDown)

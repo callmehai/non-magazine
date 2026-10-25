@@ -315,7 +315,7 @@ function runningHead(p, label) {
  * đầu mục lớn kiểu tạp chí: dòng chương viết tay + tên mục + vạch màu; góc phải là số mục rất to in nhạt
  * (mục không đánh số thì là hình vẽ nét mảnh của chương) → trả y tiếp theo
  */
-const SEC_ICON = { 0: 'non', 1: 'non', 2: 'tool-quay-non', 3: 'lotus-pond', 9: 'non' }
+const SEC_ICON = { 0: 'non', 1: 'non', 2: 'tool-quay-non', 3: 'tre-mang', 9: 'non' } // chương 3 (ghi nhận, bảo tồn, kế nghiệp): "tre già măng mọc"
 const SEC_KICKER = { 9: ['Khép lại hành trình', '旅の終わりに'] }
 function sectionHead(p, y, num, title, kicker) {
   const acc = ACC[p.chapter] ?? C.gold
@@ -1618,7 +1618,7 @@ let stripRight = null
   const qh = textH(cl.outro, qw, quoteOpt(25))
   const dh = 130
   let y = (H - (dh + 40 + qh)) / 2
-  p.add(RECT(W - 18, 0, 18, H, ACC[3], { name: 'Dải màu' }), { ...DECO('lotus-pond', (W - 18 - dh) / 2, y, dh, dh, 0.9), name: 'Hình vẽ' })
+  p.add(RECT(W - 18, 0, 18, H, ACC[3], { name: 'Dải màu' }), { ...DECO('tre-mang', (W - 18 - dh) / 2, y, dh, dh, 0.9), name: 'Hình vẽ' })
   y += dh + 18
   p.add(HL((W - 18 - 64) / 2, y, 64, ACC[3], 1.8))
   quote(p, y + 22, cl.outro, (W - 18 - qw) / 2, qw, { size: 25, align: 'center', color: C.ink })
@@ -1929,7 +1929,7 @@ function settle(p) {
 }
 // trang chỉ có chữ còn chỗ ở đáy → một hình vẽ nét mảnh theo chương (họa tiết nón / tre / sen theo góp ý của nhóm),
 // trang không còn trơn chữ và không để dải trống
-const VIGNETTE = { 0: 'still-non', 1: 'non', 2: 'tool-quay-non', 3: 'lotus-pond', 9: 'still-non' }
+const VIGNETTE = { 0: 'still-non', 1: 'non', 2: 'tool-quay-non', 3: 'tre-mang', 9: 'still-non' }
 function vignette(p) {
   if (p.fixed || p.hasImg || p.els.some((e) => e.type === 'image' && e.name === 'Hình vẽ')) return
   // chú thích cuối trang (và gạch ngắn phía trên nó) neo đáy, không tính là nội dung
@@ -1943,7 +1943,7 @@ function vignette(p) {
   if (room < 64) return
   // ít chỗ thì chỉ một chiếc nón nhỏ làm hoa văn cuối trang
   const name = room < 110 ? 'non' : VIGNETTE[p.chapter] ?? 'non'
-  const ratio = name === 'still-non' ? 310 / 640 : name === 'lotus-pond' ? 1 : name === 'non' ? 260 / 300 : 1
+  const ratio = name === 'still-non' ? 310 / 640 : name === 'lotus-pond' || name === 'tre-mang' ? 1 : name === 'non' ? 260 / 300 : 1
   const h = Math.min(room, 200)
   const w = Math.min(p.cw, h / ratio)
   p.add({ ...DECO(name, p.x0 + (p.cw - w) / 2, bottom + 24 + (room - h) / 2, w, h, 0.9), name: 'Hình vẽ' })

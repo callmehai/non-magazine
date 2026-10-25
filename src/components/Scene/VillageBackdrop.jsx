@@ -76,7 +76,14 @@ function culm(r, x0, y0, h, lean, w0, k = 1) {
     L.push([p.x - (p.dy / len) * -w, p.y + (p.dx / len) * -w])
     R.push([p.x + (p.dy / len) * -w, p.y - (p.dx / len) * -w])
   }
-  const body = 'M' + L.map(([x, y]) => `${f(x)} ${f(y)}`).join('L') + 'L' + R.reverse().map(([x, y]) => `${f(x)} ${f(y)}`).join('L') + 'Z'
+  const body =
+    'M' +
+    L.map(([x, y]) => `${f(x)} ${f(y)}`).join('L') +
+    'L' +
+    R.reverse()
+      .map(([x, y]) => `${f(x)} ${f(y)}`)
+      .join('L') +
+    'Z'
   // đốt tre: vạch ngang ngắn, thưa dần lên ngọn
   let nodes = ''
   for (let t = 0.07; t < 0.8; t += 0.075 + t * 0.02) {
@@ -157,7 +164,8 @@ function bigTree() {
       crown += leaf(x, y, a + (r() - 0.5), 14 + r() * 12, 4 + r() * 2)
     }
   }
-  const trunk = 'M1478 700C1470 560 1488 470 1450 360C1440 330 1420 300 1400 280L1418 274C1446 300 1468 330 1480 352C1488 300 1510 260 1540 236L1552 248C1520 284 1508 330 1506 380C1510 480 1504 580 1512 700Z'
+  const trunk =
+    'M1478 700C1470 560 1488 470 1450 360C1440 330 1420 300 1400 280L1418 274C1446 300 1468 330 1480 352C1488 300 1510 260 1540 236L1552 248C1520 284 1508 330 1506 380C1510 480 1504 580 1512 700Z'
   return { crown, trunk }
 }
 
@@ -185,7 +193,8 @@ function gate() {
   for (let x = -100; x <= 100; x += 7) detail += `M${x} -205L${f(x * 1.04)} -172`
   for (let x = -104; x <= 104; x += 13) detail += `M${x} -120V-138`
   detail += 'M-74 -64h26v28h-26Z M48 -64h26v28h-26Z M-170 -60H170'
-  const rim = 'M-150 -214Q-146 -200-134 -196Q-120 -192-106 -194L-76 -208H76L106 -194Q120 -192 134 -196Q146 -200 150 -214 M-80 -216H80 M-203 -156h34 M169 -156h34'
+  const rim =
+    'M-150 -214Q-146 -200-134 -196Q-120 -192-106 -194L-76 -208H76L106 -194Q120 -192 134 -196Q146 -200 150 -214 M-80 -216H80 M-203 -156h34 M169 -156h34'
   return { solid, glow, detail, rim }
 }
 
@@ -241,44 +250,102 @@ function hatStack(x, y, n, rx) {
   return { body, rings, lit, knob }
 }
 
-function useScene() {
+/** gói một lớp SVG thành ảnh data URL: trình duyệt raster một lần, sau đó chỉ dịch / nghiêng ảnh trên GPU (không vẽ lại) */
+const toImg = (inner) =>
+  'data:image/svg+xml;charset=utf-8,' +
+  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMax slice">${inner}</svg>`)
+
+/** 4 lớp ảnh theo độ sâu: nền trời + lũy tre xa / sân + cổng đình / cây, giếng, chồng nón / bụi tre gần */
+function useLayers() {
   return useMemo(() => {
-    const far = farBamboo()
-    const near = nearBamboo()
-    const tree = bigTree()
-    const g = gate()
-    const w = well()
-    // chồng nón bày bán trên sân như phiên chợ Chuông: gần thì to, xa thì nhỏ
-    const stacks = [hatStack(1150, 742, 5, 34), hatStack(1250, 764, 7, 44), hatStack(1372, 790, 6, 54)]
-    return { far, near, tree, g, w, stacks, floor: floor() }
+    const s = {
+      far: farBamboo(),
+      near: nearBamboo(),
+      tree: bigTree(),
+      g: gate(),
+      w: well(),
+      // chồng nón bày bán trên sân như phiên chợ Chuông: gần thì to, xa thì nhỏ
+      stacks: [hatStack(1150, 742, 5, 34), hatStack(1250, 764, 7, 44), hatStack(1372, 790, 6, 54)],
+      floor: floor(),
+    }
+    const back = `<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#140904"/><stop offset=".38" stop-color="${C.espresso}"/><stop offset=".6" stop-color="#6e2d06"/><stop offset=".71" stop-color="#c0650e"/><stop offset=".72" stop-color="#5e260a"/><stop offset="1" stop-color="#1f0d05"/></linearGradient>
+<radialGradient id="sun" cx="800" cy="540" r="560" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${C.malibu}" stop-opacity=".95"/><stop offset=".16" stop-color="#f7b54a" stop-opacity=".75"/><stop offset=".45" stop-color="${C.gold}" stop-opacity=".28"/><stop offset="1" stop-color="${C.ember}" stop-opacity="0"/></radialGradient>
+<linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9973a" stop-opacity="0"/><stop offset=".7" stop-color="#e9973a" stop-opacity=".38"/><stop offset="1" stop-color="#e9973a" stop-opacity=".12"/></linearGradient>
+</defs>
+<rect width="${VW}" height="${VH}" fill="url(#sky)"/><rect width="${VW}" height="${VH}" fill="url(#sun)"/>
+<path d="${s.far.body}" fill="${C.far}"/><path d="${s.far.leaves}" fill="${C.far}" stroke="${C.far}" stroke-width=".6"/>
+<rect y="${HORIZON - 150}" width="${VW}" height="160" fill="url(#haze)"/>`
+    const yard = `<defs>
+<linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3f12"/><stop offset=".35" stop-color="#5a240a"/><stop offset="1" stop-color="#220e05"/></linearGradient>
+<radialGradient id="pool" cx="800" cy="700" r="420" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 700) scale(1 .32) translate(-800 -700)"><stop offset="0" stop-color="#ffc56a" stop-opacity=".5"/><stop offset="1" stop-color="#ffc56a" stop-opacity="0"/></radialGradient>
+</defs>
+<rect y="${HORIZON}" width="${VW}" height="${VH - HORIZON}" fill="url(#fl)"/><rect y="${HORIZON}" width="${VW}" height="${VH - HORIZON}" fill="url(#pool)"/>
+<path d="${s.floor}" stroke="#1a0a03" stroke-opacity=".38" stroke-width="1.2" fill="none"/>
+<g transform="translate(1236 ${HORIZON + 2}) scale(1.06)">
+<path d="${s.g.solid}" fill="${C.gate}" fill-rule="evenodd"/>
+<path d="${s.g.glow}" fill="#ffcf7a" opacity=".85"/>
+<path d="${s.g.detail}" stroke="#5c2c10" stroke-width=".8" fill="none"/>
+<path d="${s.g.rim}" stroke="${C.rim}" stroke-opacity=".75" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+</g>`
+    const mid =
+      `<path d="${s.tree.trunk}" fill="${C.dark}"/><path d="${s.tree.crown}" fill="${C.dark}"/>
+<path d="${s.w.solid}" fill="#241005"/><path d="${s.w.mouth}" fill="#0e0602"/>
+<path d="${s.w.bricks}" stroke="#4a220c" stroke-width="1" fill="none"/>
+<path d="${s.w.rim + s.w.rope + s.w.pulley}" stroke="${C.rim}" stroke-opacity=".5" stroke-width="1.2" fill="none"/>
+<path d="${s.w.bucket}" fill="#3a1b09"/>` +
+      s.stacks
+        .map(
+          (st) =>
+            `<path d="${st.body}" fill="#a88c62"/><path d="${st.lit}" fill="#e3cf9f" opacity=".75"/><path d="${st.rings}" stroke="#6e2a14" stroke-width="1.6" fill="none"/><path d="${st.knob}" fill="#f3e6c6"/>`
+        )
+        .join('')
+    const near = s.near
+      .map(
+        (c) =>
+          `<path d="${c.body}" fill="#170a04"/><path d="${c.nodes}" stroke="#3c1d0b" stroke-width="2"/><path d="${c.leaves}" fill="#1d0c05" stroke="#1d0c05" stroke-width="1.2"/>`
+      )
+      .join('')
+    return [
+      { d: 0.1, src: toImg(back) },
+      { d: 0.32, src: toImg(yard) },
+      { d: 0.58, src: toImg(mid) },
+      { d: 1, src: toImg(near), cls: 'is-near' },
+    ]
   }, [])
 }
 
 /** lá tre rơi (nhẹ, thưa) */
-const FALLING = Array.from({ length: 11 }, (_, i) => {
+const FALLING = Array.from({ length: 9 }, (_, i) => {
   const r = rng(90 + i)
   return { left: 4 + r() * 92, delay: -r() * 18, dur: 14 + r() * 10, size: 14 + r() * 10, drift: (r() - 0.5) * 160, spin: r() < 0.5 ? -1 : 1 }
 })
+const LEAF =
+  'data:image/svg+xml;charset=utf-8,' +
+  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 12"><path d="${leaf(2, 6, 0, 36, 4)}" fill="#d9a54e"/></svg>`)
 
-export default function VillageBackdrop({ reducedMotion }) {
-  const s = useScene()
+/**
+ * active: đang ở sảnh. Lúc đọc sách cảnh đứng yên (không parallax, không lá rơi) để GPU nghỉ.
+ */
+export default function VillageBackdrop({ reducedMotion, active = true }) {
+  const layers = useLayers()
   const ref = useRef(null)
 
-  // parallax theo chuột: --px, --py trong [-1, 1], làm mượt bằng rAF
+  // parallax theo chuột: --px, --py trong [-1, 1], làm mượt bằng rAF; chỉ chạy ở sảnh
   useEffect(() => {
-    if (reducedMotion) return
+    if (reducedMotion || !active) return
     const el = ref.current
     let tx = 0
     let ty = 0
-    let x = 0
-    let y = 0
+    let x = Number(el.style.getPropertyValue('--px')) || 0
+    let y = Number(el.style.getPropertyValue('--py')) || 0
     let raf = 0
     const tick = () => {
-      x += (tx - x) * 0.06
-      y += (ty - y) * 0.06
-      el.style.setProperty('--px', x.toFixed(4))
-      el.style.setProperty('--py', y.toFixed(4))
-      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.0005 ? requestAnimationFrame(tick) : 0
+      x += (tx - x) * 0.08
+      y += (ty - y) * 0.08
+      el.style.setProperty('--px', x.toFixed(3))
+      el.style.setProperty('--py', y.toFixed(3))
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.002 ? requestAnimationFrame(tick) : 0
     }
     const onMove = (e) => {
       tx = (e.clientX / window.innerWidth) * 2 - 1
@@ -290,132 +357,31 @@ export default function VillageBackdrop({ reducedMotion }) {
       window.removeEventListener('pointermove', onMove)
       cancelAnimationFrame(raf)
     }
-  }, [reducedMotion])
-
-  const layer = (depth, children, extra = '') => (
-    <svg className={`village__layer ${extra}`} style={{ '--d': depth }} viewBox={`0 0 ${VW} ${VH}`} preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-      {children}
-    </svg>
-  )
+  }, [reducedMotion, active])
 
   return (
     <div ref={ref} className="village" aria-hidden="true">
-      {layer(
-        0,
-        <>
-          <defs>
-            <linearGradient id="vb-sky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#140904" />
-              <stop offset="0.38" stopColor={C.espresso} />
-              <stop offset="0.6" stopColor="#6e2d06" />
-              <stop offset="0.71" stopColor="#c0650e" />
-              <stop offset="0.72" stopColor="#5e260a" />
-              <stop offset="1" stopColor="#1f0d05" />
-            </linearGradient>
-            <radialGradient id="vb-sun" cx="800" cy="540" r="560" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor={C.malibu} stopOpacity="0.95" />
-              <stop offset="0.16" stopColor="#f7b54a" stopOpacity="0.75" />
-              <stop offset="0.45" stopColor={C.gold} stopOpacity="0.28" />
-              <stop offset="1" stopColor={C.ember} stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <rect width={VW} height={VH} fill="url(#vb-sky)" />
-          <rect width={VW} height={VH} fill="url(#vb-sun)" />
-        </>
-      )}
-      {layer(
-        0.12,
-        <>
-          <path d={s.far.body} fill={C.far} />
-          <path d={s.far.leaves} fill={C.far} stroke={C.far} strokeWidth="0.6" />
-          {/* sương chiều phủ chân lũy tre */}
-          <defs>
-            <linearGradient id="vb-haze" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#e9973a" stopOpacity="0" />
-              <stop offset="0.7" stopColor="#e9973a" stopOpacity="0.38" />
-              <stop offset="1" stopColor="#e9973a" stopOpacity="0.12" />
-            </linearGradient>
-          </defs>
-          <rect y={HORIZON - 150} width={VW} height="160" fill="url(#vb-haze)" />
-        </>
-      )}
-      {layer(
-        0.3,
-        <>
-          <defs>
-            <linearGradient id="vb-floor" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#8a3f12" />
-              <stop offset="0.35" stopColor="#5a240a" />
-              <stop offset="1" stopColor="#220e05" />
-            </linearGradient>
-            <radialGradient id="vb-pool" cx="800" cy="700" r="420" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 700) scale(1 0.32) translate(-800 -700)">
-              <stop offset="0" stopColor="#ffc56a" stopOpacity="0.5" />
-              <stop offset="1" stopColor="#ffc56a" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <rect y={HORIZON} width={VW} height={VH - HORIZON} fill="url(#vb-floor)" />
-          <rect y={HORIZON} width={VW} height={VH - HORIZON} fill="url(#vb-pool)" />
-          <path d={s.floor} stroke="#1a0a03" strokeOpacity="0.38" strokeWidth="1.2" fill="none" />
-        </>
-      )}
-      {layer(
-        0.36,
-        <g transform={`translate(1236 ${HORIZON + 2}) scale(1.06)`}>
-          <path d={s.g.solid} fill={C.gate} fillRule="evenodd" />
-          {/* nắng chiều lọt qua ba cửa vòm */}
-          <path d={s.g.glow} fill="#ffcf7a" opacity="0.85" />
-          <path d={s.g.detail} stroke="#5c2c10" strokeWidth="0.8" fill="none" />
-          <path d={s.g.rim} stroke={C.rim} strokeOpacity="0.75" strokeWidth="1.1" fill="none" strokeLinecap="round" />
-        </g>
-      )}
-      {layer(
-        0.55,
-        <>
-          <path d={s.tree.trunk} fill={C.dark} />
-          <path d={s.tree.crown} fill={C.dark} />
-          <path d={s.w.solid} fill="#241005" />
-          <path d={s.w.mouth} fill="#0e0602" />
-          <path d={s.w.bricks} stroke="#4a220c" strokeWidth="1" fill="none" />
-          <path d={s.w.rim + s.w.rope + s.w.pulley} stroke={C.rim} strokeOpacity="0.5" strokeWidth="1.2" fill="none" />
-          <path d={s.w.bucket} fill="#3a1b09" />
-        </>
-      )}
-      {layer(
-        0.75,
-        <>
-          {s.stacks.map((st, i) => (
-            <g key={i}>
-              <path d={st.body} fill="#a88c62" />
-              <path d={st.lit} fill="#e3cf9f" opacity="0.75" />
-              <path d={st.rings} stroke="#6e2a14" strokeWidth="1.6" fill="none" />
-              <path d={st.knob} fill="#f3e6c6" />
-            </g>
-          ))}
-        </>
-      )}
-      {layer(
-        1,
-        <>
-          {s.near.map((c, i) => (
-            <g key={i} className="village__culm" style={{ transformOrigin: `${(c.x / VW) * 100}% 100%`, animationDelay: `${c.delay}s`, animationDuration: `${c.dur}s` }}>
-              <path d={c.body} fill="#170a04" />
-              <path d={c.nodes} stroke="#3c1d0b" strokeWidth="2" />
-              <path d={c.leaves} fill="#1d0c05" stroke="#1d0c05" strokeWidth="1.2" />
-            </g>
-          ))}
-        </>,
-        'is-near'
-      )}
-      {!reducedMotion && (
+      {layers.map((l, i) => (
+        <div key={i} className={`village__layer ${l.cls ?? ''}`} style={{ '--d': l.d }}>
+          <img src={l.src} alt="" decoding="async" draggable="false" />
+        </div>
+      ))}
+      {!reducedMotion && active && (
         <div className="village__leaves">
           {FALLING.map((l, i) => (
-            <svg
+            <img
               key={i}
-              viewBox="0 0 40 12"
-              style={{ left: `${l.left}%`, width: l.size, animationDelay: `${l.delay}s`, animationDuration: `${l.dur}s`, '--drift': `${l.drift}px`, '--spin': l.spin }}
-            >
-              <path d={leaf(2, 6, 0, 36, 4)} fill="#d9a54e" />
-            </svg>
+              src={LEAF}
+              alt=""
+              style={{
+                left: `${l.left}%`,
+                width: l.size,
+                animationDelay: `${l.delay}s`,
+                animationDuration: `${l.dur}s`,
+                '--drift': `${l.drift}px`,
+                '--spin': l.spin,
+              }}
+            />
           ))}
         </div>
       )}

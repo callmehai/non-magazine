@@ -23,6 +23,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
   const currentRef = useRef(0)
   const layoutRef = useRef(layout)
   const redrawRef = useRef(0) // số khung hình còn phải vẽ lại sau một thay đổi
+  const wakeRef = useRef(null) // đánh thức vòng lặp render đang ngủ
   layoutRef.current = layout
   const [current, setCurrent] = useState(0)
   const [flipState, setFlipState] = useState('read')
@@ -110,6 +111,22 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     pf.on('init', () => setReady(true))
     const order = rtl ? [...pageEls].reverse() : pageEls
     pf.loadFromHTML(order)
+    // vùng "góc trang" mặc định của StPageFlip rộng 1/5 đường chéo (~200px): rê chuột vào là mép giấy cuộn lên theo chuột,
+    // che mất nút "Đọc thêm", thẻ chương… và bấm không được → thu còn ~1/14 đường chéo, và không cuộn khi chuột đang ở trên nút/link
+    // (bộ điều khiển lật chỉ có sau loadFromHTML)
+    {
+      const fc = pf.getFlipController()
+      let lastEl = null
+      const onPointer = (e) => (lastEl = e.target)
+      root.addEventListener('pointermove', onPointer, { passive: true })
+      fc.isPointOnCorners = function (t) {
+        if (lastEl?.closest?.('a, button, [role="button"], [data-link], video, input')) return false
+        const r = this.getBoundsRect()
+        const s = Math.hypot(r.pageWidth, r.height) / 14
+        const b = this.render.convertToBook(t)
+        return b.x > 0 && b.y > 0 && b.x < r.width && b.y < r.height && (b.x < s || b.x > r.width - s) && (b.y < s || b.y > r.height - s)
+      }
+    }
     // showCover khiến StPageFlip ép bìa trước/sau thành "bìa cứng" (xoay phẳng như cánh cửa);
     // trang nào được yêu cầu mềm thì trả lại mềm để lật cong như giấy
     order.forEach((el, i) => {
@@ -126,8 +143,47 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
         if (redrawRef.current > 0) redrawRef.current--
       }
     }
+    // Vòng lặp render của StPageFlip chạy requestAnimationFrame mãi mãi, kể cả khi sách nằm yên → trình duyệt dựng khung
+    // hình 60–120 lần/giây cho không (đo ở bản build: ~15% CPU lúc chỉ ngồi đọc). Thay bằng vòng lặp của mình: sách yên
+    // ~20 khung thì ngủ hẳn, có thao tác (rê/chạm, lật, đổi cỡ) thì thức dậy.
+    const SLEEP = Symbol('flip-sleep')
+    const swallow = (e) => e.error === SLEEP && e.preventDefault()
+    window.addEventListener('error', swallow)
+    const renderOnce = render.render.bind(render)
+    let sleeping = false
+    let idle = 0
+    let alive = true
+    const step = (t) => {
+      if (!alive) return
+      renderOnce(t)
+      const busy = pf.getState() !== 'read' || render.animation || redrawRef.current > 0
+      idle = busy ? 0 : idle + 1
+      if (idle > 20) sleeping = true
+      else requestAnimationFrame(step)
+    }
+    const wake = () => {
+      idle = 0
+      if (sleeping && alive) {
+        sleeping = false
+        requestAnimationFrame(step)
+      }
+    }
+    // vòng lặp gốc chết ở khung kế tiếp (ném SLEEP, đã chặn báo lỗi); từ đây chỉ còn vòng lặp step
+    render.render = () => {
+      render.render = () => {}
+      throw SLEEP
+    }
+    requestAnimationFrame(step)
+    const startAnimation = render.startAnimation.bind(render)
+    render.startAnimation = (...a) => {
+      wake()
+      return startAnimation(...a)
+    }
+    ;['pointerdown', 'pointermove', 'touchstart', 'wheel'].forEach((ev) => root.addEventListener(ev, wake, { passive: true }))
+    wakeRef.current = wake
     const touch = () => {
       redrawRef.current = 4
+      wake()
     }
     touch()
     pf.on('flip', touch)
@@ -140,9 +196,12 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
 
     return () => {
       flipRef.current = null
+      alive = false
+      wakeRef.current = null
+      window.removeEventListener('error', swallow)
       // StPageFlip không tự dừng vòng lặp render khi destroy → vô hiệu hoá nó
-      const render = pf.getRender()
-      if (render) render.render = () => {}
+      const r = pf.getRender()
+      if (r) r.render = () => {}
       pf.destroy()
     }
     // khởi tạo một lần; kích thước được cập nhật ở effect bên dưới
@@ -160,6 +219,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
     pf.getSettings().minWidth = layout.pageW * 0.75
     pf.update()
     redrawRef.current = 4
+    wakeRef.current?.()
   }, [layout])
 
   // rtl: trang sau nằm bên trái → lật ngược lại về phía phải
@@ -176,6 +236,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       if (Math.abs(index - cur) <= 3) pf.flip(target, 'bottom')
       else {
         redrawRef.current = 4
+        wakeRef.current?.()
         pf.turnToPage(target)
       }
     },

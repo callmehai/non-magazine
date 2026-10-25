@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#8a6a3c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M92 214 C 82 138.8, 102 82.4, 106 26"/>
+<path d="M97 214 C 87 138.8, 107 82.4, 110 28" opacity=".5"/>
+<path d="M90.6 176.4 h9" opacity=".8"/>
+<path d="M91.2 138.8 h9" opacity=".8"/>
+<path d="M91.8 101.2 h9" opacity=".8"/>
+<path d="M92.4 63.6 h9" opacity=".8"/>
+<path d="M97.5 110.6 C 83.5 96.6, 61.5 88.6, 51.5 92.6 C 63.5 100.6, 81.5 108.6, 97.5 110.6 Z" fill="#d3dfc3"/>
+<path d="M93.5 108.6 Q 75.5 98.6 55.5 93.6" stroke-width="0.7" opacity=".6"/>
+<path d="M99.2 78.6 C 113.2 64.6, 135.2 56.6, 145.2 60.6 C 133.2 68.6, 115.2 76.6, 99.2 78.6 Z" fill="#d3dfc3"/>
+<path d="M103.2 76.6 Q 121.2 66.6 141.2 61.6" stroke-width="0.7" opacity=".6"/>
+<path d="M101 44.8 C 87 30.8, 65 22.8, 55 26.8 C 67 34.8, 85 42.8, 101 44.8 Z" fill="#d3dfc3"/>
+<path d="M97 42.8 Q 79 32.8 59 27.8" stroke-width="0.7" opacity=".6"/>
+<path d="M132 214 C 140 151.6, 124 104.8, 120.8 58"/>
+<path d="M137 214 C 145 151.6, 129 104.8, 124.8 60" opacity=".5"/>
+<path d="M129.5 182.8 h9" opacity=".8"/>
+<path d="M129 151.6 h9" opacity=".8"/>
+<path d="M128.6 120.4 h9" opacity=".8"/>
+<path d="M128.1 89.2 h9" opacity=".8"/>
+<path d="M128 136 C 142 122, 164 114, 174 118 C 162 126, 144 134, 128 136 Z" fill="#d3dfc3"/>
+<path d="M132 134 Q 150 124 170 119" stroke-width="0.7" opacity=".6"/>
+<path d="M126.1 98.6 C 112.1 84.6, 90.1 76.6, 80.1 80.6 C 92.1 88.6, 110.1 96.6, 126.1 98.6 Z" fill="#d3dfc3"/>
+<path d="M122.1 96.6 Q 104.1 86.6 84.1 81.6" stroke-width="0.7" opacity=".6"/>
+<path d="M124.6 70.5 C 138.6 56.5, 160.6 48.5, 170.6 52.5 C 158.6 60.5, 140.6 68.5, 124.6 70.5 Z" fill="#d3dfc3"/>
+<path d="M128.6 68.5 Q 146.6 58.5 166.6 53.5" stroke-width="0.7" opacity=".6"/>
+<path d="M152 214 C 154 192, 162 174, 170 162 C 174 176, 182 194, 184 214 Z" fill="#ecd0bd"/>
+<path d="M153 210 Q 168 200 183 210" stroke-width="0.9"/>
+<path d="M156.2 199 Q 168 189 179.8 199" stroke-width="0.9"/>
+<path d="M159.4 188 Q 168 178 176.6 188" stroke-width="0.9"/>
+<path d="M162.6 177 Q 168 167 173.4 177" stroke-width="0.9"/>
+<path d="M142 213 q 5 -14 10 -2 M190 213 q 4 -10 8 0" stroke-width="0.8"/>
+<path d="M30 216 C 90 210, 160 220, 212 215" stroke-width="1" opacity=".6"/>
+</svg>
