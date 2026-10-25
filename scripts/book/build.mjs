@@ -322,6 +322,12 @@ function padPage(pool, chapter, label) {
   const p = new Page({ chapter })
   runningHead(p, label ?? CH_LABEL[chapter] ?? ['NÓN LÁ LÀNG CHUÔNG', 'チュオン村のノンラー'])
   let y = TOP + 4
+  // giấy tờ / bằng chụp dọc (ảnh 3:4): một ảnh dọc phủ cả trang, đọc được chữ — không xếp hai ảnh ngang nhỏ
+  if (pool[0] && fitOf(pool[0]) === 'contain') {
+    const ih = Math.min(CW * R.por, BOT - y - capH(pool[0], CW) - 8)
+    figure(p, p.x0, y, CW, ih, pool.shift())
+    return p
+  }
   for (const r of [R.wide, R.cin]) {
     const cap = pool.shift()
     if (!cap) break
@@ -1014,7 +1020,7 @@ const POOL = {
     ['Người bán ngồi giữa lá, vành và nón trong phiên chợ Chuông', 'チュオンの市場で、葉や輪、笠に囲まれて座る売り手たち'],
     ['Du khách nước ngoài học làm nón trong một xưởng ở làng Chuông', 'チュオン村の工房で笠づくりを学ぶ外国人観光客'],
     ['Nón chùm — sản phẩm OCOP 4 sao của cơ sở Lê Văn Tuy', 'レー・ヴァン・トゥイ工房のOCOP四つ星製品「束ね笠」'],
-    ['Giấy khen của Bảo tàng Dân tộc học Việt Nam tặng ông Lê Văn Tuy', 'ベトナム民族学博物館からレー・ヴァン・トゥイ氏に贈られた表彰状'],
+    // trang 91: chỉ một ảnh dọc to (bằng nghệ nhân) — bỏ giấy khen Bảo tàng Dân tộc học (góp ý: hai ảnh xếp chồng nhỏ)
     ['Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy', 'レー・ヴァン・トゥイ氏の「ベトナム工芸村職人」認定証'],
     ['Trải nghiệm làm nón tại nhà nghệ nhân Lê Văn Tuy', '職人レー・ヴァン・トゥイの工房での体験'],
     // ba nghệ nhân giữ nghề: nón xưa trong bảo tàng, người làng nối nghề
