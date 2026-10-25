@@ -275,6 +275,7 @@ const CW = W - M.outer - M.inner
 // trang ảnh đệm: ảnh vừa phải (khung dọc 3:4, ~60% bề rộng khối) giữa trang + chú thích + hình vẽ nét mảnh —
 // góp ý: ảnh to / tràn trang đều xấu (ảnh nhóm tự chụp, không chuyên) → không phóng ảnh ra cả trang
 const pageCap = (s) => (s ? strip(s).replace(/^(Ảnh toàn trang|Ảnh trang lót):\s*/, '').replace(/^(全面写真|見返し写真)：/, '').replace(/^./, (c) => c.toUpperCase()) : s)
+const padArt = {}
 function photoPage(hint, chapter = 0) {
   const p = new Page({ chapter })
   runningHead(p, CH_LABEL[chapter] ?? ['NÓN LÁ LÀNG CHUÔNG', 'チュオン村のノンラー'])
@@ -285,8 +286,12 @@ function photoPage(hint, chapter = 0) {
   const ch = capH(cap, iw)
   p.add(IMG(x, TOP + 10, iw, ih, hint, { name: 'Ảnh trang' }))
   p.add(T(x, TOP + 10 + ih + 8, iw, ch, cap, { ...capOpt, italic: true, align: 'center', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
-  const dh = r1(CW * (310 / 640))
-  p.add({ ...DECO('still-non', p.x0, BOT - dh, CW, dh, 0.9), name: 'Hình vẽ' })
+  // hình vẽ dưới ảnh đổi theo chương (không lặp một hình chồng nón ở mọi trang đệm)
+  const arts = { 1: ['non', 'tool-but-vong'], 2: ['tool-quay-non', 'tool-khau-non'], 3: ['tre-mang', 'non'] }[chapter]
+  const art = arts?.[(padArt[chapter] = (padArt[chapter] ?? -1) + 1) % arts.length]
+  const dh = art ? Math.min(BOT - (TOP + 10 + ih + 8 + ch) - 16, 200) : r1(CW * (310 / 640))
+  if (art) p.add({ ...DECO(art, p.x0 + (CW - dh * 1.2) / 2, BOT - dh, dh * 1.2, dh, 0.9), name: 'Hình vẽ' })
+  else p.add({ ...DECO('still-non', p.x0, BOT - dh, CW, dh, 0.9), name: 'Hình vẽ' })
   return p
 }
 /** trang kế tiếp phải là trang trái (số chẵn) — nếu không thì chèn một trang ảnh */
