@@ -210,9 +210,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 28em;
-  height: 47.6em;
-  margin: -23.8em 0 0 -14em;
+  width: 46em;
+  height: 32.2em;
+  margin: -24em 0 0 -23em; /* bánh xe nằm trên vạch đường */
   will-change: transform;
 }
 .cvw-cartop {

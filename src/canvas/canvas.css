@@ -22,6 +22,16 @@
   transform-origin: center;
 }
 
+/* khung ảnh (el.frame = bề rộng viền giấy, pt): viền giấy ngà + nét mảnh + bóng nhẹ, vẽ bên trong ô nên không xê dịch bố cục —
+   góp ý: không để ảnh nào đứng trơ không khung */
+.cv-el.has-frame {
+  box-sizing: border-box;
+  padding: var(--mat);
+  border: 0.7em solid #e3d6bb;
+  background: #fffdf8;
+  box-shadow: 0 2.5em 8em rgba(70, 45, 20, 0.16);
+}
+
 .cv-group {
   position: absolute;
   left: 0;

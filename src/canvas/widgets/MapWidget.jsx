@@ -14,7 +14,7 @@ ensureFont('Klee One')
  *  1. bản đồ Việt Nam chữ S (Natural Earth, bản theo quan điểm Việt Nam: có Hoàng Sa, Trường Sa)
  *  2. bấm vào → phóng tới Hà Nội, chuyển sang bản đồ đường phố sáng màu kiểu Google Maps / TravelBoast
  *     (vẽ sẵn từ dữ liệu OpenStreetMap: đường, sông hồ, công viên; tên quận huyện đặt theo ngôn ngữ đang xem)
- *  3. ghim điểm đi (Hồ Hoàn Kiếm) và điểm đến (Làng Chuông); camera sà xuống chiếc ô tô chở nón (nhìn từ trên)
+ *  3. ghim điểm đi (Hồ Hoàn Kiếm) và điểm đến (Làng Chuông); camera sà xuống chiếc xe buýt vàng đỏ chở nón (nhìn ngang)
  *  4. xe lăn bánh theo tuyến đường thật (OSRM / OpenStreetMap, qua Nguyễn Trãi – Hà Đông – QL21B), có khói,
  *     camera bám theo xe, vạch đỏ vẽ dần sau xe, đồng hồ đếm quãng đường tới 30,2 km (Google Maps)
  *  5. tới nơi: camera lùi ra thấy cả tuyến, ghim rơi xuống, thẻ ghi chú
@@ -102,7 +102,7 @@ function heading(d) {
   const b = at(Math.min(LEN, d + 22))
   return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI
 }
-const PARK = LEN - 70 // xe dừng ngay trước ghim Làng Chuông (không đè lên ghim / nhãn)
+const PARK = LEN - 125 // xe buýt dừng ngay trước ghim Làng Chuông (không đè lên ghim / nhãn)
 const BOX = (() => {
   const xs = R.map((p) => p[0])
   const ys = R.map((p) => p[1])
@@ -128,6 +128,20 @@ function inside(v, { w, h }) {
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
+/**
+ * phóng thẳng vào một điểm: giữa hai khung nhìn có đúng một điểm đứng yên trên màn hình — giữ điểm đó cố định,
+ * chỉ đổi tỉ lệ (không lia ngang). Toàn cảnh → Hà Nội: điểm đứng yên nằm ngay vùng Hà Nội, nên người xem thấy bản đồ
+ * phóng thẳng vào Hà Nội (trước đây camera vừa phóng vừa lia từ miền Trung ra Hà Nội → chóng mặt)
+ */
+function zoomView(a, b, t) {
+  const s = Math.exp(Math.log(a.s) + (Math.log(b.s) - Math.log(a.s)) * t)
+  if (Math.abs(a.s - b.s) < 1e-9) return lerpView(a, b, t)
+  const d = 1 / a.s - 1 / b.s
+  const px = (a.x / a.s - b.x / b.s) / d
+  const py = (a.y / a.s - b.y / b.s) / d
+  return { x: px - ((px - a.x) * s) / a.s, y: py - ((py - a.y) * s) / a.s, s }
+}
+
 /** nội suy phóng to quanh một điểm: điểm đích trôi đều trên màn hình trong lúc khung nhìn co lại */
 function lerpView(a, b, t) {
   const s = Math.exp(Math.log(a.s) + (Math.log(b.s) - Math.log(a.s)) * t)
@@ -147,6 +161,7 @@ export default function MapWidget({ el, interactive, visible }) {
   const [size, setSize] = useState({ w: 500, h: 400 })
   const [view, setView] = useState(WORLD) // khung nhìn bản đồ chữ S
   const [st, setSt] = useState(IDLE)
+  const dirRef = useRef(-1)
 
   useEffect(() => {
     const node = rootRef.current
@@ -204,7 +219,7 @@ export default function MapWidget({ el, interactive, visible }) {
     let lastPuff = 0
     const frame = (now) => {
       const e = now - t0
-      if (tz) setView(lerpView(v0, SAT_VIEW, ease(clamp01(e / tz))))
+      if (tz) setView(zoomView(v0, SAT_VIEW, ease(clamp01(e / tz))))
       const sat = fromWorld ? clamp01((e - tz + 250) / T_FADE) : 1
       const e1 = e - tz - (fromWorld ? T_FADE * 0.6 : 0)
       const pins = clamp01(e1 / 400)
@@ -245,7 +260,7 @@ export default function MapWidget({ el, interactive, visible }) {
     const t0 = performance.now()
     const frame = (now) => {
       const k = clamp01((now - t0) / 1500)
-      setView(lerpView(SAT_VIEW, WORLD, ease(k)))
+      setView(zoomView(SAT_VIEW, WORLD, ease(k)))
       setSt((s) => ({ ...s, phase: k < 1 ? 'leaving' : 'world', sat: 1 - clamp01(k * 3) }))
       if (k < 1) raf.current = requestAnimationFrame(frame)
       else setSt(IDLE)
@@ -278,6 +293,11 @@ export default function MapWidget({ el, interactive, visible }) {
   const car = at(st.drive * PARK)
   const carAng = heading(st.drive * PARK)
   const carScr = toScr(car.x, car.y)
+  const cosA = Math.cos((carAng * Math.PI) / 180)
+  if (Math.abs(cosA) > 0.25) dirRef.current = cosA > 0 ? 1 : -1
+  const dir = dirRef.current
+  // xe nghiêng nhẹ theo dốc của đường (tối đa 14°), đầu xe luôn về phía đang đi
+  const tilt = Math.max(-14, Math.min(14, dir > 0 ? ((carAng + 540) % 360) - 180 : ((carAng + 360) % 360) - 180))
   const [fx, fy] = toScr(...trip.places.hanoi)
   const [mx, my] = toScr(...trip.places.hadong)
   const [tx, ty] = toScr(...trip.places.chuong)
@@ -342,10 +362,10 @@ export default function MapWidget({ el, interactive, visible }) {
               <div
                 className="cvw-trip__car"
                 style={{
-                  transform: `translate(${carScr[0]}px, ${carScr[1]}px) rotate(${carAng + 90}deg) scale(${st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1})`,
+                  transform: `translate(${carScr[0]}px, ${carScr[1]}px) rotate(${tilt}deg) scale(${(st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1) * dir}, ${st.pop < 1 ? st.pop * (1 + Math.sin(st.pop * Math.PI) * 0.4) : 1})`,
                 }}
               >
-                <CarTop />
+                <Bus />
               </div>
             )}
           </div>
@@ -405,30 +425,41 @@ function Pin({ x, y, show, kind, text }) {
   )
 }
 
-/** ô tô nhìn từ trên xuống (đầu xe hướng lên), trên nóc một chiếc nón lá */
-function CarTop() {
+/** xe buýt Hà Nội vàng đỏ nhìn ngang (đầu xe bên phải), trên nóc chở hai chồng nón lá */
+function Bus() {
+  const hats = (x, n) =>
+    Array.from({ length: n }, (_, i) => (
+      <path key={`${x}${i}`} d={`M${x - 11} ${-19 - i * 2.6} L${x} ${-26 - i * 2.6} L${x + 11} ${-19 - i * 2.6} Q${x} ${-17 - i * 2.6} ${x - 11} ${-19 - i * 2.6} Z`} fill="#fbf4e4" stroke="#a88f62" strokeWidth=".8" />
+    ))
   return (
-    <svg viewBox="-20 -34 40 68" className="cvw-cartop">
-      <ellipse cx="0" cy="3" rx="17" ry="31" fill="rgba(0,0,0,.28)" />
-      {[
-        [-14, -19],
-        [14, -19],
-        [-14, 18],
-        [14, 18],
-      ].map(([x, y]) => (
-        <rect key={`${x}${y}`} x={x - 3} y={y - 6} width="6" height="12" rx="2" fill="#2b2118" />
+    <svg viewBox="-40 -34 80 56" className="cvw-cartop">
+      <ellipse cx="0" cy="17.5" rx="37" ry="3" fill="rgba(0,0,0,.25)" />
+      {/* giá nóc + nón */}
+      <path d="M-26 -16.5 H18" stroke="#6b4a2e" strokeWidth="1.2" />
+      {hats(-14, 3)}
+      {hats(7, 2)}
+      <path d="M-25 -21 L-3 -24 M-3 -24 L18 -21" stroke="#c0392b" strokeWidth=".8" opacity=".8" />
+      {/* thân xe: vàng trên, đỏ dưới */}
+      <rect x="-37" y="-16" width="74" height="29" rx="5" fill="#f2b632" stroke="#6b4a2e" strokeWidth="1.2" />
+      <path d="M-37 3 H37 V8 Q37 13 32 13 H-32 Q-37 13 -37 8 Z" fill="#c8372d" />
+      <path d="M-37 1.5 H37" stroke="#fff6dc" strokeWidth="1.2" />
+      {/* cửa sổ + cửa lên xuống + kính lái */}
+      {[-32, -21.5, -11, -0.5].map((x) => (
+        <rect key={x} x={x} y="-12" width="9" height="10" rx="1.5" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth=".7" />
       ))}
-      <rect x="-13" y="-31" width="26" height="62" rx="11" fill="#f3e3c3" stroke="#6b4a2e" strokeWidth="1.6" />
-      <rect x="-13" y="-31" width="26" height="9" rx="6" fill="#b23a24" />
-      <path d="M-10 -18 Q0 -23 10 -18 L9 -10 L-9 -10 Z" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth="1" />
-      <path d="M-9 17 L9 17 L10 23 Q0 26 -10 23 Z" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth="1" />
-      {/* nón lá trên nóc: vòng tròn đồng tâm, chóp ở giữa */}
-      <circle cx="0" cy="3" r="11.5" fill="#fbf4e4" stroke="#b9a37a" strokeWidth="1" />
-      <circle cx="0" cy="3" r="8" fill="none" stroke="#d9c7a0" strokeWidth=".8" />
-      <circle cx="0" cy="3" r="4.5" fill="none" stroke="#d9c7a0" strokeWidth=".8" />
-      <circle cx="0" cy="3" r="1.4" fill="#a9502c" />
-      <circle cx="-8" cy="-29" r="2" fill="#ffe7a3" />
-      <circle cx="8" cy="-29" r="2" fill="#ffe7a3" />
+      <rect x="11" y="-12" width="8" height="21" rx="1.2" fill="#8bb8c6" stroke="#6b4a2e" strokeWidth=".7" />
+      <path d="M15 -12 V9" stroke="#6b4a2e" strokeWidth=".5" />
+      <path d="M23 -12 H33 Q36 -12 36 -8 V-2 H23 Z" fill="#9cc7d3" stroke="#6b4a2e" strokeWidth=".7" />
+      <rect x="23" y="-15" width="11" height="2.4" rx=".6" fill="#2b2118" />
+      <circle cx="35" cy="6" r="1.8" fill="#ffe7a3" />
+      <rect x="-37.5" y="4" width="2" height="4" fill="#7a1d12" />
+      {/* bánh xe */}
+      {[-23, 23].map((x) => (
+        <g key={x}>
+          <circle cx={x} cy="13" r="5.5" fill="#2b2118" />
+          <circle cx={x} cy="13" r="2.2" fill="#cfc6b8" />
+        </g>
+      ))}
     </svg>
   )
 }

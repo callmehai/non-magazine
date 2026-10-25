@@ -86,6 +86,9 @@ export function boxStyle(el) {
 }
 
 export function Element({ el, mode, visible }) {
+  // el.only = 'vi' | 'ja': phần tử chỉ hiện ở một ngôn ngữ (vd. dòng địa danh đặt ngay dưới tên nón theo chiều cao chữ của từng thứ tiếng)
+  const lang = useCanvasLang()
+  if (el.only && el.only !== (lang === 'ja' ? 'ja' : 'vi')) return null
   const anim =
     el.anim && mode === 'read'
       ? {
@@ -95,11 +98,11 @@ export function Element({ el, mode, visible }) {
       : null
   return (
     <div
-      className={`cv-el cv-el--${el.type}`}
+      className={`cv-el cv-el--${el.type}${el.frame ? ' has-frame' : ''}`}
       data-id={el.id}
       data-name={el.name || undefined}
       data-anim={anim ? el.anim.kind : undefined}
-      style={anim ? { ...boxStyle(el), ...anim } : boxStyle(el)}
+      style={{ ...boxStyle(el), ...anim, ...(el.frame ? { '--mat': `${el.frame}em` } : null) }}
     >
       <ElementBody el={el} mode={mode} visible={visible} />
     </div>

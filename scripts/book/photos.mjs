@@ -26,7 +26,8 @@ export const photos = {
   "Nón lá hình chóp truyền thống — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón chóp truyền thống/IMG_3321-nen",
   "Nón Ba tầm — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón ba tầm/IMG_7330-nen",
   "Nón Quai thao — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón quai thao/IMG_3866-nen",
-  // "Nón thúng — ảnh sản phẩm": ảnh cũ là nón quai thao → để khung trống chờ nhóm gửi ảnh nón thúng (thư mục "Nón Thúng" trên Drive còn trống)
+  // nón thúng: thư mục "Nón Thúng" trên Drive của nhóm còn trống → ảnh báo QĐND chụp tại Làng Chuông (nón của bà Trần Thị Hoa), ghi nguồn dưới ảnh
+  "Nón thúng — ảnh sản phẩm": "online/non-thung-qdnd",
   "Nón nhà sư (Nón thầy tu) — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón nhà sư/IMG_7319-nen",
   "Nón lụa — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón lụa/IMG_7312",
   "Nón lụa hai mặt — ảnh sản phẩm": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón lá 2 mặt lụa - xanh ngọc 2",

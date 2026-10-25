@@ -96,6 +96,14 @@ function textH(pair, w, o = {}) {
   return Math.ceil(Math.max(hv, hj) + 2)
 }
 
+/** chiều cao chữ của MỘT thứ tiếng (k = 0 tiếng Việt, 1 tiếng Nhật): lấy số đo thật của cả cặp nếu có */
+function textH1(pair, w, o, k) {
+  const size = o.size ?? BODY.size
+  const m = MEASURED[measureKey({ text: pair[0], ja: pair[1], w, size, jaSize: o.jaSize ?? size, lh: o.lh ?? BODY.lh, paraGap: o.paraGap ?? 0, font: o.font ?? F.body, weight: o.weight ?? 400, tracking: o.tracking ?? 0 })]
+  if (m) return Math.ceil(m[k] + 2)
+  return textH(k ? ['', pair[1]] : [pair[0], null], w, o)
+}
+
 // ── phần tử
 const r1 = (n) => Math.round(n * 100) / 100
 function T(x, y, w, h, pair, o = {}) {
@@ -1097,7 +1105,13 @@ let contents = null
       const gy = f.y + row * (cell + 8 + nameH + 10)
       p.add(IMG(gx, gy, cw, cell, [`${name[0]} — ${place[0]}`, `${strip(name[1])} — ${place[1]}`]))
       const nh = textH(name, cw, nameO)
-      p.add(T(gx, gy + cell + 6, cw, nh, name, { ...nameO, color: C.ink, jaFont: F.jaHead, name: 'Tên nón' }), T(gx, gy + cell + 10 + nh, cw, textH(place, cw, placeO), place, { ...placeO, color: C.muted, jaFont: F.jaSans, name: 'Địa phương' }))
+      p.add(T(gx, gy + cell + 6, cw, nh, name, { ...nameO, color: C.ink, jaFont: F.jaHead, name: 'Tên nón' }))
+      // địa danh sát dưới tên theo đúng chiều cao chữ của từng thứ tiếng (tên tiếng Nhật dài hai dòng không đẩy bản tiếng Việt tụt xuống)
+      for (const [k, lang] of [[0, 'vi'], [1, 'ja']]) {
+        const one = k ? [place[0], place[1]] : [place[0], null]
+        const nk = textH1(name, cw, nameO, k)
+        p.add({ ...T(gx, gy + cell + 10 + nk, cw, textH(one, cw, placeO), one, { ...placeO, color: C.muted, jaFont: F.jaSans, name: 'Địa phương' }), only: lang })
+      }
     })
     f.y += rows * (cell + 8 + nameH) + (rows - 1) * 10 + 22
     return ratio
@@ -1190,6 +1204,8 @@ let contents = null
     let y = f.y
     if (t.notes) footnotes(p, t.notes)
     p.add(IMG(p.x0, y, CW, CW * r, [`${t.name[0]} — ảnh sản phẩm`, `${strip(t.name[1])} — 製品写真`], { fit: 'cover' }))
+    // ảnh lấy từ báo: ghi nguồn ngay dưới ảnh (nằm trong khoảng cách sẵn có, không đẩy chữ)
+    if (t.credit) p.add(T(p.x0, y + CW * r + 4, CW, 12, t.credit, { size: 8.5, italic: true, color: C.muted, align: 'right', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh' }))
     y += CW * r + 20
     p.add(T(p.x0, y, CW, nh, t.name, { ...no, weight: 700, color: ACC[1], jaFont: F.jaHead, name: 'Tên nón' }))
     p.add(T(p.x0, y + nh + 10, CW, th, t.text, { ...to, align: 'justify', jaFont: F.jaBody, name: 'Mô tả' }))
@@ -1659,7 +1675,7 @@ let stripRight = null
     const credits = [
       ['NGUỒN ẢNH', '写真の出典'],
       ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。'],
-      ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Lao Động (nón lá bàng; nón ngựa) · Báo Quân đội nhân dân (nón lá sen; nón lá làng Chuông ở mục 1.1; dao cắt lá) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・ラオドン紙（バンの葉の笠・馬の笠）・人民軍隊紙（蓮の葉の笠・1.1節のチュオン村のノンラー・小刀）・ベトナムネット（シンガポール首相夫人）'],
+      ['Báo Tuổi Trẻ (Nhà hát Ba Nón Lá; Tổng thống Hàn Quốc) · Báo Dân trí (thời trang) · Báo Người Lao Động (nón bài thơ) · Báo Lao Động (nón lá bàng; nón ngựa) · Báo Quân đội nhân dân (nón lá sen; nón lá làng Chuông ở mục 1.1; dao cắt lá; nón thúng — ảnh Hồng Phúc) · VietNamNet (Phu nhân Thủ tướng Singapore)', 'トゥオイチェー紙（三つのノンラー劇場・韓国大統領）・ザンチー紙（ファッション）・グオイラオドン紙（詩の笠）・ラオドン紙（バンの葉の笠・馬の笠）・人民軍隊紙（蓮の葉の笠・1.1節のチュオン村のノンラー・小刀・ノン・トゥン ― 写真：ホン・フック）・ベトナムネット（シンガポール首相夫人）'],
       ['Wikimedia Commons: nón Thanh Oai (Daderot, CC0, hiện vật Bảo tàng Phụ nữ Việt Nam) · thạp đồng Đào Thịnh (Daderot, CC0) · trống đồng Ngọc Lũ (phạm vi công cộng) · hàng bán nón Hà Nội 1896 (André Salles, BnF, phạm vi công cộng)', 'ウィキメディア・コモンズ：タインオアイの笠（Daderot、CC0、ベトナム女性博物館所蔵）・ダオティン銅甕（Daderot、CC0）・ゴックルー銅鼓（パブリックドメイン）・1896年ハノイの笠屋（アンドレ・サル、フランス国立図書館、パブリックドメイン）'],
       ['Ảnh bìa: Hà Trang, Báo Văn Hóa — bài “Ghé thăm phiên chợ nón làng Chuông” (baovanhoa.vn, 8/5/2026).', '表紙写真：ハー・チャン、ヴァンホア紙 ―「チュオン村の笠市を訪ねて」（baovanhoa.vn、2026年5月8日）。'],
       ['Video nón lá trên sàn diễn thời trang quốc tế (mục 3.2): nghệ nhân Lê Văn Tuy cung cấp.', '海外のファッションショーのノンラーの動画（3.2節）：職人レー・ヴァン・トゥイ提供。'],
@@ -2010,7 +2026,19 @@ function paperFor(p) {
   if (!p.hasImg) return 'vong'
   return SPREAD_PAPERS[Math.floor(p.n / 2) % SPREAD_PAPERS.length]
 }
-const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: p.els }))
+// khung cho mọi ảnh / video / bản đồ / mô hình đứng trên trang (góp ý: không để ảnh nào đứng trơ không khung);
+// trừ ảnh tràn mép trang, ảnh đã nằm trong khung (polaroid, khung công đoạn, giấy chứng nhận), logo và hình vẽ nét mảnh
+function addFrames(p) {
+  const frames = p.els.filter((e) => e.type === 'shape' && /Khung/.test(e.name || ''))
+  for (const e of p.els) {
+    if (!['image', 'video', 'widget'].includes(e.type) || /deco\//.test(e.src || '') || /Logo|polaroid/.test(e.name || '')) continue
+    if (e.x <= 0.5 || e.y <= 0.5 || e.x + e.w >= W - 0.5 || e.y + e.h >= H - 0.5) continue
+    if (frames.some((f) => f.x <= e.x + 0.5 && f.y <= e.y + 0.5 && f.x + f.w >= e.x + e.w - 0.5 && f.y + f.h >= e.y + e.h - 0.5)) continue
+    e.frame = r1(Math.max(3, Math.min(7, Math.min(e.w, e.h) * 0.028)))
+  }
+  return p.els
+}
+const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: addFrames(p) }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })
 fs.writeFileSync(path.join(here, 'out', 'book.json'), JSON.stringify({ pages: out }, null, 1))
 const counts = out.map((p, i) => `${i + 1}:${p.elements.length}`).join(' ')

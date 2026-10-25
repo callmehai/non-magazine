@@ -242,6 +242,7 @@ export const ch1 = {
         },
         {
           name: ['Nón thúng', 'ノン・トゥン'],
+          credit: ['Ảnh: Hồng Phúc / Báo Quân đội nhân dân', '写真：ホン・フック／人民軍隊紙'],
           text: [
             'Là kiểu nón có vành rất rộng, dáng sâu lòng giống như cái thúng khi ngửa lên. Xưa kia, nón thúng kết hợp quai thao là món phụ kiện trang phục cao cấp đi cùng áo tứ thân, áo mớ ba mớ bảy của các bà, các chị trong dịp lễ Tết, hội hè. Ngày nay, nón chủ yếu xuất hiện trong không gian biểu diễn nghệ thuật truyền thống hoặc đóng vai trò như sản phẩm quà tặng, trưng bày di sản.',
             'つばがとても広く、上に向けると{籠|かご}のように深い形をした笠です。かつては{房飾|ふさかざ}りのあごひもと合わせ、{正月|しょうがつ}や祭りに女性たちが{四身|よつみ}の{衣|ころも}や{重|かさ}ね{着|ぎ}の衣装とともに身につける、{高級|こうきゅう}な装身具でした。今では主に伝統芸能の舞台で見られるほか、贈り物や文化遺産の展示品となっています。',
