@@ -1,13 +1,16 @@
 import * as THREE from 'three'
 import { MiniScene } from './miniScene.js'
+import { reducedMotion } from './webgl.js'
 
 /**
  * Ba lớp lá lợp nón tách rời theo chiều cao (trên cùng là lớp lá ngoài, giữa là mo nang, dưới là lớp lá trong).
  * Bấm (không kéo) vào một lớp → lớp đó sáng màu và nhô ra, hai lớp kia mờ đi. onSelect(i | null) báo cho giao diện.
+ * Kéo = xoay chính chồng nón theo tay (đèn, camera đứng yên): nón tròn đều, nếu xoay camera thì chỉ thấy mảng sáng
+ * tối trượt ngược chiều tay kéo → cảm giác xoay ngược.
  */
 const R = 1
 const H = 0.7 // cùng dáng thấp như nón 3D ở sảnh (HAT.H 0,72): nón thật không nhọn hoắt
-const GAP = 0.9
+const GAP = 0.72
 
 function texture(kind) {
   const c = document.createElement('canvas')
@@ -62,11 +65,12 @@ export class LayersScene extends MiniScene {
   constructor(canvas, { colors, onSelect }) {
     super(canvas, {
       fov: 36,
-      camera: [0, 1.3, 4.1],
-      target: [0, 0.2, 0],
-      autoRotate: 0.8,
+      camera: [0, 1.45, 4.7],
+      target: [0, 0.05, 0],
+      autoRotate: 0,
       polar: [0.7, 1.45],
     })
+    this.controls.enabled = false
     this.onSelect = onSelect
     this.colors = colors.map((c) => new THREE.Color(c))
     const s = this.scene
@@ -95,7 +99,10 @@ export class LayersScene extends MiniScene {
       return mesh
     })
     this.root.rotation.x = 0.08
-    this.root.position.y = -0.38
+    this.root.position.y = -0.3
+    this.spin = 0
+    this.tilt = 0
+    this.auto = !reducedMotion()
     this.sel = null
     this.hover = null
 
@@ -103,19 +110,38 @@ export class LayersScene extends MiniScene {
     this.ray = new THREE.Raycaster()
     this.ptr = new THREE.Vector2()
     let down = null
-    this.onDown = (e) => (down = [e.clientX, e.clientY])
+    let last = null
+    this.dragging = false
+    this.onDown = (e) => {
+      down = last = [e.clientX, e.clientY]
+      this.dragging = true
+      canvas.setPointerCapture?.(e.pointerId)
+    }
     this.onUp = (e) => {
-      if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return
+      this.dragging = false
+      if (!down) return
+      const moved = Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6
+      down = null
+      if (moved) return
       const hit = this.pick(e)
       this.select(hit === this.sel ? null : hit)
     }
     this.onMove = (e) => {
+      if (this.dragging && last) {
+        // kéo sang phải → mặt trước nón chạy sang phải; kéo xuống → nghiêng chóp về phía người xem
+        this.spin += (e.clientX - last[0]) * 0.012
+        this.tilt = Math.min(0.55, Math.max(-0.35, this.tilt + (e.clientY - last[1]) * 0.006))
+        last = [e.clientX, e.clientY]
+        this.auto = false
+        return
+      }
       this.hover = this.pick(e)
-      canvas.style.cursor = this.hover !== null ? 'pointer' : 'grab'
+      canvas.style.cursor = this.hover !== null ? 'var(--cursor-leaf-hand, pointer)' : 'grab'
     }
     canvas.addEventListener('pointerdown', this.onDown)
     canvas.addEventListener('pointerup', this.onUp)
     canvas.addEventListener('pointermove', this.onMove)
+    canvas.addEventListener('pointercancel', this.onUp)
   }
 
   pick(e) {
@@ -133,6 +159,9 @@ export class LayersScene extends MiniScene {
 
   update(dt) {
     const k = 1 - Math.pow(0.0015, dt) // làm mượt theo thời gian
+    if (this.auto) this.spin += dt * 0.35
+    this.root.rotation.y = this.spin
+    this.root.rotation.x = 0.08 + this.tilt
     this.layers.forEach((m, i) => {
       const on = this.sel === i
       const dim = this.sel !== null && !on
@@ -140,7 +169,7 @@ export class LayersScene extends MiniScene {
       mat.emissiveIntensity += ((on ? 0.55 : this.hover === i ? 0.18 : 0) - mat.emissiveIntensity) * k
       mat.opacity += ((dim ? 0.28 : 1) - mat.opacity) * k
       mat.depthWrite = mat.opacity > 0.9
-      const y = m.userData.y + (on ? (i === 0 ? 0.22 : i === 2 ? -0.22 : 0) : 0)
+      const y = m.userData.y + (on ? (i === 0 ? 0.16 : i === 2 ? -0.16 : 0) : 0)
       m.position.y += (y - m.position.y) * k
       const sc = on ? 1.06 : 1
       m.scale.setScalar(m.scale.x + (sc - m.scale.x) * k)
@@ -151,6 +180,7 @@ export class LayersScene extends MiniScene {
     this.canvas.removeEventListener('pointerdown', this.onDown)
     this.canvas.removeEventListener('pointerup', this.onUp)
     this.canvas.removeEventListener('pointermove', this.onMove)
+    this.canvas.removeEventListener('pointercancel', this.onUp)
     super.dispose()
   }
 }
