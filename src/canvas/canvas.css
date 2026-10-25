@@ -74,7 +74,7 @@
   display: block;
   height: 100%;
   text-decoration: none;
-  cursor: pointer;
+  cursor: var(--cursor-leaf-hand);
 }
 
 /* khối phủ cả một dòng (mục lục, dải công đoạn): rê chuột thì cả dòng sáng nền lên */
@@ -473,7 +473,7 @@
   font: 400 13.5em/1 'Patrick Hand', 'Klee One', cursive;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  cursor: pointer;
+  cursor: var(--cursor-leaf-hand);
   transition:
     background 0.2s,
     color 0.2s,

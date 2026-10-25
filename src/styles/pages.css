@@ -790,7 +790,7 @@
   border: 0;
   background: var(--brown);
   color: var(--ivory);
-  cursor: pointer;
+  cursor: var(--cursor-leaf-hand);
 }
 
 .inline-audio__main {

@@ -17,6 +17,16 @@
   color: var(--ed-text);
 }
 
+/* editor dùng con trỏ thường của hệ điều hành (con trỏ lá tre chỉ cho trang đọc) */
+.ed-app,
+.ed-login,
+.ed-splash {
+  cursor: auto;
+}
+.ed-app :is(a, button, label, select, summary, [role='button']) {
+  cursor: pointer;
+}
+
 .ed-app {
   position: fixed;
   inset: 0;
