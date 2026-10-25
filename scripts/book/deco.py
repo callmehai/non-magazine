@@ -13,9 +13,9 @@ RED = '#b4533a'
 TEAL = '#5f8f8a'
 
 
-def svg(name, vb, body, sw=1.5):
+def svg(name, vb, body, sw=1.5, ink=INK):
     w, h = vb
-    s = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" fill="none" stroke="{INK}" '
+    s = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" fill="none" stroke="{ink}" '
          f'stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round">\n{body}\n</svg>\n')
     with open(os.path.join(OUT, name + '.svg'), 'w') as f:
         f.write(s)
@@ -157,6 +157,11 @@ for i in range(4, 16, 2):
         for a in (math.pi * 2 * k / n for k in range(n))) + '</g>')
 v.append(f'<circle cx="{c}" cy="{c}" r="9" fill="{IVORY}" stroke-width="1.2"/>')
 svg('vong-non', (400, 400), '\n'.join(v), sw=1)
+# bản nét vàng thếp trên nền then (bìa, bìa sau — kiểu sơn mài; không dùng ảnh tràn trang)
+GOLD = '#d9b56a'
+svg('vong-non-gold', (400, 400), '\n'.join(v).replace(f'fill="{IVORY}"', 'fill="#3a2a1c"'), sw=1, ink=GOLD)
+# nón lớn cho bìa trước / bìa sau (giấy ngà, nét nâu): đỉnh y 20, vành y 210, quai võng dưới vành — khung đủ cao không cắt quai
+svg('bia-non', (600, 350), non(300, 20, 280, 190, rings=12), sw=1.6)
 
 # 2. tĩnh vật: chồng nón + nón nghiêng + tre + lá (chân trang, mục lục)
 body = []

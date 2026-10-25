@@ -272,7 +272,23 @@ class Page {
 const CW = W - M.outer - M.inner
 
 /** trang ảnh toàn trang (dùng cả để chèn cho trang sau rơi đúng bên) */
-const photoPage = (hint, chapter = 0) => new Page({ chapter, hideNumber: true }).add(IMG(0, 0, W, H, hint, { name: 'Ảnh toàn trang' }))
+// trang ảnh đệm: ảnh vừa phải (khung dọc 3:4, ~60% bề rộng khối) giữa trang + chú thích + hình vẽ nét mảnh —
+// góp ý: ảnh to / tràn trang đều xấu (ảnh nhóm tự chụp, không chuyên) → không phóng ảnh ra cả trang
+const pageCap = (s) => (s ? strip(s).replace(/^(Ảnh toàn trang|Ảnh trang lót):\s*/, '').replace(/^(全面写真|見返し写真)：/, '').replace(/^./, (c) => c.toUpperCase()) : s)
+function photoPage(hint, chapter = 0) {
+  const p = new Page({ chapter })
+  runningHead(p, CH_LABEL[chapter] ?? ['NÓN LÁ LÀNG CHUÔNG', 'チュオン村のノンラー'])
+  const cap = [pageCap(hint[0]), pageCap(hint[1])]
+  const iw = r1(CW * 0.62)
+  const ih = r1(iw * R.por)
+  const x = p.x0 + (CW - iw) / 2
+  const ch = capH(cap, iw)
+  p.add(IMG(x, TOP + 10, iw, ih, hint, { name: 'Ảnh trang' }))
+  p.add(T(x, TOP + 10 + ih + 8, iw, ch, cap, { ...capOpt, italic: true, align: 'center', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+  const dh = r1(CW * (310 / 640))
+  p.add({ ...DECO('still-non', p.x0, BOT - dh, CW, dh, 0.9), name: 'Hình vẽ' })
+  return p
+}
 /** trang kế tiếp phải là trang trái (số chẵn) — nếu không thì chèn một trang ảnh */
 function toLeft(hint, chapter) {
   if ((pages.length + 1) % 2 !== 0) photoPage(hint, chapter)
@@ -774,7 +790,7 @@ class Flow {
       const hero = HERO.shift()
       this.p = null
       if (hero) {
-        new Page({ chapter: this.chapter, hideNumber: true }).add(IMG(0, 0, W, H, hero, { name: 'Ảnh toàn trang' }))
+        photoPage(hero, this.chapter)
         return rest
       }
       // hết ảnh dọc đẹp → trang ảnh: hai ảnh khung chuẩn (3:2 + 16:9) có chú thích, không cắt tràn ảnh tài liệu
@@ -1000,11 +1016,16 @@ const POOL = {
 function chapterOpener(ch, photo) {
   const acc = ACC[ch.no]
   toLeft(photo.alt, ch.no - 1)
-  const left = new Page({ chapter: ch.no, hideNumber: true })
+  // trang trái mở chương: không dùng ảnh (ảnh nhóm chụp phóng to thì xấu) — số chương thật to màu chương,
+  // nhãn chương, hình vẽ nét mảnh của chương trên mười sáu vòng nón in mờ
+  const left = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream, paper: 'giay' })
+  const iw = left.cw - 110
   left.add(
-    IMG(0, 0, W, H, photo.main, { name: 'Ảnh mở chương' }),
-    RECT(0, H - 210, W, 210, '#1f1810', { opacity: 0.5, name: 'Nền chữ' }),
-    T(left.x0, H - 196, 320, 150, [String(ch.no).padStart(2, '0'), null], { font: F.head, size: 132, color: '#fbf7ee', lh: 1.1, name: 'Số chương' })
+    { ...DECO('vong-non', left.x0 - 50, 250, left.cw + 100, left.cw + 100, 0.12), name: 'Hình vẽ' },
+    T(left.x0 - 6, 84, 320, 165, [String(ch.no).padStart(2, '0'), null], { font: F.head, size: 150, color: acc, lh: 1.05, name: 'Số chương' }),
+    T(left.x0, 258, left.cw, 20, [ch.label[0].toUpperCase(), strip(ch.label[1])], { size: S.label + 1, tracking: 3, color: acc, weight: 700, lh: 1.3, jaFont: F.jaSans, name: 'Nhãn chương' }),
+    HL(left.x0, 292, 64, acc, 1.6),
+    { ...DECO(SEC_ICON[ch.no] ?? 'non', left.x0 + 55, 345, iw, iw, 0.95), name: 'Hình vẽ' }
   )
   const p = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream })
   p.fixed = true
@@ -1037,21 +1058,20 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
 // chỉ có hình nón làng Chuông: ảnh tràn trang những chồng nón trắng trong đình Chuông (ảnh báo, ghi nguồn),
 // lớp tối dần ở trên/dưới để chữ màu kem đọc rõ (nền website xanh lá tre nên bìa nâu tách hẳn khỏi nền)
 {
-  const p = new Page({ hideNumber: true, bg: '#2b2118' })
-  const shade = (y, h, flip) => ({ ...DECO('shade', 0, y, W, h, 1), fit: 'fill', rot: flip ? 180 : 0, name: 'Lớp tối' })
-  const cream = '#fbf4e4'
+  // bìa giấy ngà (cùng chất giấy ruột sách, nổi trên nền web tối): nón lớn nét nâu trên mười sáu vòng nón in mờ, dấu son —
+  // không dùng ảnh (góp ý: ảnh tràn trang, kể cả ảnh bìa, đều xấu vì ảnh không chuyên)
+  const p = new Page({ hideNumber: true, bg: C.cream, paper: 'giay' })
   p.add(
-    IMG(0, 0, W, H, ['Ảnh bìa: những chồng nón lá trắng trong đình Chuông — Hà Trang / Báo Văn Hóa', '表紙写真：チュオン村の亭に積まれた白いノンラー'], { name: 'Ảnh bìa' }),
-    shade(0, 360),
-    shade(H - 210, 210, true),
-    T(46, 58, 500, 120, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 52, lh: 1.08, tracking: 2.5, color: cream, jaFont: F.jaHead, jaSize: 46, name: 'Tên sách' }),
-    T(48, 184, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: '#e7c98f', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
-    HL(50, 244, 70, '#e7c98f', 1.4),
-    RECT(46, H - 92, 124, 42, '#fbf4e4', { radius: 6, opacity: 0.94, name: 'Nền logo' }),
+    { ...DECO('vong-non', W / 2 - 280, 300, 560, 560, 0.16), name: 'Hình vẽ' },
+    { ...DECO('bia-non', W / 2 - 240, 400, 480, 280, 1), name: 'Hình vẽ' },
+    RECT(26, 26, W - 52, H - 52, 'none', { stroke: '#a07a3c', sw: 0.8, dash: '3 2.5', opacity: 0.6, name: 'Đường khâu' }),
+    T(52, 74, 430, 120, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 52, lh: 1.08, tracking: 2.5, color: C.title, jaFont: F.jaHead, jaSize: 46, name: 'Tên sách' }),
+    T(54, 200, 500, 44, front.subtitle.map(strip), { font: F.script, size: 32, lh: 1.3, color: '#a07a3c', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
+    HL(56, 260, 70, '#a07a3c', 1.4),
+    ...SEAL(W - 52 - 60, 80),
     // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
-    IMG(52, H - 87, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
-    T(184, H - 88, 380, 34, front.team, { size: 10.5, lh: 1.5, color: 'rgba(251,244,228,.85)', jaFont: F.jaSans, name: 'Thông tin' }),
-    T(W - 250, H - 26, 230, 12, ['Ảnh bìa: Hà Trang / Báo Văn Hóa', '表紙写真：ハー・チャン／ヴァンホア紙'], { size: 7.5, align: 'right', color: 'rgba(251,244,228,.55)', lh: 1.3, jaFont: F.jaSans, name: 'Nguồn ảnh bìa' })
+    IMG(54, H - 96, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
+    T(186, H - 92, 360, 34, front.team, { size: 10.5, lh: 1.5, color: C.ink2, jaFont: F.jaSans, name: 'Thông tin' })
   )
 }
 
@@ -1771,12 +1791,14 @@ let stripRight = null
   // trang lót mặt trong bìa sau (trang phải) rồi bìa sau (trang trái cuối cùng)
   if ((pages.length + 1) % 2 === 0) photoPage(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
   photoPage(['Ảnh trang lót: những chùm nón trang trí treo giữa vườn cây', '見返し写真：庭の木々の間に吊るされたノンラーの飾り'], 9)
-  const b = new Page({ chapter: 9, hideNumber: true, bg: '#2b2118' })
+  const b = new Page({ chapter: 9, hideNumber: true, bg: C.cream, paper: 'giay' })
   b.add(
-    IMG(0, 0, W, H * 0.55, ['Ảnh bìa sau: chiếc nón lá trên nền tre, ánh sáng dịu', '裏表紙写真：竹を背景にしたノンラー'], { name: 'Ảnh bìa sau' }),
-    DECO('non-line', W / 2 - 80, H * 0.6, 160, 85, 0.75),
-    T(50, H * 0.6 + 110, W - 100, 34, ['Cảm ơn quý độc giả', 'ありがとうございました'], { font: F.script, size: 27, align: 'center', color: '#d9bd84', lh: 1.3, jaFont: F.jaBody, jaSize: 21, name: 'Lời cảm ơn' }),
-    T(50, H - 100, W - 100, 38, ['NÓN LÁ LÀNG CHUÔNG\nĐại học FPT Hà Nội · 2026 · nonla09092026@gmail.com', 'チュオン村のノンラー\nFPT大学ハノイ校・2026年・nonla09092026@gmail.com'], { size: 10, tracking: 1.2, align: 'center', color: 'rgba(244,234,212,.65)', lh: 1.7, jaFont: F.jaSans, name: 'Thông tin' })
+    // không ảnh: mười sáu vòng nón + nón nét vàng như bìa trước
+    RECT(26, 26, W - 52, H - 52, 'none', { stroke: '#a07a3c', sw: 0.8, dash: '3 2.5', opacity: 0.6, name: 'Đường khâu' }),
+    { ...DECO('vong-non', W / 2 - 210, 110, 420, 420, 0.16), name: 'Hình vẽ' },
+    { ...DECO('bia-non', W / 2 - 170, 220, 340, 198, 1), name: 'Hình vẽ' },
+    T(50, H * 0.6 + 110, W - 100, 34, ['Cảm ơn quý độc giả', 'ありがとうございました'], { font: F.script, size: 27, align: 'center', color: '#a07a3c', lh: 1.3, jaFont: F.jaBody, jaSize: 21, name: 'Lời cảm ơn' }),
+    T(50, H - 100, W - 100, 38, ['NÓN LÁ LÀNG CHUÔNG\nĐại học FPT Hà Nội · 2026 · nonla09092026@gmail.com', 'チュオン村のノンラー\nFPT大学ハノイ校・2026年・nonla09092026@gmail.com'], { size: 10, tracking: 1.2, align: 'center', color: C.muted, lh: 1.7, jaFont: F.jaSans, name: 'Thông tin' })
   )
 }
 
