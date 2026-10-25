@@ -6,7 +6,7 @@ import { t } from '../../lib/i18n.js'
  * Màn mở đầu: chữ "NÓN" trên cảnh 3D chiếc nón tự đan.
  * Luôn chạy hết hiệu ứng; khi xong mới hiện nút "Mở tạp chí".
  */
-export default function LoadingIntro({ magazine, progress, ready, leaving, onOpen }) {
+export default function LoadingIntro({ magazine, progress, ready, bowing, leaving, onOpen }) {
   const btnRef = useRef(null)
   // tên dài (vd. "Nón lá Làng Chuông"): chữ nhỏ hơn, xuống dòng theo từ — không tách giữa từ
   const long = [...magazine.title].length > 8
@@ -22,7 +22,7 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
   }, [ready])
 
   return (
-    <div className={`intro ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
+    <div className={`intro ${bowing ? 'is-bowing' : ''} ${leaving ? 'is-leaving' : ''} ${ready ? 'is-ready' : ''}`}>
       {/* key theo tên: đổi ngôn ngữ thì cả tên lẫn dòng phụ cùng chạy lại hiệu ứng hiện chữ */}
       <div className="intro__text" key={`${magazine.title}|${magazine.subtitle}`}>
         <p className="intro__kicker">{t('introKicker')}</p>
@@ -48,7 +48,13 @@ export default function LoadingIntro({ magazine, progress, ready, leaving, onOpe
       <p className="intro__scene">{t('introScene')}</p>
 
       <div className="intro__foot" role="status" aria-live="polite">
-        {ready ? (
+        {bowing || leaving ? (
+          // nón ngả chào cổng đình: câu ca dao thay chỗ nút
+          <figure className="intro__bow">
+            <blockquote>{t('bowCadao')}</blockquote>
+            <figcaption>{t('introCadaoBy')}</figcaption>
+          </figure>
+        ) : ready ? (
           <>
             <button ref={btnRef} type="button" className="intro__open" onClick={onOpen} disabled={leaving}>
               <span>{t('openBook')}</span>

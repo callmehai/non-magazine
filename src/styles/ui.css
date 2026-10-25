@@ -789,6 +789,51 @@
   pointer-events: auto;
 }
 
+/* bấm "Mở sách": nón ngả chào cổng đình, câu "Qua đình ngả nón trông đình" hiện thay chỗ nút */
+.intro__bow {
+  margin: 0;
+  text-align: center;
+  animation: bow-in 0.9s var(--ease) 0.15s both;
+}
+
+.intro__bow blockquote {
+  margin: 0;
+  white-space: pre-line;
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-size: clamp(19px, 1.9vw, 26px);
+  line-height: 1.5;
+  color: #ffecb8;
+  text-shadow: 0 2px 18px rgba(20, 8, 0, 0.7);
+}
+
+.intro__bow figcaption {
+  margin-top: 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(224, 142, 0, 0.9);
+}
+
+html[lang='ja'] .intro__bow blockquote {
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+@keyframes bow-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.intro.is-bowing .intro__cadao,
+.intro.is-bowing .intro__scene {
+  opacity: 0 !important;
+  transition: opacity 0.6s var(--ease);
+  animation: none;
+}
+
 .intro.is-leaving {
   opacity: 0;
   visibility: hidden;

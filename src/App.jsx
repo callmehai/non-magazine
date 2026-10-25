@@ -25,6 +25,7 @@ import { t, setLang } from './lib/i18n.js'
 import { CanvasLang } from './canvas/lang.js'
 
 const INTRO_MS = 3200
+const BOW_MS = 2600
 const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
 
 export default function App({ magazine: source }) {
@@ -94,7 +95,7 @@ export default function App({ magazine: source }) {
 
   // ───────────── intro: luôn chạy hết hiệu ứng, bấm "Mở tạp chí" mới vào đọc
   const introEnabled = settings.intro !== false
-  const [phase, setPhase] = useState(introEnabled ? 'intro' : 'reading') // intro → leaving → reading
+  const [phase, setPhase] = useState(introEnabled ? 'intro' : 'reading') // intro → bow → leaving → reading
   const [sceneStatus, setSceneStatus] = useState(settings.background3D === false && !introEnabled ? 'off' : 'loading')
   const [sceneIntroDone, setSceneIntroDone] = useState(false)
   const [replayKey, setReplayKey] = useState(0)
@@ -133,6 +134,13 @@ export default function App({ magazine: source }) {
     return () => cancelAnimationFrame(raf)
   }, [phase, sceneDone, replayKey])
 
+  // bấm "Mở sách": nón ngả về phía cổng đình như người ngả nón chào ("Qua đình ngả nón trông đình"), rồi mới vào sách
+  useEffect(() => {
+    if (phase !== 'bow') return
+    const t = setTimeout(() => setPhase('leaving'), BOW_MS)
+    return () => clearTimeout(t)
+  }, [phase])
+
   useEffect(() => {
     if (phase !== 'leaving') return
     const t = setTimeout(() => setPhase('reading'), reducedMotion ? 200 : 1100)
@@ -154,13 +162,13 @@ export default function App({ magazine: source }) {
   }, [music])
 
   const openMagazine = useCallback(() => {
-    setPhase((p) => (p === 'intro' ? 'leaving' : p))
+    setPhase((p) => (p === 'intro' ? (reducedMotion ? 'leaving' : 'bow') : p))
     // bấm nút là thao tác của người dùng → trình duyệt cho phép phát nhạc
     if (soundOnRef.current && !triedMusic.current) {
       triedMusic.current = true
       music.play().then((ok) => setNeedsGesture(!ok))
     }
-  }, [music])
+  }, [music, reducedMotion])
 
   const replayIntro = useCallback(() => {
     setPanelOpen(false)
@@ -289,7 +297,7 @@ export default function App({ magazine: source }) {
   const forward = { onClick: book.next, disabled: lastVisible >= count - 1, 'aria-label': t('nextPage') }
 
   const pageLabel = visible.length === 2 ? `${visible[0] + 1}–${visible[1] + 1}` : `${visible[0] + 1}`
-  const entered = phase !== 'intro'
+  const entered = phase === 'leaving' || phase === 'reading'
 
   return (
     <CanvasLang.Provider value={languages ? lang : 'vi'}>
@@ -303,7 +311,7 @@ export default function App({ magazine: source }) {
             <VillageBackdrop reducedMotion={reducedMotion} active={phase === 'intro'} />
           </div>
           <SceneBackground
-            mode={phase === 'intro' ? 'intro' : 'reading'}
+            mode={phase === 'intro' || phase === 'bow' ? phase : 'reading'}
             replayKey={replayKey}
             reducedMotion={reducedMotion}
             enabled={sceneStatus !== 'off'}
@@ -374,7 +382,7 @@ export default function App({ magazine: source }) {
           <Reader state={reader} onClose={() => setReader(null)} />
 
           {phase !== 'reading' && (
-            <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase === 'leaving'} leaving={phase === 'leaving'} onOpen={openMagazine} />
+            <LoadingIntro magazine={magazine} progress={progress} ready={introReady || phase !== 'intro'} bowing={phase === 'bow'} leaving={phase === 'leaving'} onOpen={openMagazine} />
           )}
         </div>
       </MagazineContext.Provider>

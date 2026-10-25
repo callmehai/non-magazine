@@ -10,6 +10,8 @@ const easeOut = (t) => 1 - Math.pow(1 - t, 3)
 
 /** Mốc thời gian của màn mở đầu (giây) */
 const T = { rings: [0.15, 1.5], leaf: [1.15, 2.75], strap: [2.45, 3.05], end: 3.2 }
+/** Ngả nón chào cổng đình khi bấm "Mở sách" (giây): cúi xuống, giữ, ngẩng lên */
+const BOW = { down: [0, 0.75], up: [1.35, 2.1] }
 
 /**
  * Cảnh nền 3D: chiếc nón lá tự "đan" khi mở trang (intro),
@@ -176,6 +178,7 @@ export class HeroScene {
       this.lastInput = performance.now()
       this.wake()
     }
+    if (mode === 'bow' && this.mode !== 'bow') this.bowT = 0
     this.mode = mode
     if (mode === 'reading') {
       if (!this.introDone) {
@@ -234,7 +237,7 @@ export class HeroScene {
     }
     // nhịp vẽ: màn 120Hz sẽ gọi tick 120 lần/giây — nón xoay chậm nên không cần. Đang kéo xoay / vừa rê chuột / đang
     // chuyển cảnh: 60 khung/giây; nón tự xoay yên ở sảnh: 30; lúc đọc: 30 (đo ở bản build: CPU trang giảm gần một nửa)
-    const lively = this.drag.active || !this.introDone || (this.modeT > 0 && this.modeT < 1) || timestamp - (this.lastInput ?? 0) < 1500
+    const lively = this.drag.active || !this.introDone || this.mode === 'bow' || (this.modeT > 0 && this.modeT < 1) || timestamp - (this.lastInput ?? 0) < 1500
     const fps = settled || !lively ? 30 : 60
     if (timestamp - (this.lastFrame ?? 0) < 1000 / fps - 2) return
     this.lastFrame = timestamp
@@ -249,6 +252,10 @@ export class HeroScene {
       this.applyIntro(this.introTime + dt)
       if (this.introTime >= T.end) this.finishIntro()
     }
+
+    if (this.bowT !== undefined) this.bowT += dt
+    const bt = this.bowT ?? 99
+    const bow = this.reducedMotion ? 0 : easeInOut(range(bt, ...BOW.down)) * (1 - easeInOut(range(bt, ...BOW.up)))
 
     const target = this.mode === 'reading' ? 1 : 0
     const speed = this.reducedMotion ? 10 : 0.6
@@ -278,6 +285,11 @@ export class HeroScene {
     pivot.rotation.x = THREE.MathUtils.lerp(0.24, 0.5, m) + Math.sin(time * 0.6) * 0.03 * motion
     pivot.rotation.z = THREE.MathUtils.lerp(0.06, -0.28, m)
     pivot.position.y += Math.sin(time * 0.8) * 0.03 * motion
+    // ngả nón: nghiêng chóp về phía cổng đình (bên phải) và cúi về trước
+    pivot.rotation.z -= 0.4 * bow
+    pivot.rotation.x += 0.08 * bow
+    pivot.position.x += 0.06 * bow
+    pivot.position.y += 0.05 * bow
     this.hat.group.rotation.y += dt * (0.35 - 0.2 * m) * (motion || 0.0)
     if (!motion) this.hat.group.rotation.y = 0.6
 
@@ -298,7 +310,7 @@ export class HeroScene {
       const decay = Math.pow(0.04, dt)
       d.vx *= decay
       d.vy *= decay
-      if (this.mode === 'reading') {
+      if (this.mode !== 'intro') {
         const k = 1 - Math.pow(0.02, dt)
         d.rotX += (0 - d.rotX) * k
         d.rotY += (0 - d.rotY) * k
