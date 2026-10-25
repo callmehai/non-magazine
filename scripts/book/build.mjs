@@ -1017,14 +1017,13 @@ function chapterOpener(ch, photo) {
   const acc = ACC[ch.no]
   toLeft(photo.alt, ch.no - 1)
   // trang trái mở chương: không dùng ảnh (ảnh nhóm chụp phóng to thì xấu) — số chương thật to màu chương,
-  // nhãn chương, hình vẽ nét mảnh của chương trên mười sáu vòng nón in mờ
+  // hình vẽ nét mảnh của chương trên mười sáu vòng nón in mờ (nhãn "Chương N" đã có ở trang phải)
   const left = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream, paper: 'giay' })
   const iw = left.cw - 110
   left.add(
     { ...DECO('vong-non', left.x0 - 50, 250, left.cw + 100, left.cw + 100, 0.12), name: 'Hình vẽ' },
     T(left.x0 - 6, 84, 320, 165, [String(ch.no).padStart(2, '0'), null], { font: F.head, size: 150, color: acc, lh: 1.05, name: 'Số chương' }),
-    T(left.x0, 258, left.cw, 20, [ch.label[0].toUpperCase(), strip(ch.label[1])], { size: S.label + 1, tracking: 3, color: acc, weight: 700, lh: 1.3, jaFont: F.jaSans, name: 'Nhãn chương' }),
-    HL(left.x0, 292, 64, acc, 1.6),
+    HL(left.x0, 262, 64, acc, 1.6),
     { ...DECO(SEC_ICON[ch.no] ?? 'non', left.x0 + 55, 345, iw, iw, 0.95), name: 'Hình vẽ' }
   )
   const p = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream })
