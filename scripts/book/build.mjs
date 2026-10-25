@@ -406,7 +406,9 @@ function figure(p, x, y, w, h, cap, o = {}) {
 const POLA = { pad: 10 }
 const polaCapO = { font: F.hand, size: 15, lh: 1.25, jaSize: 12.5 }
 // chú thích trong khung: bỏ phần nguồn sau dấu "—" (nguồn ảnh vẫn ghi ở trang Nguồn ảnh)
-const polaCap = (cap) => [strip(cap[0]).replace(/\s+—.*$/, ''), strip(cap[1] ?? '').replace(/\s+—.*$/, '')]
+// chỉ bỏ khi phần sau "—" là nguồn ảnh; phần sau "—" là nội dung (vd. "— nguyên liệu … tại Bảo tàng …") thì giữ (góp ý: chú thích cụt)
+const SRC_TAIL = /\s+[—―]\s*(nguồn|ảnh|Nguồn|Ảnh|出典|写真)[:：].*$/
+const polaCap = (cap) => [strip(cap[0]).replace(SRC_TAIL, ''), strip(cap[1] ?? '').replace(SRC_TAIL, '')]
 const polaBand = (w, cap) => textH(polaCap(cap), w - 2 * POLA.pad, polaCapO) + 16
 const polaH = (w, r, cap) => (w - 2 * POLA.pad) * r + POLA.pad + polaBand(w, cap)
 function polaroid(p, x, y, w, r, cap, rot) {
@@ -1711,14 +1713,26 @@ let stripRight = null
   topics(cl.topics, [cl.intro])
   f.end()
 
-  // cặp trang khép chương: trái = ảnh tràn trang (nón lá bên tà áo dài trong đình — chiếc nón trong đời sống hôm nay),
-  // phải = lời khép chương chữ lớn canh giữa trang, hình vẽ sen nét mảnh phía trên
-  toRight(['Ảnh toàn trang: nón lá làm duyên cho tà áo dài trong đình Chuông', '全面写真：チュオン村の亭で、アオザイに添えられたノンラー'], 3)
+  // cặp trang khép chương, hai trang đối xứng (góp ý: bố cục lệch mắt): trái = ảnh khung dọc + chú thích canh giữa trang,
+  // dải màu chương ở mép ngoài; phải = lời khép chương chữ lớn canh giữa trang, hình tre già măng mọc phía trên
+  if ((pages.length + 1) % 2 === 0) {
+    const hint = ['Ảnh toàn trang: nón lá làm duyên cho tà áo dài trong đình Chuông', '全面写真：チュオン村の亭で、アオザイに添えられたノンラー']
+    const lp = new Page({ chapter: 3, hideNumber: true, bg: C.cream })
+    lp.fixed = true
+    const cap = [pageCap(hint[0]), pageCap(hint[1])]
+    const iw = 330
+    const ih = r1(iw * R.por)
+    const ch = capH(cap, iw)
+    const x = 18 + (W - 18 - iw) / 2
+    const y0 = (H - (ih + 10 + ch)) / 2
+    lp.add(RECT(0, 0, 18, H, ACC[3], { name: 'Dải màu' }), IMG(x, y0, iw, ih, hint, { name: 'Ảnh trang' }))
+    lp.add(T(x, y0 + ih + 10, iw, ch, cap, { ...capOpt, italic: true, align: 'center', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+  }
   const p = new Page({ chapter: 3, hideNumber: true, bg: C.cream })
   p.fixed = true
   const qw = W - 150
   const qh = textH(cl.outro, qw, quoteOpt(25))
-  const dh = 130
+  const dh = 165
   let y = (H - (dh + 40 + qh)) / 2
   p.add(RECT(W - 18, 0, 18, H, ACC[3], { name: 'Dải màu' }), { ...DECO('tre-mang', (W - 18 - dh) / 2, y, dh, dh, 0.9), name: 'Hình vẽ' })
   y += dh + 18
@@ -1735,8 +1749,9 @@ let stripRight = null
   f.end()
 
   f.runLabel = ['LƯU Ý', 'ご注意'] // đầu trang mọi trang của phần này (không chỉ trang đầu)
+  // lưu ý: toàn văn gọn trong một trang (góp ý của người dùng), không chia cặp trang + ảnh
   mark(1, e.notice.title, f.section(null, e.notice.title, ['Đôi lời gửi bạn đọc', '読者の皆様へ']), '—')
-  f.story({ paras: e.notice.p, title: e.notice.title })
+  f.prose(e.notice.p, { budget: false, size: 14, lh: 1.55, paraGap: 6 })
   f.end()
 
   f.runLabel = ['TÀI LIỆU THAM KHẢO', '参考文献']
