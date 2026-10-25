@@ -1344,10 +1344,9 @@ let contents = null
     let y = TOP
     if (kicker) {
       p.add(T(p.x0, y, CW, 16, kicker.map((x) => strip(x).toUpperCase()), { size: S.label, tracking: 2.4, weight: 700, color: tone, jaFont: F.jaSans, name: 'Nhóm' }))
-      y += 30
+      y += 46
     }
-    // cành hoa nét mảnh ở góc trên phía ngoài (không đè chữ: tên nón chừa chỗ bên phải)
-    p.add(T(p.x0 - 4, y - 14, 112, 96, [num, null], { font: F.head, size: 84, color: tone, lh: 1.1, name: 'Số thứ tự' }))
+    p.add(T(p.x0 - 4, y - 10, 112, 104, [num, null], { font: F.head, size: 84, color: tone, lh: 1.1, name: 'Số thứ tự' }))
     const tw = iw - 20
     const nh = textH(t.name, tw, no)
     p.add(T(ix, y + 4, tw, nh, t.name, { ...no, weight: 700, color: tone, jaFont: F.jaHead, name: 'Tên nón' }))
@@ -1434,18 +1433,26 @@ let stripRight = null
   f.fillRest()
   f.page()
   {
-    // hai phần chính: hai ô nền màu cạnh nhau
-    const gap = 14
-    const bw = (CW - gap) / 2
+    // hai phần chính theo mockup của nhóm: mỗi phần một hàng — hình vẽ nét mảnh, số tròn, tên phần, mô tả
     const to = { size: 15, lh: 1.5, jaSize: jaPt(15) }
-    const hh = Math.max(...st.parts.map(([n, t]) => textH(n, bw - 28, { size: 18, font: F.head, lh: 1.25 }) + 8 + textH(t, bw - 28, to))) + 32
-    f.place(hh, (p, y) =>
-      st.parts.forEach(([name, text], i) => {
-        const bx = p.x0 + i * (bw + gap)
-        const nh = textH(name, bw - 28, { size: 18, font: F.head, lh: 1.25 })
-        p.add(RECT(bx, y, bw, hh, TINT[2], { radius: 8, name: 'Ô' }), T(bx + 14, y + 14, bw - 28, nh, name, { font: F.head, size: 18, weight: 700, color: ACC[2], lh: 1.25, jaFont: F.jaHead, name: 'Tên phần' }), T(bx + 14, y + 22 + nh, bw - 28, textH(text, bw - 28, to), text, { ...to, color: C.ink2, jaFont: F.jaBody, name: 'Mô tả' }))
-      })
-    )
+    const art = ['khung-non', 'la-ba-lop']
+    const dw = 150
+    const tw = CW - dw - 22 - 34
+    st.parts.forEach(([name, text], i) => {
+      const nh = textH(name, tw, { size: 18, font: F.head, lh: 1.25 })
+      const th = textH(text, tw, to)
+      const hh = Math.max(nh + 8 + th, dw * 0.62)
+      f.place(hh, (p, y) => {
+        const tx = p.x0 + dw + 22
+        p.add(
+          { ...DECO(art[i], p.x0, y + 2, dw, dw * (i ? 0.7 : 0.58), 0.95), name: 'Hình vẽ' },
+          ELL(tx, y - 1, 24, 24, ACC[2], { name: 'Số tròn' }),
+          T(tx, y + 2, 24, 18, [String(i + 1), null], { size: 13, weight: 700, align: 'center', color: '#fff', lh: 1.3, name: 'Số' }),
+          T(tx + 34, y, tw, nh, name, { font: F.head, size: 18, weight: 700, color: ACC[2], lh: 1.25, jaFont: F.jaHead, name: 'Tên phần' }),
+          T(tx + 34, y + nh + 8, tw, th, text, { ...to, color: C.ink2, jaFont: F.jaBody, name: 'Mô tả' })
+        )
+      }, 26)
+    })
   }
   // 2.1.1 — khung 16 vòng (thứ tự theo Doc: khung trước, lá lợp sau): sơ đồ vòng, dáng thấp như nón thật
   // (cao ≤ 0,72 × bán kính vành, chóp có núm tròn nhỏ — góp ý: hình nón vẽ nhọn quá)
@@ -1879,7 +1886,7 @@ let stripRight = null
   f.runLabel = ['LƯU Ý', 'ご注意'] // đầu trang mọi trang của phần này (không chỉ trang đầu)
   // lưu ý: toàn văn gọn trong một trang (góp ý của người dùng), không chia cặp trang + ảnh
   mark(1, e.notice.title, f.section(null, e.notice.title, ['Đôi lời gửi bạn đọc', '読者の皆様へ']), '—')
-  f.prose(e.notice.p, { budget: false, size: 14, lh: 1.55, paraGap: 6 })
+  f.prose(e.notice.p, { budget: false, size: 13.5, lh: 1.5, paraGap: 5, jaSize: 13.5 })
   f.end()
 
   f.runLabel = ['TÀI LIỆU THAM KHẢO', '参考文献']
@@ -1915,7 +1922,7 @@ let stripRight = null
   runningHead(p, ['NHÓM THỰC HIỆN', '制作チーム'])
   mark(1, e.team.title, p, '—')
   let y = sectionHead(p, TOP, null, e.team.title, ['Những người làm nên cuốn sách', 'この本をつくった人たち'])
-  const lo = { size: 16, lh: 1.55, jaSize: jaPt(16) }
+  const lo = { size: 15, lh: 1.5, jaSize: jaPt(15) }
   const lh = textH(e.team.lead, p.cw, lo)
   p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, name: 'Đoạn văn' }))
   y += lh + 18
@@ -1924,23 +1931,23 @@ let stripRight = null
   const mw = (p.cw - 14) / 2
   e.team.members.forEach(([name, code], i) => {
     const mx = p.x0 + (i % 2) * (mw + 14)
-    const my = y + Math.floor(i / 2) * 138
+    const my = y + Math.floor(i / 2) * 110
     // chưa có ảnh chân dung của nhóm → chữ cái đầu tên trong vòng đường khâu (không để khung ảnh tạm)
     const ini = name[0].split(' ').slice(-2).map((w) => w[0]).join('')
-    const cx = mx + (mw - 64) / 2
+    const cx = mx + (mw - 56) / 2
     p.add(
-      RECT(cx, my, 64, 64, TINT[9], { radius: 32, stroke: ACC[9], sw: 0.9, dash: '3 2.5', name: 'Vòng tên' }),
-      T(cx, my + 19, 64, 26, [ini, null], { font: F.head, size: 22, align: 'center', color: ACC[9], lh: 1.2, name: 'Chữ đầu tên' }),
-      T(mx, my + 74, mw, 22, name, { font: F.head, size: 16.5, align: 'center', lh: 1.3, jaFont: F.jaHead, jaSize: 15, name: 'Tên thành viên' }),
-      T(mx, my + 100, mw, 16, [code, null], { size: 12, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' })
+      RECT(cx, my, 56, 56, TINT[9], { radius: 28, stroke: ACC[9], sw: 0.9, dash: '3 2.5', name: 'Vòng tên' }),
+      T(cx, my + 15, 56, 26, [ini, null], { font: F.head, size: 20, align: 'center', color: ACC[9], lh: 1.2, name: 'Chữ đầu tên' }),
+      T(mx, my + 64, mw, 22, name, { font: F.head, size: 16.5, align: 'center', lh: 1.3, jaFont: F.jaHead, jaSize: 15, name: 'Tên thành viên' }),
+      T(mx, my + 88, mw, 16, [code, null], { size: 12, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' })
     )
   })
-  y += 2 * 138 + 4
+  y += 2 * 110 - 4
   p.add(HL(p.x0, y, p.cw, C.line, 0.5))
-  const co = { size: 14, lh: 1.55, jaSize: jaPt(14), paraGap: 4 }
+  const co = { size: 13, lh: 1.45, jaSize: 13, paraGap: 3 }
   const ch = textH(e.team.contact, p.cw, co)
-  p.add(T(p.x0, y + 16, p.cw, ch, e.team.contact, { ...co, align: 'center', italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Liên hệ' }))
-  p.add(T(p.x0, y + 24 + ch, p.cw, 22, ['Email: ' + e.team.email, 'メール：' + e.team.email], { size: 15, weight: 700, align: 'center', color: ACC[9], lh: 1.4, jaFont: F.jaSans, name: 'Email' }))
+  p.add(T(p.x0, y + 12, p.cw, ch, e.team.contact, { ...co, align: 'center', italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Liên hệ' }))
+  p.add(T(p.x0, y + 18 + ch, p.cw, 22, ['Email: ' + e.team.email, 'メール：' + e.team.email], { size: 15, weight: 700, align: 'center', color: ACC[9], lh: 1.4, jaFont: F.jaSans, name: 'Email' }))
 
   // trang lót mặt trong bìa sau (trang phải) rồi bìa sau (trang trái cuối cùng)
   if ((pages.length + 1) % 2 === 0) photoPage(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
@@ -2272,10 +2279,13 @@ function addFrames(p) {
  * trang kết thúc bằng một ảnh (khung chuẩn nhảy bậc) mà dưới đáy còn dải trống → hạ cụm ảnh + chú thích xuống giữa
  * khoảng trống (chia đều trên / dưới ảnh), không để một dải trống ở đáy trang; trang bố cục riêng (fixed) giữ nguyên
  */
+// phần tử chiếm chỗ trong vùng nội dung: chữ, ảnh và cả hình vẽ nhỏ đặt giữa trang (vignette); bỏ họa tiết nền / góc
+const contentEls = (p) =>
+  p.els.filter((e) => e.y > TOP - 10 && (/deco\//.test(e.src || '') ? e.w < CW * 0.6 && e.y + e.h <= BOT + 30 && e.x >= p.x0 - 1 : !DECOR.has(e.name)))
 const TAIL = new Set(['Ảnh', 'Chú thích ảnh', 'Chú thích video', 'Video trình diễn', 'Khung polaroid', 'Ảnh polaroid', 'Chú thích polaroid', 'Băng keo', 'Khung ảnh'])
 function centerTail(p) {
   if (p.fixed) return
-  const body = p.els.filter((e) => !DECOR.has(e.name) && !/deco\//.test(e.src || '') && e.y > TOP - 10)
+  const body = contentEls(p)
   if (!body.length) return
   const bottom = Math.max(...body.map((e) => e.y + e.h))
   const gap = BOT - bottom
@@ -2291,6 +2301,25 @@ function centerTail(p) {
   tail.forEach((e) => (e.y = r1(e.y + gap / 2)))
 }
 pages.forEach(centerTail)
+/**
+ * hoa lá nét mảnh ở chân trang (theo mockup của nhóm: cây cỏ, hoa sen nét mảnh ở lề): trang thường còn khoảng trống
+ * dưới đáy thì đặt dải cỏ hoa ở góc ngoài, không chạm chữ / ảnh; xen kẽ cụm sen thấp và dải cỏ hoa
+ */
+let flourish = 0
+function bottomFlora(p) {
+  if (p.fixed) return
+  const body = contentEls(p)
+  if (!body.length) return
+  const bottom = Math.max(...body.map((e) => e.y + e.h))
+  const gap = BOT + 24 - bottom
+  if (gap < 64) return
+  const sen = flourish++ % 2 === 0 && gap >= 110
+  const h = sen ? Math.min(gap - 14, 120) : Math.min(gap - 10, 70)
+  const w = sen ? h * (280 / 240) : h * (280 / 92)
+  const x = p.side === 'left' ? p.x0 - 10 : p.x1 - w + 10
+  p.els.push({ ...DECO(sen ? 'sen-goc' : 'co-hoa', x, BOT + 24 - h, w, h, 0.6), name: 'Hình vẽ' })
+}
+pages.forEach(bottomFlora)
 const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: addFrames(p) }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })
 fs.writeFileSync(path.join(here, 'out', 'book.json'), JSON.stringify({ pages: out }, null, 1))

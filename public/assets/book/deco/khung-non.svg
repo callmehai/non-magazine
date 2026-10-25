@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" fill="none" stroke="#8b8460" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M106.8 50.8 A 13.2 2.3 0 0 1 133.2 50.8" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M106.8 50.8 A 13.2 2.3 0 0 0 133.2 50.8" stroke-width="0.8"/>
+<path d="M93.5 59.5 A 26.5 4.5 0 0 1 146.5 59.5" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M93.5 59.5 A 26.5 4.5 0 0 0 146.5 59.5" stroke-width="0.8"/>
+<path d="M80.2 68.2 A 39.8 6.8 0 0 1 159.8 68.2" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M80.2 68.2 A 39.8 6.8 0 0 0 159.8 68.2" stroke-width="0.8"/>
+<path d="M67 77 A 53 9 0 0 1 173 77" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M67 77 A 53 9 0 0 0 173 77" stroke-width="0.8"/>
+<path d="M53.8 85.8 A 66.2 11.3 0 0 1 186.2 85.8" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M53.8 85.8 A 66.2 11.3 0 0 0 186.2 85.8" stroke-width="0.8"/>
+<path d="M40.5 94.5 A 79.5 13.5 0 0 1 199.5 94.5" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M40.5 94.5 A 79.5 13.5 0 0 0 199.5 94.5" stroke-width="0.8"/>
+<path d="M27.2 103.2 A 92.8 15.8 0 0 1 212.8 103.2" stroke-width="0.5599999999999999" opacity=".35"/>
+<path d="M27.2 103.2 A 92.8 15.8 0 0 0 212.8 103.2" stroke-width="0.8"/>
+<path d="M14 112 A 106 18 0 0 1 226 112" stroke-width="0.9799999999999999" opacity=".35"/>
+<path d="M14 112 A 106 18 0 0 0 226 112" stroke-width="1.4"/>
+<path d="M120 42 L226 112" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L217.9 118.9" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L195 124.7" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L160.6 128.6" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L120 130" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L79.4 128.6" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L45 124.7" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L22.1 118.9" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L14 112" stroke-width="0.7" opacity="1"/>
+<path d="M120 42 L22.1 105.1" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L45 99.3" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L79.4 95.4" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L120 94" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L160.6 95.4" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L195 99.3" stroke-width="0.7" opacity="0.3"/>
+<path d="M120 42 L217.9 105.1" stroke-width="0.7" opacity="0.3"/>
+<circle cx="120" cy="40" r="3" fill="#f8f2e6"/>
+</svg>

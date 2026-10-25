@@ -194,3 +194,38 @@ c.append('<path d="M178 90 C 182 74, 176 60, 184 48"/>')
 c += blossom(184, 42, 8, rot=-10)
 svg('co-hoa', (280, 92), '\n'.join(c))
 print('ok')
+
+# ── khung nón: núm chóp, nan, các vòng nứa (hình minh họa "phần khung"); dáng thấp như nón thật (cao ≈ 0,66 bán kính),
+# nửa sau của vòng / nan vẽ nhạt (khung rỗng nên vẫn thấy, nhưng lùi về sau)
+k = []
+ax, R, Hh, by, e = 120, 106, 70, 112, 0.17
+ay = by - Hh
+def ring(t, sw):
+    rx, cy, ry = R * t, ay + Hh * t, R * t * e
+    front = f'M{f(ax - rx)} {f(cy)} A {f(rx)} {f(ry)} 0 0 0 {f(ax + rx)} {f(cy)}'
+    back = f'M{f(ax - rx)} {f(cy)} A {f(rx)} {f(ry)} 0 0 1 {f(ax + rx)} {f(cy)}'
+    return [f'<path d="{back}" stroke-width="{sw * 0.7}" opacity=".35"/>', f'<path d="{front}" stroke-width="{sw}"/>']
+for j in range(1, 9):
+    k += ring(j / 8, 1.4 if j == 8 else 0.8)
+for i in range(16):
+    a = math.radians(i * 22.5)
+    x, y = ax + R * math.cos(a), by + R * e * math.sin(a)
+    k.append(f'<path d="M{ax} {ay} L{f(x)} {f(y)}" stroke-width="0.7" opacity="{1 if math.sin(a) > 0 else 0.3}"/>')
+k.append(f'<circle cx="{ax}" cy="{ay - 2}" r="3" fill="{PAPER}"/>')
+svg('khung-non', (240, 140), '\n'.join(k))
+
+# ── ba lớp lá: lá lụi ngoài, mo nang giữa (gân dọc dày), lá lụi trong — xếp lệch như mockup
+l3 = []
+for i, (dy, hatch) in enumerate(((0, False), (40, True), (80, False))):
+    x0, y0 = 16, 40 + dy
+    l3 += petal(x0, y0, -12, 210, 30, veins=4 if not hatch else 0, lean=0.06)
+    if hatch:
+        for j in range(14):
+            t = 0.08 + j * 0.062
+            dx, dyy = unit(-12)
+            nx, ny = -dyy, dx
+            cx0, cy0 = x0 + dx * 210 * t, y0 + dyy * 210 * t
+            w = 30 * 0.72 * math.sin(math.pi * min(t, 0.95))
+            l3.append(f'<path d="M{f(cx0 + nx * w)} {f(cy0 + ny * w)} L{f(cx0 - nx * w)} {f(cy0 - ny * w)}" stroke-width="0.5" opacity=".7"/>')
+svg('la-ba-lop', (240, 170), '\n'.join(l3))
+print('ok2')
