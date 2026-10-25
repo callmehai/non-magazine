@@ -192,4 +192,17 @@ export const photos = {
   "Giấy chứng nhận OCOP 4 sao của cơ sở nón lá Lê Văn Tuy": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón chùm",
   "Nguyên liệu và dụng cụ làm nón bày trên bàn — Bảo tàng Dân tộc học Việt Nam": "Chương 2/BTDTHVN/IMG_20260929_090553",
   "Nón lá và trang phục trong gian trưng bày nghề nón — Bảo tàng Dân tộc học Việt Nam": "Chương 2/BTDTHVN/IMG_6409",
+  // thêm 2026-10-25 khi giãn chữ: ảnh chưa dùng trong bộ "Hình thức sản phẩm" của nhóm (Drive, tải ngày 18/10)
+  "Các kiểu nón truyền thống trưng bày tại Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_2634",
+  "Chiếc nón rộng vành trong gian trưng bày của Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_2637",
+  "Trang phục và nón của phụ nữ các dân tộc — Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_20260929_103623",
+  "Nón lá treo trang trí trên phố": "Drive/Chương 1/BTPN/IMG_6514",
+  "Người bán nón và vật liệu làm nón ở chợ Chuông": "Drive/Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3159",
+  "Người dân ngồi làm nón trong một cơ sở ở làng Chuông": "Drive/Chương 3/IMG_3727",
+  "Khung nón đang lợp dở lớp lá — Bảo tàng Dân tộc học Việt Nam": "Drive/Chương 2/BTDTHVN/IMG_6393",
+  "Nón, vòng nứa và chỉ màu trong gian trưng bày nghề nón — Bảo tàng Dân tộc học Việt Nam": "Drive/Chương 2/BTDTHVN/IMG_20260929_090746",
+  "Gian trưng bày nón tại một cơ sở ở làng Chuông": "Drive/Chương 1/Tại làng Chuông/IMG_7117",
+  "Nón lá vẽ trang trí trong không gian trưng bày của Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_20260929_102517",
+  "Người thợ làng Chuông bên chồng nón": "Drive/Chương 3/Không gian chợ nón/IMG_6461",
+  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": "Drive/Chương 2/BTDTHVN/IMG_2611",
 }

@@ -45,6 +45,9 @@ const ACC = { 0: '#a07a3c', 1: '#5f7350', 2: '#a95f3c', 3: '#3f7676', 9: '#8c6a3
 const TINT = { 0: '#efe3c6', 1: '#e3e8d8', 2: '#f1dccd', 3: '#d9e6e3', 9: '#efe3c6' }
 const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Serif JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
 const M = { bottom: 58, outer: 40, inner: 50 }
+// hạn mức chữ thân bài mỗi trang (pt, ≈ 12–13 dòng): phần còn lại của trang là ảnh — góp ý: trang dày đặc chữ quá,
+// cả sách không quá ~7 trang toàn chữ. Chữ vượt hạn mức chảy sang trang / cặp trang sau (không cắt bớt, không "Đọc thêm")
+const TXT_PAGE = 340
 const TOP = 82 // chữ bắt đầu dưới đầu trang
 const BOT = H - M.bottom
 // thang chữ (pt trên trang A4). Tiếng Nhật ngắn hơn tiếng Việt ~30% → chữ Nhật lớn hơn để lấp khung.
@@ -484,6 +487,7 @@ class Flow {
     if (!o.bare) runningHead(this.p, o.label ?? this.runLabel)
     this.y = o.y ?? TOP
     this.bot = BOT
+    this.txt = 0 // chiều cao chữ thân bài đã đặt trên trang này
     return this.p
   }
   get room() {
@@ -618,13 +622,15 @@ class Flow {
     const queue = paras.map((q) => [...q])
     let acc = []
     const keep = () => (typeof o.keep === 'function' ? o.keep() : (o.keep ?? 0))
-    const limit = () => this.bot - keep() - (o.free ? 0 : this.reserve)
+    const hard = () => this.bot - keep() - (o.free ? 0 : this.reserve)
+    const limit = () => (o.budget === false ? hard() : Math.min(hard(), this.y + TXT_PAGE - (this.txt ?? 0)))
     const flush = () => {
       if (!acc.length) return
       const pair = join(acc)
       const h = textH(pair, w(), opt)
       this.p.add(T(this.p.x0, this.y, w(), h, pair, { ...opt, align: o.align ?? 'justify', color: o.color ?? C.ink, jaFont: F.jaBody, italic: o.italic, font: o.font, name: o.name ?? 'Đoạn văn' }))
       this.y += h
+      this.txt = (this.txt ?? 0) + h
       acc = []
     }
     if (!this.p) this.page()
@@ -645,7 +651,7 @@ class Flow {
       // không cắt đoạn văn qua trang: đoạn không vừa thì sang trang sau nguyên đoạn, chỗ trống lấp bằng ảnh;
       // chỉ tách (ở ranh giới câu) khi một đoạn dài hơn cả một trang trống
       if (!acc.length && (this.fresh || (this.headOnly() && this.sub.y0 <= TOP + 1))) {
-        const sp = splitPara(queue[0], w(), opt, limit() - this.y)
+        const sp = splitPara(queue[0], w(), opt, hard() - this.y)
         if (sp) {
           acc.push(sp[0])
           queue[0] = sp[1]
@@ -667,6 +673,11 @@ class Flow {
    * o = { h, num, paras, images: [cap | { video: cap }], title (cho khung Đọc thêm) }
    */
   story(o) {
+    // chữ dài hơn hạn mức một cặp trang → in tiếp ở cặp trang sau (không tiêu đề), mỗi trang vẫn có ảnh
+    let rest = this.storySpread(o)
+    while (rest?.paras.length) rest = this.storySpread({ paras: rest.paras, images: rest.images, title: o.title })
+  }
+  storySpread(o) {
     const underHead = (o.here || (this.head?.p === this.p && this.head.y === this.y)) && this.p?.side === 'left'
     if (!underHead) this.unit()
     const L = this.p
@@ -691,9 +702,9 @@ class Flow {
     const nextImg = () => imgs.shift() ?? this.pool.shift() ?? null
     const capOf = (im) => (im ? capH(im.video ?? im, CW) : 0)
     const minImg = CW * R.cin + 30
-    const moreH = 40
-    const capL = LB - y - minImg - 24
-    const capR = BOT - TOP - minImg - 24
+    const moreH = o.more ? 40 : 0
+    const capL = Math.min(LB - y - minImg - 24, TXT_PAGE - (y > TOP + 160 && o.lead?.length ? 120 : 0))
+    const capR = Math.min(BOT - TOP - minImg - 24, TXT_PAGE)
     const ps = o.paras
     // trái: nhiều đoạn nhất vừa chỗ; phải: phần còn lại (vừa thì thôi, không thì cắt bớt + Đọc thêm)
     let k = 0
@@ -723,7 +734,8 @@ class Flow {
         k = kk
       }
     }
-    const more = k + m < ps.length
+    const more = !!o.more && k + m < ps.length
+    const rest = { paras: more ? [] : ps.slice(k + m), images: imgs }
     const left = ps.slice(0, k)
     const right = ps.slice(k, k + m)
     const put = (pg, yy, group) => {
@@ -753,13 +765,17 @@ class Flow {
     y = put(L, y, left)
     y = media(L, y)
     this.y = y
+    if (!L.hasImg) {
+      this.fillRest()
+      y = this.y
+    }
     if (!right.length && !more) {
       // hết chữ ở trang trái → trang phải là ảnh tràn trang (nhịp "trang ảnh lớn" xen "trang kể chuyện")
       const hero = HERO.shift()
       this.p = null
       if (hero) {
         new Page({ chapter: this.chapter, hideNumber: true }).add(IMG(0, 0, W, H, hero, { name: 'Ảnh toàn trang' }))
-        return
+        return rest
       }
       // hết ảnh dọc đẹp → trang ảnh: hai ảnh khung chuẩn (3:2 + 16:9) có chú thích, không cắt tràn ảnh tài liệu
       const a1 = nextImg()
@@ -775,7 +791,7 @@ class Flow {
       }
       this.y = yy
       this.close()
-      return
+      return rest
     }
     const Rp = this.page()
     let ry = put(Rp, TOP, right)
@@ -786,6 +802,7 @@ class Flow {
     this.y = media(Rp, ry)
     this.p = Rp
     this.close()
+    return rest
   }
   /** ảnh rộng cả khối, khung 3:2 (chật thì 16:9; không vừa thì sang trang) */
   figure(cap, o = {}) {
@@ -835,7 +852,8 @@ class Flow {
       const start = this.y
       let j = i
       let used = 0
-      while (j < items.length && start + used + hs[j] <= this.bot) used += hs[j++] + gap
+      // o.max: tối đa bao nhiêu thẻ một trang (phần còn lại lấp ảnh — trang không thành một bức tường chữ)
+      while (j < items.length && (o.max == null || j - i < o.max) && start + used + hs[j] <= this.bot) used += hs[j++] + gap
       if (j === i) {
         if (!this.fresh) {
           this.page()
@@ -847,7 +865,7 @@ class Flow {
       const n = j - i
       const last = j === items.length
       const free = Math.max(0, this.bot - start - (used - gap))
-      const spare = last && free - gap >= (o.tail ?? 0) ? 0 : free
+      const spare = o.max || (last && free - gap >= (o.tail ?? 0)) ? 0 : free
       const extraGap = n > 1 ? Math.min(60, spare / (n - 1)) : 0
       let y = start
       for (let k = i; k < j; k++) {
@@ -856,6 +874,7 @@ class Flow {
       }
       this.y = y
       i = j
+      if (o.max) this.fillRest()
       if (i < items.length) this.page()
     }
   }
@@ -920,6 +939,12 @@ const POOL = {
     ['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンの笠市場'],
     ['Người mua kẻ bán tấp nập trong phiên chợ nón Chuông', '売り手と買い手でにぎわうチュオンの笠市場'],
     ['Gian trưng bày nón và bằng khen tại một cơ sở làng Chuông', 'チュオン村の工房に並ぶ笠と表彰状'],
+    // thêm khi giãn chữ: ảnh chưa dùng trong Drive của nhóm (bảo tàng, chợ, cơ sở làm nón), đã soát không trùng cảnh
+    ['Các kiểu nón truyền thống trưng bày tại Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館に展示された伝統的な笠'],
+    ['Chiếc nón rộng vành trong gian trưng bày của Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館の展示室にあるつばの広い笠'],
+    ['Trang phục và nón của phụ nữ các dân tộc — Bảo tàng Phụ nữ Việt Nam', 'さまざまな民族の女性の衣装と笠 — ベトナム女性博物館'],
+    ['Nón lá treo trang trí trên phố', '通りに飾られたノンラー'],
+    ['Người bán nón và vật liệu làm nón ở chợ Chuông', 'チュオンの市場で笠と材料を売る人々'],
   ],
   2: [
     ['Người thợ khâu những mũi cuối trên thân nón', '笠の胴に最後の針を通す職人'],
@@ -943,6 +968,20 @@ const POOL = {
     ['Người vác hàng rời phiên chợ Chuông', '荷物を担いで市場をあとにする人'],
     ['Du khách vẽ trang trí nón tại một cơ sở làng Chuông', 'チュオン村の工房で笠の絵付けをする観光客'],
     ['Trải nghiệm làm nón tại nhà nghệ nhân Lê Văn Tuy', '職人レー・ヴァン・トゥイの工房での体験'],
+    // thêm khi giãn chữ (hạn mức chữ mỗi trang): ảnh chưa dùng, đã soát không trùng cảnh với ảnh trong sách
+    ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レー・ヴァン・トゥイの展示スペース'],
+    ['Nón làng Chuông xếp chồng — Bảo tàng Dân tộc học Việt Nam', '積み重ねられたチュオン村の笠 — ベトナム民族学博物館'],
+    ['Nón lá và trang phục trong gian trưng bày nghề nón — Bảo tàng Dân tộc học Việt Nam', '笠づくりの展示室のノンラーと衣装 — ベトナム民族学博物館'],
+    ['Nguyên liệu và dụng cụ làm nón bày trên bàn — Bảo tàng Dân tộc học Việt Nam', '机に並べられた笠づくりの材料と道具 — ベトナム民族学博物館'],
+    ['Mua bán nón trong phiên chợ Chuông', 'チュオンの市場での笠の売り買い'],
+    ['Chợ nón Chuông họp từ lúc tờ mờ sáng', '夜明け前から開かれるチュオンの笠市場'],
+    ['Phiên chợ bán lá lụi trước cổng đình Chuông', 'チュオン村の亭の門前で開かれるライ葉の市'],
+    ['Lá lụi và nón thành phẩm trong phiên chợ Chuông', 'チュオンの市場に並ぶライ葉と仕上がった笠'],
+    // thêm khi giãn chữ: ảnh chưa dùng trong Drive của nhóm (bảo tàng, chợ, cơ sở làm nón), đã soát không trùng cảnh
+    ['Người dân ngồi làm nón trong một cơ sở ở làng Chuông', 'チュオン村の工房で笠づくりをする人々'],
+    ['Khung nón đang lợp dở lớp lá — Bảo tàng Dân tộc học Việt Nam', '葉を葺きかけの笠の骨組み — ベトナム民族学博物館'],
+    ['Nón, vòng nứa và chỉ màu trong gian trưng bày nghề nón — Bảo tàng Dân tộc học Việt Nam', '笠づくりの展示に並ぶ笠、竹の輪、色糸 — ベトナム民族学博物館'],
+    ['Gian trưng bày nón tại một cơ sở ở làng Chuông', 'チュオン村の工房の笠の展示'],
   ],
   9: [
     ['Những chồng nón cao bên đường trong phiên chợ Chuông', 'チュオンの市場で道ばたに高く積まれた笠'],
@@ -950,7 +989,10 @@ const POOL = {
     ['Mua bán lá và vành nón trong phiên chợ Chuông', 'チュオンの市場で葉や笠の輪を売り買いする人々'],
     ['Bó mo nang được buộc lại trước khi mang ra chợ', '市場へ運ぶ前に束ねられるモーナン'],
     ['Người bán xếp nón trên phố làng Chuông', 'チュオン村の通りで笠を並べる売り手'],
-    ['Chiếc nón trắng vừa hoàn thiện', '仕上がったばかりの白いノンラー'],
+    // thêm khi giãn chữ: ảnh chưa dùng trong Drive của nhóm (bảo tàng, chợ, cơ sở làm nón), đã soát không trùng cảnh
+    ['Nón lá vẽ trang trí trong không gian trưng bày của Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館の展示空間を彩る絵付けのノンラー'],
+    ['Người thợ làng Chuông bên chồng nón', '積み重ねた笠のそばのチュオン村の職人'],
+    ['Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam', 'ライ葉・笠・色糸 — ベトナム民族学博物館に展示された笠づくりの材料'],
   ],
 }
 
@@ -1123,8 +1165,11 @@ let contents = null
   const steps = [R.cin, R.wide, R.std, R.sq]
   grid(sh.groups[1], 3, outroH, steps[Math.min(steps.length - 1, steps.indexOf(r0) + 1)])
   f.note(sh.outro)
-  // giá trị văn hóa và thẩm mỹ: đoạn có dấu ¹ (Nhà hát Cao Văn Lầu) cùng trang với chú thích của nó
+  // giá trị văn hóa và thẩm mỹ: đoạn có dấu ¹ (Nhà hát Cao Văn Lầu) cùng trang với chú thích của nó;
+  // mở ở trang mới, phần trống dưới lưới hình dáng nón lấp ảnh (trang lưới không thành trang chữ)
   const val = s11.blocks[2]
+  f.fillRest()
+  f.page()
   f.block(val.h)
   f.prose(val.p.slice(0, 2))
   f.noted([val.p[2]], val.notes)
@@ -1237,6 +1282,9 @@ let stripRight = null
   const st = ch.structure
   mark(2, st.title, f.section('2.1', st.title), '2.1')
   f.prose([st.intro])
+  // trang mở mục: tiêu đề + đoạn dẫn + ảnh; hai ô "phần khung / phần lá" sang trang phải (không dồn cả mục vào một trang chữ)
+  f.fillRest()
+  f.page()
   {
     // hai phần chính: hai ô nền màu cạnh nhau
     const gap = 14
@@ -1435,10 +1483,11 @@ let stripRight = null
     const gh = Math.min(CW * R.std, Math.max(minG, BOT - y - 6 - hOf(left) - 24))
     p.add(RECT(p.x0 - 6, y - 6, CW + 12, gh + 12, '#ffffff', { radius: 6, name: 'Khung GIF' }))
     stepFlow.y = figure(p, p.x0, y, CW, gh, s.gif, { noCaption: true }) + 10
-    stepFlow.prose(left, { size: 15.5 })
+    // trang công đoạn có bố cục riêng (một bước = một cặp trang, GIF + ảnh thật) → không áp hạn mức chữ chung
+    stepFlow.prose(left, { size: 15.5, budget: false })
     if (stepFlow.p === p) stepFlow.page()
     const rp = stepFlow.p
-    if (right.length) stepFlow.prose(right, { size: 15.5, keep: 200, after: 18 })
+    if (right.length) stepFlow.prose(right, { size: 15.5, keep: 200, after: 18, budget: false })
     if (rp !== stepFlow.p || rp.n !== p.n + 1) console.warn(`⚠ công đoạn ${s.no}: chữ tràn quá một cặp trang`)
     // ảnh thật lấp phần còn lại của trang phải, chỉ khung tỉ lệ chuẩn: hai ảnh thì xếp cạnh nhau (khung dọc 3:4 → 4:3)
     // hoặc chồng dọc (rộng cả khối, tối thiểu 16:9 — không ép thành dải mỏng cắt ngang mặt người), cách nào ảnh lớn hơn
@@ -1505,7 +1554,8 @@ let stripRight = null
     const n12 = rc.notes.slice(0, 2)
     const noteH = textH(join(n12), CW, { size: S.note, lh: 1.45, paraGap: 3 }) + 26
     const p0H = textH(join(rc.p.slice(0, 1)), CW, { size: BODY.size, lh: BODY.lh, paraGap: 8, jaSize: BODY.jaSize })
-    if (f.y + p0H > BOT - noteH) {
+    // trang mở mục chỉ còn tiêu đề + ca dao: lấp ảnh, đoạn có chú thích sang trang sau (không để trang mở mục toàn chữ)
+    if (f.y + p0H > BOT - noteH || f.y + p0H > TOP + TXT_PAGE) {
       f.fillRest()
       f.page()
     }
@@ -1555,6 +1605,8 @@ let stripRight = null
   const ar = ch.artisans
   f.section(null, ar.title)
   f.prose([ar.intro])
+  f.fillRest()
+  f.page()
   const bioO = { size: 15.5, lh: 1.55, jaSize: jaPt(15.5) }
   const piw = 178
   const ptx = piw + 20
@@ -1585,7 +1637,7 @@ let stripRight = null
           T(p.x0 + ptx, ty + 26, CW - ptx, textH(bio, CW - ptx, bioO), bio, { ...bioO, align: 'justify', jaFont: F.jaBody, name: 'Tiểu sử' })
         )
       },
-      { gap: 26 }
+      { gap: 26, max: 1 }
     )
   const g1 = ar.groups[0]
   f.label(g1.name)
@@ -1609,6 +1661,8 @@ let stripRight = null
   f.page()
   f.label(g2.name)
   f.prose([g2.intro], { size: 16 })
+  f.fillRest()
+  f.page()
   people(g2.people.map((per, i) => [per, ar.image[i]]))
   // không gian trưng bày của nghệ nhân Lê Văn Tuy + cơ sở của nghệ nhân Tạ Thu Hương: ngay sau thẻ của hai người
   f.row(
