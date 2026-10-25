@@ -12,6 +12,7 @@ export const photos = {
   "Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3231",
   "Ảnh toàn trang: nón lá xếp chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3162",
   "Ảnh bìa sau: chiếc nón lá trên nền tre, ánh sáng dịu": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3180",
+  "Ảnh trang lót: phiên chợ Chuông lúc chiều muộn trước sân đình": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3180",
   "Logo FPT": "online/logo-fpt",
   "Ảnh toàn trang: nón lá trên cánh đồng lúa": "Chương 1/Tại làng Chuông/IMG_3669",
   // mở chương

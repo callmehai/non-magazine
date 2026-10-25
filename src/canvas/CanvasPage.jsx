@@ -270,7 +270,20 @@ function ImageBody({ el }) {
   const { openLightbox } = useContext(MagazineContext)
   const lang = useCanvasLang()
   // el.srcJa: ảnh riêng cho bản tiếng Nhật (ví dụ logo không kèm chữ tiếng Việt)
-  const img = <img className="cv-img" src={asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)} alt={el.alt || ''} draggable="false" style={{ objectFit: el.fit || 'cover', objectPosition: el.pos }} />
+  // el.crop = { x, y, z }: ảnh cận một chi tiết (phóng z lần quanh điểm x%, y% của ảnh) — ô "chi tiết" cạnh ảnh lớn
+  const c = el.crop
+  // phóng quanh điểm (x, y) rồi dời điểm đó về giữa ô (giới hạn để ảnh vẫn phủ kín ô)
+  const mid = (v) => Math.min(Math.max(v / 100, 0.5 / (c?.z || 1)), 1 - 0.5 / (c?.z || 1))
+  const pic = (
+    <img
+      className="cv-img"
+      src={asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
+      alt={el.alt || ''}
+      draggable="false"
+      style={c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos }}
+    />
+  )
+  const img = c ? <span className="cv-crop">{pic}</span> : pic
   const i = list ? list.findIndex((z) => z.id === el.id) : -1
   if (i < 0 || !openLightbox) return img
   return (
