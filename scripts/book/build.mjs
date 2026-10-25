@@ -1951,7 +1951,33 @@ let stripRight = null
 
   // trang lót mặt trong bìa sau (trang phải) rồi bìa sau (trang trái cuối cùng)
   if ((pages.length + 1) % 2 === 0) photoPage(['Ảnh toàn trang: những chiếc nón trên sân phơi lúc hoàng hôn', '全面写真：夕暮れの庭に並ぶノンラー'], 9)
-  photoPage(['Ảnh trang lót: phiên chợ Chuông lúc chiều muộn trước sân đình', '見返し写真：夕暮れの亭の前で開かれるチュオンの市'], 9)
+  // trang lót → bưu thiếp Làng Chuông: chọn ảnh + câu ca dao, tải về gửi bạn bè (thứ người đọc mang về khi gấp sách)
+  {
+    const q = new Page({ chapter: 9 })
+    runningHead(q, ['BƯU THIẾP', '絵はがき'])
+    let y = sectionHead(q, TOP, null, ['Bưu thiếp từ Làng Chuông', 'チュオン村からの絵はがき'], ['Một chút làng mang về', '村のおみやげに'])
+    const lead = ['Chọn một bức ảnh và một câu ca dao, rồi tải tấm bưu thiếp về để gửi người thân, bạn bè.', '写真とカーザオ（民謡）を一つずつ選んで、絵はがきを保存し、家族や友だちに送ってみてください。']
+    const lo = { size: 14.5, lh: 1.5, jaSize: 14.5 }
+    const lh = textH(lead, q.cw, lo)
+    q.add(T(q.x0, y - 6, q.cw, lh, lead, { ...lo, color: C.ink2, jaFont: F.jaBody, name: 'Đoạn văn' }))
+    y += lh + 14
+    const card = (hint, pos) => ({ src: PHOTOS[hint[0]] ?? '', cap: hint.map(pageCap), pos })
+    const photos = [
+      card(['Ảnh trang lót: phiên chợ Chuông lúc chiều muộn trước sân đình', '見返し写真：夕暮れの亭の前で開かれるチュオンの市'], [50, 70]),
+      card(['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンの笠市場'], [50, 40]),
+      card(['Ảnh toàn trang: nón lá làm duyên cho tà áo dài trong đình Chuông', '全面写真：チュオン村の亭で、アオザイに添えられたノンラー'], [30, 45]),
+      card(['Chợ nón Chuông — những chiếc nón trắng bày bán', 'チュオン村の笠市場 — 並べられた白い笠'], [50, 60]),
+    ]
+    const verses = [
+      ['Muốn ăn cơm trắng cá trê\nMuốn đội nón tốt thì về làng Chuông', '白いご飯とナマズが食べたいなら\n良い笠をかぶりたいならチュオン村へ'],
+      ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭の前を通れば、笠を傾けて亭を仰ぐ\n亭の瓦の数ほど、あなたを想う'],
+      ['Mồng mười đi chợ Chuông chơi\nXem đánh cờ người, xem thổi cơm thi', '十日にはチュオンの市へ遊びに行こう\n人間将棋に、飯炊き競争を見に'],
+    ]
+    // cao = tấm thiếp (rộng 290pt, tỉ lệ 1200 × 1650) + chỗ cho bóng; giữa phần trống còn lại của trang
+    const wh = 412
+    q.add(WIDGET(q.x0, y + Math.max(0, (BOT - y - wh) / 2 - 10), q.cw, wh, 'postcard', { name: 'Bưu thiếp tương tác', data: { photos, verses } }))
+    q.fixed = true
+  }
   const b = new Page({ chapter: 9, hideNumber: true, bg: C.cream, paper: 'giay' })
   b.add(
     // không ảnh: mười sáu vòng nón + nón nét vàng như bìa trước
@@ -2269,6 +2295,7 @@ function addFrames(p) {
   const frames = p.els.filter((e) => e.type === 'shape' && /Khung/.test(e.name || ''))
   for (const e of p.els) {
     if (!['image', 'video', 'widget'].includes(e.type) || /deco\//.test(e.src || '') || /Logo|polaroid/.test(e.name || '')) continue
+    if (e.kind === 'postcard') continue // tấm bưu thiếp tự có viền + bóng, không bọc thêm khung ảnh
     if (e.x <= 0.5 || e.y <= 0.5 || e.x + e.w >= W - 0.5 || e.y + e.h >= H - 0.5) continue
     if (frames.some((f) => f.x <= e.x + 0.5 && f.y <= e.y + 0.5 && f.x + f.w >= e.x + e.w - 0.5 && f.y + f.h >= e.y + e.h - 0.5)) continue
     e.frame = r1(Math.max(3, Math.min(7, Math.min(e.w, e.h) * 0.028)))

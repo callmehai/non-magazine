@@ -471,3 +471,119 @@
   white-space: nowrap;
   pointer-events: none;
 }
+
+/* ── bưu thiếp Làng Chuông (trang cuối) ── */
+.cvw-pc {
+  display: flex;
+  gap: 18em;
+  align-items: flex-start;
+}
+/* .stf__parent canvas (thư viện lật trang) ép mọi canvas phủ kín trang → đè lại */
+.cvw .cvw-pc__card {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: none;
+  width: 290em;
+  height: auto;
+  aspect-ratio: 1200 / 1650;
+  box-shadow: 0 3em 14em rgba(60, 35, 10, 0.22), 0 0 0 0.6em rgba(160, 122, 60, 0.35);
+  transform: rotate(-1.2deg);
+  background: #efe4cf;
+}
+.cvw-pc__side {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cvw-pc__label {
+  margin: 0 0 0.6em;
+  font-size: 10.5em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a07a3c;
+}
+:lang(ja) .cvw-pc__label {
+  letter-spacing: 0.06em;
+}
+.cvw-pc__thumbs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7em;
+  margin-bottom: 16em;
+}
+.cvw-pc__thumb {
+  padding: 0;
+  border: 0;
+  height: 96em;
+  border-radius: 3em;
+  overflow: hidden;
+  background: #d9cdb4;
+  outline: 1.2em solid transparent;
+  outline-offset: 1.6em;
+  opacity: 0.75;
+  transition: opacity 0.2s, outline-color 0.2s;
+}
+.cvw-pc__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cvw-pc__thumb.is-on,
+.cvw-pc__thumb:hover {
+  opacity: 1;
+}
+.cvw-pc__thumb.is-on {
+  outline-color: #a8382b;
+}
+.cvw-pc__verses {
+  display: grid;
+  gap: 6em;
+  margin-bottom: 16em;
+}
+.cvw-pc__verse {
+  font: inherit;
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
+  font-style: italic;
+  font-size: 12.5em;
+  line-height: 1.3;
+  text-align: left;
+  padding: 0.5em 0.7em;
+  border: 0.08em solid rgba(160, 122, 60, 0.45);
+  border-radius: 0.35em;
+  background: rgba(255, 252, 244, 0.6);
+  color: #4e3426;
+}
+:lang(ja) .cvw-pc__verse {
+  font-style: normal;
+  font-size: 11em;
+}
+.cvw-pc__verse.is-on {
+  border-color: #a8382b;
+  background: #fbf3e2;
+  box-shadow: inset 0.25em 0 0 #a8382b;
+}
+.cvw-pc__save {
+  font: inherit;
+  font-size: 12.5em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.75em 1em;
+  border: 0;
+  border-radius: 999px;
+  background: #4e3426;
+  color: #fbf4e6;
+  transition: background 0.2s;
+}
+.cvw-pc__save:hover:not(:disabled) {
+  background: #a8382b;
+}
+.cvw-pc__size {
+  margin: 0.6em 0 0;
+  font-size: 9.5em;
+  text-align: center;
+  color: #8b7355;
+}
