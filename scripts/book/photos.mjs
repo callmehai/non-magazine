@@ -5,6 +5,7 @@
  * Khung không có ở đây (ảnh lấy từ báo, logo, chân dung nhóm…) vẫn là khung ảnh tạm.
  */
 export const photos = {
+  // "Trọng Khải/…": ảnh chợ nón Chuông của nhiếp ảnh Trọng Khải (bên thuê gửi 25/10, thư mục Drive "1310") — ghi nguồn ở trang Nguồn ảnh
   // bìa, trang lót, trang ảnh
   "Ảnh bìa: những chồng nón lá trắng trong đình Chuông — Hà Trang / Báo Văn Hóa": "online/bia-cho-non",
   "Ảnh trang lót: những chùm nón trang trí treo giữa vườn cây": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón chùm-ảnh",
@@ -101,9 +102,9 @@ export const photos = {
   "Nón lá cổ trưng bày tại Bảo tàng Mỹ thuật Việt Nam": "Chương 1/BTMTVN/IMG_2760",
   "Người phụ nữ đội nón giữa cánh đồng — tranh tại Bảo tàng Mỹ thuật Việt Nam": "Chương 1/BTMTVN/IMG_20260929_142308",
   "Phiên chợ nón Chuông họp từ sáng sớm": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3131",
-  "Nón trắng xếp thành từng chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3161",
+  "Nón trắng xếp thành từng chồng ở chợ Chuông": "Trọng Khải/IMG_6541",
   "Người bán nón giữa những chồng nón trắng ở chợ Chuông": "Chương 3/Không gian chợ nón/Người bán nón",
-  "Bó vòng nứa vót sẵn bày bán ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3143",
+  "Bó vòng nứa vót sẵn bày bán ở chợ Chuông": "Trọng Khải/IMG_6765",
   "Khuôn nón bày bán ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3200",
   "Người bán bên những chiếc nón lợp dở ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3200",
   "Sợi len màu để luồn nhôi bày bán ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3188",
@@ -123,7 +124,7 @@ export const photos = {
   "Giấy khen của Bảo tàng Dân tộc học Việt Nam tặng ông Lê Văn Tuy": "Chương 3/IMG_3326",
   "Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy": "Chương 3/IMG_3291",
   "Bằng công nhận danh hiệu Nghệ nhân Hà Nội (2019) của ông Lê Văn Tuy": "Drive/Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Chứng nhận nghệ nhân Hà Nội",
-  "Người bán vành và khung nón trong phiên chợ Chuông": "Drive/Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3203",
+  "Người bán vành và khung nón trong phiên chợ Chuông": "Trọng Khải/IMG_6587",
   "Người bán nón giữa chợ Chuông ban ngày": "Drive/Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3144",
   "Ảnh trang lót: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Ảnh em bé cầm nón",
   "Nón chùm — sản phẩm OCOP 4 sao của cơ sở Lê Văn Tuy": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón chùm-ảnh",
@@ -132,8 +133,8 @@ export const photos = {
   "Lòng nón lá trắng với chỉ nhôi đỏ – xanh": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón chóp truyền thống/IMG_3323",
   "Niềm vui của người bán nón trong phiên chợ Chuông": "Chương 3/Không gian chợ nón/Hđ buôn bán 3",
   "Nón cổ có trang trí hoa văn — Bảo tàng Phụ nữ Việt Nam": "Chương 1/BTPN/IMG_2638",
-  "Chợ nón Chuông dưới mái che treo đèn lồng": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3263",
-  "Người mua kẻ bán tấp nập trong phiên chợ nón Chuông": "Chương 1/Tại làng Chuông/IMG_7078",
+  "Chợ nón Chuông dưới mái che treo đèn lồng": "Trọng Khải/IMG_6418",
+  "Người mua kẻ bán tấp nập trong phiên chợ nón Chuông": "Trọng Khải/IMG_6537",
   "Gian trưng bày nón và bằng khen tại một cơ sở làng Chuông": "Chương 1/Tại làng Chuông/IMG_7111",
   "Người bán lá lụi ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3257",
   "Khung nón xếp chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3139",
@@ -166,7 +167,7 @@ export const photos = {
   "Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam": "online/non-thanh-oai-1999",
   "Dao, kéo cắt lá": "online/dao-cat-la",
   // ảnh lấp trang đôi (bổ sung 2026-10-22)
-  "Phiên chợ Chuông họp từ khi trời còn tối, người bán ngồi giữa nón và lá": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3154",
+  "Phiên chợ Chuông họp từ khi trời còn tối, người bán ngồi giữa nón và lá": "Trọng Khải/IMG_6436",
   "Chiếc nón trắng vừa hoàn thiện": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón cô dâu(1)",
   "Người thợ khâu những mũi cuối trên thân nón": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/IMG_7438",
   "Nghệ nhân giới thiệu khung nón đã lên đủ vành": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
@@ -206,7 +207,7 @@ export const photos = {
   "Chiếc nón rộng vành trong gian trưng bày của Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_2637",
   "Trang phục và nón của phụ nữ các dân tộc — Bảo tàng Phụ nữ Việt Nam": "Drive/Chương 1/BTPN/IMG_20260929_103623",
   "Nón lá treo trang trí trên phố": "Drive/Chương 1/BTPN/IMG_6514",
-  "Người bán nón và vật liệu làm nón ở chợ Chuông": "Drive/Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3159",
+  "Người bán nón và vật liệu làm nón ở chợ Chuông": "Trọng Khải/IMG_6742",
   "Người dân ngồi làm nón trong một cơ sở ở làng Chuông": "Drive/Chương 3/IMG_3727",
   "Khung nón đang lợp dở lớp lá — Bảo tàng Dân tộc học Việt Nam": "Drive/Chương 2/BTDTHVN/IMG_6393",
   "Nón, vòng nứa và chỉ màu trong gian trưng bày nghề nón — Bảo tàng Dân tộc học Việt Nam": "Drive/Chương 2/BTDTHVN/IMG_20260929_090746",

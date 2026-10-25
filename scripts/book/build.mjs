@@ -20,6 +20,7 @@ import { ch1 } from './content/01-ch1.mjs'
 import { ch2 } from './content/02-ch2.mjs'
 import { measureKey } from './measureKey.mjs'
 import { ch3, ending } from './content/03-ch3.mjs'
+import { photos as PHOTO_PATHS } from './photos.mjs'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 // ảnh thật đã tải lên kho (upload-photos.mjs): mô tả khung → URL; chưa có thì khung ảnh tạm
@@ -1922,6 +1923,10 @@ let stripRight = null
   // nguồn ảnh: trang riêng (trang phải) — bảng hai cột "nguồn | ảnh nào", chia nhóm báo chí / kho ảnh mở / video, bản đồ
   // (góp ý: khối chữ dày nửa trên, nửa dưới trống → trình bày lại cho đẹp). Ảnh còn lại do nhóm tự chụp.
   {
+    // ảnh của nhiếp ảnh Trọng Khải (bên thuê gửi): thư mục "Trọng Khải" + thư mục "Không gian chợ nón" của nhóm (đã so ảnh:
+    // toàn bộ là ảnh của anh) → ghi số các trang có ảnh; bưu thiếp cuối sách cũng dùng ảnh chợ đèn lồng của anh
+    const tkSrc = new Set(Object.entries(PHOTO_PATHS).filter(([, rel]) => /^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/.test(rel)).map(([h]) => PHOTOS[h]).filter(Boolean))
+    const tkPages = pages.filter((q) => q.els.some((e) => e.type === 'image' && tkSrc.has(e.src))).map((q) => q.n)
     const groups = [
       [['BÁO CHÍ', '新聞・ウェブメディア'], [
         [['Báo Tuổi Trẻ', 'トゥオイチェー紙'], ['Nhà hát Ba Nón Lá · Tổng thống Hàn Quốc', '三つのノンラー劇場・韓国大統領']],
@@ -1945,7 +1950,10 @@ let stripRight = null
         [['Bản đồ hành trình', '旅の地図'], ['Nền bản đồ từ dữ liệu © OpenStreetMap contributors (ODbL) · định tuyến OSRM · quãng đường theo Google Maps', '© オープンストリートマップの貢献者のデータから作成・距離はグーグルマップによる']],
       ]],
     ]
-    const note = ['Ảnh không ghi nguồn do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.', '出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。']
+    const note = [
+      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và ảnh bưu thiếp: nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
+      `${tkPages.join('、')}ページのチュオンの笠市場の写真と絵はがきの写真：チョン・カイ撮影。そのほか出典の記載がない写真は、チュオン村とハノイの博物館で著者が撮影したものです。`,
+    ]
     f.page()
     const p = f.p
     const y0 = sectionHead(p, TOP, null, ['Nguồn ảnh', '写真の出典'], ['Ghi công hình ảnh', '写真と資料の提供'])
@@ -1976,7 +1984,9 @@ let stripRight = null
       }
       return y
     }
-    const size = 12
+    // cỡ chữ lớn nhất (12pt trở xuống) mà cả bảng vừa trang
+    let size = 12
+    while (size > 10 && layout(size, false) > BOT - 6) size -= 0.5
     f.y = layout(size, true)
     p.fixed = true
     f.end()
