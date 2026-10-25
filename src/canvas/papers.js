@@ -9,6 +9,7 @@ export const PAPER_BASE = 'assets/book/paper/giay.webp'
 export const PAPERS = [
   { id: 'giay', name: 'Giấy ngà trơn', layers: [] },
   { id: 'tre', name: 'Lá tre ở góc', layers: [{ src: 'assets/book/paper/tre.svg', at: 'top' }] },
+  { id: 'vong', name: 'Mười sáu vòng nón in mờ', layers: [{ src: 'assets/book/deco/vong-non.svg', at: 'watermark' }] },
   { id: 'sen', name: 'Hoa sen in mờ', layers: [{ src: 'assets/book/deco/lotus.svg', at: 'watermark' }] },
   {
     id: 'non',

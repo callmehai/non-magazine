@@ -193,8 +193,14 @@ const IMG = (x, y, w, h, hint, o = {}) => ({
 })
 const VIDEO = (x, y, w, h, src, o = {}) => ({ id: id(), type: 'video', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src, ...(o.poster ? { poster: o.poster } : {}), name: o.name ?? 'Video' })
 const DECO = (name, x, y, w, h, opacity = 0.55) => ({ id: id(), type: 'image', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src: `assets/book/deco/${name}.svg`, fit: 'contain', opacity, name: 'Họa tiết' })
-const shape = (kind) => (x, y, w, h, fill, o = {}) => ({ id: id(), type: 'shape', shape: kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, fill, ...(o.stroke ? { stroke: o.stroke, strokeWidth: o.sw ?? 0.8 } : {}), ...(o.radius ? { radius: o.radius } : {}), ...(o.opacity != null ? { opacity: o.opacity } : {}), ...(o.link ? { link: o.link } : {}), ...(o.alt ? { alt: o.alt } : {}), name: o.name ?? 'Hình' })
+const shape = (kind) => (x, y, w, h, fill, o = {}) => ({ id: id(), type: 'shape', shape: kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, fill, ...(o.stroke ? { stroke: o.stroke, strokeWidth: o.sw ?? 0.8 } : {}), ...(o.radius ? { radius: o.radius } : {}), ...(o.dash ? { dash: o.dash } : {}), ...(o.opacity != null ? { opacity: o.opacity } : {}), ...(o.link ? { link: o.link } : {}), ...(o.alt ? { alt: o.alt } : {}), name: o.name ?? 'Hình' })
 const RECT = shape('rect')
+/** con dấu son "Làng Chuông": vuông nhỏ, viền trong mảnh, chữ in hoa — kiểu dấu trên họa đồ Henri Oger */
+const SEAL = (x, y, s = 60) => [
+  RECT(x, y, s, s, '#a8382b', { radius: 3, name: 'Con dấu' }),
+  RECT(x + 3.5, y + 3.5, s - 7, s - 7, 'none', { stroke: '#f6e9d6', sw: 0.8, radius: 2, name: 'Viền dấu' }),
+  T(x + 2, y + s / 2 - 12, s - 4, 24, ['LÀNG\nCHUÔNG', 'チュオン\n村'], { font: F.head, size: 8.6, weight: 700, tracking: 0.4, lh: 1.3, align: 'center', color: '#f6e9d6', jaFont: F.jaHead, jaSize: 9.5, name: 'Chữ dấu' }),
+]
 const ELL = shape('ellipse')
 const TRI = shape('triangle')
 const HL = (x, y, w, stroke = C.line, sw = 0.6) => ({ id: id(), type: 'line', x: r1(x), y: r1(y - 2), w: r1(w), h: 4, rot: 0, x1: 0, y1: 0.5, x2: 1, y2: 0.5, stroke, strokeWidth: sw, name: 'Đường kẻ' })
@@ -291,7 +297,7 @@ function padPage(pool, chapter, label) {
   if (y < TOP + 100) {
     shortPool.push(p.n)
     const ih = p.cw * (310 / 640)
-    p.add({ ...DECO('dong-son', p.x0 + 40, 150, p.cw - 80, p.cw - 80, 0.12), name: 'Hình vẽ' }, { ...DECO('still-non', p.x0, BOT - ih - 20, p.cw, ih, 0.95), name: 'Hình vẽ' })
+    p.add({ ...DECO('vong-non', p.x0 + 40, 150, p.cw - 80, p.cw - 80, 0.12), name: 'Hình vẽ' }, { ...DECO('still-non', p.x0, BOT - ih - 20, p.cw, ih, 0.95), name: 'Hình vẽ' })
   }
   return p
 }
@@ -952,8 +958,10 @@ function chapterOpener(ch, photo) {
   )
   const p = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream })
   p.fixed = true
-  // mặt trống đồng Đông Sơn in mờ, tràn khỏi góc dưới (họa tiết văn hoá Việt in mờ giữa trang theo góp ý của nhóm)
-  p.add({ ...DECO('dong-son', W - 330, H - 360, 440, 440, 0.14), name: 'Hình vẽ' }, RECT(W - 18, 0, 18, H, acc, { name: 'Dải màu chương' }))
+  // mười sáu vòng nón nhìn từ trên in mờ, tràn khỏi góc dưới (trống đồng chỉ dùng ở phần lịch sử — skill van-hoa-non-la)
+  p.add({ ...DECO('vong-non', W - 330, H - 360, 440, 440, 0.16), name: 'Hình vẽ' }, RECT(W - 18, 0, 18, H, acc, { name: 'Dải màu chương' }))
+  // con dấu son "Làng Chuông" (điểm nhấn đỏ duy nhất của trang, như chỗ buộc quai)
+  p.add(...SEAL(p.x1 - 70, 92))
   const tw = p.cw - 10
   // giữ chỗ xuống dòng có chủ đích (tiếng Nhật không bị ngắt giữa từ kiểu ノ/ンラー)
   const title = [ch.title[0], strip(ch.title[1])]
@@ -1010,7 +1018,7 @@ let contents = null
   const f = new Flow(0, ['LỜI MỞ ĐẦU', 'はじめに'], POOL[0].filter((c) => !/áo dài/.test(c[0])))
   const p = f.unit()
   mark(1, preface.title, p, '—')
-  p.add(DECO('cloud', p.x1 - 120, 78, 112, 48, 0.5))
+  p.add(DECO('leaf-sprig', p.x1 - 92, 66, 88, 88, 0.4))
   const to = { size: 38, font: F.head, lh: 1.15, jaSize: 34 }
   p.add(T(p.x0, 92, p.cw - 130, 48, preface.title, { ...to, color: C.title, jaFont: F.jaHead, name: 'Tiêu đề' }))
   p.add(HL(p.x0, 152, 56, ACC[0], 1.4))
@@ -1026,8 +1034,8 @@ let contents = null
   f.prose([p3], { free: true })
   f.label(preface.contentsTitle.map((s) => strip(s).toUpperCase()))
   const n = preface.chapters.length
-  const cardH = 112
-  f.place(n * cardH + (n - 1) * 14, (pg, y) => (contents = { page: pg, y, h: cardH, gap: 14 }))
+  const cardH = 122
+  f.place(n * cardH + (n - 1) * 10, (pg, y) => (contents = { page: pg, y, h: cardH, gap: 10 }))
   f.page()
   f.prose(rest, { free: true })
   const sg = { size: 16, lh: 1.45, font: F.hand, jaSize: 15 }
@@ -1777,10 +1785,10 @@ let stripRight = null
     })
   })
 
-  // mặt trống đồng in mờ vắt ngang gáy sách: mỗi trang một nửa → hai trang liền một khối (ý Minh Ánh: họa tiết nối hai trang)
+  // mười sáu vòng nón in mờ vắt ngang gáy sách: mỗi trang một nửa → hai trang liền một khối (ý Minh Ánh: họa tiết nối hai trang)
   const ds = 560
-  L.els.unshift({ ...DECO('dong-son', W - ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
-  Rp.els.unshift({ ...DECO('dong-son', -ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
+  L.els.unshift({ ...DECO('vong-non', W - ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
+  Rp.els.unshift({ ...DECO('vong-non', -ds / 2, 250, ds, ds, 0.17), name: 'Hình vẽ' })
 }
 
 // ═════════════════════════════════════════ BA THẺ CHƯƠNG trong lời mở đầu (điền sau khi biết trang chương)
@@ -1794,19 +1802,26 @@ let stripRight = null
     const card = preface.chapters[i]
     const title = [strip(a.title[0]).replace(/\n/g, ' '), strip(a.title[1]).replace(/\n/g, '')]
     const alt = `${a.label} ${title[0]} — tr. ${a.page}`
-    const iw = 96
-    const tx = p.x0 + iw + 30
-    const tw = p.cw - iw - 30 - 64
+    // thẻ giấy sáng viền "đường khâu" màu chương; hình vẽ trong khung tròn nhạt; số chương lớn + "Trang 08 →" bên phải
+    // cả thẻ là một nút: lớp link phủ trên cùng (trước đây chữ và hình nằm đè lên link nên bấm vào chữ không lật trang)
+    const iw = 84
+    const ix = p.x0 + 14
+    const tx = ix + iw + 18
+    const tw = p.x1 - 96 - tx
     const tO = { font: F.head, size: 16.5, lh: 1.25, jaSize: 15.5 }
     const th = Math.min(textH(title, tw, tO), 44)
+    const pad = String(a.page).padStart(2, '0')
     p.add(
-      RECT(p.x0, y, p.cw, ch, TINT[no], { radius: 10, opacity: 0.55, link: `#p${a.page}`, alt, name: 'Thẻ chương' }),
-      RECT(p.x0, y, 5, ch, acc, { name: 'Vạch chương' }),
-      { ...DECO(card.icon, p.x0 + 16, y + (ch - iw * 0.8) / 2, iw, iw * 0.8, 0.95), name: 'Hình vẽ' },
-      T(tx, y + 12, 160, 18, [`CHƯƠNG ${no}`, `第${no}章`], { size: 11.5, tracking: 2, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
-      T(tx, y + 32, tw, th, title, { ...tO, color: C.ink, jaFont: F.jaHead, name: 'Tên chương' }),
-      T(tx, y + 36 + th, tw, ch - 44 - th, card.text, { size: 12.5, lh: 1.38, jaSize: 12.5, italic: true, color: C.ink2, jaFont: F.jaSans, name: 'Mô tả chương' }),
-      T(p.x1 - 60, y + 12, 48, 20, [String(a.page).padStart(2, '0'), null], { font: F.head, size: 17, color: acc, align: 'right', lh: 1.3, name: 'Số trang chương' })
+      RECT(p.x0, y, p.cw, ch, '#fbf6ea', { radius: 8, opacity: 0.92, stroke: TINT[no], sw: 1.2, name: 'Thẻ chương' }),
+      RECT(p.x0 + 5, y + 5, p.cw - 10, ch - 10, 'none', { radius: 5, stroke: acc, sw: 0.8, dash: '3 2.5', opacity: 0.7, name: 'Đường khâu' }),
+      ELL(ix, y + (ch - iw) / 2, iw, iw, TINT[no], { opacity: 0.75, name: 'Nền hình vẽ' }),
+      { ...DECO(card.icon, ix + 5, y + (ch - iw) / 2 + 5, iw - 10, iw - 10, 0.95), name: 'Hình vẽ' },
+      T(tx, y + 11, 160, 18, [`CHƯƠNG ${no}`, `第${no}章`], { size: 11, tracking: 2.2, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
+      T(tx, y + 29, tw, th, title, { ...tO, color: C.ink, jaFont: F.jaHead, name: 'Tên chương' }),
+      T(tx, y + 33 + th, tw, ch - 44 - th, card.text, { size: 12, lh: 1.38, jaSize: 12, italic: true, color: C.ink2, jaFont: F.jaSans, name: 'Mô tả chương' }),
+      T(p.x1 - 66, y + 8, 54, 40, [String(no).padStart(2, '0'), null], { font: F.head, size: 34, color: acc, align: 'right', lh: 1.15, name: 'Số chương lớn' }),
+      T(p.x1 - 92, y + ch - 30, 80, 16, [`Trang ${pad} →`, `${a.page}ページ →`], { size: 10.5, weight: 600, tracking: 0.5, color: acc, align: 'right', lh: 1.3, jaFont: F.jaSans, name: 'Số trang chương' }),
+      RECT(p.x0, y, p.cw, ch, 'none', { radius: 8, link: `#p${a.page}`, alt, name: 'Nút thẻ chương' })
     )
   })
 }
@@ -1985,14 +2000,14 @@ if (textOnly.length) console.warn(`ℹ Trang chỉ có chữ: ${textOnly.join(',
 
 // ── xuất
 // mẫu nền giấy ngà + họa tiết (góp ý hình thức: nền trắng ngà xuyên suốt, trang nào cũng có họa tiết):
-// trang ảnh tràn trang / nền tối thì thôi; trang chỉ có chữ → sen in mờ giữa trang;
+// trang ảnh tràn trang / nền tối thì thôi; trang chỉ có chữ → mười sáu vòng nón in mờ giữa trang (sen chỉ hợp ở ao đình);
 // còn lại đổi theo cặp trang (hai trang đối diện cùng một mẫu, họa tiết đối xứng ở mép ngoài)
 const SPREAD_PAPERS = ['tre', 'non', 'giay']
 function paperFor(p) {
   if (p.paper !== undefined) return p.paper
   if (p.bg === '#2b2118') return null
   if (p.els.some((e) => e.type === 'image' && e.x <= 0 && e.y <= 0 && e.w >= W - 1 && e.h >= H - 1)) return null
-  if (!p.hasImg) return 'sen'
+  if (!p.hasImg) return 'vong'
   return SPREAD_PAPERS[Math.floor(p.n / 2) % SPREAD_PAPERS.length]
 }
 const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: p.els }))

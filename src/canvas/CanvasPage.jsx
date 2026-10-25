@@ -335,6 +335,7 @@ function ShapeBody({ el }) {
     fill: el.fill || 'none',
     stroke: el.stroke || 'none',
     strokeWidth: sw,
+    strokeDasharray: el.dash || undefined, // nét đứt kiểu "đường khâu" nón
   }
   let shape
   if (el.shape === 'ellipse') shape = <ellipse cx={w / 2} cy={h / 2} rx={w / 2} ry={h / 2} {...common} />
@@ -351,7 +352,7 @@ function LineBody({ el }) {
   const { w, h } = el
   return (
     <svg className="cv-svg" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" aria-hidden="true">
-      <line x1={el.x1 * w} y1={el.y1 * h} x2={el.x2 * w} y2={el.y2 * h} stroke={el.stroke} strokeWidth={el.strokeWidth || 1} />
+      <line x1={el.x1 * w} y1={el.y1 * h} x2={el.x2 * w} y2={el.y2 * h} stroke={el.stroke} strokeWidth={el.strokeWidth || 1} strokeDasharray={el.dash || undefined} />
     </svg>
   )
 }
