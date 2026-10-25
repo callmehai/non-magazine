@@ -37,6 +37,7 @@ const bookParam = params.get('book')
 
 // #/admin → editor (đăng nhập, sửa sách) · ?book=pdf → sách từ file PDF
 // ?book=tap-chi → tạp chí NÓN cũ · còn lại → sách làm bằng editor (mặc định "non", ?draft=1 xem bản nháp)
+// chạy dev (npm run dev): mặc định đọc bản vừa dựng scripts/book/out/book.json; ?published=1 hoặc ?draft=1 để xem bản trên Supabase
 if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#admin)
   setLang('vi')
   document.title = 'Biên tập — ノン'
@@ -73,7 +74,10 @@ if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#
   document.title = `${canvasBook.title} — ${canvasBook.subtitle}`
   root.render(<p className="boot-msg">{t('bootLoading')}</p>)
   import('./lib/canvasBook.js')
-    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, bookParam || canvasBook.slug, { draft: params.get('draft') === '1' }))
+    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, bookParam || canvasBook.slug, {
+      draft: params.get('draft') === '1',
+      local: import.meta.env.DEV && !params.has('draft') && !params.has('published') && !bookParam,
+    }))
     .then(render, (err) => {
       console.error(err)
       root.render(<p className="boot-msg">{err.message || String(err)}</p>)

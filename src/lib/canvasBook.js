@@ -7,13 +7,12 @@ import { t } from './i18n.js'
  * Sách dựng bằng editor (#/admin) → dữ liệu cho flipbook.
  * Người đọc thấy bản đã "Xuất bản"; thêm &draft=1 để xem bản nháp mới nhất (nút "Xem thử" trong editor).
  */
-export async function loadCanvasBook(config, slug, { draft = false } = {}) {
-  const store = await getStore()
-  const res = draft ? await store.loadBook(slug) : await store.loadPublished(slug)
+export async function loadCanvasBook(config, slug, { draft = false, local = false } = {}) {
+  const res = local ? await loadLocalBuild() : draft ? await (await getStore()).loadBook(slug) : await (await getStore()).loadPublished(slug)
   if (!res) throw new Error(`Sách "${slug}" chưa được xuất bản`)
   const list = res.pages
   // bản nháp chỉ đọc được khi đã đăng nhập editor; không có trang thì báo lỗi rõ ràng (thư viện lật trang không chạy với sách rỗng)
-  if (!list?.length) throw new Error(draft ? 'Bản nháp chỉ xem được khi đã đăng nhập trang biên tập (#/admin).' : `Sách "${slug}" chưa có trang nào`)
+  if (!list?.length) throw new Error(local ? 'scripts/book/out/book.json chưa có trang nào — chạy node scripts/book/build.mjs' : draft ? 'Bản nháp chỉ xem được khi đã đăng nhập trang biên tập (#/admin).' : `Sách "${slug}" chưa có trang nào`)
   ensureFontsFor(list) // font Google chỉ tải cho những font sách thật sự dùng
   const n = list.length
   const pages = list.map((p, i) => ({
@@ -33,4 +32,12 @@ export async function loadCanvasBook(config, slug, { draft = false } = {}) {
     settings: { ...config.settings, pageWidth: PAGE_W, pageHeight: PAGE_H },
     pages,
   }
+}
+
+/** Chạy dev: đọc thẳng bản vừa dựng scripts/book/out/book.json — không cần đăng nhập, không cần đẩy bản nháp */
+async function loadLocalBuild() {
+  const r = await fetch(`${import.meta.env.BASE_URL}scripts/book/out/book.json`, { cache: 'no-store' })
+  if (!r.ok) throw new Error('Chưa có scripts/book/out/book.json — chạy node scripts/book/build.mjs')
+  const { pages } = await r.json()
+  return { book: {}, pages: pages.map((p, i) => ({ id: `local-${i}`, ...p })) }
 }
