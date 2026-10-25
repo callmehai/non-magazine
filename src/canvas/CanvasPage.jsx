@@ -11,6 +11,10 @@ const Widget = lazy(() => import('./widgets/index.jsx'))
 
 // ảnh bấm để xem lớn (chế độ đọc; trừ ảnh tràn ngang trang như bìa, ảnh mở chương): cả trang dùng chung một danh sách để ← → chuyển ảnh trong lightbox
 const ZoomList = createContext(null)
+
+// Tải ảnh/video/widget của trang: 'eager' (mặc định, editor) · 'lazy' (ảnh thu nhỏ: chỉ tải khi cuộn tới)
+// · 'off' (trang còn xa trong sách: chưa tải gì, kẻo mở web là tải cả trăm ảnh một lúc)
+export const LoadMode = createContext('eager')
 const zoomable = (el) =>
   el.type === 'image' &&
   !!el.src &&
@@ -110,6 +114,7 @@ export function Element({ el, mode, visible }) {
 }
 
 function ElementBody({ el, mode, visible }) {
+  const loadOn = useContext(LoadMode) !== 'off'
   switch (el.type) {
     case 'text':
       return <TextBody el={el} mode={mode} />
@@ -128,7 +133,7 @@ function ElementBody({ el, mode, visible }) {
     case 'more':
       return <MoreBody el={el} mode={mode} />
     case 'widget':
-      return (
+      return !loadOn ? null : (
         <Suspense fallback={null}>
           <Widget el={el} mode={mode} visible={visible} />
         </Suspense>
@@ -269,6 +274,7 @@ function ImageBody({ el }) {
   const list = useContext(ZoomList)
   const { openLightbox } = useContext(MagazineContext)
   const lang = useCanvasLang()
+  const load = useContext(LoadMode)
   // el.srcJa: ảnh riêng cho bản tiếng Nhật (ví dụ logo không kèm chữ tiếng Việt)
   // el.crop = { x, y, z }: ảnh cận một chi tiết (phóng z lần quanh điểm x%, y% của ảnh) — ô "chi tiết" cạnh ảnh lớn
   const c = el.crop
@@ -281,7 +287,8 @@ function ImageBody({ el }) {
   const pic = (
     <img
       className={`cv-img ${spin ? 'is-spin' : ''}`}
-      src={asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
+      src={load === 'off' ? undefined : asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
+      loading={load === 'lazy' ? 'lazy' : undefined}
       alt={el.alt || ''}
       draggable="false"
       style={c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
@@ -382,6 +389,7 @@ function LineBody({ el }) {
 const firstFrame = (src) => (src.startsWith('data:') ? src : `${src}#t=0.5`)
 
 function VideoBody({ el, mode, visible }) {
+  if (useContext(LoadMode) === 'off') return <div className="cv-video-ph" />
   if (mode !== 'read' || !el.src) {
     // editor: chỉ hiển thị (bấm/kéo để chọn); xem video bằng nhấp đúp hoặc nút "Xem video"
     return (
