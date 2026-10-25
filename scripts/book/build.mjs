@@ -1980,6 +1980,7 @@ let stripRight = null
 
   // trang kết: giảng viên hướng dẫn, thành viên, email
   const p = new Page({ chapter: 9, bg: C.cream })
+  p.fixed = true // bố cục tự đặt: không để bước căn giữa phần cuối trang dời lời nhắn xuống đáy
   runningHead(p, ['NHÓM THỰC HIỆN', '制作チーム'])
   mark(1, e.team.title, p, '—')
   let y = sectionHead(p, TOP, null, e.team.title, ['Những người làm nên cuốn sách', 'この本をつくった人たち'])
@@ -1987,6 +1988,11 @@ let stripRight = null
   const lh = textH(e.team.lead, p.cw, lo)
   p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, name: 'Đoạn văn' }))
   y += lh + 18
+  // khối thành viên + lời nhắn đặt giữa phần trang còn lại (không dồn lên trên, không dạt xuống đáy)
+  const co = { size: 13, lh: 1.45, jaSize: 13, paraGap: 3 }
+  const ch = textH(e.team.contact, p.cw, co)
+  const blockH = 30 + 2 * 110 + 26 + 18 + ch + 22
+  y += Math.max(0, (BOT - 10 - y - blockH) / 2)
   p.add(T(p.x0, y, p.cw, 16, e.team.membersTitle.map((s) => s.toUpperCase()), { size: S.label, tracking: 2.4, weight: 700, color: ACC[9], jaFont: F.jaSans, name: 'Nhóm' }))
   y += 30
   const mw = (p.cw - 14) / 2
@@ -2003,10 +2009,9 @@ let stripRight = null
       T(mx, my + 88, mw, 16, [code, null], { size: 12, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' })
     )
   })
-  y += 2 * 110 - 4
+  // dòng kẻ + lời nhắn cách hàng mã sinh viên một khoảng thở (góp ý: sát ảnh/tên quá)
+  y += 2 * 110 + 26
   p.add(HL(p.x0, y, p.cw, C.line, 0.5))
-  const co = { size: 13, lh: 1.45, jaSize: 13, paraGap: 3 }
-  const ch = textH(e.team.contact, p.cw, co)
   p.add(T(p.x0, y + 12, p.cw, ch, e.team.contact, { ...co, align: 'center', italic: true, color: C.ink2, jaFont: F.jaBody, name: 'Liên hệ' }))
   p.add(T(p.x0, y + 18 + ch, p.cw, 22, ['Email: ' + e.team.email, 'メール：' + e.team.email], { size: 15, weight: 700, align: 'center', color: ACC[9], lh: 1.4, jaFont: F.jaSans, name: 'Email' }))
 
