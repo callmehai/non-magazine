@@ -1318,6 +1318,8 @@ let contents = null
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Dáng chóp nhọn', '先のとがった円錐形'], ['Lá lụi khâu trên 16 vòng nứa', 'ライ葉を16本のヌア竹の輪に縫い付け'], ['Màu trắng sáng hoặc vàng ngà', '明るい白か象牙色'], ['Gọn nhẹ, dùng hằng ngày, làm quà tặng', '軽く、日常使いにも贈り物にも']]],
     },
     'Nón Ba tầm': {
+      // ảnh chụp trọn chiếc nón gần vuông: khung ngang 4:3 cắt mất mép trên + thành nón → khung gần vuông, canh giữa nón
+      hero: { r: 1.15, pos: '50% 47%' },
       details: [[['Núm chóp', '頂の飾り'], 50, 37, 3.4], [['Lá Hồ lợp tỉ mỉ', '丁寧に葺かれたホー葉'], 28, 46, 3], [['Thành nón cao', '高い縁'], 50, 84, 2.6]],
       box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 70–80 cm', '直径70〜80cm'], ['Thành cao 10–12 cm', '縁の高さ10〜12cm'], ['Còn gọi là nón Mười', '別名「ノン・ムオイ」'], ['Lợp từ lá Hồ tuyển chọn', '選び抜いたホー葉で葺く']]],
     },
@@ -1392,11 +1394,13 @@ let contents = null
     const room = bot - y - capH0 - (boxH ? boxH + 16 : 0)
     // cột ảnh chi tiết: mỗi ô cao ít nhất ~78pt (chỗ thấp thì bớt ô, không để thành dải mỏng)
     const dets = (ex.details ?? []).slice(0, Math.max(1, Math.min(3, Math.floor((room + 10) / 108))))
-    const hw = dets.length ? CW * 0.64 : CW
+    const hw0 = dets.length ? CW * 0.64 : CW
+    const hh = Math.min(room, hw0 * 1.2)
+    // ex.hero.r: tỉ lệ khung (rộng / cao) cho ảnh cần thấy trọn vật — khung hẹp lại, cột ảnh chi tiết rộng ra
+    const hw = ex.hero?.r ? Math.min(hw0, hh * ex.hero.r) : hw0
     const dw = CW - hw - 14
-    const hh = Math.min(room, hw * 1.2)
     const hint = [`${t.name[0]} — ảnh sản phẩm`, `${strip(t.name[1])} — 製品写真`]
-    p.add(IMG(p.x0, y, hw, hh, hint, { fit: 'cover' }))
+    p.add(IMG(p.x0, y, hw, hh, hint, { fit: 'cover', ...(ex.hero?.pos ? { pos: ex.hero.pos } : {}) }))
     const cap = t.credit ? [`${t.name[0]} · ${t.credit[0]}`, `${strip(t.name[1])}・${t.credit[1]}`] : t.name
     p.add(T(p.x0, y + hh + 5, hw, 14, cap, { size: 11, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
     if (dets.length) {
