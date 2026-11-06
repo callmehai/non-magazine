@@ -136,7 +136,8 @@ export const ch3 = {
         images: [
           ['Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông', 'チュオン{村|むら}のノンラー{工芸村|こうげいむら}におけるOCOP製品の創造的デザイン・紹介・広報・販売センター'],
           // 06/11: ảnh nhóm gắn (3-29: cơ sở ông Tuy; 3-31, 3-24: du khách vẽ nón), chú thích JA theo nhóm
-          ['Trung tâm thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP làng nghề nón Chuông — cơ sở của nghệ nhân Lê Văn Tuy', 'チュオン村のノンラー工芸村におけるOCOP製品の創造的デザイン・紹介・広報・販売センター（レ・ヴァン・トゥイ氏の施設）'],
+          // soát 07/11: ảnh du khách lên trước (cạnh đoạn "thử khâu, vẽ, trang trí nón"); ảnh cơ sở ông Tuy (cùng biển với ảnh trên)
+          // chuyển sang trang OCOP (POOL[3], cạnh ảnh năm 2023)
           ['Du khách nước ngoài trải nghiệm vẽ nón ở làng Chuông', 'チュオン村を訪れた観光客による伝統工芸体験'],
           ['Trải nghiệm vẽ trên nón lá ở làng Chuông', 'チュオン村でのノンラーへの絵画体験'],
           ['Biển “Lớp học giữ nghề nón làng Chuông”', 'チュオン{村|むら}の伝統的なノンラー作りを{継承|けいしょう}するための教室「Lớp học giữ nghề nón」の看板'],
