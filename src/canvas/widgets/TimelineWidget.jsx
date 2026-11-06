@@ -6,7 +6,8 @@ import { asset } from '../../lib/assets.js'
  * Dòng thời gian bấm được (trang nghệ nhân chương 3): thanh ngang có các mốc năm; bấm một mốc → vạch màu chạy tới mốc đó,
  * thẻ bên dưới hiện câu chuyện của người ấy (năm · vai trò · tên · tiểu sử). Nút ‹ › để đi lần lượt.
  * Dùng thay ảnh cho những nghệ nhân đã mất (góp ý của nhóm: không đưa ảnh người đã mất vào sách).
- * el.items = [{ year: [vi, ja], name: [vi, ja], role: [vi, ja], bio: [vi, ja] }], el.accent = màu chương.
+ * el.items = [{ year: [vi, ja], name: [vi, ja], role: [vi, ja], bio: [vi, ja], img?: url, cap?: [vi, ja] }], el.accent = màu chương.
+ * Mốc có img (06/11: nhóm gửi ảnh ông Phạm Trần Canh): ảnh chân dung + chú thích thay hình nón vẽ ở chân thẻ.
  */
 const L = {
   vi: { hint: 'Bấm vào từng mốc năm để đọc', prev: 'Mốc trước', next: 'Mốc sau' },
@@ -75,7 +76,18 @@ export default function TimelineWidget({ el, interactive }) {
         <div className="cvw-tl__bio">
           <Ruby text={it.bio[li]} />
         </div>
-        <img className="cvw-tl__still" src={asset('assets/book/deco/still-non.svg')} alt="" />
+        {it.img ? (
+          <figure className="cvw-tl__photo">
+            <img src={it.img} alt={String(it.name[li] ?? '').replace(/\{([^|}]+)\|[^}]+\}/g, '$1')} loading="lazy" />
+            {it.cap && (
+              <figcaption>
+                <Ruby text={it.cap[li] ?? it.cap[0]} />
+              </figcaption>
+            )}
+          </figure>
+        ) : (
+          <img className="cvw-tl__still" src={asset('assets/book/deco/still-non.svg')} alt="" />
+        )}
         <div className="cvw-tl__nav">
           <button type="button" onClick={() => go(i - 1)} disabled={i === 0} aria-label={t.prev}>
             ‹

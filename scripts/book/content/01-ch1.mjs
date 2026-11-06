@@ -1,27 +1,29 @@
 /**
  * Chương 1 — Khái quát về nón lá Việt Nam và nón lá Làng Chuông. Mỗi đoạn: [tiếng Việt, tiếng Nhật]
- * Tiếng Việt: nguyên văn tab "Chương 1" (Doc "ND + HT - Nón lá đã sửa", bản sửa lần 1); tiếng Nhật: bản dịch tạm.
+ * Tiếng Việt: nguyên văn tab "Chương 1" (Doc "ND + HT - Nón lá đã sửa", bản sửa lần 1).
+ * Tiếng Nhật: bản dịch chính thức của nhóm (tab "JA パート1", tải 06/11/2026), chỉ sửa lỗi gõ rõ ràng
+ * (danh sách: scripts/book/out/r0611/ja-p1.issues.md); phiên âm {漢字|かな} theo bản cũ.
  */
 export const ch1 = {
   no: 1,
-  label: ['Chương 1', '第1{章|しょう}'],
+  label: ['Chương 1', 'パート1'],
   title: ['Khái quát về nón lá Việt Nam\nvà nón lá Làng Chuông', 'ベトナムのノンラーと\nチュオン{村|むら}のノンラーの{概要|がいよう}'],
   lead: [
     'Nhắc đến nón lá Việt Nam, nhiều người thường hình dung ngay đến chiếc nón hình chóp quen thuộc. Tuy nhiên, nón lá không chỉ có một kiểu dáng duy nhất mà còn bao gồm nhiều loại khác nhau, mỗi loại mang những đặc điểm riêng về hình dáng, công dụng và giá trị văn hóa. Để hiểu rõ hơn về sự đa dạng ấy, Chương 1 sẽ đưa độc giả tìm hiểu những đặc điểm cơ bản của nón lá Việt Nam, các kiểu nón tiêu biểu, những dấu tích lịch sử và ý nghĩa văn hóa gắn liền với chiếc nón. Từ bức tranh tổng quan đó, chương tiếp tục giới thiệu về nón lá làng Chuông (Hà Nội) là một đại diện tiêu biểu của nón lá truyền thống ở miền Bắc để tìm hiểu khái quát về làng nghề và các sản phẩm nón truyền thống, đặc biệt là chiếc nón lá hình chóp – đối tượng tìm hiểu trọng tâm của cuốn flipbook.',
-    'ベトナムのノンラーと{聞|き}くと、多くの人はまず、おなじみの{円錐形|えんすいけい}の{笠|かさ}を思い{浮|う}かべるでしょう。しかしノンラーには一つの形だけでなくさまざまな{種類|しゅるい}があり、それぞれが形・{用途|ようと}・文化的{価値|かち}に{独自|どくじ}の{特徴|とくちょう}をもっています。その{多様性|たようせい}をより深く知るために、第1章ではまず、ベトナムのノンラーの基本的な特徴、代表的な笠の種類、歴史に残る{痕跡|こんせき}、そして笠に結びついた文化的な意味を見ていきます。そのうえで、北部の伝統的なノンラーを代表するハノイのチュオン村の笠を取り上げ、{工芸村|こうげいむら}と伝統的な笠、とくに本書の中心となる円錐形のノンラーについて紹介します。',
+    'ベトナムのノンラーといえば、多くの人は、なじみのある{円錐形|えんすいけい}のノンラーを思い{浮|う}かべるでしょう。しかし、ノンラーにはさまざまな{種類|しゅるい}があり、それぞれ形や{用途|ようと}、文化的{価値|かち}に{独自|どくじ}の{特徴|とくちょう}があります。こうした{多様性|たようせい}をよりよく理解できるように、パート1では、ベトナムのノンラーの基本的な特徴や代表的な種類、歴史的な{痕跡|こんせき}、ノンラーに結びついた文化的な意味について紹介します。その全体像を踏まえ、ベトナム北部の伝統的なノンラーの代表例の一つとして、ハノイ市のチュオン{村|むら}のノンラーを取り上げます。チュオン村の伝統{工芸村|こうげいむら}としての{概要|がいよう}と伝統的なノンラー製品について概説し、特に本フリップブックで主に取り上げる伝統的な円錐形のノンラーに{焦点|しょうてん}を当てます。',
   ],
 
   // ── 1.1
   life: {
     id: '1.1',
-    title: ['Nón lá trong đời sống Việt Nam', 'ベトナムの暮らしの中のノンラー'],
+    title: ['Nón lá trong đời sống Việt Nam', 'ベトナムの人々の暮らしとノンラー'],
     blocks: [
       {
-        h: ['Khái niệm cơ bản của nón lá', 'ノンラーとは'],
+        h: ['Khái niệm cơ bản của nón lá', 'ノンラーの基本的な概念'],
         p: [
           [
             'Nón lá là sản phẩm thủ công truyền thống của Việt Nam, được làm từ các nguyên liệu tự nhiên như lá lụi, tre và nứa. Trong đó, lá được sử dụng để tạo phần lợp, còn tre, nứa được gia công thành khung và các vành nón nhằm định hình sản phẩm. Tùy theo nhu cầu sử dụng, đặc điểm văn hóa và kỹ thuật chế tác của từng địa phương, nón lá có nhiều kiểu dáng và kích thước khác nhau, góp phần tạo nên sự đa dạng của nghề làm nón truyền thống Việt Nam.',
-            'ノンラー（{葉|は}の{笠|かさ}）は、ライ{葉|ば}、竹、ヌア竹といった{天然|てんねん}の{材料|ざいりょう}から作られる、ベトナムの伝統的な手工芸品です。葉は笠の表面を{葺|ふ}くのに使われ、竹とヌア竹は{骨組|ほねぐ}みや{輪|わ}に加工されて、笠の形をつくります。使い方や地域の文化、{製作技術|せいさくぎじゅつ}によって、ノンラーにはさまざまな形と大きさがあり、ベトナムの伝統的な笠づくりの{多様|たよう}さを生み出しています。',
+            'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイや竹、ヌアなどの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
           ],
         ],
       },
@@ -30,7 +32,7 @@ export const ch1 = {
         p: [
           [
             'Trong đời sống thường ngày, nón lá được sử dụng chủ yếu để che nắng, che mưa, đặc biệt khi lao động và di chuyển ngoài trời. Ngoài công dụng đội đầu, nón lá còn có thể được tận dụng để quạt mát hoặc đựng tạm rau củ, bánh trái khi đi chợ, tùy theo hình dáng và kích thước của từng loại. Những công dụng này đã khiến chiếc nón trở thành vật dụng quen thuộc trong sinh hoạt của người Việt.',
-            '日々の暮らしの中で、ノンラーは主に日差しや雨を{避|さ}けるために使われ、とくに{屋外|おくがい}で働くときや出歩くときに{欠|か}かせません。頭にかぶるだけでなく、形や大きさによっては、うちわのように{扇|あお}いで{涼|すず}んだり、市場で野菜や果物、お{菓子|かし}を入れたりすることもできます。こうした用途によって、ノンラーはベトナムの人々の生活になじみ深い道具となりました。',
+            '日常生活では、ノンラーは主に日差しや雨を防ぐために使われ、特に{屋外|おくがい}での作業や移動の際に役立ちます。また、頭にかぶるだけでなく、形や大きさによっては、あおいで涼をとったり、市場での買い{物|もの}の際に野菜や果物、{菓子|かし}などを一時的に入れたりすることもできます。こうした{用途|ようと}から、ノンラーはベトナムの人々の日常生活において身近な生活用品となっています。',
           ],
         ],
       },
@@ -39,27 +41,30 @@ export const ch1 = {
         p: [
           [
             'Bên cạnh công dụng trong sinh hoạt, nón lá còn mang giá trị văn hóa gắn liền với hình ảnh con người Việt Nam qua nhiều thế hệ. Chiếc nón thường xuất hiện cùng áo dài và các trang phục truyền thống, đặc biệt trong những hình ảnh về người phụ nữ Việt Nam. Sự kết hợp này góp phần tạo nên vẻ đẹp giản dị, duyên dáng, trở thành hình ảnh quen thuộc khi giới thiệu về văn hóa Việt Nam.',
-            '生活の道具であるだけでなく、ノンラーは何世代にもわたるベトナムの人々の姿と結びついた文化的な価値をもっています。笠はアオザイなどの{伝統衣装|でんとういしょう}とともに、とくにベトナム女性のイメージの中によく登場します。この組み合わせが{素朴|そぼく}でしとやかな美しさを生み、ベトナム文化を紹介するときのおなじみの姿となりました。',
+            'ノンラーは、日常生活で使われる道具であるだけでなく、世代を超えてベトナムの人々の姿と結びついてきた文化的{価値|かち}もあります。ノンラーはアオザイをはじめとする{伝統衣装|でんとういしょう}とともに登場することが多く、特にベトナムの女性を描いた場面でよく見られます。こうした組み合わせは、{素朴|そぼく}で優美な印象を生み出し、ベトナムの文化を紹介する際にもなじみ深いイメージとなっています。',
           ],
           [
             'Giá trị văn hóa của nón lá còn được thể hiện qua việc lưu giữ và trưng bày tại các bảo tàng. Tại đây, những chiếc nón được giới thiệu như một phần của đời sống và văn hóa truyền thống, giúp khách tham quan tìm hiểu về đặc điểm cũng như vai trò của nón lá trong sinh hoạt của người Việt.',
-            'ノンラーの文化的な価値は、博物館での{保存|ほぞん}や{展示|てんじ}にも表れています。笠は伝統的な暮らしと文化の一部として紹介され、訪れる人がノンラーの特徴や、ベトナムの人々の生活の中での役割を知る手がかりとなっています。',
+            'ノンラーの文化的{価値|かち}は、博物館での収蔵や{展示|てんじ}にも表れています。博物館では、ノンラーが伝統的な暮らしや文化の一部として紹介されており、来館者はその{特徴|とくちょう}や、ベトナムの人々の生活において果たしてきた役割について知ることができます。',
           ],
           [
             'Ngoài ra, hình dáng nón lá còn trở thành nguồn cảm hứng trong các lĩnh vực sáng tạo như nghệ thuật, thời trang và kiến trúc. Một ví dụ tiêu biểu là Nhà hát Cao Văn Lầu¹, với thiết kế ba khối mái lấy cảm hứng từ hình dáng chiếc nón lá truyền thống. Công trình thể hiện việc vận dụng hình ảnh nón lá trong kiến trúc hiện đại, đồng thời gợi nhắc đến nét đặc trưng của văn hóa Việt Nam.',
-            'さらに、ノンラーの形は、芸術・ファッション・建築といった創作の分野で{着想|ちゃくそう}の{源|みなもと}にもなっています。代表的な例が、伝統的なノンラーの形から{生|う}まれた三つの屋根をもつカオ・ヴァン・ラウ{劇場|げきじょう}¹です。この建物は、ノンラーのイメージを現代建築に生かすと同時に、ベトナム文化の特色を思い起こさせます。',
+            'また、ノンラーの形は、芸術やファッション、建築などの創作分野でも{着想|ちゃくそう}の{源|みなもと}となっています。その代表的な例が、伝統的なノンラーの形をモチーフにした三つの屋根部分が{特徴|とくちょう}のカオ・ヴァン・ラウ{劇場|げきじょう}です¹。この建築物は、ノンラーの形を現代建築に取り入れたものであり、ベトナム文化の特徴を思い起こさせるものでもあります。',
           ],
           [
             'Như vậy, nón lá không chỉ là vật dụng trong sinh hoạt mà còn mang những giá trị văn hóa và thẩm mỹ, tiếp tục được gìn giữ và thể hiện dưới nhiều hình thức trong đời sống hiện đại.',
-            'このように、ノンラーは生活の道具であるだけでなく、文化的・美的な価値をもち、現代の暮らしの中でもさまざまな形で守られ、表現され続けています。',
+            'このように、ノンラーは生活用品であるだけでなく、文化的・{美的|びてき}{価値|かち}も持っています。その価値は現代の生活の中でも、さまざまな形で{受|う}け継がれ、表現されています。',
           ],
         ],
-        notes: [['¹ Còn gọi là Nhà hát Ba Nón Lá, công trình kiến trúc văn hóa tiêu biểu tại tỉnh Bạc Liêu.', '¹「三つのノンラー劇場」とも呼ばれる、バクリエウ{省|しょう}を代表する文化建築。']],
+        notes: [['¹ Còn gọi là Nhà hát Ba Nón Lá, công trình kiến trúc văn hóa tiêu biểu tại tỉnh Bạc Liêu.', '¹「三つのノンラー{劇場|げきじょう}」とも呼ばれ、バクリエウ{省|しょう}を代表する文化的な建築物です。']],
         images: [
-          ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Tuổi Trẻ', 'カオ・ヴァン・ラウ三つのノンラー劇場（バクリエウ）— 出典：トゥオイチェー{紙|し}'],
-          ['Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí', 'ベトナム・ファッションウィーク2017のノンラー（デザイナー：チュー・ラー）— 出典：ザンチー紙'],
+          // ảnh 1-19 (b): cùng chủ đề, sách dùng ảnh Báo Tuổi Trẻ → nguồn giữ theo ảnh đang in, viết theo kiểu nhóm (tên báo tiếng Việt)
+          ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Tuổi Trẻ', 'バクリエウ{省|しょう}にあるカオ・ヴァン・ラウ三つのノンラー{劇場|げきじょう} — 出典：Báo Tuổi Trẻ'],
+          // ảnh 1-20 (b)
+          ['Nón lá trên sàn diễn Vietnam Fashion Week 2017 (NTK Chu La) — nguồn: Báo Dân trí', '衣装デザインに取り入れられたノンラー — 出典：Báo Dân trí'],
           ['Nón lá bên tà áo dài', 'アオザイとノンラー'],
-          ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam', 'ベトナム女性博物館の展示'],
+          // ảnh 1-18 (a)
+          ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam', '博物館に{展示|てんじ}されているノンラー'],
         ],
       },
     ],
@@ -70,108 +75,114 @@ export const ch1 = {
     title: ['Hình dáng nón lá phổ biến', 'ノンラーの代表的な形'],
     intro: [
       'Nón lá Việt Nam có nhiều kiểu dáng, gắn với nhu cầu sử dụng và đặc điểm văn hóa của từng vùng miền. Xét về hình dáng, có thể giới thiệu một số loại nón tiêu biểu thông qua hai nhóm: nón hình chóp và nón tròn vành rộng. Cách phân nhóm này nhằm giúp người đọc dễ hình dung sự khác biệt về kiểu dáng, không phải hệ thống phân loại bao quát toàn bộ các loại nón truyền thống Việt Nam.',
-      'ベトナムのノンラーには、使い方や地域の文化に結びついたさまざまな形があります。ここでは形に注目し、「{円錐形|えんすいけい}の笠」と「つばの広い{円形|えんけい}の笠」の二つのグループで代表的な笠を紹介します。この分け方は形の違いをイメージしやすくするためのもので、ベトナムの伝統的な笠をすべて{網羅|もうら}する{分類|ぶんるい}ではありません。',
+      'ベトナムのノンラーには、地域ごとの使用目的や文化的{特徴|とくちょう}に応じて、さまざまな形があります。形の違いに着目すると、代表的なノンラーを「{円錐形|えんすいけい}」と「つばの広い{円形|えんけい}」の二つのグループに分けて紹介することができます。この分け{方|かた}は、読者が形の違いを理解しやすくするためのものであり、ベトナムの伝統的なノンラーをすべて{網羅|もうら}する{分類|ぶんるい}体系ではありません。',
     ],
     groups: [
       {
-        name: ['Nón lá hình chóp', '円錐形の笠'],
+        name: ['Nón lá hình chóp', '{円錐形|えんすいけい}のノンラー'],
         text: [
           'Nón lá hình chóp thường có phần đỉnh nhọn, thân nón mở rộng dần xuống vành, tạo nên dáng vẻ thanh thoát, cân đối. Một số loại nón tiêu biểu thuộc nhóm này có thể kể đến như:',
-          '円錐形の笠は、先のとがった{頂|いただき}から{縁|ふち}へ向かって少しずつ広がり、軽やかで{均整|きんせい}のとれた姿をしています。代表的な笠には次のようなものがあります。',
+          '{円錐形|えんすいけい}のノンラーは、一般的に先端が尖っており、上部から{縁|ふち}に向かって徐々に広がる、すっきりとしたバランスのよい形が{特徴|とくちょう}です。このグループの代表的なノンラーには、次のようなものがあります。',
         ],
         items: [
-          [['Nón bài thơ', '{詩|し}の笠（ノン・バイトー）'], ['Thành phố Huế', 'フエ市']],
-          [['Nón lá sen', '{蓮|はす}の葉の笠'], ['Thành phố Huế', 'フエ市']],
-          [['Nón lá bàng', 'バンの葉の笠'], ['Thành phố Huế', 'フエ市']],
-          [['Nón ngựa', '{馬|うま}の笠'], ['Tỉnh Gia Lai (Bình Định cũ)', 'ザーライ{省|しょう}（旧ビンディン省）']],
-          [['Nón lá làng Chuông', 'チュオン村のノンラー'], ['Hà Nội', 'ハノイ']],
+          [['Nón bài thơ', 'ノン・バイ・トー'], ['Thành phố Huế', 'フエ市']],
+          [['Nón lá sen', 'ノン・ラー・セン'], ['Thành phố Huế', 'フエ市']],
+          [['Nón lá bàng', 'ノン・ラー・バン'], ['Thành phố Huế', 'フエ市']],
+          [['Nón ngựa', 'ノン・グア'], ['Tỉnh Gia Lai (Bình Định cũ)', 'ザライ{省|しょう}（旧ビンディン省）']],
+          [['Nón lá làng Chuông', 'チュオン{村|むら}のノンラー'], ['Hà Nội', 'ハノイ市']],
+          // 06/11: nhóm thêm trong bản Nhật (ảnh 1-10): タイ族のノンラー ― タイグエン省 (Báo Dân tộc và phát triển)
+          [['Nón người Tày', 'タイ族のノンラー'], ['Thái Nguyên', 'タイグエン{省|しょう}']],
         ],
       },
       {
-        name: ['Nón lá hình tròn vành rộng', 'つばの広い円形の笠'],
+        name: ['Nón lá hình tròn vành rộng', 'つばの広い{円形|えんけい}のノンラー'],
         text: [
           'Nhóm nón lá hình tròn vành rộng có đường kính lớn, phần thân nón tương đối nông và dáng nón xòe rộng tạo nên hình dáng khác biệt so với nón hình chóp. Những hình ảnh tiêu biểu gắn với kiểu dáng này có thể kể đến như:',
-          'つばの広い円形の笠は直径が大きく、{胴|どう}が{比較的|ひかくてき}浅く、大きく広がった形をしていて、円錐形の笠とは{異|こと}なる姿をしています。代表的なものは次のとおりです。',
+          'つばの広い{円形|えんけい}のノンラーは、直径が大きく、{笠|かさ}の深さが{比較的|ひかくてき}浅いことが{特徴|とくちょう}です。全体が大きく広がった形をしており、{円錐形|えんすいけい}のノンラーとは{異|こと}なる形が特徴です。このグループの代表的なノンラーには、次のようなものがあります。',
         ],
         items: [
-          [['Nón ba tầm', 'バータム笠'], ['Hà Nội', 'ハノイ']],
-          [['Nón quai thao', 'クアイタオ笠'], ['Hà Nội', 'ハノイ']],
+          [['Nón ba tầm', 'ノン・バータム'], ['Hà Nội', 'ハノイ市']],
+          [['Nón quai thao', 'ノン・クアイ・タオ'], ['Hà Nội', 'ハノイ市']],
           [['Nón thúng', 'ノン・トゥン'], ['Nghệ An', 'ゲアン{省|しょう}']],
         ],
       },
     ],
     outro: [
       'Sự đa dạng về hình dáng và kỹ thuật chế tác đã tạo nên những nét riêng cho các loại nón, đồng thời phản ánh sự phong phú của nghề làm nón truyền thống Việt Nam.',
-      '形と製作技術の多様さが、それぞれの笠に{独自|どくじ}の{個性|こせい}を与え、ベトナムの伝統的な笠づくりの{豊|ゆた}かさを映し出しています。',
+      'このように、ノンラーには形や{製作技術|せいさくぎじゅつ}にさまざまな違いがあり、それぞれに{独自|どくじ}の{特徴|とくちょう}が見られます。こうした{多様性|たようせい}は、ベトナムの伝統的なノンラー作りの{豊|ゆた}かさを示しています。',
     ],
   },
 
   // ── 1.2
   history: {
     id: '1.2',
-    title: ['Nón lá trong dòng chảy lịch sử', '歴史の流れの中のノンラー'],
+    title: ['Nón lá trong dòng chảy lịch sử', '歴史の中のノンラー'],
     traces: {
-      h: ['Dấu tích của nón lá', 'ノンラーの{痕跡|こんせき}'],
+      h: ['Dấu tích của nón lá', 'ノンラーに関する歴史的な{痕跡|こんせき}'],
       p: [
         [
           'Theo tài liệu Nghề đẹp quê hương (Nguyễn Vỵ), những hình ảnh được cho là tiền thân của chiếc nón đã xuất hiện trên trống đồng Ngọc Lũ và thạp đồng Đào Thịnh, có niên đại khoảng 2500–3000 năm trước theo tư liệu này¹. Những hình chạm khắc gợi liên tưởng đến vật đội đầu mà cư dân Việt cổ có thể đã sử dụng, với chất liệu được phỏng đoán là lông chim kết lại hoặc các loại lá cây bản rộng, dày như lá cọ. Tuy nhiên, những hình ảnh này chưa đủ cơ sở để xác định chính xác hình dáng và chất liệu của chiếc nón thời kỳ đó. Vì vậy, đây được xem là những tư liệu tham khảo góp phần tìm hiểu về các hình thức vật đội đầu trong đời sống cư dân Việt cổ, thay vì bằng chứng trực tiếp về chiếc nón lá hiện nay.',
-          '『ふるさとの美しい手仕事』（グエン・ヴィー）によれば、笠の{原型|げんけい}と考えられる図像が、ゴックルー{銅鼓|どうこ}やダオティン{銅甕|どうおう}に{刻|きざ}まれており、この資料ではその年代を約2500〜3000年前としています¹。刻まれた姿は、古代ベトナムの人々が使っていたかもしれない{被|かぶ}り{物|もの}を思わせ、その{素材|そざい}は鳥の{羽|はね}を{束|たば}ねたものや、ヤシの葉のように厚く広い葉だったと{推測|すいそく}されています。ただし、これらの図像だけでは、当時の笠の形や素材を正確に{特定|とくてい}する{根拠|こんきょ}にはなりません。そのため、これらは現在のノンラーの{直接|ちょくせつ}の{証拠|しょうこ}ではなく、古代の人々の被り物を知るための参考資料とされています。',
+          'グエン・ヴィの著書『Nghề đẹp quê hương』によると、ノンラーの{原型|げんけい}と考えられる図像が、約2,500～3,000年前のものとされるゴックルーの{銅鼓|どうこ}やダオティンの青銅製容器に見られます¹。これらの彫刻からは、古代ベトナムの人々が使用していた可能性のあるかぶり{物|もの}がうかがえます。その{素材|そざい}については、鳥の{羽|はね}を{束|たば}ねたものや、ヤシの{葉|は}のような幅が広く厚みのある葉が使われていたと{推測|すいそく}されています。しかし、これらの図像だけでは、当時のかぶり物の形や素材を正確に{特定|とくてい}することはできません。そのため、現在のノンラーの存在を{直接|ちょくせつ}示す{証拠|しょうこ}というよりも、古代ベトナムの人々が使用していたかぶり物の形態を知るための参考資料として位置づけられています。',
         ],
         [
           'Bên cạnh các dấu tích khảo cổ về nón lá thì còn có nghề làm nón được đề cập trong những tài liệu về nghề thủ công truyền thống. Theo tư liệu Từ điển văn hóa cổ truyền Việt Nam do Hữu Ngọc (chủ biên), nghề này muộn nhất đã có từ thời Trần, khoảng thế kỷ XIII–XIV². Trong xã hội xưa, nón có nhiều loại dành cho những đối tượng và mục đích sử dụng khác nhau, chẳng hạn nón tam giang dành cho người lớn tuổi, nón chéo vành dành cho binh lính hay nón tu lờ dành cho nhà sư,... Điều này cho thấy các loại nón đã được sử dụng trong nhiều hoàn cảnh khác nhau của đời sống truyền thống.',
-          '{考古|こうこ}の痕跡に加えて、笠づくりの仕事は伝統工芸に関する資料にも登場します。フウ・ゴック{編|へん}『ベトナム{伝統文化辞典|でんとうぶんかじてん}』によれば、この仕事は{遅|おそ}くとも{陳朝|ちんちょう}の時代、13〜14世紀ごろにはすでにあったとされています²。昔の社会には、使う人や目的に応じたさまざまな笠があり、たとえばお年寄りのための「タムザン笠」、兵士のための「チェオヴァイン笠」、僧侶のための「トゥロー笠」などがありました。このことから、笠が伝統的な暮らしのさまざまな場面で使われていたことがわかります。',
+          'こうした{考古|こうこ}学的な{痕跡|こんせき}に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック{編|へん}『Từ điển văn hóa cổ truyền Việt Nam』によると、ノンラー作りは、{遅|おそ}くとも13～14世紀のチャン朝時代にはすでに存在していたとされています²。かつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
         ],
       ],
       notes: [
-        ['¹ Nghề đẹp quê hương, Ty Văn hóa Thông tin Hà Sơn Bình, 1977, tr. 141.', '¹『ふるさとの美しい手仕事』ハーソンビン{省|しょう}文化情報{局|きょく}、1977年、141頁。'],
-        ['² Hữu Ngọc (chủ biên), Từ điển văn hóa cổ truyền Việt Nam, NXB Kim Đồng, tr. 521.', '² フウ・ゴック編『ベトナム伝統文化辞典』キムドン出版社、521頁。'],
+        ['¹ Nghề đẹp quê hương, Ty Văn hóa Thông tin Hà Sơn Bình, 1977, tr. 141.', '¹『Nghề đẹp quê hương』、ハソンビン省文化情報局、1977年、141頁。'],
+        ['² Hữu Ngọc (chủ biên), Từ điển văn hóa cổ truyền Việt Nam, NXB Kim Đồng, tr. 521.', '² フー・ゴック（{編|へん}）『Từ điển văn hóa cổ truyền Việt Nam』、キムドン出版社、521頁。'],
       ],
     },
     blocks: [
       {
-        h: ['Sự thay đổi nhận thức về hình dáng nón trong thời hiện đại', '現代におけるノンラーの形の{受|う}け{止|と}め{方|かた}の変化'],
+        h: ['Sự thay đổi nhận thức về hình dáng nón trong thời hiện đại', '現代におけるノンラーの形状に対する認識の{変化|へんか}'],
         p: [
           [
             'Trải qua thời gian, hình dáng của nón lá Việt Nam có những thay đổi để phù hợp với nhu cầu sử dụng, điều kiện sinh hoạt và thị hiếu thẩm mỹ của từng thời kỳ. Bên cạnh những kiểu nón có vành rộng, thân tương đối nông được sử dụng trong xã hội xưa, nón lá hình chóp dần trở nên phổ biến và được nhận diện rộng rãi trong đời sống hiện đại.',
-            '時代とともに、ベトナムのノンラーの形は、使い方や暮らしの{条件|じょうけん}、それぞれの時代の美意識に合わせて変わってきました。昔の社会で使われた、つばが広く胴の浅い笠に加えて、円錐形のノンラーがしだいに{広|ひろ}まり、現代の暮らしの中で広く知られるようになりました。',
+            '時代とともに、ベトナムのノンラーの形は、時代ごとの{用途|ようと}や生活環境、{美的|びてき}感覚に応じて{変化|へんか}してきました。かつては、つばが広く、深さが{比較的|ひかくてき}浅い形のノンラーも使われていましたが、次第に{円錐形|えんすいけい}のノンラーが広く{普及|ふきゅう}し、現代の人々の暮らしの中でよく知られるようになりました。',
           ],
           [
             'Ngày nay, nón lá hình chóp đã trở thành kiểu dáng quen thuộc khi nhắc đến nón lá Việt Nam. Tuy nhiên, những kiểu nón truyền thống khác vẫn được lưu giữ, phục dựng hoặc tiếp tục sử dụng trong các hoạt động văn hóa tại một số địa phương. Điều này cho thấy sự đa dạng về hình dáng của nón lá vẫn được duy trì, dù mức độ phổ biến và mục đích sử dụng của từng loại đã có những thay đổi theo thời gian.',
-            '今では、「ベトナムのノンラー」といえば円錐形の笠がおなじみの形です。それでも、ほかの伝統的な笠も、いくつかの地域で{保存|ほぞん}・{復元|ふくげん}されたり、文化行事で使われ続けたりしています。それぞれの笠の{普及|ふきゅう}の度合いや用途は時代とともに変わっても、ノンラーの形の多様さは今も受け継がれているのです。',
+            '今日では、ベトナムのノンラーといえば、{円錐形|えんすいけい}のノンラーが広く思い{浮|う}かべられるようになっています。一方、ほかの伝統的な形のノンラーも、一部の地域では現在も{保存|ほぞん}・{復元|ふくげん}されたり、文化活動で引き続き使用されたりしています。このように、時代とともにノンラーの{普及|ふきゅう}の状況や使われ{方|かた}は{変化|へんか}してきましたが、さまざまな伝統的な形が今も{受|う}け継がれています。',
           ],
         ],
       },
       {
-        h: ['Nón lá trong hoạt động giới thiệu và quảng bá văn hóa Việt Nam', 'ベトナム文化の紹介とPRの中のノンラー'],
+        h: ['Nón lá trong hoạt động giới thiệu và quảng bá văn hóa Việt Nam', 'ベトナム文化の紹介・{普及|ふきゅう}におけるノンラー'],
         p: [
           [
             'Ngày nay, nón lá còn xuất hiện trong nhiều hoạt động giao lưu và quảng bá văn hóa Việt Nam. Hình ảnh chiếc nón được sử dụng trong các chương trình biểu diễn nghệ thuật, sự kiện văn hóa và hoạt động quảng bá du lịch. Bên cạnh đó, nón lá còn được lựa chọn làm sản phẩm thủ công và quà lưu niệm dành cho du khách, bạn bè quốc tế.',
-            '今日、ノンラーはベトナム文化の{交流|こうりゅう}やPRのさまざまな場面にも登場します。笠のイメージは、舞台芸術や文化イベント、観光のPRに使われています。また、観光客や海外の友人に{贈|おく}る手工芸品やお{土産|みやげ}としても選ばれています。',
+            '現在、ノンラーはベトナム文化の{交流|こうりゅう}や発信を目的としたさまざまな活動にも登場しています。ノンラーは、芸術公演や文化イベント、観光プロモーションなどでも用いられています。また、観光客や海外の人々向けの工芸品や{土産|みやげ}物としても選ばれています。',
           ],
           [
             'Trong các hoạt động giao lưu văn hóa ở nước ngoài, nón lá thường xuất hiện cùng áo dài và những sản phẩm thủ công truyền thống khác. Sự hiện diện này góp phần giới thiệu những nét đặc trưng của văn hóa Việt Nam đến với công chúng quốc tế, đồng thời cho thấy nón lá là một trong những hình ảnh mang tính biểu trưng của văn hóa Việt Nam.',
-            '海外での文化交流の場では、ノンラーはアオザイやほかの伝統工芸品とともによく登場します。その姿は、ベトナム文化の特色を世界の人々に伝えると同時に、ノンラーがベトナム文化を{象徴|しょうちょう}するイメージの一つであることを示しています。',
+            '海外で行われる文化{交流|こうりゅう}活動では、ノンラーはアオザイやほかの伝統工芸品とともに紹介されることがよくあります。こうした場面でノンラーが用いられることは、ベトナム文化の{特徴|とくちょう}を海外の人々に伝える一助となっています。同時に、ノンラーがベトナム文化を{象徴|しょうちょう}するものの一つであることも示しています。',
           ],
         ],
         images: [
-          ['Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet', 'ノンラーをかぶるシンガポール首相夫人とベトナム首相夫人（2025年3月）— 出典：ベトナムネット'],
-          ['Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ', 'ハノイ旧市街でノンラーをかぶる韓国のイ・ジェミョン大統領（2026年4月）— 出典：トゥオイチェー紙'],
+          // ảnh 1-25 (06/11, ảnh nhóm gắn): chú thích JA nguyên văn nhóm
+          ['Giới thiệu văn hóa Việt Nam tại Triển lãm Thế giới Expo 2021 Dubai', 'ドバイ国際博覧会2021におけるベトナム文化の紹介'],
+          // ảnh 1-26 (a)
+          ['Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet', 'ノンラーをかぶるシンガポール首相夫人 — 出典：VietnamNet'],
+          // ảnh 1-27 (b): sách dùng ảnh khác (Báo Tuổi Trẻ)
+          ['Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ', 'ノンラーをかぶる韓国大統領 — 出典：Báo Tuổi Trẻ'],
         ],
       },
       {
-        h: ['Từ nón lá nói chung đến nón lá làng Chuông nói riêng', 'ノンラー全般からチュオン村のノンラーへ'],
+        h: ['Từ nón lá nói chung đến nón lá làng Chuông nói riêng', 'ベトナムのノンラーからチュオン{村|むら}のノンラーへ'],
         p: [
           [
             'Bên cạnh việc hiện diện trong đời sống và các hoạt động văn hóa, nón lá còn gắn liền với những làng nghề thủ công truyền thống tại nhiều địa phương. Chính tại các làng nghề này, kinh nghiệm và kỹ thuật làm nón được lưu truyền qua nhiều thế hệ, góp phần duy trì những giá trị của nghề thủ công truyền thống.',
-            '暮らしや文化活動の中だけでなく、ノンラーは各地の伝統的な{工芸村|こうげいむら}とも深く結びついています。こうした村でこそ、笠づくりの経験と技が何世代にもわたって受け継がれ、伝統工芸の価値が守られてきました。',
+            'ノンラーは、人々の暮らしや文化活動の中で使われているだけでなく、ベトナム各地の伝統{工芸村|こうげいむら}とも深く結びついています。こうした村々では、ノンラー作りの経験や技術が何世代にもわたって{受|う}け継がれ、伝統工芸の{価値|かち}を維持することにつながっています。',
           ],
           [
             'Trong số đó, làng Chuông (Hà Nội) là một trong những làng nghề làm nón tiêu biểu ở miền Bắc. Tại đây, người thợ sử dụng những nguyên liệu quen thuộc cùng kỹ thuật chế tác thủ công để tạo nên nhiều sản phẩm nón mang nét đặc trưng riêng của làng.',
-            'その中でも、ハノイのチュオン村は北部を代表する笠づくりの村の一つです。ここでは職人たちが、なじみのある材料と手仕事の技で、村ならではの特徴をもつさまざまな笠を作っています。',
+            'その中でも、ハノイ市のチュオン{村|むら}は、ベトナム北部の代表的なノンラー作りの伝統{工芸村|こうげいむら}の一つです。この村では、職人たちがなじみのある{材料|ざいりょう}と手作業による{製作技術|せいさくぎじゅつ}を用いて、村{独自|どくじ}の{特徴|とくちょう}を持つさまざまなノンラーを作っています。',
           ],
           [
             'Phần tiếp theo sẽ giới thiệu khái quát về làng Chuông và các sản phẩm nón truyền thống của làng, trong đó tập trung vào chiếc nón lá hình chóp – đối tượng tìm hiểu chính của cuốn flipbook.',
-            '次の節では、チュオン村と村の伝統的な笠の{概要|がいよう}を紹介し、とくに本書の中心となる円錐形のノンラーに{焦点|しょうてん}を当てます。',
+            '続いて、チュオン{村|むら}の{概要|がいよう}と村の伝統的なノンラー製品について紹介します。特に、このフリップブックで主に取り上げる伝統的な{円錐形|えんすいけい}のノンラーに{焦点|しょうてん}を当てます。',
           ],
         ],
       },
@@ -181,126 +192,132 @@ export const ch1 = {
   // ── 1.3
   village: {
     id: '1.3',
-    title: ['Nón lá Làng Chuông', 'チュオン村のノンラー'],
+    title: ['Nón lá Làng Chuông', 'チュオン{村|むら}のノンラー'],
     about: {
       id: '1.3.1',
-      h: ['Khái quát về Làng Chuông', 'チュオン村の{概要|がいよう}'],
+      h: ['Khái quát về Làng Chuông', 'チュオン{村|むら}の{概要|がいよう}'],
       p: [
         [
           'Làng Chuông nằm tại xã Thanh Oai (trước đây là xã Phương Trung, huyện Thanh Oai), thành phố Hà Nội, cách trung tâm Thủ đô khoảng 30 km về phía Tây Nam. Đây là làng nghề nổi tiếng với truyền thống làm nón lá từ hơn 300 năm trước. Nghề làm nón đã được duy trì qua nhiều thế hệ, trở thành hoạt động gắn liền với đời sống kinh tế, sinh hoạt và văn hóa của người dân địa phương.',
-          'チュオン村はハノイ市タインオアイ社（旧タインオアイ県フオンチュン社）にあり、{首都|しゅと}の中心から南西へ約30kmの場所に位置します。300年以上前から続くノンラーづくりで知られる工芸村です。笠づくりは何世代にもわたって受け継がれ、村の人々の経済・生活・文化と{切|き}り{離|はな}せない営みとなっています。',
+          // địa chỉ theo bản Nhật của nhóm (xã Phương Trung, ~30 km về phía Tây); chữ Việt giữ — xem ja-p1.issues.md
+          'チュオン{村|むら}はハノイ市フオンチュン社に位置し、ハノイ中心部から西へ約30kmの距離にあります。300年以上にわたるノンラー作りの伝統で知られる{工芸村|こうげいむら}です。ノンラー作りは代々受け継がれ、地域の人々の経済活動や日常生活、文化と深く結びついています。',
         ],
         [
           'Trong lịch sử, theo cuốn Hỏi đáp về làng nghề truyền thống Việt Nam (Hoàng Đức Nhuận và cộng sự, 2009), nón lá Làng Chuông không chỉ được sử dụng rộng rãi trong đời sống hằng ngày mà còn từng được lựa chọn làm cống vật tiến dâng lên Hoàng hậu, Công chúa¹. Đến thời kỳ kháng chiến chống Mỹ, người dân trong làng tiếp tục duy trì sản xuất để đáp ứng nhu cầu sinh hoạt và hỗ trợ lực lượng thanh niên xung phong. Một số loại nón còn được khâu thêm lớp vải dù ngụy trang để sử dụng trên các tuyến đường ra mặt trận. Điều này không chỉ phản ánh nét đẹp trong sản xuất truyền thống mà còn khẳng định những đóng góp quan trọng của làng nghề qua từng mốc lịch sử gian lao của dân tộc (Vũ Từ Trang & Oger, 2020)².',
-          '歴史をふり返ると、『ベトナムの伝統工芸村Q&A』（ホアン・ドゥック・ニュアン{他|ほか}、2009）によれば、チュオン村のノンラーは日々の暮らしで広く使われただけでなく、{皇后|こうごう}や{王女|おうじょ}への{献上品|けんじょうひん}に選ばれたこともありました¹。{抗米戦争|こうべいせんそう}の時代にも、村の人々は生活の{需要|じゅよう}に{応|こた}え、青年{突撃隊|とつげきたい}を支えるために生産を続けました。{前線|ぜんせん}へ向かう道で使うため、パラシュートの{布|ぬの}で{偽装|ぎそう}を{施|ほどこ}した笠も作られました。これは伝統的なものづくりの美しさを示すと同時に、民族の{苦難|くなん}の歴史の{節目|ふしめ}ごとに村が果たした大きな{貢献|こうけん}を物語っています（ヴー・トゥー・チャン＆オジェ、2020）²。',
+          '『Hỏi đáp về làng nghề truyền thống Việt Nam』（Hoàng Đức Nhuậnほか、2009年）によると、チュオン{村|むら}のノンラーは、かつて日常生活で広く使われていただけでなく、{皇后|こうごう}や{王女|おうじょ}に献上する貢ぎ{物|もの}にも選ばれていました¹。{抗米戦争|こうべいせんそう}期にも、村の人々は生活上の{需要|じゅよう}に{応|こた}え、青年{突撃隊|とつげきたい}を支援するために、ノンラーの生産を続けました。一部のノンラーには、{前線|ぜんせん}へと続く道で使用するため、迷彩用のパラシュート生地が{縫|ぬ}い{付|つ}けられていました。こうした営みは、伝統的なものづくりの美しさを表すだけでなく、民族が{苦難|くなん}を経験した歴史の各時期に、この{工芸村|こうげいむら}が果たしてきた重要な{貢献|こうけん}を明確に示しています（Vũ Từ Trang & Oger、2020年）²。',
         ],
         [
           'Ngày nay, nghề làm nón Làng Chuông vẫn tiếp tục được gìn giữ chủ yếu theo mô hình sản xuất hộ gia đình. Từ khâu chuẩn bị nguyên liệu, làm khung, chằm nón cho đến hoàn thiện sản phẩm đều diễn ra trong không gian sinh hoạt quen thuộc của mỗi nếp nhà. Tùy theo độ khéo léo và kinh nghiệm, mỗi thành viên trong gia đình sẽ đảm nhận từng công đoạn riêng biệt. Chính phương thức sản xuất mộc mạc ấy không chỉ bảo tồn trọn vẹn những kỹ thuật thủ công tinh xảo, mà còn là sợi dây kết nối, truyền lửa nghề qua nhiều thế hệ.',
-          '現在も、チュオン村の笠づくりは主に家族単位の{家内生産|かないせいさん}によって守られています。材料の{準備|じゅんび}、骨組みづくり、{縫|ぬ}い{付|つ}けから{仕上|しあ}げまで、すべてが{住|す}み{慣|な}れた家の中で行われます。家族一人ひとりが{器用|きよう}さや経験に応じて{別々|べつべつ}の工程を{担当|たんとう}します。この素朴な生産のかたちこそが、{精巧|せいこう}な手仕事の技をそのまま{残|のこ}し、世代から世代へと技の{灯|ひ}をつなぐ{絆|きずな}となっているのです。',
+          '現在も、チュオン{村|むら}のノンラー作りは、主に家族単位の生産形態で{受|う}け継がれています。{材料|ざいりょう}の{準備|じゅんび}から{骨組|ほねぐ}み作り、{縫|ぬ}い{付|つ}け、{仕上|しあ}げに至るまで、すべての工程は、それぞれの家庭の{慣|な}れ親しんだ生活空間で行われています。家族の一人ひとりが、手先の{器用|きよう}さや経験に応じて、それぞれの工程を{担当|たんとう}しています。こうした{素朴|そぼく}な生産のあり{方|かた}は、精緻な手仕事の技術を余すところなく守り伝えるだけでなく、世代をつなぎ、ノンラー作りへの情熱を次の世代へと受け継ぐ役割も果たしています。',
         ],
       ],
       notes: [
-        ['¹ Hỏi đáp về làng nghề truyền thống Việt Nam, NXB Quân đội nhân dân, 2009, tr. 50.', '¹『ベトナムの伝統工芸村Q&A』人民軍隊出版社、2009年、50頁。'],
-        ['² Vũ Từ Trang, Henri Oger, Nghề cổ nước Việt – Từ truyền thống đến hiện đại, NXB Phụ nữ Việt Nam, 2020, tr. 218.', '² ヴー・トゥー・チャン、アンリ・オジェ『ベトナムの古い手仕事：伝統から現代へ』ベトナム女性出版社、2020年、218頁。'],
+        ['¹ Hỏi đáp về làng nghề truyền thống Việt Nam, NXB Quân đội nhân dân, 2009, tr. 50.', '¹『Hỏi đáp về làng nghề truyền thống Việt Nam』、人民軍出版社、2009年、50頁。'],
+        ['² Vũ Từ Trang, Henri Oger, Nghề cổ nước Việt – Từ truyền thống đến hiện đại, NXB Phụ nữ Việt Nam, 2020, tr. 218.', '² Vũ Từ Trang, Henri Oger『Nghề cổ nước Việt – Từ truyền thống đến hiện đại』、ベトナム女性出版社、2020年、218頁。'],
       ],
       images: [
         ['Bản đồ hành trình từ trung tâm Hà Nội tới Làng Chuông (xã Thanh Oai, Hà Nội) — nguồn: nền bản đồ © OpenStreetMap', 'ハノイ中心部からチュオン村（ハノイ市タインオアイ社）への道のり — 出典：地図データ © OpenStreetMap'],
-        ['Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)', '1896年、ハノイの笠屋 — 写真：アンドレ・サル（フランス国立図書館）'],
+        ['Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)', '1896年、ハノイのノンラー屋 — 写真：アンドレ・サル（フランス国立図書館）'],
       ],
       // góp ý 04/11 (Thu Nguyệt): ảnh trong mục phải là nón Làng Chuông / nón cổ chụp tại bảo tàng theo đúng ảnh nhóm chọn
       museum: [
-        ['Nón lá làng Chuông tại quầy trưng bày của Bảo tàng Dân tộc học Việt Nam', 'ベトナム民族学博物館のチュオン村のノンラーの展示'],
-        ['Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam', 'バータム笠 — ベトナム美術博物館'],
-        ['Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam', 'キン族の笠：竹・葉・鳥の羽・銀 — ベトナム美術博物館'],
+        // ảnh 1-29 (a): chú thích Nhật theo nhóm
+        ['Nón lá làng Chuông tại quầy trưng bày của Bảo tàng Dân tộc học Việt Nam', 'ベトナム民族学博物館の{展示|てんじ}コーナーにあるチュオン{村|むら}の女性の模型'],
+        ['Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam', 'ノン・バータム — ベトナム美術博物館'],
+        ['Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam', 'キン族のノンラー：竹・葉・鳥の羽・銀 — ベトナム美術博物館'],
       ],
     },
     types: {
       id: '1.3.2',
-      h: ['Nón lá Làng Chuông', 'チュオン村のノンラー'],
+      h: ['Nón lá Làng Chuông', 'チュオン{村|むら}のノンラー'],
       intro: [
         'Nghề làm nón Làng Chuông đã được duy trì qua nhiều thế hệ, gắn liền với đời sống sinh hoạt và hoạt động sản xuất của người dân địa phương. Theo thời gian, cùng với sự phát triển của đời sống hiện đại và nhu cầu thị trường thay đổi, các sản phẩm nón của Làng Chuông đã linh hoạt chuyển mình về kiểu dáng, chất liệu và công dụng. Bên cạnh việc duy trì sản xuất nón lá chóp truyền thống, các nghệ nhân nơi đây đã sáng tạo thêm nhiều dòng sản phẩm mới, kết hợp tinh tế giữa kỹ thuật thủ công lâu đời và chất liệu hiện đại:',
-        'チュオン村の笠づくりは何世代にもわたり、村人の生活と生産に結びついてきました。現代の暮らしの発展や市場の{変化|へんか}に合わせて、村の笠は形・素材・用途を{柔軟|じゅうなん}に変えてきました。伝統的な円錐形のノンラーを作り続ける一方で、職人たちは長い歴史をもつ手仕事の技と現代的な素材を巧みに組み合わせ、新しい製品を数多く生み出しています。',
+        'チュオン{村|むら}のノンラー作りは、地域の人々の日常生活や生産活動と深く結びつきながら、代々受け継がれてきました。現代の暮らしの発展や市場のニーズの{変化|へんか}に伴い、村のノンラーも形や{素材|そざい}、{用途|ようと}の{面|めん}で{柔軟|じゅうなん}に変化してきました。職人たちは、伝統的な{円錐形|えんすいけい}のノンラーの生産を続ける一方で、長年受け継がれてきた手仕事の技術と現代の素材を巧みに組み合わせ、次のような新たな製品も生み出しています。',
       ],
       // góp ý 04/11: ảnh nghệ nhân Lê Văn Tuy chụp (thư mục "Ảnh trang 32"), khung không cắt mất đầu
-      hero: ['Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy', '笠の工房の職人レー・ヴァン・トゥイ — 写真：レー・ヴァン・トゥイ氏'],
+      // ảnh 2-3 (a, cùng ảnh nl-f33d60): chú thích Nhật theo nhóm
+      hero: ['Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy', 'ノンラーを作る職人のレ・ヴァン・トゥイ氏 — 写真：職人レ・ヴァン・トゥイ氏'],
       list: [
         {
-          name: ['Nón lá hình chóp truyền thống', '伝統的な円錐形のノンラー'],
+          name: ['Nón lá hình chóp truyền thống', '伝統的な{円錐形|えんすいけい}のノンラー'],
           text: [
             'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non)¹ đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có hai màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng và các đường khâu tương đối đều. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
-            '先のとがった円錐形の笠で、{処理|しょり}したライ葉（若いヤシの葉）¹を16本のヌア竹の輪に縫い付けて作ります。色は明るい白か{象牙色|ぞうげいろ}の二色が多く、葉の表面は{平|たい}らで、{縫|ぬ}い{目|め}もよくそろっています。軽くて使いやすいため、日常使いにも贈り物にも選ばれています。',
+            '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉¹）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
           ],
-          notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の高い木。{扇|おうぎ}形の葉が{幹|みき}の先に{房|ふさ}のように{茂|しげ}り、屋根を{葺|ふ}いたり笠を作ったりするのに使われる。']],
+          notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
         },
         {
-          name: ['Nón lá già ghép sống', '{古葉|ふるば}{継|つ}ぎの{笠|かさ}（ノン・ラー・ザー・ゲップ・ソン）'],
+          name: ['Nón lá già ghép sống', '古いヤシの{葉|は}で作られたノンラー'],
           text: [
             'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón lá chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật với các đường sống lá rõ nét, tạo nên vẻ ngoài mộc mạc và khác biệt cho sản phẩm.',
-            '{育|そだ}ちきったヤシの葉を{継|つ}ぎ合わせ、骨組みに縫い{留|と}めて作る笠です。表面は{淡|あわ}い{茶色|ちゃいろ}で、頂から{縁|ふち}へ{放射状|ほうしゃじょう}に広がる葉の{筋|すじ}と、横に走る縫い目が組み合わさって、独特の{風合|ふうあ}いを生み出しています。葉の面が平らで色の明るい伝統的な円錐形の笠とくらべ、くっきりとした葉の筋が目を引き、{素朴|そぼく}で個性的な姿に仕上がります。',
+            '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。',
           ],
         },
         {
-          name: ['Nón Ba tầm', 'バータム笠'],
+          name: ['Nón Ba tầm', 'ノン・バータム'],
+          // hai câu giữa (kích thước + "sườn cao nhất"; "lá Hồ tuyển chọn") tạm giữ bản cũ — xem ja-p1.issues.md mục (b)
           text: [
             'Là kiểu nón hội hè truyền thống của phụ nữ miền Bắc, còn có tên gọi khác là nón Mười (tên "Ba tầm" xuất phát từ kỹ thuật khâu ba vòng ở lòng nón). Nón nổi bật với kiểu dáng xòe rộng (đường kính 70–80 cm, thành cao 10–12 cm) và phần sườn cao nhất trong các dòng nón cổ, được lợp tỉ mỉ từ lá Hồ tuyển chọn (nổi danh nhất là nón Làng Chuông). Xưa kia, từ các cô gái trẻ đến các cụ bà đều ưa chuộng đội nón Ba tầm khi đi hội, đi chùa hay trẩy chợ để tôn lên nét duyên dáng, thanh lịch. Ngày nay, nón không còn phổ biến trong sinh hoạt thường nhật mà chủ yếu xuất hiện trên sân khấu nghệ thuật, lễ hội truyền thống hoặc làm sản phẩm trưng bày di sản.',
-            '北部の女性がお祭りでかぶった伝統的な笠で、「ノン・ムオイ」とも呼ばれます（「バータム」の名は、笠の内側に{三重|さんじゅう}の輪を縫う技法に{由来|ゆらい}します）。直径70〜80cm、{縁|ふち}の高さ10〜12cmと大きく広がり、古い笠の中でもっとも高い{骨|ほね}をもちます。選び{抜|ぬ}いたホー葉で丁寧に葺かれ、チュオン村のものがもっとも名高いとされます。かつては若い女性からお{年寄|としよ}りまで、祭りや{寺参|てらまい}り、市場へ出かけるときにこの笠をかぶり、しとやかな美しさを引き立てました。今では日常で使われることは少なく、主に舞台や伝統的な祭り、{文化遺産|ぶんかいさん}の展示で見られます。',
+            'ベトナム北部の女性が祭りの際にかぶる伝統的なノンラーです。「バータム」という名称は、ノンラーの内側を{三重|さんじゅう}の輪状に縫う技法に{由来|ゆらい}します。直径70〜80cm、{縁|ふち}の高さ10〜12cmと大きく広がり、古いノンラーの中でもっとも高い{骨|ほね}をもちます。選び{抜|ぬ}いたホー{葉|ば}で丁寧に葺かれ、チュオン{村|むら}のものがもっとも名高いとされます。かつては、若い女性から年配の女性まで、祭りや{寺参|てらまい}り、市へ出かける際に、優美さや上品さを引き立てるために好んでかぶっていました。現在では、日常生活で使われることは少なくなりましたが、主に舞台芸術や伝統的な祭りで用いられるほか、{文化遺産|ぶんかいさん}を紹介する{展示|てんじ}品にもなっています。',
           ],
         },
         {
-          name: ['Nón Quai thao', 'クアイタオ笠'],
+          name: ['Nón Quai thao', 'ノン・クアイ・タオ'],
           text: [
             'Là loại nón rộng vành gắn liền với trang phục truyền thống của phụ nữ Bắc Bộ, đặc biệt là hình ảnh các liền chị Quan họ trong dịp hội hè. Nón có ba kích cỡ phổ biến (đường kính 30 cm, 70 cm, 90 cm và thành cao 3–4 cm), đặc trưng với mặt nón rộng, tương đối phẳng, thành thấp, kết hợp cùng dây quai tết và các chùm thao trang trí rực rỡ quanh vành. Do đặc điểm cấu tạo, nón chủ yếu được dùng làm phụ kiện trang phục, tạo dáng trong lễ hội và biểu diễn văn hóa. Trong một số không gian giao duyên, nón còn được dùng làm khay đặt trầu têm cánh phụng để mời khách.',
-            '北部の女性の伝統衣装、とくにお祭りで歌うクアンホー（{民謡|みんよう}）の歌い手の姿と結びついた、つばの広い笠です。直径30cm・70cm・90cmの三つの大きさがよく見られ、縁の高さは3〜4cmです。広く{平|ひら}たい{面|めん}と低い縁をもち、{編|あ}んだあごひもと、縁を{彩|いろど}る{華|はな}やかな{房飾|ふさかざ}りが特徴です。その構造から、主に祭りや舞台の{装身具|そうしんぐ}として使われます。歌を{交|か}わす{場|ば}では、客にすすめる{檳榔|びんろう}を{載|の}せる{盆|ぼん}としても使われます。',
+            'ベトナム北部の女性の{伝統衣装|でんとういしょう}と深く結びついた、つばの広いノンラーです。一般的には三つのサイズ（直径30cm、70cm、90cm、側面の高さ3～4cm）があり、広く{比較的|ひかくてき}平らな{面|めん}と低い側面、編み込んだあご紐、{縁|ふち}の周囲を{彩|いろど}る鮮やかな{房飾|ふさかざ}りが{特徴|とくちょう}です。その構造から、主に衣装に添える{小物|こもの}として、祭りや文化公演で姿を美しく見せるために用いられます。また、男女が歌を{交|か}わす{場|ば}では、鳳凰の翼の形に整えたキンマを{載|の}せ、客にキンマを勧めるための{盆|ぼん}として使われることもあります。',
           ],
         },
         {
           name: ['Nón thúng', 'ノン・トゥン'],
-          // góp ý 04/11 (C9): ảnh nón thúng IMG_8480, nguồn nghệ nhân Lê Văn Tuy
-          credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
+          // góp ý 04/11 (C9): ảnh nón thúng IMG_8480, nguồn nghệ nhân Lê Văn Tuy (bản Nhật của nhóm ghi グループ撮影 — hỏi lại)
+          credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レ・ヴァン・トゥイ氏'],
+          // dấu [7] [8] (chú thích áo tứ thân, áo mớ ba mớ bảy) chỉ có ở bản Nhật → chưa đặt, xem ja-p1.issues.md mục (d)
           text: [
             'Là kiểu nón có vành rất rộng, dáng sâu lòng giống như cái thúng khi ngửa lên. Xưa kia, nón thúng kết hợp quai thao là món phụ kiện trang phục cao cấp đi cùng áo tứ thân, áo mớ ba mớ bảy của các bà, các chị trong dịp lễ Tết, hội hè. Ngày nay, nón chủ yếu xuất hiện trong không gian biểu diễn nghệ thuật truyền thống hoặc đóng vai trò như sản phẩm quà tặng, trưng bày di sản.',
-            'つばがとても広く、上に向けると{籠|かご}のように深い形をした笠です。かつては{房飾|ふさかざ}りのあごひもと合わせ、{正月|しょうがつ}や祭りに女性たちが{四身|よつみ}の{衣|ころも}や{重|かさ}ね{着|ぎ}の衣装とともに身につける、{高級|こうきゅう}な装身具でした。今では主に伝統芸能の舞台で見られるほか、贈り物や文化遺産の展示品となっています。',
+            'つばが非常に広く、深さがあり、裏返すとトゥン（竹編みのかご）のような形になるノンラーです。かつては、{飾|かざ}り{房|ふさ}の付いたあごひもを組み合わせたノン・トゥンが、女性たちの上質な装いの{小物|こもの}として、テト（ベトナムの旧{正月|しょうがつ}）などの祝祭日や祭りの際に、アオ・トゥータンやアオ・モー・バー・モー・バイ（複数の{衣|ころも}を{重|かさ}ねる伝統的な装い）とともに用いられていました。現在では、主に伝統芸能の公演で使われるほか、贈答品や{文化遺産|ぶんかいさん}を紹介する{展示|てんじ}品としても用いられています。',
           ],
         },
         {
-          name: ['Nón nhà sư (Nón thầy tu)', '{僧侶|そうりょ}の笠'],
+          name: ['Nón nhà sư (Nón thầy tu)', '{僧侶|そうりょ}用のノンラー'],
           text: [
             'Là loại nón có nguồn gốc cổ xưa từ Thanh Oai (Hà Nội), mang kiểu dáng rộng vượt khổ (đường kính khoảng 50 cm) để tạo sự cân đối khi kết hợp cùng áo cà sa phom rộng của chư tôn đức. Trong lịch sử, nón từng được đan thô sơ từ loại lá dày bởi thợ đan rổ rá với giá thành bình dân. Để đáp ứng tiêu chuẩn thẩm mỹ hiện đại, sản phẩm đã được cải tiến tinh tế: giữ đường kính rộng đặc trưng nhưng hạ thấp độ cao của chóp, tạo nên tổng thể thanh thoát, trang nhã và tôn lên phong thái thanh cao của nhà sư. Sự kết hợp này giúp nón nhà sư nhận được sự đánh giá rất cao, không chỉ phục vụ chư tăng ni trong nước mà còn vươn tầm quốc tế, được đón nhận tại Ấn Độ và nhiều quốc gia Phật giáo.',
-            'タインオアイ（ハノイ）に古くから伝わる笠で、ゆったりとした{袈裟|けさ}と{釣|つ}り{合|あ}うよう、直径約50cmと大きく作られます。かつては{籠|かご}を編む職人が厚い葉で{素朴|そぼく}に編んだ、手ごろな笠でした。現代の美の{基準|きじゅん}に合わせて{改良|かいりょう}され、特徴的な広い直径はそのままに頂を低くすることで、軽やかで上品な、僧侶の{気高|けだか}い{佇|たたず}まいを引き立てる姿になりました。こうして高い評価を受け、国内の僧侶だけでなく、インドなど多くの{仏教国|ぶっきょうこく}でも愛用されています。',
+            'ハノイのタインオアイに起源を持つ、古くからのノンラーです。直径約50cmという大ぶりな形が{特徴|とくちょう}で、{僧侶|そうりょ}がまとうゆったりとした{袈裟|けさ}と調和するように作られています。かつては、かごやざるを編む職人が厚手の{葉|は}を使って簡素に編み、手頃な価格で作っていました。現代の{美的|びてき}{基準|きじゅん}に{応|こた}えるため、特徴的な直径の広さを保ちながら頂部を低くするという、細やかな{改良|かいりょう}が加えられています。それによって、全体がすっきりと上品な姿に整えられ、僧侶の{気高|けだか}い{佇|たたず}まいを引き立てています。こうした工夫により、僧侶用のノンラーは非常に高く評価され、国内の僧侶や尼僧に用いられるだけでなく、海外にも広がり、インドや多くの{仏教国|ぶっきょうこく}で{受|う}け入れられています。',
           ],
         },
       ],
       styled: {
-        h: ['Các mẫu nón cách điệu từ nón lá chóp truyền thống', '伝統的な円錐形から生まれた新しい笠'],
+        h: ['Các mẫu nón cách điệu từ nón lá chóp truyền thống', '伝統的なノンラーをアレンジした製品'],
         list: [
           {
-            name: ['Nón lụa', '{絹|きぬ}の笠'],
-            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
+            name: ['Nón lụa', '絹張りのノンラー'],
+            // bản Nhật của nhóm ghi ảnh nón lụa là グループ撮影 (ảnh nhóm khác ảnh sách) — giữ nguồn sách, hỏi lại
+            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レ・ヴァン・トゥイ氏'],
             text: [
               'Là sản phẩm được phát triển từ nón lá chóp truyền thống, có phần bên ngoài được bọc bằng lụa tơ tằm Vạn Phúc (Hà Đông). Sự kết hợp giữa kỹ thuật làm nón của Làng Chuông và chất liệu lụa với màu sắc, hoa văn đa dạng tạo nên diện mạo thanh lịch, phù hợp làm phụ kiện thời trang và quà lưu niệm.',
-              '伝統的な円錐形のノンラーをもとに、外側をヴァンフック（ハドン）の{絹|きぬ}で{包|つつ}んだ笠です。チュオン村の笠づくりの技と、色や{柄|がら}の豊かな絹が合わさって上品な姿になり、ファッション{小物|こもの}やお{土産|みやげ}にぴったりです。',
+              '伝統的な{円錐形|えんすいけい}のノンラーをもとに開発された製品で、外側をヴァンフック（ハドン）の絹織物で覆っています。チュオン{村|むら}のノンラー作りの技術と、多彩な色や{柄|がら}の{絹|きぬ}を組み合わせることで、上品な外観に{仕上|しあ}げられており、ファッション{小物|こもの}や{土産|みやげ}物に適しています。',
             ],
           },
           {
-            name: ['Nón lụa hai mặt', '{両面|りょうめん}絹張りの笠'],
-            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
+            name: ['Nón lụa hai mặt', '内側と外側に絹布を使用したノンラー'],
+            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レ・ヴァン・トゥイ氏'],
             text: [
               'Được thiết kế với hai mặt có màu sắc hoặc họa tiết khác nhau, tạo sự đa dạng về hình thức trang trí. Sản phẩm giữ dáng nón chóp quen thuộc, đồng thời tăng tính linh hoạt trong cách phối màu và lựa chọn kiểu dáng, phù hợp làm phụ kiện thời trang và quà lưu niệm.',
-              '表と裏で色や柄の{異|こと}なる絹を張り、{飾|かざ}りのバリエーションを広げた笠です。なじみのある円錐形はそのままに、色の組み合わせや形を自由に選べ、ファッション小物やお土産に向いています。',
+              '内側と外側に{異|こと}なる色や{柄|がら}を用いることで、装飾に{変化|へんか}を持たせています。なじみのある{円錐形|えんすいけい}を保ちながら、配色やデザインの選択の幅を広げた製品で、ファッション{小物|こもの}や{土産|みやげ}物に適しています。',
             ],
           },
           {
-            name: ['Nón cô dâu', '{花嫁|はなよめ}の笠'],
+            name: ['Nón cô dâu', '{花嫁|はなよめ}用のノンラー'],
             text: [
               'Là mẫu nón được cách điệu để phục vụ nhu cầu trang trí và chụp ảnh cưới. Bên cạnh hình dáng nón truyền thống, sản phẩm được trang trí thêm họa tiết ở mặt trong, tạo điểm nhấn khi nhìn từ phía dưới hoặc khi tạo dáng chụp ảnh. Thiết kế này mang đến diện mạo mới cho nón lá, kết hợp nét truyền thống với mục đích sử dụng trong các hoạt động cưới hỏi và lưu giữ kỷ niệm.',
-              '{飾|かざ}りや{結婚|けっこん}写真の{撮影|さつえい}のためにアレンジされた笠です。伝統的な形に加え、内側に{模様|もよう}を{描|えが}き、下から見たときや写真でポーズをとるときに目を引くようにしています。伝統の美しさと、結婚式や思い出づくりという用途を結びつけた、ノンラーの新しい姿です。',
+              '{結婚|けっこん}式の装飾や記念{撮影|さつえい}のニーズに合わせて、現代風にアレンジされたノンラーです。伝統的な形状を保ちつつ、内側に{模様|もよう}が施されており、下から見上げたときや撮影のポーズをとる際に、良いアクセントとなります。',
             ],
           },
         ],
       },
       outro: [
         'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, flipbook sẽ giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
-        '本書では、チュオン村の伝統的な円錐形のノンラーを主に取り上げます。先のとがった特徴的な形をもち、ベトナム女性のイメージと結びついた笠だからです。文化的価値と{実用性|じつようせい}に加え、この笠はOCOP（{一村一品|いっそんいっぴん}）の{四|よっ}つ{星|ぼし}にも{認定|にんてい}され、地域の伝統工芸品としての価値が認められています。また、現在この村でもっとも多く作られている笠でもあります。そこで本書は、チュオン村のノンラーの概要を紹介したうえで、{概要|がいよう}と特徴、構造・材料・製作技術、そして生産工程という三つの内容を通して、伝統的な円錐形のノンラーの特徴を明らかにします。それによって、ノンラーの全体像、笠づくりの工程、そしてチュオン村の職人の技と腕前の特色をお伝えします。',
+        '本プロジェクトでは、チュオン{村|むら}の伝統的な{円錐形|えんすいけい}のノンラーを、フリップブックの主な紹介対象に選びました。先端が尖った{特徴|とくちょう}的な形を持ち、ベトナムの女性の姿と深く結びついているためです。文化的{価値|かち}や日常生活における{実用性|じつようせい}に加え、チュオン村の円錐形のノンラーはOCOPの4つ星{認定|にんてい}を{受|う}けており、地域の伝統工芸品としての価値が認められています。また、現在もこの{工芸村|こうげいむら}で広く生産されている{種類|しゅるい}です。そのため、本フリップブックでは、チュオン村のノンラーについて概説し、「{概要|がいよう}・特徴」「構造・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」「製作工程」という三つの主要な内容を通して、伝統的な円錐形のノンラーの特徴を詳しく紹介します。これにより、ノンラーの全体像や各製作工程、チュオン村の職人の技術や熟練の技に見られる特徴を伝えます。',
       ],
     },
   },

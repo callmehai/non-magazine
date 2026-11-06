@@ -160,7 +160,8 @@ export const photos = {
   "Nón ba tầm — Hà Nội": "Chương 1/Hình dáng nón/Nón ba tầm mặt trong",
   // soát 04/11: ảnh cũ là chiếc nón ba tầm có tua ở Bảo tàng Mỹ thuật (đã dùng ở tr. 28 theo ghi chú nhóm) → ảnh nón quai thao IMG_3868
   "Nón quai thao — Hà Nội": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón quai thao/IMG_3868",
-  "Nón thúng — Nghệ An": "Chương 1/Hình dáng nón/Nón thúng",
+  // 06/11: nhóm gắn ảnh nón thúng Nghệ An trong bản Nhật (ノン・トゥン ― ゲアン省 (Đông Phong)) → ô tr. 14 hết là hình vẽ
+  "Nón thúng — Nghệ An": "online/dong-phong-non-thung-nghe-an",
   "Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet": "online/phu-nhan-singapore",
   "Tổng thống Hàn Quốc Lee Jae Myung đội nón lá ở phố cổ Hà Nội (4/2026) — nguồn: Báo Tuổi Trẻ": "online/tong-thong-han-quoc",
   "Bản đồ Làng Chuông (xã Phương Trung, Hà Nội)": "online/ban-do-lang-chuong",
@@ -258,4 +259,19 @@ export const photos = {
   // E4 / Sheet dòng 24 (Đổi mới sản phẩm, cột Nguồn: Báo Pháp luật, ảnh Xuân Lai) và dòng 29 (Quốc phòng Thủ đô)
   "Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật": "new/phapluat-doi-moi",
   "Người thợ làng Chuông bên những chiếc nón vẽ, nón trang trí — nguồn: Báo Quốc phòng Thủ đô": "new/qptd-cho-dung",
+
+  // ── ảnh nhóm gắn trong bản Nhật (Doc, 06/11; "ảnh nào phù hợp em cứ lấy nhé"). Chú thích VI dịch sát chú thích JA của nhóm
+  // (nhóm chỉ ghi chú thích tiếng Nhật); nguồn theo nhóm ghi. Ảnh trong thư mục doc-0611/ do nhóm chụp (グループ撮影).
+  "Nón người Tày — Thái Nguyên": "online/dtpt-non-tay",
+  "Giới thiệu văn hóa Việt Nam tại Triển lãm Thế giới Expo 2021 Dubai": "online/thanhnien-expo-dubai",
+  "Cổng đình làng Chuông": "doc-0611/dinh-chuong",
+  "Nghệ nhân Phạm Trần Canh": "online/qdnd-pham-tran-canh",
+  "Trung tâm thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP làng nghề nón Chuông — cơ sở của nghệ nhân Lê Văn Tuy": "doc-0611/ocop-co-so-le-van-tuy",
+  "Trải nghiệm vẽ trên nón lá ở làng Chuông": "doc-0611/ve-non-can-tay",
+  "Du khách trải nghiệm vẽ nón ở làng Chuông": "doc-0611/ve-non-du-khach",
+  "Du khách nước ngoài trải nghiệm vẽ nón ở làng Chuông": "doc-0611/ve-non-khach-nuoc-ngoai",
+  "Năm 2023, nghệ nhân Lê Văn Tuy (hàng thứ ba, thứ hai từ trái) chụp ảnh lưu niệm cùng Chủ tịch nước Võ Văn Thưởng": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/doc-0611-chu-tich-nuoc-2023",
+  "Nghệ nhân Tạ Thu Hương tại gian hàng nón của bà": "Chương 3/Ghi nhận OCOP/Nón Tạ Thu Hương/doc-0611-gian-hang",
+  "Nghệ nhân Tạ Thu Hương (áo dài đỏ, ở giữa) giới thiệu sản phẩm nón lá": "Chương 3/Ghi nhận OCOP/Nón Tạ Thu Hương/doc-0611-hoi-cho",
+  "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": "doc-0611/huong-giay-khen",
 }
