@@ -168,7 +168,7 @@ function Hat({ cx, by, R, t0, rings = 16, ribs = true, quai = true, fast = 1 }) 
           trên mặt đất (anh Hải 06/11: trước vẽ chữ U đè ngoài thân nón — "dây nói ngoài nón") */}
       {quai && (
         <path
-          d={`M${f1(cx - R * 0.34)} ${f1(by + RY * 0.94)} C ${f1(cx - R * 0.3)} ${f1(by + RY * 1.4)}, ${f1(cx + R * 0.3)} ${f1(by + RY * 1.4)}, ${f1(cx + R * 0.34)} ${f1(by + RY * 0.94)}`}
+          d={`M${f1(cx - R * 0.34)} ${f1(by + RY * 0.94)} C ${f1(cx - R * 0.3)} ${f1(by + RY * 1.15)}, ${f1(cx + R * 0.3)} ${f1(by + RY * 1.15)}, ${f1(cx + R * 0.34)} ${f1(by + RY * 0.94)}`}
           stroke={QUAI}
           strokeWidth="1.5"
           {...draw(tF + 0.7, 0.6)}

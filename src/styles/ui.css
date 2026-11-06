@@ -1419,3 +1419,13 @@ html[lang='ja'] .intro__cadao {
     flex-shrink: 0;
   }
 }
+/* soát vòng 10: màn ≤ 379px hàng nút (333px) tràn khỏi thanh → bỏ nút toàn màn hình (iOS không hỗ trợ), nút nhỏ lại */
+@media (max-width: 379px) {
+  .controls .ctrl {
+    width: 32px;
+    height: 32px;
+  }
+  .controls .ctrl--fullscreen {
+    display: none;
+  }
+}

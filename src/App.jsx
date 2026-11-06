@@ -274,6 +274,14 @@ export default function App({ magazine: source }) {
         last = null
         const r = s.getBoundingClientRect()
         zoomFocus.current = { fx: (e.clientX - r.left + s.scrollLeft) / s.scrollWidth, fy: (e.clientY - r.top + s.scrollTop) / s.scrollHeight }
+        // soát vòng 10: cú click theo sau lần chạm thứ hai rơi xuống bố cục đã phóng (chỗ dưới ngón tay đã là thứ khác,
+        // vd. ảnh → mở xem ảnh lớn ngoài ý muốn) → nuốt đúng một click ngay sau đó
+        const eat = (ev) => {
+          ev.stopPropagation()
+          ev.preventDefault()
+        }
+        window.addEventListener('click', eat, { capture: true, once: true })
+        setTimeout(() => window.removeEventListener('click', eat, true), 450)
         setZoom((z) => (z > 1 ? 1 : 2))
       } else last = { t: now, x: e.clientX, y: e.clientY }
     }
@@ -328,7 +336,7 @@ export default function App({ magazine: source }) {
   const resumeMusic = useCallback(() => {
     if (!musicByVideo.current) return
     musicByVideo.current = false
-    musicPlay()
+    if (soundOnRef.current) musicPlay() // tắt âm thanh trong lúc xem video thì thôi
   }, [musicPlay])
   const flipTo = book.flipTo
   // anh Hải 05/11: bấm link trong sách (dòng mục lục, số tài liệu tham khảo…) thì lật tới trang đó; có nút "Quay lại trang …"

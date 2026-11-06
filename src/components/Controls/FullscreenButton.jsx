@@ -6,7 +6,7 @@ export default function FullscreenButton({ isFullscreen, onToggle, supported }) 
   return (
     <button
       type="button"
-      className="ctrl"
+      className="ctrl ctrl--fullscreen"
       onClick={onToggle}
       aria-label={isFullscreen ? t('exitFullscreen') : t('fullscreen')}
       aria-pressed={isFullscreen}

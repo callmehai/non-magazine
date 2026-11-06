@@ -1399,9 +1399,10 @@ const POOL = {
     // soát 04/11: trang lớp lá cần ảnh thấy các lớp (ảnh thợ đeo micro không khớp nội dung)
     ['Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá', '葺きかけの笠：葉の層の間に見えるモーナン'],
     // soát 06/11 (R9): ảnh quầy bảo tàng này là lần thứ ba cùng một quầy (tr. 46, 54); review lần 2: ảnh "trải lá quanh
-    // khung" cùng bàn tay, cùng chiếu, cùng lúc với ảnh 58 (lớp lá ngoài, tr. 53) → chiếc nón thành phẩm (đoạn văn: chọn
-    // lá, vòng, cước theo chuẩn khắt khe để có chiếc nón đẹp)
-    ['Chiếc nón trắng vừa hoàn thiện', '仕上がったばかりの白いノンラー'],
+    // khung" cùng bàn tay, cùng chiếu, cùng lúc với ảnh 58 (lớp lá ngoài, tr. 53); soát vòng 10: "Chiếc nón trắng vừa hoàn
+    // thiện" là CÙNG tấm ảnh với ảnh 33 tr. 31 (thư mục Nón cô dâu(1) chứa IMG_7347 của nhóm) → người thợ khâu nón tại nhà
+    // (chương 2 không lấp bằng ảnh chợ — góp ý 04/11; ảnh bảo tàng IMG_6391 cùng quầy tr. 46, 54)
+    ['Người thợ khâu nón ngay trong nếp nhà', '自宅で笠を縫う職人'],
     ['Khung nón và vành nứa — trưng bày tại Bảo tàng Dân tộc học Việt Nam', '笠の骨組みとヌア竹の輪 — ベトナム民族学博物館の展示'],
     ['Nguyên liệu và các lớp của chiếc nón — trưng bày tại Bảo tàng Dân tộc học Việt Nam', '笠の材料と層 — ベトナム民族学博物館の展示'],
     ['Người bán phân loại lá lụi ở chợ Chuông', 'チュオンの市場でライ葉を仕分ける売り手'],
@@ -3092,7 +3093,7 @@ let stripRight = null
     stepPages.forEach((t, j) => {
       const x = x0 + j * step
       const on = t === s
-      const alt = `${j + 1}. ${strip(t.name[0])} — tr. ${t.page}`
+      const alt = [`${j + 1}. ${strip(t.name[0])} — tr. ${t.page}`, `${j + 1}. ${strip(t.name[1] ?? t.name[0])} — ${t.page}ページ`]
       pg.add(
         ELL(x, dy - d / 2, d, d, on ? acc : '#fbf6ea', { stroke: acc, sw: 1.1, name: 'Số bước tròn' }),
         T(x, dy - 7.6, d, 15, [String(j + 1), null], { size: 12.5, weight: 700, lh: 1.2, align: 'center', color: on ? '#fff' : acc, name: 'Số trên chấm' }),
@@ -3126,7 +3127,7 @@ const CH_PHOTO = {
     const acc = ACC[no]
     const card = preface.chapters[i]
     const title = [strip(a.title[0]).replace(/\n/g, ' '), strip(a.title[1]).replace(/\n/g, '')]
-    const alt = `${a.label} ${title[0]} — tr. ${a.page}`
+    const alt = [`${a.label} ${title[0]} — tr. ${a.page}`, `${a.label} ${title[1] || title[0]} — ${a.page}ページ`]
     // thẻ giấy sáng viền đường khâu màu chương; ảnh mở chương trong khung tròn; số chương lớn + "Trang 08 →" bên phải.
     // Cả thẻ là một nút: lớp link phủ trên cùng
     const iw = Math.min(ch - 28, 124)
@@ -3461,6 +3462,12 @@ pages.forEach(bottomFlora)
       if (e.ja) e.ja = e.ja.replace(/^画像\d+：/, `画像${n}：`)
       e.h = r1(Math.max(e.h, textH([e.text, e.ja], e.w, { size: e.size, lh: e.lineHeight, jaSize: e.jaSize ?? e.size })))
     }
+}
+// ảnh gốc có viền đen (chụp từ màn hình video): phóng nhẹ quanh tâm cho mất viền — { x, y, z } như el.crop
+const CROP_FIX = { 'Người thợ khâu nón ngay trong nếp nhà': { x: 50, y: 50, z: 1.12 } }
+for (const [hint, c] of Object.entries(CROP_FIX)) {
+  const src = PHOTOS[hint]
+  if (src) for (const p of pages) for (const e of p.els) if (e.type === 'image' && e.src === src && !e.crop) e.crop = c
 }
 const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: addFrames(p) }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })

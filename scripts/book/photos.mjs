@@ -169,6 +169,7 @@ export const photos = {
   "Dao, kéo cắt lá": "online/dao-cat-la",
   // ảnh lấp trang đôi (bổ sung 2026-10-22)
   "Phiên chợ Chuông họp từ khi trời còn tối, người bán ngồi giữa nón và lá": "Trọng Khải/IMG_6436",
+  // soát vòng 10: thư mục này thực chứa IMG_7347 của nhóm = ảnh 33 tr. 31 ("Chiếc nón lá chóp…") — đừng xếp vào kho ảnh lấp
   "Chiếc nón trắng vừa hoàn thiện": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón cô dâu(1)",
   "Người thợ khâu những mũi cuối trên thân nón": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/IMG_7438",
   "Nghệ nhân giới thiệu khung nón đã lên đủ vành": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
