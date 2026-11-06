@@ -23,7 +23,7 @@ const canvasBook = {
   settings: {
     // 'ltr' = lật trái → phải kiểu sách Việt · 'rtl' = phải → trái kiểu sách Nhật
     direction: 'ltr',
-    flipDuration: 800,
+    flipDuration: 700, // anh Hải 06/11 "lật trang lâu": 800 → 700ms
     // nhạc nền: Trống cơm, đàn tranh độc tấu của Nguyên Kỳ (YouTube h47j_MyM3Us, giấy phép CC BY → phải ghi tên người chơi)
     // (bản Cò lả bên thuê gửi là bản thu có bản quyền của Alternate Universe Orchestra, chưa xin phép nên không dùng)
     backgroundMusic: 'assets/audio/trong-com.mp3',

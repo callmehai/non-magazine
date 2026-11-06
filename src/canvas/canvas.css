@@ -417,9 +417,12 @@
 }
 
 /* review lần 2: lá tre góc trang chạy qua dòng đầu trang, trông như lỗi dàn trang → lá lùi ra mép ngoài, mờ hơn, và chữ
-   đầu trang có quầng màu giấy nên luôn đọc rõ, lá như nằm dưới chữ */
+   đầu trang có viền màu giấy (vẽ dưới nét chữ) nên luôn đọc rõ, lá như nằm dưới chữ.
+   Trước dùng 7 lớp text-shadow mờ (em = cỡ chữ → bán kính mờ rất lớn): mỗi khung hình lật trang trình duyệt phải vẽ lại
+   các lớp mờ đó → lật trang tụt ~29 khung/giây (anh Hải 06/11: "lật trang lâu, lag"). Viền chữ không mờ: 60 khung/giây */
 .cv-el[data-name='Đầu trang'] .cv-text {
-  text-shadow: 0 0 1em #f4ede0, 0 0 2em #f4ede0, 0 0 3em #f4ede0, 0 0 5em #f4ede0, 0 0 8em #f4ede0, 0 0 8em #f4ede0, 0 0 12em #f4ede0;
+  -webkit-text-stroke: 0.35em #eee6d2;
+  paint-order: stroke fill;
 }
 
 .cv-paper__deco.is-watermark {
