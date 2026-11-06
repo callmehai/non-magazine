@@ -1,7 +1,6 @@
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { asset } from './assets.js'
-import { t } from './i18n.js'
 
 GlobalWorkerOptions.workerSrc = workerUrl
 
@@ -37,7 +36,8 @@ export async function loadPdfBook(book) {
     pdfPage: i + 1,
     // bìa trước/sau là bìa cứng
     hard: i === 0 || i === n - 1,
-    thumbnailLabel: labels[i + 1] || (i === 0 ? t('cover') : i === n - 1 ? t('backCover') : undefined),
+    thumbnailLabel: labels[i + 1],
+    thumbnailKey: i === 0 ? 'cover' : i === n - 1 ? 'backCover' : undefined, // dịch lúc vẽ, theo ngôn ngữ đang chọn
     overlays: overlays[i + 1] || [],
     // số trang in ở góc trang (bìa trước/sau không in)
     folio: settings.pageNumbers !== false && i !== 0 && i !== n - 1 && !hideNumbers.has(i + 1) ? i + 1 : null,

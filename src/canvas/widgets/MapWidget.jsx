@@ -151,6 +151,9 @@ function lerpView(a, b, t) {
 
 const IDLE = { phase: 'world', sat: 0, cam: null, pins: 0, pop: 0, drive: 0, end: 0 }
 
+/** bề rộng ước lượng của nhãn, tính bằng em: chữ Nhật/Hán ~1 em, chữ Latin ~0,56 em */
+const emW = (str) => [...str].reduce((w, c) => w + (/[\u3000-\u9fff\uff00-\uffef]/.test(c) ? 1 : 0.56), 0)
+
 export default function MapWidget({ el, interactive, visible }) {
   const lang = useCanvasLang() === 'ja' ? 'ja' : 'vi'
   const t = L[lang]
@@ -327,7 +330,9 @@ export default function MapWidget({ el, interactive, visible }) {
           {label(352, 392, t.country, 17, { anchor: 'start', cls: 'is-country', track: 4 })}
           {label(470, 520, t.sea, 13, { cls: 'is-sea' })}
           {label(555, 300, t.paracel, 10.5, { cls: 'is-islands' })}
-          {label(612, 585, t.spratly, 10.5, { cls: 'is-islands' })}
+          {/* nhãn không lọt ra ngoài mép phải khung (khung dọc hẹp cắt mất "Trường Sa") */}
+          {/* chữ Nhật/Hán rộng cả một em (trước tính 0,56 em/chữ như chữ Latin → "チュオンサ諸島" bị cắt ở bản JA) */}
+          {label(Math.min(612, view.x + vw / 2 - (emW(t.spratly) * 10.5 * u) / 2 - 6 * u), 585, t.spratly, 10.5, { cls: 'is-islands' })}
           <circle cx={HX} cy={HY} r={11 * u} className="cvw-map__pulse" />
           <circle cx={HX} cy={HY} r={4.5 * u} className="cvw-map__dot" />
         </g>

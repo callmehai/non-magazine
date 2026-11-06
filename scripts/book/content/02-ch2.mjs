@@ -44,16 +44,18 @@ export const ch2 = {
         'チュオン村のノンラーは、外側のライ葉、中間のモーナン、内側のライ葉という三層の材料を重ねて葺く構造になっています。それぞれの層が{独自|どくじ}の{役割|やくわり}を{担|にな}い、笠の丈夫さと美しさを生み出しています。',
       ],
       items: [
-        [['Lớp lá lụi (lớp ngoài)', 'ライ葉（外層）'], ['Sử dụng lá lụi trắng, có đặc điểm mỏng, dài và màu sắc sáng tương đối đồng đều. Đây là lớp tiếp xúc trực tiếp với môi trường bên ngoài, có tác dụng che nắng, mưa và tạo diện mạo cho chiếc nón.', '白いライ葉を使います。薄くて長く、明るい色がよくそろっているのが特徴です。外の{環境|かんきょう}に{直接|ちょくせつ}{触|ふ}れる層で、日差しや雨を防ぎ、笠の{表情|ひょうじょう}をつくります。']],
-        [['Lớp mo nang (lớp giữa)', 'モーナン（中層）'], ['Nằm giữa hai lớp lá lụi, có tác dụng làm lớp đệm, tăng độ chắc chắn và hỗ trợ duy trì hình dáng thân nón. Nhờ lớp mo nang, phần lá lợp có độ dày cần thiết mà vẫn giữ được đặc điểm nhẹ của sản phẩm.', '二層のライ葉の間に入り、{緩衝材|かんしょうざい}として笠を{補強|ほきょう}し、{胴|どう}の形を保つ{助|たす}けをします。モーナンのおかげで、葺き葉は必要な{厚|あつ}みをもちながらも、軽さを{失|うしな}いません。']],
         [['Lớp lá lụi (lớp trong)', 'ライ葉（内層）'], ['Nằm ở mặt trong của nón, có tác dụng che phủ lớp mo nang, hoàn thiện lòng nón và tạo bề mặt gọn gàng. Lớp này góp phần bảo vệ phần vật liệu bên trong, đồng thời tăng tính thẩm mỹ cho sản phẩm.', '笠の内側にあり、モーナンを{覆|おお}って内側を仕上げ、すっきりとした面をつくります。中の材料を守ると同時に、製品の美しさも高めます。']],
+        [['Lớp mo nang (lớp giữa)', 'モーナン（中層）'], ['Nằm giữa hai lớp lá lụi, có tác dụng làm lớp đệm, tăng độ chắc chắn và hỗ trợ duy trì hình dáng thân nón. Nhờ lớp mo nang, phần lá lợp có độ dày cần thiết mà vẫn giữ được đặc điểm nhẹ của sản phẩm.', '二層のライ葉の間に入り、{緩衝材|かんしょうざい}として笠を{補強|ほきょう}し、{胴|どう}の形を保つ{助|たす}けをします。モーナンのおかげで、葺き葉は必要な{厚|あつ}みをもちながらも、軽さを{失|うしな}いません。']],
+        [['Lớp lá lụi (lớp ngoài)', 'ライ葉（外層）'], ['Sử dụng lá lụi trắng, có đặc điểm mỏng, dài và màu sắc sáng tương đối đồng đều. Đây là lớp tiếp xúc trực tiếp với môi trường bên ngoài, có tác dụng che nắng, mưa và tạo diện mạo cho chiếc nón.', '白いライ葉を使います。薄くて長く、明るい色がよくそろっているのが特徴です。外の{環境|かんきょう}に{直接|ちょくせつ}{触|ふ}れる層で、日差しや雨を防ぎ、笠の{表情|ひょうじょう}をつくります。']],
       ],
       // một dòng tóm tắt cho mô hình 3D ba lớp (bấm vào lớp nào thì lớp đó sáng màu)
       short: [
-        ['Che nắng, che mưa và tạo diện mạo cho nón', '日差しや雨を防ぎ、笠の表情をつくる'],
-        ['Lớp đệm giúp nón chắc chắn, giữ dáng mà vẫn nhẹ', '笠を丈夫にし、軽さを保ったまま形を支える'],
         ['Che lớp mo nang, hoàn thiện lòng nón', 'モーナンを覆い、笠の内側を仕上げる'],
+        ['Lớp đệm giúp nón chắc chắn, giữ dáng mà vẫn nhẹ', '笠を丈夫にし、軽さを保ったまま形を支える'],
+        ['Che nắng, che mưa và tạo diện mạo cho nón', '日差しや雨を防ぎ、笠の表情をつくる'],
       ],
+      // lớp tương ứng trên mô hình 3D (mô hình xếp ngoài trên cùng, trong dưới cùng)
+      kinds: ['inner', 'mo', 'outer'],
       outro: [
         'Như vậy, ba lớp vật liệu có chức năng bổ trợ cho nhau trong cấu tạo của nón lá Làng Chuông. Lớp lá ngoài đảm nhiệm việc che chắn và tạo bề mặt, lớp mo nang góp phần tăng độ chắc chắn, còn lớp lá trong giúp hoàn thiện mặt trong của nón. Sự kết hợp này tạo nên phần lá lợp vừa nhẹ nhàng, vừa có độ ổn định cần thiết trong quá trình sử dụng.',
         'このように、三層の材料はチュオン村のノンラーの構造の中で{互|たが}いに{補|おぎな}い合っています。外の葉は守りと表面を、モーナンは強さを、内の葉は内側の仕上げを担います。この組み合わせによって、軽く、しかも使うときに必要な安定さをもつ葺き葉ができあがるのです。',
@@ -71,8 +73,12 @@ export const ch2 = {
       ],
       after: [
         [
-          'Nứa được sử dụng làm vành nhờ đặc tính nhẹ, dai và có độ đàn hồi phù hợp, giúp khung nón vừa chắc chắn vừa không làm tăng đáng kể trọng lượng sản phẩm. Khoảng cách và vị trí của các vành cần được bố trí tương đối đều để tạo sự cân đối giữa phần vành, thân và chóp nón. Cách sắp xếp này cũng giúp lớp lá được nâng đỡ trên toàn bộ bề mặt, góp phần duy trì hình dáng ổn định sau khi hoàn thiện.',
-          'ヌア竹が輪に使われるのは、軽くてねばりがあり、ほどよい{弾力|だんりょく}をもつためです。骨組みを丈夫にしながら、笠をほとんど重くしません。輪の間隔と位置はほぼ{均等|きんとう}にし、つば・胴・頂の{釣|つ}り{合|あ}いをとります。こうすることで葉が面全体で支えられ、仕上がったあとも形が安定します。',
+          'Theo lời kể của các nghệ nhân Làng Chuông, các cụ xưa còn lý giải rằng 16 vòng nón tượng trưng cho tuổi trăng tròn của người con gái, độ tuổi được xem là đẹp nhất của thời thanh xuân. Cách lý giải này gắn cấu tạo của chiếc nón với quan niệm dân gian về vẻ đẹp của người phụ nữ ngày xưa.',
+          'チュオン村の職人たちによれば、昔の人々は、16本の輪は娘の「{十六|じゅうろく}の{満月|まんげつ}」、つまり{青春|せいしゅん}のいちばん美しい{年頃|としごろ}を表すと語ってきたそうです。この言い伝えは、笠の構造を、昔の女性の美しさについての{民間|みんかん}の考え方と結びつけています。',
+        ],
+        [
+          'Các vòng nón được làm từ nứa nhờ đặc tính nhẹ, dai và có độ đàn hồi phù hợp, giúp khung nón chắc chắn mà không làm tăng đáng kể trọng lượng sản phẩm. Khoảng cách và vị trí của các vành cần được bố trí tương đối đều để tạo sự cân đối giữa phần vành, thân và chóp nón. Cách sắp xếp này cũng giúp lớp lá được nâng đỡ trên toàn bộ bề mặt, góp phần duy trì hình dáng ổn định sau khi hoàn thiện.',
+          '笠の輪がヌア竹で作られるのは、軽くてねばりがあり、ほどよい{弾力|だんりょく}をもつためです。骨組みを丈夫にしながら、笠をほとんど重くしません。輪の間隔と位置はほぼ{均等|きんとう}にし、つば・胴・頂の{釣|つ}り{合|あ}いをとります。こうすることで葉が面全体で支えられ、仕上がったあとも形が安定します。',
         ],
         [
           'Bên cạnh cách bố trí các vành, việc xử lý các điểm nối cũng ảnh hưởng đến độ đều của khung nón. Các mối nối cần được làm gọn, hạn chế những chỗ nhô cao hoặc gồ ghề để không ảnh hưởng đến quá trình lợp lá và chằm nón. Khi các vành nứa được sắp xếp cân đối và liên kết chắc chắn, phần khung tạo nền tảng cho lớp lá lợp, góp phần làm nên chiếc nón Làng Chuông có dáng chóp thanh mảnh nhưng vẫn chắc chắn và bền trong quá trình sử dụng.',
@@ -143,8 +149,9 @@ export const ch2 = {
         ],
       ],
       images: [
-        ['Lá tươi được vò qua cát', '砂でもむ生の葉'],
-        ['Người làng gỡ và chọn từng bó lá lụi trên sân gạch', 'れんがの庭でライ葉の束をほどき、選り分ける村の人々'],
+        // góp ý 04/11: ảnh theo file nhóm gán (Sheet: vò lá, chọn lá IMG_7819 · phơi lá IMG_4613)
+        ['Lá lụi tươi trước khi vò và chọn lá', 'もむ前の、選り分けを待つ生のライ葉'],
+        ['Phơi lá lụi dưới nắng', '日差しの下でライ葉を干す'],
       ],
     },
     stepsH: { id: '2.3.2', h: ['Quy trình dựng và hoàn thiện nón', '笠の組み立てと仕上げの工程'] },
@@ -231,7 +238,9 @@ export const ch2 = {
       {
         no: 5,
         name: ['Khâu nón', '{縫|ぬ}い{付|つ}け'],
-        sub: ['thắt nón', 'タット・ノン'],
+        // soát đọc lần đầu 05/11 + anh Hải đồng ý: các bước khác ghi việc làm ("葉を平らにする"…), riêng bước này chỉ phiên âm →
+        // ghi việc làm, giữ thuật ngữ trong ngoặc
+        sub: ['thắt nón', '葉を輪に縫い留める（タット・ノン）'],
         text: [
           [
             'Công đoạn khâu nón (thắt nón) là bước dùng kim và sợi cước để gắn chặt các lớp lá và lớp mo vào vòng nón. Quá trình này được tiến hành theo thứ tự từ trên đỉnh chóp xuống dưới vành cạp.',

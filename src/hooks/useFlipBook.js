@@ -92,6 +92,9 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       mobileScrollSupport: true,
       swipeDistance: 24,
       showPageCorners: true,
+      // màn cảm ứng: chạm giữa trang không lật (vuốt / chạm góc trang vẫn lật) — để chạm hai lần phóng to chữ (review lần 2:
+      // chữ thân bài trên điện thoại chỉ ~9,8px)
+      disableFlipByClick: typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches,
       startPage: rtl ? count - 1 - currentRef.current : currentRef.current,
     })
 

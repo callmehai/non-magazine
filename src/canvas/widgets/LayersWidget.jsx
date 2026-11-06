@@ -1,97 +1,123 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useCanvasLang, plainText } from '../lang.js'
-import { webglOK } from './webgl.js'
+import { asset } from '../../lib/assets.js'
+import { setTab, useTab } from '../tabs.js'
+import { MagazineContext } from '../../lib/context.js'
 
 /**
- * Mô hình 3 lớp lá nón (mục 2.1.1): danh sách ba lớp bên trái, mô hình 3D tách lớp bên phải.
- * Bấm vào một lớp (trên mô hình hoặc trong danh sách) → lớp đó sáng màu riêng, hai lớp kia mờ đi.
- * el.items = [{ name: [vi, ja], note: [vi, ja] }] — sửa chữ trong dữ liệu trang, không cần sửa code.
+ * Mô hình 3 lớp lá nón (mục 2.1.2): danh sách ba lớp bên trái, ba lớp tách rời xếp tầng bên phải.
+ * Anh Hải 05/11: "bên trái mặc định như này, khỏi 3d đi cho nhẹ trang, defaut chọn layer 1 luôn" → không chạy WebGL;
+ * ba lớp là ba ảnh tĩnh nền trong suốt chụp từ mô hình 3D cũ (mặt lớp là ảnh thật nhóm chụp — scripts/book/layer-tex.py,
+ * chụp lại bằng scripts/book/layer-stack.browser.js), chồng đúng chỗ.
+ * Bấm vào một lớp (trên hình hoặc trong danh sách) → lớp đó rõ + nhô nhẹ, hai lớp kia mờ đi; mặc định lớp 1.
+ * el.items = [{ name: [vi, ja], kind: 'inner' | 'mo' | 'outer' }] (thứ tự Doc: trong → mo nang → ngoài)
+ * el.tabSet: nhóm thẻ (src/canvas/tabs.js) của trang bên cạnh — bấm lớp thứ i thì trang bên hiện ảnh thật + mô tả lớp
+ * đó; bấm hàng chọn ở trang bên thì hình bên này cũng sáng lớp tương ứng (cùng một trạng thái, không lệch nhau).
  */
-const COLORS = ['#d9962f', '#a95f3c', '#5f8a4a']
+const COLOR = { outer: '#d9962f', mo: '#a95f3c', inner: '#5f8a4a' }
+// xếp từ trên xuống như khi tách lớp nón ra: lớp ngoài trên cùng, mo nang giữa, lớp trong dưới cùng.
+// band = dải chiều cao (tỉ lệ khung ảnh) phần lớp đó lộ ra → vùng bấm của lớp, không chồng lên nhau
+const STACK = [
+  { kind: 'outer', band: [0, 0.43] },
+  { kind: 'mo', band: [0.43, 0.73] },
+  { kind: 'inner', band: [0.73, 1] },
+]
 const L = {
-  vi: { hint: 'Bấm vào một lớp lá để làm nổi bật', drag: 'Kéo để xoay' },
-  ja: { hint: '層をクリックすると色で強調されます', drag: 'ドラッグで回転' },
+  vi: 'Bấm vào một lớp để xem ảnh thật',
+  ja: '層をクリックすると実物の画像が見られます',
+}
+const L_PORTRAIT = {
+  vi: 'Chạm một lớp để xem ảnh thật ở trang sau →',
+  ja: '層をタップすると次のページで実物の画像へ →',
 }
 
-export default function LayersWidget({ el, interactive, visible }) {
+export default function LayersWidget({ el, interactive }) {
   const lang = useCanvasLang() === 'ja' ? 'ja' : 'vi'
   const li = lang === 'ja' ? 1 : 0
   const items = el.items || []
-  const [sel, setSel] = useState(null)
-  const canvasRef = useRef(null)
-  const sceneRef = useRef(null)
-  const live = interactive && visible && webglOK
-
-  useEffect(() => {
-    if (!live) return
-    let cancelled = false
-    import('./layers3d.js').then(({ LayersScene }) => {
-      if (cancelled || !canvasRef.current) return
-      sceneRef.current = new LayersScene(canvasRef.current, {
-        colors: COLORS,
-        onSelect: setSel,
-      })
-    })
-    return () => {
-      cancelled = true
-      sceneRef.current?.dispose()
-      sceneRef.current = null
-      setSel(null)
-    }
-  }, [live])
-
+  const tab = useTab(el.tabSet)
+  const [own, setOwn] = useState(0) // không có trang bên (tabSet) thì tự giữ lớp đang chọn
+  const cur = el.tabSet ? tab : own
+  const { portrait, nextPage } = useContext(MagazineContext)
+  // review lần 2 (điện thoại): sách hiện một trang thì chạm lớp ở tr. 52 không thấy gì đổi (ảnh lớp ở tr. 53) → lật sang luôn
   const pick = (i) => {
-    const next = sel === i ? null : i
-    setSel(next)
-    sceneRef.current?.select(next, false)
+    if (el.tabSet) {
+      setTab(el.tabSet, i)
+      if (portrait) nextPage?.()
+    } else setOwn(i)
   }
+  const kindOf = (i) => items[i]?.kind
+  const sel = kindOf(cur)
+  const idxOf = (kind) => items.findIndex((it) => it.kind === kind)
 
   return (
-    <div className={`cvw cvw-layers ${sel !== null ? 'has-sel' : ''}`} data-no-flip={interactive ? '' : undefined}>
+    <div className="cvw cvw-layers has-sel" data-no-flip={interactive ? '' : undefined}>
+      {/* danh sách xếp cùng chiều hình (ngoài trên cùng … trong dưới cùng); số 1 · 2 · 3 giữ thứ tự Doc */}
       <ol className="cvw-layers__list">
-        {items.map((it, i) => (
-          <li key={i}>
-            <button
-              type="button"
-              className={`cvw-layers__item ${sel === i ? 'is-on' : ''}`}
-              style={{ '--c': COLORS[i] }}
-              onClick={() => pick(i)}
-              disabled={!interactive}
-              aria-pressed={sel === i}
-            >
-              <span className="cvw-layers__no">{i + 1}</span>
-              <span className="cvw-layers__txt">
-                <b>{plainText(it.name[li] ?? it.name[0])}</b>
-                <span>{plainText(it.note[li] ?? it.note[0])}</span>
-              </span>
-            </button>
-          </li>
-        ))}
+        {STACK.map(({ kind }) => {
+          const i = idxOf(kind)
+          if (i < 0) return null
+          const it = items[i]
+          return (
+            <li key={kind}>
+              <button
+                type="button"
+                className={`cvw-layers__item ${sel === kind ? 'is-on' : ''}`}
+                style={{ '--c': COLOR[kind] }}
+                onClick={() => pick(i)}
+                disabled={!interactive}
+                aria-pressed={sel === kind}
+              >
+                <span className="cvw-layers__no">{i + 1}</span>
+                <span className="cvw-layers__txt">
+                  {(() => {
+                    // "Lớp lá lụi (lớp ngoài)" → "Lớp lá lụi" / "(lớp ngoài)": chữ giữ nguyên, chỉ xuống dòng trước ngoặc
+                    const s = plainText(it.name[li] ?? it.name[0])
+                    const k = s.search(/[（(]/)
+                    return k > 0 ? (
+                      <>
+                        <b>{s.slice(0, k).trim()}</b>
+                        <small>{s.slice(k)}</small>
+                      </>
+                    ) : (
+                      <b>{s}</b>
+                    )
+                  })()}
+                </span>
+              </button>
+            </li>
+          )
+        })}
       </ol>
       <div className="cvw-layers__stage">
-        {/* hình tĩnh: editor, ảnh thu nhỏ, máy không có WebGL */}
-        {!live && (
-          <svg className="cvw-layers__still" viewBox="0 0 200 200" aria-hidden="true">
-            {[0, 1, 2].map((i) => {
-              const y = 20 + i * 52
-              const w = 150 - i * 8
-              const x = 100 - w / 2
+        <div className="cvw-layers__stack">
+          {[...STACK].reverse().map(({ kind }) => (
+            <img
+              key={kind}
+              className={`cvw-layers__img ${sel === kind ? 'is-on' : ''}`}
+              style={{ '--c': COLOR[kind] }}
+              src={asset(`assets/book/fx/lop-stack-${kind}.webp`)}
+              alt=""
+              draggable="false"
+            />
+          ))}
+          {interactive &&
+            STACK.map(({ kind, band }) => {
+              const i = idxOf(kind)
+              if (i < 0) return null
               return (
-                <g key={i} style={{ opacity: sel === null || sel === i ? 1 : 0.3 }}>
-                  <path
-                    d={`M${x} ${y + 50} L100 ${y} L${x + w} ${y + 50} Z`}
-                    fill={['#efe4c8', '#c4a072', '#f3ead6'][i]}
-                    stroke={COLORS[i]}
-                    strokeWidth="1.2"
-                  />
-                  <ellipse cx="100" cy={y + 50} rx={w / 2} ry="6" fill={['#efe4c8', '#c4a072', '#f3ead6'][i]} stroke={COLORS[i]} strokeWidth="1.2" />
-                </g>
+                <button
+                  key={kind}
+                  type="button"
+                  className="cvw-layers__hit"
+                  style={{ top: `${band[0] * 100}%`, height: `${(band[1] - band[0]) * 100}%` }}
+                  onClick={() => pick(i)}
+                  aria-label={plainText(items[i].name[li] ?? items[i].name[0])}
+                />
               )
             })}
-          </svg>
-        )}
-        {live && <canvas ref={canvasRef} className="cvw-layers__gl" aria-label={L[lang].hint} />}
-        {interactive && <span className="cvw-layers__hint">{webglOK ? `${L[lang].hint} · ${L[lang].drag}` : L[lang].hint}</span>}
+        </div>
+        {interactive && <span className="cvw-layers__hint">{(portrait && el.tabSet ? L_PORTRAIT : L)[lang]}</span>}
       </div>
     </div>
   )

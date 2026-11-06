@@ -1,7 +1,6 @@
 import { getStore } from '../canvas/store/index.js'
 import { PAGE_W, PAGE_H } from '../canvas/model.js'
 import { ensureFontsFor } from '../canvas/fonts.js'
-import { t } from './i18n.js'
 
 /**
  * Sách dựng bằng editor (#/admin) → dữ liệu cho flipbook.
@@ -22,7 +21,8 @@ export async function loadCanvasBook(config, slug, { draft = false, local = fals
     hard: i === 0 || i === n - 1,
     soft: true, // bìa vẫn lật cong như trang giấy; kiểu "bìa cứng" của StPageFlip xoay phẳng như cánh cửa
     folio: i !== 0 && i !== n - 1 && !p.hideNumber ? i + 1 : null,
-    thumbnailLabel: i === 0 ? t('cover') : i === n - 1 ? t('backCover') : undefined,
+    // khoá chữ, dịch lúc vẽ (soát 05/11: dịch ở đây thì bản JA vẫn ghi "Bìa" — lúc tải sách ngôn ngữ còn là vi)
+    thumbnailKey: i === 0 ? 'cover' : i === n - 1 ? 'backCover' : undefined,
   }))
   // số trang lẻ → chèn trang trắng trước bìa sau (sách lật kiểu Nhật cần số trang chẵn)
   if (n > 1 && n % 2 === 1) pages.splice(n - 1, 0, { id: 'blank', type: 'canvas', data: { bg: '#f4ede0', elements: [] } })

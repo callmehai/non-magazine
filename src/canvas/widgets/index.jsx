@@ -6,12 +6,18 @@ import './widgets.css'
  *  - "map": bản đồ Việt Nam chữ S, bấm vào thì phóng tới Làng Chuông và hiện mô hình 3D của làng
  *  - "layers": mô hình 3D ba lớp lá nón, bấm vào lớp nào thì lớp đó sáng màu
  *  - "postcard": bưu thiếp Làng Chuông — chọn ảnh + câu ca dao, tải về ảnh JPG
+ *  - "tabs": hàng nút chọn thẻ — đổi phần nội dung đang hiện của một nhóm (vd. ảnh thật từng lớp lá, mục 2.1.2)
+ *  - "timeline": dòng thời gian bấm được — mỗi mốc năm một câu chuyện (trang nghệ nhân chương 3)
+ *  - "grove": lũy tre lớn dần, nón được làm dưới gốc tre (cặp trang Lưu ý) — chỉ là hình động, không bấm
  * Chế độ "edit" (editor, ảnh thu nhỏ) chỉ vẽ hình tĩnh; WebGL chỉ chạy khi trang đang mở ở chế độ đọc.
  */
 const KINDS = {
   map: lazy(() => import('./MapWidget.jsx')),
   layers: lazy(() => import('./LayersWidget.jsx')),
   postcard: lazy(() => import('./PostcardWidget.jsx')),
+  timeline: lazy(() => import('./TimelineWidget.jsx')),
+  tabs: lazy(() => import('./TabsWidget.jsx')),
+  grove: lazy(() => import('./GroveWidget.jsx')),
 }
 
 export default function Widget({ el, mode, visible }) {

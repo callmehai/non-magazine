@@ -17,18 +17,19 @@ const L = {
     stamp: 'VIỆT NAM',
     foot: 'NÓN LÁ LÀNG CHUÔNG · THANH OAI, HÀ NỘI',
     by: '— Ca dao —',
-    seal: ['LÀNG', 'CHUÔNG'],
+    // góp ý 04/11: đối tượng chính là NÓN LÁ Làng Chuông, không phải Làng Chuông
+    seal: ['NÓN LÁ', 'LÀNG', 'CHUÔNG'],
     file: 'buu-thiep-lang-chuong.jpg',
   },
   ja: {
-    photo: '写真をえらぶ',
+    photo: '画像をえらぶ',
     verse: 'カーザオをえらぶ',
     save: '絵はがきを保存',
     size: 'JPG画像 1200 × 1650',
     stamp: 'ベトナム',
     foot: 'チュオン村のノンラー・ハノイ',
     by: '― ベトナムの民謡（カーザオ）―',
-    seal: ['チュオン', '村'],
+    seal: ['チュオン村', 'の', 'ノンラー'],
     file: 'chuong-village-postcard.jpg',
   },
 }
@@ -171,8 +172,9 @@ async function drawCard(canvas, { photo, verse, lang }) {
     fs -= 1
     g.font = sealFont()
   }
-  g.fillText(t.seal[0], sx + s / 2, sy + s / 2 - 6)
-  g.fillText(t.seal[1], sx + s / 2, sy + s / 2 + fs + 2)
+  const n = t.seal.length
+  const sealLh = fs + 4
+  t.seal.forEach((x, i) => g.fillText(x, sx + s / 2, sy + s / 2 + fs / 2.8 + (i - (n - 1) / 2) * sealLh))
 }
 
 export default function PostcardWidget({ el, interactive }) {
@@ -238,7 +240,11 @@ export default function PostcardWidget({ el, interactive }) {
         <div className="cvw-pc__verses">
           {verses.map((v, i) => (
             <button key={i} type="button" className={`cvw-pc__verse ${i === vi ? 'is-on' : ''}`} onClick={() => setVi(i)} disabled={!interactive} aria-pressed={i === vi}>
-              {plainText(v[li] ?? v[0]).split('\n')[0]}…
+              {plainText(v[li] ?? v[0])
+                .split('\n')
+                .map((ln, k) => (
+                  <span key={k}>{ln}</span>
+                ))}
             </button>
           ))}
         </div>

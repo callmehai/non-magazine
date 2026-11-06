@@ -36,7 +36,8 @@ export const preface = {
     ],
   ],
   sign: ['Hà Nội, tháng 11 năm 2026\nNhóm tác giả', '2026年11月 ハノイにて\n{著者|ちょしゃ}一同'],
-  photo: ['Nón lá trắng và tà áo dài trước sân đình Chuông', 'チュオン村の亭の前で、白いノンラーを手にするアオザイ姿の女性たち'],
+  // góp ý 04/11: ảnh nhóm 4 người (Ảnh nhóm.jpg)
+  photo: ['Nhóm tác giả — bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội', '著者 — FPT大学ハノイ校日本語学科の学生4人'],
   contentsTitle: ['Trong cuốn sách này', '本書の{構成|こうせい}'],
   chapters: [
     { icon: 'non', text: ['Nón lá trong đời sống, lịch sử và chân dung làng Chuông', '暮らしと歴史の中のノンラー、そしてチュオン村の{横顔|よこがお}'] },

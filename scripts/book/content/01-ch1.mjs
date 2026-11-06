@@ -204,9 +204,14 @@ export const ch1 = {
         ['² Vũ Từ Trang, Henri Oger, Nghề cổ nước Việt – Từ truyền thống đến hiện đại, NXB Phụ nữ Việt Nam, 2020, tr. 218.', '² ヴー・トゥー・チャン、アンリ・オジェ『ベトナムの古い手仕事：伝統から現代へ』ベトナム女性出版社、2020年、218頁。'],
       ],
       images: [
-        ['Bản đồ hành trình từ trung tâm Hà Nội tới Làng Chuông (xã Thanh Oai, Hà Nội)', 'ハノイ中心部からチュオン村（ハノイ市タインオアイ社）への道のり'],
+        ['Bản đồ hành trình từ trung tâm Hà Nội tới Làng Chuông (xã Thanh Oai, Hà Nội) — nguồn: nền bản đồ © OpenStreetMap', 'ハノイ中心部からチュオン村（ハノイ市タインオアイ社）への道のり — 出典：地図データ © OpenStreetMap'],
         ['Hàng bán nón ở Hà Nội năm 1896 — ảnh: André Salles (Thư viện Quốc gia Pháp)', '1896年、ハノイの笠屋 — 写真：アンドレ・サル（フランス国立図書館）'],
-        ['Nón lá Thanh Oai, Hà Nội (1999) — hiện vật Bảo tàng Phụ nữ Việt Nam', 'タインオアイ（ハノイ）のノンラー（1999年）— ベトナム女性博物館所蔵'],
+      ],
+      // góp ý 04/11 (Thu Nguyệt): ảnh trong mục phải là nón Làng Chuông / nón cổ chụp tại bảo tàng theo đúng ảnh nhóm chọn
+      museum: [
+        ['Nón lá làng Chuông tại quầy trưng bày của Bảo tàng Dân tộc học Việt Nam', 'ベトナム民族学博物館のチュオン村のノンラーの展示'],
+        ['Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam', 'バータム笠 — ベトナム美術博物館'],
+        ['Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam', 'キン族の笠：竹・葉・鳥の羽・銀 — ベトナム美術博物館'],
       ],
     },
     types: {
@@ -216,7 +221,8 @@ export const ch1 = {
         'Nghề làm nón Làng Chuông đã được duy trì qua nhiều thế hệ, gắn liền với đời sống sinh hoạt và hoạt động sản xuất của người dân địa phương. Theo thời gian, cùng với sự phát triển của đời sống hiện đại và nhu cầu thị trường thay đổi, các sản phẩm nón của Làng Chuông đã linh hoạt chuyển mình về kiểu dáng, chất liệu và công dụng. Bên cạnh việc duy trì sản xuất nón lá chóp truyền thống, các nghệ nhân nơi đây đã sáng tạo thêm nhiều dòng sản phẩm mới, kết hợp tinh tế giữa kỹ thuật thủ công lâu đời và chất liệu hiện đại:',
         'チュオン村の笠づくりは何世代にもわたり、村人の生活と生産に結びついてきました。現代の暮らしの発展や市場の{変化|へんか}に合わせて、村の笠は形・素材・用途を{柔軟|じゅうなん}に変えてきました。伝統的な円錐形のノンラーを作り続ける一方で、職人たちは長い歴史をもつ手仕事の技と現代的な素材を巧みに組み合わせ、新しい製品を数多く生み出しています。',
       ],
-      hero: ['Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu', 'さまざまな笠が並ぶ展示室で、笠の骨組みを手にするチュオン村の職人'],
+      // góp ý 04/11: ảnh nghệ nhân Lê Văn Tuy chụp (thư mục "Ảnh trang 32"), khung không cắt mất đầu
+      hero: ['Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy', '笠の工房の職人レー・ヴァン・トゥイ — 写真：レー・ヴァン・トゥイ氏'],
       list: [
         {
           name: ['Nón lá hình chóp truyền thống', '伝統的な円錐形のノンラー'],
@@ -225,6 +231,13 @@ export const ch1 = {
             '先のとがった円錐形の笠で、{処理|しょり}したライ葉（若いヤシの葉）¹を16本のヌア竹の輪に縫い付けて作ります。色は明るい白か{象牙色|ぞうげいろ}の二色が多く、葉の表面は{平|たい}らで、{縫|ぬ}い{目|め}もよくそろっています。軽くて使いやすいため、日常使いにも贈り物にも選ばれています。',
           ],
           notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の高い木。{扇|おうぎ}形の葉が{幹|みき}の先に{房|ふさ}のように{茂|しげ}り、屋根を{葺|ふ}いたり笠を作ったりするのに使われる。']],
+        },
+        {
+          name: ['Nón lá già ghép sống', '{古葉|ふるば}{継|つ}ぎの{笠|かさ}（ノン・ラー・ザー・ゲップ・ソン）'],
+          text: [
+            'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón lá chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật với các đường sống lá rõ nét, tạo nên vẻ ngoài mộc mạc và khác biệt cho sản phẩm.',
+            '{育|そだ}ちきったヤシの葉を{継|つ}ぎ合わせ、骨組みに縫い{留|と}めて作る笠です。表面は{淡|あわ}い{茶色|ちゃいろ}で、頂から{縁|ふち}へ{放射状|ほうしゃじょう}に広がる葉の{筋|すじ}と、横に走る縫い目が組み合わさって、独特の{風合|ふうあ}いを生み出しています。葉の面が平らで色の明るい伝統的な円錐形の笠とくらべ、くっきりとした葉の筋が目を引き、{素朴|そぼく}で個性的な姿に仕上がります。',
+          ],
         },
         {
           name: ['Nón Ba tầm', 'バータム笠'],
@@ -242,7 +255,8 @@ export const ch1 = {
         },
         {
           name: ['Nón thúng', 'ノン・トゥン'],
-          credit: ['Ảnh: Hồng Phúc / Báo Quân đội nhân dân', '写真：ホン・フック／人民軍隊紙'],
+          // góp ý 04/11 (C9): ảnh nón thúng IMG_8480, nguồn nghệ nhân Lê Văn Tuy
+          credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
           text: [
             'Là kiểu nón có vành rất rộng, dáng sâu lòng giống như cái thúng khi ngửa lên. Xưa kia, nón thúng kết hợp quai thao là món phụ kiện trang phục cao cấp đi cùng áo tứ thân, áo mớ ba mớ bảy của các bà, các chị trong dịp lễ Tết, hội hè. Ngày nay, nón chủ yếu xuất hiện trong không gian biểu diễn nghệ thuật truyền thống hoặc đóng vai trò như sản phẩm quà tặng, trưng bày di sản.',
             'つばがとても広く、上に向けると{籠|かご}のように深い形をした笠です。かつては{房飾|ふさかざ}りのあごひもと合わせ、{正月|しょうがつ}や祭りに女性たちが{四身|よつみ}の{衣|ころも}や{重|かさ}ね{着|ぎ}の衣装とともに身につける、{高級|こうきゅう}な装身具でした。今では主に伝統芸能の舞台で見られるほか、贈り物や文化遺産の展示品となっています。',
@@ -261,6 +275,7 @@ export const ch1 = {
         list: [
           {
             name: ['Nón lụa', '{絹|きぬ}の笠'],
+            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
             text: [
               'Là sản phẩm được phát triển từ nón lá chóp truyền thống, có phần bên ngoài được bọc bằng lụa tơ tằm Vạn Phúc (Hà Đông). Sự kết hợp giữa kỹ thuật làm nón của Làng Chuông và chất liệu lụa với màu sắc, hoa văn đa dạng tạo nên diện mạo thanh lịch, phù hợp làm phụ kiện thời trang và quà lưu niệm.',
               '伝統的な円錐形のノンラーをもとに、外側をヴァンフック（ハドン）の{絹|きぬ}で{包|つつ}んだ笠です。チュオン村の笠づくりの技と、色や{柄|がら}の豊かな絹が合わさって上品な姿になり、ファッション{小物|こもの}やお{土産|みやげ}にぴったりです。',
@@ -268,6 +283,7 @@ export const ch1 = {
           },
           {
             name: ['Nón lụa hai mặt', '{両面|りょうめん}絹張りの笠'],
+            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レー・ヴァン・トゥイ氏'],
             text: [
               'Được thiết kế với hai mặt có màu sắc hoặc họa tiết khác nhau, tạo sự đa dạng về hình thức trang trí. Sản phẩm giữ dáng nón chóp quen thuộc, đồng thời tăng tính linh hoạt trong cách phối màu và lựa chọn kiểu dáng, phù hợp làm phụ kiện thời trang và quà lưu niệm.',
               '表と裏で色や柄の{異|こと}なる絹を張り、{飾|かざ}りのバリエーションを広げた笠です。なじみのある円錐形はそのままに、色の組み合わせや形を自由に選べ、ファッション小物やお土産に向いています。',

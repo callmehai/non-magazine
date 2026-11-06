@@ -5,6 +5,7 @@ import { PAGE_W, PAGE_H } from './model.js'
 import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby, plainText } from './lang.js'
 import { t } from '../lib/i18n.js'
 import { PAPER_BASE, paperOf } from './papers.js'
+import { useTab } from './tabs.js'
 
 // bản đồ, mô hình 3D… chỉ tải khi trang có phần tử tương tác
 const Widget = lazy(() => import('./widgets/index.jsx'))
@@ -18,7 +19,7 @@ export const LoadMode = createContext('eager')
 const zoomable = (el) =>
   el.type === 'image' &&
   !!el.src &&
-  !['Họa tiết', 'Hình vẽ', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang'].includes(el.name) &&
+  !['Họa tiết', 'Hình vẽ', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang', 'Bóng nắng', 'Nền ô'].includes(el.name) &&
   !/logo/i.test(`${el.name} ${el.hint}`) &&
   el.w < PAGE_W * 0.95 &&
   el.w * el.h < PAGE_W * PAGE_H * 0.8
@@ -39,21 +40,32 @@ const captionOf = (el, lang) => {
  * side: "left" | "right" — mẫu nền (page.paper) đặt họa tiết ở mép ngoài trang
  * el.anim = { kind: "fade" | "grow", delay, dur } (giây): mỗi lần trang được lật tới, phần tử chạy hiệu ứng
  * xuất hiện (chỉ ở chế độ đọc; editor và ảnh thu nhỏ luôn hiện đủ)
+ * el.pop = { z, kind: "obj" | "flat" | "bg", float }: lớp nổi — vật nổi khỏi mặt giấy, trôi theo con trỏ theo độ sâu z
+ * (âm = lùi sau giấy), "obj" có bóng đổ theo hình (ảnh PNG/WebP trong suốt), float = biên độ lơ lửng (em)
  */
 function CanvasPage({ page, mode = 'read', renderEl, visible, side = 'right' }) {
   const paper = paperOf(page.paper)
   const animated = mode === 'read' && (page.elements || []).some((el) => el.anim)
-  // run tăng mỗi lần trang hiện ra → phần tử có hiệu ứng được dựng lại để chạy lại từ đầu
+  // run tăng mỗi lần trang hiện ra → phần tử có hiệu ứng được dựng lại để chạy lại từ đầu; trang rời khỏi tầm mắt thì
+  // về 0 (is-wait, ẩn) — soát độc lập 05/11: quay lại trang đã xem thì lúc đang lật hình vẽ hiện sẵn (còn is-play của lần
+  // trước), lật xong mới tắt đi dựng lại
   const [run, setRun] = useState(0)
   useEffect(() => {
-    if (animated && visible) setRun((r) => r + 1)
+    if (animated) setRun((r) => (visible ? r + 1 : 0))
   }, [animated, visible])
   const animCls = animated ? (run ? ' is-play' : ' is-wait') : ''
   const lang = useCanvasLang()
+  // ảnh của thẻ đang ẩn (el.tab, vd. lớp 2, 3 ở mục 2.1.2) không vào danh sách ← → của lightbox
+  const tabSet = (page.elements || []).find((el) => el.tab)?.tab.set
+  const tab = useTab(tabSet)
   const zoom = useMemo(
     () =>
-      mode === 'read' ? (page.elements || []).filter(zoomable).map((el) => ({ id: el.id, src: el.src, alt: el.alt, caption: captionOf(el, lang) })) : null,
-    [page.elements, mode, lang]
+      mode === 'read'
+        ? (page.elements || [])
+            .filter((el) => zoomable(el) && (!el.tab || el.tab.i === tab))
+            .map((el) => ({ id: el.id, src: el.src, alt: el.alt, caption: captionOf(el, lang) }))
+        : null,
+    [page.elements, mode, lang, tab]
   )
   return (
     <ZoomList.Provider value={zoom}>
@@ -92,6 +104,8 @@ export function boxStyle(el) {
 export function Element({ el, mode, visible }) {
   // el.only = 'vi' | 'ja': phần tử chỉ hiện ở một ngôn ngữ (vd. dòng địa danh đặt ngay dưới tên nón theo chiều cao chữ của từng thứ tiếng)
   const lang = useCanvasLang()
+  // el.tab = { set, i }: phần tử thuộc thẻ i của nhóm set (src/canvas/tabs.js), chỉ hiện khi thẻ đó đang chọn
+  const tab = useTab(el.tab?.set)
   if (el.only && el.only !== (lang === 'ja' ? 'ja' : 'vi')) return null
   const anim =
     el.anim && mode === 'read'
@@ -106,7 +120,12 @@ export function Element({ el, mode, visible }) {
       data-id={el.id}
       data-name={el.name || undefined}
       data-anim={anim ? el.anim.kind : undefined}
-      style={{ ...boxStyle(el), ...anim, ...(el.frame ? { '--mat': `${el.frame}em` } : null) }}
+      data-pop={el.pop ? el.pop.kind || 'obj' : undefined}
+      data-float={el.pop?.float ? '' : undefined}
+      data-mirror={el.mirror ? '' : undefined}
+      data-tab={el.tab ? el.tab.i : undefined}
+      data-tab-off={el.tab && el.tab.i !== tab ? '' : undefined}
+      style={{ ...boxStyle(el), ...anim, ...(el.pop ? { '--pz': el.pop.z ?? 1, '--pf': `${el.pop.float ?? 0}em` } : null), ...(el.frame ? { '--mat': `${el.frame}em` } : null), ...(el.round ? { borderRadius: '50%', overflow: 'hidden' } : null) }}
     >
       <ElementBody el={el} mode={mode} visible={visible} />
     </div>
@@ -192,14 +211,14 @@ function TextBody({ el, mode }) {
   )
   if (isPageLink(el.link)) {
     return (
-      <PageLink el={el} mode={mode}>
+      <PageLink el={el} mode={mode} className={el.linkStyle ? `cv-link--${el.linkStyle}` : ''}>
         {body}
       </PageLink>
     )
   }
   if (el.link && mode === 'read') {
     return (
-      <a className="cv-link" href={el.link} target="_blank" rel="noreferrer">
+      <a className={`cv-link${el.linkStyle ? ` cv-link--${el.linkStyle}` : ''}`} href={el.link} target="_blank" rel="noreferrer">
         {body}
       </a>
     )
@@ -253,12 +272,13 @@ const isPageLink = (link) => /^#p\d+$/.test(link || '')
 /** link trong sách: "#p12" = lật tới trang 12 (số trang in trên sách) — dòng mục lục, dải công đoạn… */
 function PageLink({ el, mode, className = '', children }) {
   const { goToPage } = useContext(MagazineContext)
+  const ja = useCanvasLang() === 'ja'
   if (mode !== 'read' || !goToPage || !isPageLink(el.link)) return children
   return (
     <a
       className={`cv-link cv-link--page ${className}`}
       href={el.link}
-      aria-label={el.alt || undefined}
+      aria-label={(Array.isArray(el.alt) ? el.alt[ja ? 1 : 0] : el.alt) || undefined}
       onClick={(e) => {
         e.preventDefault()
         goToPage(Number(el.link.slice(2)) - 1)
@@ -291,7 +311,7 @@ function ImageBody({ el }) {
       loading={load === 'lazy' ? 'lazy' : undefined}
       alt={el.alt || ''}
       draggable="false"
-      style={c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
+      style={el.blur ? { objectFit: 'cover', objectPosition: el.pos, filter: 'blur(5em) saturate(0.9) brightness(1.04)', transform: 'scale(1.25)' } : c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
     />
   )
   const img = c ? <span className="cv-crop">{pic}</span> : pic
@@ -389,7 +409,18 @@ function LineBody({ el }) {
 const firstFrame = (src) => (src.startsWith('data:') ? src : `${src}#t=0.5`)
 
 function VideoBody({ el, mode, visible }) {
-  if (useContext(LoadMode) === 'off') return <div className="cv-video-ph" />
+  const load = useContext(LoadMode)
+  const { onPageAudioPlay, onPageAudioStop } = useContext(MagazineContext)
+  // soát đọc lần đầu 05/11: thanh điều khiển mặc định của trình duyệt hiện sẵn trên ảnh bìa trông thô → ảnh bìa + nút ▶
+  // tròn màu son; bấm mới phát (nhạc nền tạm dừng) và mới hiện thanh điều khiển
+  const [started, setStarted] = useState(false)
+  const vref = useRef(null)
+  useEffect(() => {
+    if (visible) return
+    vref.current?.pause()
+    setStarted(false) // lật quay lại: lại là ảnh bìa + nút ▶ (soát vòng 8)
+  }, [visible])
+  if (load === 'off') return <div className="cv-video-ph" />
   if (mode !== 'read' || !el.src) {
     // editor: chỉ hiển thị (bấm/kéo để chọn); xem video bằng nhấp đúp hoặc nút "Xem video"
     return (
@@ -404,17 +435,34 @@ function VideoBody({ el, mode, visible }) {
     )
   }
   return (
-    <video
-      className="cv-video"
-      src={el.poster ? asset(el.src) : firstFrame(asset(el.src))}
-      poster={el.poster ? asset(el.poster) : undefined}
-      preload={el.poster ? 'none' : 'metadata'}
-      playsInline
-      controls
-      ref={(v) => {
-        if (v && !visible) v.pause()
-      }}
-    />
+    <div className="cv-video-wrap">
+      <video
+        ref={vref}
+        className="cv-video"
+        src={el.poster ? asset(el.src) : firstFrame(asset(el.src))}
+        poster={el.poster ? asset(el.poster) : undefined}
+        preload={el.poster ? 'none' : 'metadata'}
+        playsInline
+        controls={started}
+        onPlay={() => onPageAudioPlay?.()}
+        onPause={() => onPageAudioStop?.()}
+        onEnded={() => onPageAudioStop?.()}
+      />
+      {!started && (
+        <button
+          type="button"
+          className="cv-video-play"
+          data-no-flip=""
+          aria-label={t('playVideo')}
+          onClick={() => {
+            setStarted(true)
+            vref.current?.play().catch(() => {})
+          }}
+        >
+          <span className="cv-video-play__icon" aria-hidden="true" />
+        </button>
+      )}
+    </div>
   )
 }
 

@@ -33,6 +33,42 @@
   height: 100%;
 }
 
+/* nghiêng theo con trỏ (--mx/--my do App đặt): tối đa ~2,5° — đủ thấy cuốn sách có khối, không làm lệch chỗ kéo lật trang */
+.book__tilt {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: perspective(2600px) rotateY(calc(var(--mx, 0) * 2.6deg)) rotateX(calc(var(--my, 0) * -2deg));
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.book.is-zoomed .book__tilt {
+  transform: none;
+}
+/* vệt sáng: đốm sáng mềm chạy ngược hướng nghiêng, hoà vào giấy (soft-light) — không bắt chuột */
+.book__glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(60% 75% at calc(50% - var(--mx, 0) * 38%) calc(38% - var(--my, 0) * 30%), rgba(255, 250, 235, 0.55), rgba(255, 250, 235, 0) 70%);
+  transition: background 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.orientation-landscape .book__glare[data-alone='right'] {
+  left: 50%;
+}
+.orientation-landscape .book__glare[data-alone='left'] {
+  right: 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .book__tilt {
+    transform: none;
+  }
+  .book__glare {
+    display: none;
+  }
+}
+
 /* bóng đổ dưới sách (khối nằm gọn sau trang, chỉ bóng lộ ra — không thò gờ dưới mép trang) */
 .book__shadow {
   position: absolute;

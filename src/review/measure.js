@@ -3,7 +3,7 @@
 const TOP = 76 // vùng nội dung: dưới đầu trang …
 const BOT = 784 // … tới trên số trang
 const CELL = 8
-const DECOR = new Set(['Đầu trang', 'Đường kẻ', 'Vạch màu', 'Số trang', 'Họa tiết', 'Lớp tối', 'Chỉ vàng'])
+const DECOR = new Set(['Đầu trang', 'Đường kẻ', 'Vạch màu', 'Số trang', 'Họa tiết', 'Lớp tối', 'Chỉ vàng', 'Bóng nắng'])
 const FULL = new Set(['Ảnh toàn trang', 'Ảnh bìa', 'Ảnh mở chương'])
 const BODY = new Set(['Đoạn văn', 'Mô tả', 'Ghi chú'])
 // khung nền (chữ nằm trên là chủ đích, không tính là đè)
@@ -24,7 +24,8 @@ export function measurePage(page, W, H) {
   const pr = page.getBoundingClientRect()
   const k = W / pr.width
   const pt = (q) => ({ x: (q.left - pr.left) * k, y: (q.top - pr.top) * k, w: q.width * k, h: q.height * k })
-  const els = [...page.querySelectorAll(':scope > .cv-el')].map((node) => {
+  // phần của thẻ đang ẩn (el.tab, vd. ảnh lớp 2, 3 ở mục 2.1.2) không tính: chỉ đo phần đang hiện
+  const els = [...page.querySelectorAll(':scope > .cv-el:not([data-tab-off])')].map((node) => {
     const name = node.dataset.name || ''
     const type = [...node.classList].find((c) => c.startsWith('cv-el--'))?.slice(7)
     const box = pt(node.getBoundingClientRect())

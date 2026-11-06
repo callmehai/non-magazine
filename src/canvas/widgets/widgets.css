@@ -378,16 +378,25 @@
 /* ── ba lớp lá ── */
 .cvw-layers {
   display: grid;
-  grid-template-columns: 37% 1fr;
-  gap: 10em;
-  align-items: center;
+  grid-template-columns: 36% 1fr;
+  gap: 8em;
+  align-items: stretch;
+  /* nền giấy ngà đậm hơn trang một chút, viền đường khâu nét đứt (concept "đường khâu" của sách) */
+  box-sizing: border-box;
+  padding: 12em 12em 6em;
+  background: #f1e7d2;
+  border: 1px dashed #c4a77a;
+  border-radius: 6em;
+  box-shadow: inset 0 0 0 4em #f1e7d2, inset 0 0 0 5em rgba(196, 167, 122, 0.35);
 }
 .cvw-layers__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 18em;
   display: grid;
-  gap: 7em;
+  /* ba dòng ngang tầm ba lớp của hình (ngoài · mo nang · trong) */
+  grid-template-rows: 43fr 30fr 27fr;
+  align-items: center;
 }
 .cvw-layers__item {
   display: flex;
@@ -418,7 +427,13 @@
   border-color: var(--c);
 }
 .cvw-layers.has-sel .cvw-layers__item:not(.is-on) {
-  opacity: 0.5;
+  opacity: 0.9;
+}
+.cvw-layers.has-sel .cvw-layers__item:not(.is-on) .cvw-layers__txt b {
+  color: #8b7355;
+}
+.cvw-layers.has-sel .cvw-layers__item:not(.is-on) .cvw-layers__no {
+  background: #b9a586;
 }
 .cvw-layers__no {
   flex: none;
@@ -438,9 +453,17 @@
 }
 .cvw-layers__txt b {
   font-family: 'Playfair Display', 'Shippori Mincho', serif;
-  font-size: 14em;
+  font-size: 15.5em;
   line-height: 1.25;
   color: var(--c);
+}
+.cvw-layers__txt small {
+  font-size: 11.5em;
+  line-height: 1.3;
+  color: #8a7a64;
+}
+.cvw-layers__item.is-on .cvw-layers__txt small {
+  color: #5a4a3a;
 }
 .cvw-layers__txt span {
   font-size: 11em;
@@ -451,24 +474,56 @@
   position: relative;
   height: 100%;
 }
-.cvw-layers__still,
-.cvw-layers__gl {
+/* ba lớp ảnh tĩnh chồng đúng chỗ (lop-stack-*.webp cùng khung 820 × 990) */
+.cvw-layers__stack {
+  position: absolute;
+  top: 0;
+  bottom: 18em;
+  left: 50%;
+  translate: -50% 0;
+  aspect-ratio: 820 / 990;
+  max-width: 100%;
+}
+.cvw-layers__img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  opacity: 0.5;
+  filter: saturate(0.75);
+  transition:
+    opacity 0.35s ease,
+    filter 0.35s ease,
+    translate 0.35s ease;
+  pointer-events: none;
 }
-.cvw-layers__gl {
-  cursor: grab;
+.cvw-layers__img.is-on {
+  /* lớp đang chọn nổi lên trên hai lớp mờ (không bị lớp mờ phía trên phủ lên làm bạc màu) */
+  z-index: 1;
+  opacity: 1;
+  filter: saturate(1) drop-shadow(0 0.8em 1.4em rgba(74, 50, 26, 0.28)) drop-shadow(0 0 0.5em color-mix(in srgb, var(--c) 45%, transparent));
+  translate: 0 -3em;
+}
+.cvw-layers__hit {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: var(--cursor-leaf-hand, pointer);
 }
 .cvw-layers__hint {
   position: absolute;
   left: 50%;
   bottom: 0;
   translate: -50% 0;
-  font-size: 9.5em;
+  width: 100%;
+  font-size: 11em;
+  line-height: 1.3;
   color: #8a7a64;
-  white-space: nowrap;
+  text-align: center;
   pointer-events: none;
 }
 
@@ -476,7 +531,7 @@
 .cvw-pc {
   display: flex;
   gap: 18em;
-  align-items: flex-start;
+  align-items: center;
 }
 /* .stf__parent canvas (thư viện lật trang) ép mọi canvas phủ kín trang → đè lại */
 .cvw .cvw-pc__card {
@@ -484,7 +539,7 @@
   left: auto;
   top: auto;
   flex: none;
-  width: 290em;
+  width: 280em;
   height: auto;
   aspect-ratio: 1200 / 1650;
   box-shadow: 0 3em 14em rgba(60, 35, 10, 0.22), 0 0 0 0.6em rgba(160, 122, 60, 0.35);
@@ -494,12 +549,13 @@
 .cvw-pc__side {
   flex: 1;
   min-width: 0;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
 }
 .cvw-pc__label {
-  margin: 0 0 0.6em;
-  font-size: 10.5em;
+  margin: 0 0 0.7em;
+  font-size: 11.5em;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -509,21 +565,24 @@
   letter-spacing: 0.06em;
 }
 .cvw-pc__thumbs {
+  flex: 1;
+  min-height: 110em;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 7em;
-  margin-bottom: 16em;
+  grid-template-rows: 1fr 1fr;
+  gap: 9em;
+  margin-bottom: 18em;
 }
 .cvw-pc__thumb {
   padding: 0;
   border: 0;
-  height: 96em;
+  min-height: 0;
   border-radius: 3em;
   overflow: hidden;
   background: #d9cdb4;
-  outline: 1.2em solid transparent;
-  outline-offset: 1.6em;
-  opacity: 0.75;
+  outline: 2em solid transparent;
+  outline-offset: 2em;
+  opacity: 0.82;
   transition: opacity 0.2s, outline-color 0.2s;
 }
 .cvw-pc__thumb img {
@@ -541,25 +600,40 @@
 }
 .cvw-pc__verses {
   display: grid;
-  gap: 6em;
-  margin-bottom: 16em;
+  gap: 5em;
+  margin-bottom: 18em;
 }
 .cvw-pc__verse {
   font: inherit;
   font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
   font-style: italic;
-  font-size: 12.5em;
-  line-height: 1.3;
+  font-weight: 600;
+  font-size: 14.5em;
+  line-height: 1.25;
   text-align: left;
-  padding: 0.5em 0.7em;
+  padding: 0.4em 0.55em;
   border: 0.08em solid rgba(160, 122, 60, 0.45);
   border-radius: 0.35em;
   background: rgba(255, 252, 244, 0.6);
   color: #4e3426;
 }
+.cvw-pc__verse span {
+  display: block;
+  text-wrap: pretty;
+}
+/* lục bát: câu lục thụt vào, câu bát sát lề */
+.cvw-pc__verse span:first-child {
+  padding-left: 1.2em;
+}
 :lang(ja) .cvw-pc__verse {
   font-style: normal;
-  font-size: 11em;
+  font-weight: 500;
+  font-size: 12em;
+  line-height: 1.4;
+  line-break: strict;
+}
+:lang(ja) .cvw-pc__verse span:first-child {
+  padding-left: 0;
 }
 .cvw-pc__verse.is-on {
   border-color: #a8382b;
@@ -568,7 +642,7 @@
 }
 .cvw-pc__save {
   font: inherit;
-  font-size: 12.5em;
+  font-size: 13.5em;
   font-weight: 600;
   letter-spacing: 0.04em;
   padding: 0.75em 1em;
@@ -581,9 +655,456 @@
 .cvw-pc__save:hover:not(:disabled) {
   background: #a8382b;
 }
+/* soát đọc lần đầu 05/11: trên điện thoại nút "Tải bưu thiếp" chỉ cao 25px → chạm bằng ngón tay tối thiểu 44px
+   (nút câu ca dao không ép cao: ép thì lưới ảnh chọn co còn 24px, khó chọn hơn) */
+@media (pointer: coarse) {
+  .cvw-pc__save {
+    min-height: 44px;
+  }
+  /* bù chỗ cho nút cao hơn: dòng "Ảnh JPG 1200 × 1650" là thông tin phụ */
+  .cvw-pc__size {
+    display: none;
+  }
+}
 .cvw-pc__size {
   margin: 0.6em 0 0;
   font-size: 9.5em;
   text-align: center;
   color: #8b7355;
+}
+
+/* ── dòng thời gian (trang nghệ nhân chương 3) — 1em = 1pt ở khối chứa; phần tử chữ đặt font-size thì lề tính theo chữ đó ── */
+.cvw-tl {
+  display: flex;
+  flex-direction: column;
+  gap: 14em;
+}
+.cvw-tl__hint {
+  font-family: 'Patrick Hand', 'Klee One', cursive;
+  font-size: 15em;
+  color: #7a3b22;
+  text-align: center;
+}
+.cvw-tl__track {
+  position: relative;
+  height: 96em;
+  flex: none;
+}
+.cvw-tl__line,
+.cvw-tl__fill {
+  position: absolute;
+  left: 0;
+  top: 44em;
+  height: 3em;
+  border-radius: 2em;
+}
+.cvw-tl__line {
+  right: 0;
+  background: repeating-linear-gradient(90deg, #c9b48f 0 6em, transparent 6em 10em);
+}
+.cvw-tl__fill {
+  background: var(--acc);
+  transition: width 0.7s cubic-bezier(0.3, 0.8, 0.3, 1);
+}
+.cvw-tl__node {
+  position: absolute;
+  top: 0;
+  width: 150em;
+  margin-left: -75em;
+  height: 96em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: var(--cursor-leaf-hand, pointer);
+}
+.cvw-tl__year {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 20em;
+  line-height: 1.6;
+  color: #8f7b62;
+  transition: color 0.3s, transform 0.3s;
+}
+.cvw-tl__dot {
+  margin-top: 4em;
+  width: 18em;
+  height: 18em;
+  border-radius: 50%;
+  background: #fbf7ee;
+  border: 2.5em solid #c9b48f;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.cvw-tl__who {
+  margin-top: 0.6em;
+  font-size: 12.5em;
+  line-height: 1.3;
+  color: #5d4c3c;
+  text-align: center;
+}
+.cvw-tl__node.is-past .cvw-tl__dot {
+  border-color: var(--acc);
+  background: var(--acc);
+}
+.cvw-tl__node.is-on .cvw-tl__year {
+  color: var(--acc);
+  transform: translateY(-0.1em) scale(1.12);
+}
+.cvw-tl__node.is-on .cvw-tl__dot {
+  border-color: var(--acc);
+  background: #fbf7ee;
+  transform: scale(1.35);
+  box-shadow: 0 0 0 6em color-mix(in srgb, var(--acc) 18%, transparent);
+}
+.cvw-tl__node.is-on .cvw-tl__who {
+  color: #2b2118;
+  font-weight: 600;
+}
+.cvw-tl__node:hover .cvw-tl__dot {
+  transform: scale(1.25);
+}
+.cvw-tl__card {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 26em 28em 22em;
+  border-radius: 8em;
+  background: #fbf7ee;
+  border: 1em solid #d9c9a8;
+  box-shadow: 0 10em 28em rgba(70, 45, 20, 0.08);
+  display: flex;
+  flex-direction: column;
+  animation: cvw-tl-in 0.5s ease both;
+}
+.cvw-tl__card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5em;
+  background: var(--acc);
+}
+@keyframes cvw-tl-in {
+  from {
+    opacity: 0;
+    transform: translateY(10em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.cvw-tl__art {
+  position: absolute;
+  right: -40em;
+  bottom: -40em;
+  width: 220em;
+  height: 220em;
+  opacity: 0.1;
+  pointer-events: none;
+}
+.cvw-tl__kicker {
+  display: flex;
+  align-items: baseline;
+  gap: 12em;
+  position: relative;
+  flex-wrap: wrap;
+}
+.cvw-tl__big {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 40em;
+  line-height: 1;
+  color: var(--acc);
+}
+.cvw-tl__role {
+  font-size: 14em;
+  font-style: italic;
+  color: var(--acc);
+}
+.cvw-tl__name {
+  margin-top: 0.45em;
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-weight: 700;
+  font-size: 22em;
+  line-height: 1.25;
+  color: #2b2118;
+}
+.cvw-tl__bio {
+  margin-top: 0.8em;
+  font-size: 14.5em;
+  line-height: 1.62;
+  text-align: justify;
+  color: #2b2118;
+}
+.cvw-tl.is-ja .cvw-tl__bio {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14.5em;
+  line-height: 1.9;
+}
+.cvw-tl.is-ja .cvw-tl__role,
+.cvw-tl.is-ja .cvw-tl__who,
+.cvw-tl.is-ja .cvw-tl__hint {
+  font-style: normal;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.cvw-tl rt {
+  font-size: 0.5em;
+}
+.cvw-tl__still {
+  display: block;
+  margin: auto auto 0;
+  width: 78%;
+  max-height: 40%;
+  min-height: 0;
+  object-fit: contain;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.cvw-tl__nav {
+  padding-top: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12em;
+}
+.cvw-tl__nav button {
+  font-family: 'Playfair Display', serif;
+  font-size: 18em;
+  line-height: 1;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
+  border: 0.07em solid var(--acc);
+  background: #fbf7ee;
+  color: var(--acc);
+  cursor: var(--cursor-leaf-hand, pointer);
+}
+.cvw-tl__nav button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.cvw-tl__count {
+  font-size: 12.5em;
+  color: #8f7b62;
+  letter-spacing: 0.1em;
+}
+
+/* ── hàng chọn thẻ (TabsWidget): ba mũi khâu trên một đường chỉ nét đứt ── */
+.cvw-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10em;
+  align-items: start;
+}
+/* sợi chỉ: nét đứt chạy qua tâm ba mũi khâu */
+.cvw-tabs::before {
+  content: '';
+  position: absolute;
+  left: 4em;
+  right: 4em;
+  top: 5em;
+  border-top: 1px dashed #b89d6e;
+}
+.cvw-tabs__btn {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 7em;
+  row-gap: 7em;
+  align-items: start;
+  padding: 0 0 7em;
+  font: inherit;
+  color: #8a7a64;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: var(--cursor-leaf-hand, pointer);
+}
+.cvw-tabs__btn:disabled {
+  cursor: default;
+}
+/* gạch chân: mảnh, chỉ hiện ở lớp đang chọn */
+.cvw-tabs__btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5em;
+  background: var(--c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.cvw-tabs__btn.is-on::after {
+  transform: scaleX(1);
+}
+.cvw-tabs__dot {
+  grid-column: 1 / -1;
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  background: #f7f1e3;
+  border: 1.5px solid #b89d6e;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    transform 0.3s;
+}
+.cvw-tabs__btn.is-on .cvw-tabs__dot {
+  background: var(--c);
+  border-color: var(--c);
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3em color-mix(in srgb, var(--c) 18%, transparent);
+}
+.cvw-tabs__no {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 32em;
+  line-height: 0.9;
+  font-weight: 600;
+  color: #c9b896;
+  transition: color 0.3s;
+}
+.cvw-tabs__name {
+  display: grid;
+  gap: 1em;
+  padding-top: 2em;
+}
+.cvw-tabs__name b {
+  font-family: 'Playfair Display', 'Shippori Mincho', serif;
+  font-size: 14.5em;
+  line-height: 1.2;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+.cvw-tabs__name span {
+  font-size: 12em;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+.cvw-tabs__btn:not(:disabled):hover .cvw-tabs__no {
+  color: color-mix(in srgb, var(--c) 60%, #c9b896);
+}
+.cvw-tabs__btn.is-on .cvw-tabs__no,
+.cvw-tabs__btn.is-on .cvw-tabs__name b {
+  color: var(--c);
+}
+.cvw-tabs__btn.is-on .cvw-tabs__name span {
+  color: #5a4a3a;
+}
+
+/* ── lũy tre lớn dần (cặp trang Lưu ý, GroveWidget.jsx): nét vẽ dần, măng nhú, lá xòe, tre đung đưa ──
+   Hiệu năng (anh Hải 05/11: "mở đến trang lag"): không có chuyển động lặp mãi; cả khối khoanh vùng vẽ lại (contain)
+   để nét đang chạy không bắt vẽ lại trang giấy; chờ lật trang xong (--t0) mới chạy. */
+.cvw-grove {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+  contain: layout paint;
+  --t0: 0.55s;
+  /* anh Hải 05/11: "đẩy nhanh lên, lâu quá, x1.5" → mọi nhịp (thời lượng + độ trễ) chia cho --sp; --t0 (chờ lật trang) giữ nguyên */
+  --sp: 1.5;
+}
+.cvw-grove.is-wait {
+  visibility: hidden;
+}
+.cvw-grove .cvg-draw {
+  stroke-dasharray: 1;
+}
+.cvw-grove.is-run .cvg-draw {
+  stroke-dashoffset: 1;
+  animation: cvg-draw calc(var(--d) / var(--sp)) cubic-bezier(0.35, 0.1, 0.3, 1) calc(var(--t) / var(--sp) + var(--t0)) forwards;
+}
+/* gọng khuôn: vẽ ra rồi mờ đi khi lá đã lợp (khuôn tháo ra) */
+.cvw-grove.is-run .cvg-draw[style*='--to'] {
+  animation: cvg-draw calc(var(--d) / var(--sp)) ease-out calc(var(--t) / var(--sp) + var(--t0)) forwards, cvg-dim calc(0.6s / var(--sp)) ease calc(var(--tt) / var(--sp) + var(--t0)) forwards;
+}
+.cvw-grove.is-static .cvg-draw[style*='--to'] {
+  opacity: 0.22;
+}
+@keyframes cvg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes cvg-dim {
+  to {
+    opacity: var(--to);
+  }
+}
+.cvw-grove .cvg-pop,
+.cvw-grove .cvg-leaf,
+.cvw-grove .cvg-node,
+.cvw-grove .cvg-rise,
+.cvw-grove .cvg-drop,
+.cvw-grove .cvg-fade {
+  transform-box: view-box;
+}
+.cvw-grove.is-run .cvg-pop {
+  animation: cvg-pop calc(var(--d) / var(--sp)) cubic-bezier(0.3, 1.6, 0.5, 1) calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+.cvw-grove.is-run .cvg-leaf {
+  animation: cvg-leaf calc(var(--d) / var(--sp)) cubic-bezier(0.3, 1.35, 0.5, 1) calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+.cvw-grove.is-run .cvg-node {
+  animation: cvg-node calc(var(--d) / var(--sp)) ease-out calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+.cvw-grove.is-run .cvg-rise {
+  animation: cvg-rise calc(var(--d) / var(--sp)) cubic-bezier(0.3, 1.5, 0.5, 1) calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+.cvw-grove.is-run .cvg-drop {
+  animation: cvg-drop calc(var(--d) / var(--sp)) cubic-bezier(0.3, 1.3, 0.5, 1) calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+.cvw-grove.is-run .cvg-fade {
+  animation: cvg-fade calc(var(--d) / var(--sp)) ease calc(var(--t) / var(--sp) + var(--t0)) both;
+}
+@keyframes cvg-pop {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+}
+@keyframes cvg-leaf {
+  from {
+    opacity: 0;
+    scale: 0.05;
+    rotate: -28deg;
+  }
+}
+@keyframes cvg-node {
+  from {
+    opacity: 0;
+    scale: 0 1;
+  }
+}
+@keyframes cvg-rise {
+  from {
+    opacity: 0;
+    scale: 1 0;
+  }
+}
+@keyframes cvg-drop {
+  from {
+    opacity: 0;
+    translate: 0 -18px;
+  }
+}
+@keyframes cvg-fade {
+  from {
+    opacity: 0;
+  }
+}
+/* lớn xong thì đung đưa nhẹ quanh gốc (mỗi cây một nhịp) */
+/* bản đầu có tre đung đưa mãi + lá rơi: trang chỉ còn ~47 khung hình/giây (tĩnh 60) → bỏ; mọc xong là đứng yên, không tốn gì */
+@media (prefers-reduced-motion: reduce) {
+  .cvw-grove * {
+    animation: none !important;
+  }
 }

@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { MiniScene } from './miniScene.js'
 import { reducedMotion } from './webgl.js'
+import { asset } from '../../lib/assets.js'
 
 /**
  * Ba lớp lá lợp nón tách rời theo chiều cao (trên cùng là lớp lá ngoài, giữa là mo nang, dưới là lớp lá trong).
@@ -18,24 +19,57 @@ function texture(kind) {
   c.height = 256
   const g = c.getContext('2d')
   // u (ngang) = vòng quanh nón, v (dọc) = từ vành lên chóp
+  // góp ý: nhìn vào phải hình dung được hai lớp lá lụi kẹp lớp mo nang ở giữa → lá = từng tàu lá ngà có gân,
+  // mo nang = bẹ mo nâu loang lổ, thớ dọc (như ảnh mo thật IMG_7938), khác hẳn màu và chất hai lớp lá
+  let seed = kind === 'outer' ? 7 : kind === 'mo' ? 13 : 29
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
   if (kind === 'mo') {
-    g.fillStyle = '#c4a072'
+    g.fillStyle = '#9c7444'
     g.fillRect(0, 0, 1024, 256)
-    for (let i = 0; i < 2200; i++) {
-      g.fillStyle = `rgba(${90 + Math.random() * 60},${60 + Math.random() * 40},30,${0.05 + Math.random() * 0.12})`
-      g.fillRect(Math.random() * 1024, Math.random() * 256, 1 + Math.random() * 18, 1 + Math.random() * 2)
+    // năm bẹ mo nối tiếp quanh nón, mép bẹ sẫm hơn
+    for (let b = 0; b < 5; b++) {
+      const x0 = (b / 5) * 1024
+      const grd = g.createLinearGradient(x0, 0, x0 + 1024 / 5, 0)
+      grd.addColorStop(0, 'rgba(70,45,20,0.35)')
+      grd.addColorStop(0.15, 'rgba(190,150,95,0.25)')
+      grd.addColorStop(0.85, 'rgba(170,130,80,0.15)')
+      grd.addColorStop(1, 'rgba(70,45,20,0.4)')
+      g.fillStyle = grd
+      g.fillRect(x0, 0, 1024 / 5, 256)
+    }
+    // vết loang sẫm / sáng
+    for (let i = 0; i < 90; i++) {
+      const dark = rnd() < 0.6
+      g.fillStyle = dark ? `rgba(60,38,18,${0.08 + rnd() * 0.18})` : `rgba(225,195,140,${0.06 + rnd() * 0.14})`
+      g.beginPath()
+      g.ellipse(rnd() * 1024, rnd() * 256, 8 + rnd() * 40, 3 + rnd() * 14, rnd() * 0.4, 0, Math.PI * 2)
+      g.fill()
+    }
+    // thớ dọc mảnh
+    for (let i = 0; i < 700; i++) {
+      g.fillStyle = `rgba(${60 + rnd() * 50},${40 + rnd() * 30},20,${0.05 + rnd() * 0.12})`
+      g.fillRect(rnd() * 1024, rnd() * 256, 1, 10 + rnd() * 70)
     }
   } else {
-    g.fillStyle = kind === 'outer' ? '#efe4c8' : '#f3ead6'
+    g.fillStyle = kind === 'outer' ? '#efe6cc' : '#f4ecd8'
     g.fillRect(0, 0, 1024, 256)
-    // tàu lá chạy từ vành lên chóp, gân nhỏ
-    for (let i = 0; i < 18; i++) {
-      const x = (i / 18) * 1024
-      g.fillStyle = 'rgba(150,120,70,0.10)'
-      g.fillRect(x, 0, 2, 256)
-      for (let j = 1; j < 9; j++) {
-        g.fillStyle = 'rgba(160,130,80,0.06)'
-        g.fillRect(x + (j * 1024) / 18 / 9, 0, 1, 256)
+    // từng tàu lá lụi chạy từ vành lên chóp, hơi lệch màu nhau, mép tàu có bóng, gân giữa rõ
+    const n = 34
+    for (let i = 0; i < n; i++) {
+      const x = (i / n) * 1024
+      const w = 1024 / n
+      const t = rnd()
+      g.fillStyle = `rgba(${200 + t * 40},${180 + t * 40},${130 + t * 50},0.35)`
+      g.fillRect(x, 0, w, 256)
+      g.fillStyle = 'rgba(120,95,55,0.28)'
+      g.fillRect(x, 0, 1.5, 256)
+      g.fillStyle = 'rgba(255,255,255,0.35)'
+      g.fillRect(x + 2, 0, 1, 256)
+      g.fillStyle = 'rgba(150,120,70,0.22)'
+      g.fillRect(x + w / 2, 0, 1.2, 256)
+      for (let j = 1; j < 5; j++) {
+        g.fillStyle = 'rgba(160,130,80,0.08)'
+        g.fillRect(x + (j * w) / 5, 0, 0.8, 256)
       }
     }
   }
@@ -50,6 +84,20 @@ function texture(kind) {
   t.colorSpace = THREE.SRGBColorSpace
   t.wrapS = THREE.RepeatWrapping
   return t
+}
+
+// mặt lớp bằng ảnh thật nhóm chụp (scripts/book/layer-tex.py: dải mặt nón trong ảnh "sau khi lợp", lặp quanh nón);
+// góp ý: "3 lớp lá cho ảnh 3d thật" → vẽ tay ở trên chỉ là hình tạm trong lúc ảnh đang tải
+const loader = new THREE.TextureLoader()
+function photo(kind, mat, anisotropy) {
+  loader.load(asset(`assets/book/fx/lop-${kind}.webp`), (t) => {
+    t.colorSpace = THREE.SRGBColorSpace
+    t.wrapS = THREE.RepeatWrapping
+    t.anisotropy = anisotropy
+    mat.map?.dispose()
+    mat.map = t
+    mat.needsUpdate = true
+  })
 }
 
 function cone(scale) {
@@ -86,11 +134,14 @@ export class LayersScene extends MiniScene {
       const m = new THREE.MeshStandardMaterial({
         map: texture(kind),
         roughness: kind === 'mo' ? 0.95 : 0.7,
+        // mo nang sẫm hơn hai lớp lá lụi một chút: nhìn vào phải thấy ngay "hai lớp lá kẹp lớp mo ở giữa"
+        color: kind === 'mo' ? '#d9b98f' : '#ffffff',
         side: THREE.DoubleSide,
         transparent: true,
         emissive: this.colors[i],
         emissiveIntensity: 0,
       })
+      photo(kind, m, Math.min(8, this.renderer?.capabilities.getMaxAnisotropy?.() ?? 1))
       const mesh = new THREE.Mesh(cone(1 - i * 0.045), m)
       mesh.userData.i = i
       mesh.userData.y = (1 - i) * GAP
@@ -166,8 +217,10 @@ export class LayersScene extends MiniScene {
       const on = this.sel === i
       const dim = this.sel !== null && !on
       const mat = m.material
-      mat.emissiveIntensity += ((on ? 0.55 : this.hover === i ? 0.18 : 0) - mat.emissiveIntensity) * k
-      mat.opacity += ((dim ? 0.28 : 1) - mat.opacity) * k
+      // lớp đang chọn chỉ ửng nhẹ màu lớp (giữ màu ảnh thật); hai lớp kia mờ hẳn — soát 05/11: tô sáng 0,55 làm mất màu
+      // ảnh, lớp mờ 0,28 để lộ chóp lớp trong trông như có lớp thứ tư
+      mat.emissiveIntensity += ((on ? 0.22 : this.hover === i ? 0.12 : 0) - mat.emissiveIntensity) * k
+      mat.opacity += ((dim ? 0.14 : 1) - mat.opacity) * k
       mat.depthWrite = mat.opacity > 0.9
       const y = m.userData.y + (on ? (i === 0 ? 0.16 : i === 2 ? -0.16 : 0) : 0)
       m.position.y += (y - m.position.y) * k

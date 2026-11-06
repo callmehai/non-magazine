@@ -95,10 +95,14 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
       }}
     >
       <div className="book__shift" style={{ transform: offset ? `translate3d(${offset}px,0,0)` : undefined }}>
-        <div className="book__shadow" aria-hidden="true" data-alone={shadowAlone ? aloneSide : undefined} />
-        {stacks && progress > 0.02 && current < count - 1 && <div className="book__stack is-left" aria-hidden="true" style={{ width: stackMax * progress + 1 }} />}
-        {stacks && progress < 0.98 && current > 0 && <div className="book__stack is-right" aria-hidden="true" style={{ width: stackMax * (1 - progress) + 1 }} />}
-        <div ref={hostRef} className="book__host" />
+        {/* cả cuốn sách nghiêng nhẹ theo con trỏ (như cầm sách thật) + vệt sáng lướt trên giấy — anh Hải 05/11 */}
+        <div className={`book__tilt${turning ? ' is-turning' : ''}`}>
+          <div className="book__shadow" aria-hidden="true" data-alone={shadowAlone ? aloneSide : undefined} />
+          {stacks && progress > 0.02 && current < count - 1 && <div className="book__stack is-left" aria-hidden="true" style={{ width: stackMax * progress + 1 }} />}
+          {stacks && progress < 0.98 && current > 0 && <div className="book__stack is-right" aria-hidden="true" style={{ width: stackMax * (1 - progress) + 1 }} />}
+          <div ref={hostRef} className="book__host" />
+          <div className="book__glare" aria-hidden="true" data-alone={shadowAlone ? aloneSide : undefined} />
+        </div>
       </div>
       {pageEls.map((el, i) =>
         createPortal(

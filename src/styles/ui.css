@@ -101,6 +101,7 @@
 
 .controls__page {
   min-width: 78px;
+  white-space: nowrap; /* có nút "Quay lại" ở đầu thanh thì "114–115 / 124" không bị bẻ hai dòng */
   text-align: center;
   font-size: 13px;
   letter-spacing: 0.06em;
@@ -397,11 +398,17 @@
 }
 
 @media (max-width: 699px) {
+  /* góc trên trái, cạnh biểu tượng xem lại 3D (soát vòng 8: đặt góc phải thì nút ngôn ngữ che mất) */
   .music {
-    left: auto;
-    right: 14px;
-    top: 10px;
+    left: 62px;
+    right: auto;
+    top: 12px;
     bottom: auto;
+  }
+
+  /* soát vòng 9: UI tự ẩn thì biểu tượng xem lại 3D ẩn hẳn → nút nhạc về sát góc, không chừa ô trống 40px */
+  .ui-hidden .music {
+    left: 14px;
   }
 
   .music__meta {
@@ -439,6 +446,17 @@
 .hint.is-shown {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+/* review lần 2: dòng nhắc ở đáy màn đè lên mép dưới bìa → màn rộng thì đặt cạnh trái bìa (bìa đứng giữa, bên trái trống) */
+.hint.is-side {
+  left: calc(50% - var(--pw) / 2 - 28px);
+  top: 50%;
+  bottom: auto;
+  transform: translate(calc(-100% + 8px), -50%);
+}
+.hint.is-side.is-shown {
+  transform: translate(-100%, -50%);
 }
 
 .hint svg {
@@ -862,7 +880,8 @@ html[lang='ja'] .intro__bow blockquote {
 
 .intro__title.is-long {
   max-width: min(92vw, 1100px);
-  font-size: clamp(40px, 6.6vw, 92px);
+  /* tối thiểu 30px (trước 40): tên JA "チュオン村のノンラー" liền một khối, ở màn 390px tràn mất chữ "ー" */
+  font-size: clamp(30px, 6.6vw, 92px);
   line-height: 1.12;
   letter-spacing: 0.06em;
   margin-right: -0.06em;
@@ -1030,6 +1049,22 @@ html[lang='ja'] .intro__bow blockquote {
 
 .replay svg {
   color: var(--ui-accent);
+}
+
+/* màn hẹp: nút xem lại chỉ còn biểu tượng, nằm góc trái (soát đọc lần đầu 05/11: chữ dài đè lên nút đổi ngôn ngữ) */
+@media (max-width: 699px) {
+  .replay {
+    left: 14px;
+    transform: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .replay span {
+    display: none;
+  }
 }
 
 .ui-hidden .replay:not(:focus-visible),
@@ -1286,4 +1321,101 @@ html[lang='ja'] .intro__bow blockquote {
 html[lang='ja'] .intro__cadao blockquote {
   font-style: normal;
   letter-spacing: 0.04em;
+  /* soát 05/11 (vòng 5): câu ca dao bản JA dài hơn bản VI, khung 340px ngắt dòng để "ら、" đứng riêng một dòng →
+     chữ nhỏ hơn một bậc, khung rộng theo câu dài nhất (mỗi câu đúng một dòng như ý \n trong bản dịch) */
+  font-size: clamp(14px, 1.25vw, 18px);
+}
+html[lang='ja'] .intro__cadao {
+  max-width: min(460px, 44vw);
+}
+
+/* nút "Quay lại trang …" (đầu thanh điều khiển) sau khi bấm link trong sách (mục lục, số tài liệu tham khảo) —
+   viền khâu nét đứt như sách, nền nâu đất để nổi khỏi các nút khác */
+.jump-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border-radius: 999px;
+  border: 1px dashed rgba(224, 196, 140, 0.75);
+  background: rgba(139, 58, 0, 0.55);
+  animation: jump-back-in 0.35s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.jump-back button {
+  border: 0;
+  background: none;
+  color: #f6ead2;
+  font: 500 13px/1.2 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.jump-back__go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 999px;
+}
+.jump-back__go svg {
+  width: 15px;
+  height: 15px;
+}
+.jump-back__go:hover,
+.jump-back__go:focus-visible,
+.jump-back__x:hover,
+.jump-back__x:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.jump-back__x {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 2px;
+  border-radius: 50%;
+  font-size: 17px !important;
+  line-height: 1;
+}
+@keyframes jump-back-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jump-back {
+    animation: none;
+  }
+}
+@media (pointer: coarse) {
+  .jump-back__go {
+    min-height: 40px;
+  }
+  .jump-back__x {
+    width: 40px;
+    height: 40px;
+  }
+}
+.jump-back__short {
+  display: none;
+}
+@media (max-width: 639px) {
+  /* review lần 2 (điện thoại): nút nằm trong thanh thì thanh quá dài, các nút bị ép còn 26px và nút 次 đè "/ 124" →
+     nút nổi ngay trên thanh điều khiển (dưới trang sách còn chỗ trống), đủ chữ "Quay lại trang …", thanh giữ nguyên */
+  .controls .jump-back {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    translate: -50% 0;
+    background: rgb(92 40 6 / 0.96);
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+  }
+  .controls .jump-back + .controls__sep {
+    display: none;
+  }
+  .controls__row > * {
+    flex-shrink: 0;
+  }
 }

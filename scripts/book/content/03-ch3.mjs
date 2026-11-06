@@ -1,3 +1,4 @@
+import { refs } from './refs.mjs'
 /**
  * Chương 3 — Ghi nhận, bảo tồn nón Làng Chuông + phần kết. Mỗi đoạn: [tiếng Việt, tiếng Nhật]
  * Tiếng Việt: nguyên văn các tab "Chương 3", "Kết luận", "Trang kết" (Doc "ND + HT - Nón lá đã sửa", bản sửa lần 1);
@@ -17,7 +18,7 @@ export const ch3 = {
     id: '3.1',
     title: ['Những ghi nhận đối với nón làng Chuông', 'チュオン村のノンラーへの評価'],
     h: ['Những ghi nhận đối với nón Chuông và làng nghề', 'チュオンの笠と工芸村への評価'],
-    proverb: ['“Muốn ăn cơm trắng cá trê,\nMuốn đội nón tốt thì về làng Chuông”', '「白いご{飯|はん}とナマズが食べたいなら、\n良い笠をかぶりたいならチュオン村へ」'],
+    proverb: ['“Muốn ăn cơm trắng cá trê,\nMuốn đội nón tốt thì về làng Chuông”', '「白いご{飯|はん}とナマズを食べたいなら、\nよいノンラーをかぶりたいなら、チュオン村へ。」'],
     p: [
       [
         'Câu ca dao được lưu truyền trong dân gian phần nào phản ánh danh tiếng lâu đời của nón làng Chuông. Trong cuốn Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội do Đinh Hạnh chủ biên, có đoạn viết: “Từ xa xưa, nón làng Chuông là một trong những cống vật cung tiến hoàng hậu, công chúa bởi vẻ đẹp rất riêng được những bàn tay tài hoa, khéo léo của các nghệ nhân lành nghề làm nên”¹. Trước năm 1930, Hội làng nón được ghi nhận đã cấp chứng nhận chất lượng cho nón Chuông và đánh giá sản phẩm “còn cao hơn cả nón Huế”².',
@@ -49,6 +50,11 @@ export const ch3 = {
   },
   artisans: {
     title: ['Những ghi nhận đối với nghệ nhân tiêu biểu', '代表的な職人への評価'],
+    // câu nói của hai nghệ nhân (tab "Câu nói hay" của Doc, bản tiếng Nhật do nhóm dịch) — in thành câu trích dẫn lớn
+    sayings: {
+      Tuy: ['“Mình cứ yêu nghề là yêu nước, cứ yêu nghề là nghề nào cũng thành công.”\n— Nghệ nhân Lê Văn Tuy', '「自分の仕事を愛することは、国を愛することにもつながると思います。どんな仕事でも、好きな気持ちがあれば、きっとうまくいきます。」\n— 職人レー・ヴァン・トゥイ'],
+      Hương: ['“Muốn giữ nghề, người thợ phải vừa bảo tồn kỹ thuật truyền thống, vừa tìm cách để sản phẩm phù hợp hơn với nhu cầu của công chúng.”\n— Nghệ nhân Tạ Thu Hương', '「ノンラー作りを守っていくためには、昔からの技術を大切にしながら、今の人々のニーズに合うように製品を工夫していくことも必要だと思います。」\n— 職人ター・トゥー・フオン'],
+    },
     intro: [
       'Các nghệ nhân làng Chuông có vai trò quan trọng trong việc khôi phục, gìn giữ kỹ thuật truyền thống và phát triển sản phẩm. Năm nhân vật tiêu biểu được giới thiệu gồm ông Hai Cát (Lê Cát), nghệ nhân Phạm Trần Canh, Lê Văn Tửu, Lê Văn Tuy và Tạ Thu Hương.',
       'チュオン村の職人たちは、伝統技術の{復興|ふっこう}と{継承|けいしょう}、そして製品の発展に大きな役割を果たしてきました。ここでは代表的な5人、ハイ・カット氏（レー・カット）、職人ファム・チャン・カイン、レー・ヴァン・トゥー、レー・ヴァン・トゥイ、ター・トゥー・フオンを紹介します。',
@@ -91,11 +97,17 @@ export const ch3 = {
     topics: [
       {
         h: ['Đổi mới sản phẩm và mở rộng công năng', '製品の革新と用途の拡大'],
+        // trang phải: lưới ảnh sản phẩm sáng tạo (góp ý: bổ sung ảnh móc khóa, nón vẽ, nón lụa, nón mini…)
+        gallery: true,
         p: [['Bên cạnh nón lá truyền thống, nghệ nhân làng Chuông đã phát triển thêm nhiều mẫu như nón thêu, nón vẽ, nón lụa, nón mini và các sản phẩm trang trí. Công năng của chiếc nón cũng được mở rộng từ vật dụng che nắng, che mưa sang phụ kiện áo dài, đạo cụ biểu diễn, quà lưu niệm và vật trang trí. Sự đổi mới này cho thấy sản phẩm nón làng Chuông đang được điều chỉnh để phù hợp hơn với nhu cầu sử dụng hiện nay.', '伝統的なノンラーに加え、チュオン村の職人たちは{刺繍|ししゅう}の笠、絵付けの笠、絹の笠、ミニ笠、{装飾品|そうしょくひん}など、多くの新しい製品を生み出してきました。笠の用途も、日差しや雨を{避|さ}ける道具から、アオザイの{装身具|そうしんぐ}、舞台の小道具、お{土産|みやげ}、インテリアへと広がっています。こうした革新は、チュオン村の笠が今の{需要|じゅよう}により合うよう変わりつつあることを示しています。']],
         images: [
-          ['Bức tường nón vẽ cờ đỏ sao vàng tại một cơ sở làng Chuông', 'チュオン村の工房に飾られた、金星紅旗を描いた笠の壁'],
-          ['Nón lá hai mặt lụa xanh ngọc nhìn từ trong lòng nón', '内側から見た、青緑の絹を両面に張ったノンラー'],
+          // góp ý 04/11 (Khánh Linh): bức tường nón là trang trí ở một quán cà phê làng Chuông; bổ sung ảnh sản phẩm sáng tạo
+          // Sheet dòng 24: ảnh nhóm gán cho mục này (Báo Pháp luật)
+          ['Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật', '職人レー・ヴァン・トゥイによる、さまざまなデザインのチュオンの笠の展示 — 出典：スアン・ライ／ファップルアット紙'],
+          ['Bức tường nón vẽ cờ đỏ sao vàng trang trí tại một quán cà phê ở làng Chuông', 'チュオン村のカフェに飾られた、金星紅旗を描いた笠の壁'],
+          ['Nón mini nhiều màu — quà lưu niệm từ làng Chuông', '色とりどりのミニ笠 — チュオン村のお土産'],
           ['Nón thêu, nón vẽ, nón lụa, nón mini', '刺繍・絵付け・絹・ミニの笠'],
+          ['Nón lá vẽ hoa văn sơn mài — nguồn: Chạm Sắc (VTV5)', '漆絵の模様を描いたノンラー — 出典：チャムサック（VTV5）'],
         ],
       },
       {
@@ -108,7 +120,7 @@ export const ch3 = {
           ['Gian hàng nón làng Chuông tại một hội chợ triển lãm năm 2025 — ảnh: Báo Đại biểu Nhân dân', '2025年の見本市に出展したチュオン村の笠のブース — 写真：ダイビエウニャンザン紙'],
           ['Mua bán nón trong phiên chợ Chuông', 'チュオンの市場での笠の売り買い'],
         ],
-        video: ['Video: nón lá làng Chuông trên sàn diễn thời trang quốc tế — nguồn: nghệ nhân Lê Văn Tuy', '動画：海外のファッションショーに登場したチュオン村のノンラー — 提供：職人レー・ヴァン・トゥイ'],
+        video: ['Video: nón lá làng Chuông trên sàn diễn thời trang quốc tế — nguồn: nghệ nhân Lê Văn Tuy', '動画：海外のファッションショーに登場したチュオン村のノンラー — 提供：職人レー・ヴァン・トゥイ氏'],
       },
       {
         h: ['Gắn làng nghề với trải nghiệm, du lịch và giáo dục', '体験・観光・教育との結びつき'],
@@ -161,7 +173,9 @@ export const ch3 = {
           ['Trước những thay đổi ấy, nón Chuông đang tìm thêm chỗ đứng trong lĩnh vực thời trang, biểu diễn, trang trí và du lịch. Đây vừa là cơ hội, vừa là thách thức. Những công dụng mới có thể mở ra hướng phát triển cho nón Chuông, nhưng đồng thời cũng đòi hỏi người làm nghề phải tiếp tục đổi mới để đáp ứng nhu cầu thị trường mà vẫn giữ được những nét đặc trưng của sản phẩm truyền thống.', 'こうした変化を受けて、チュオンの笠はファッション、舞台、インテリア、観光の分野に新しい居場所を求めています。それは{好機|こうき}であると同時に、課題でもあります。新しい用途は笠に発展の道を開くかもしれませんが、職人には、伝統的な製品の特徴を守りながら、市場の需要に応えて革新を続けることが求められます。'],
         ],
         images: [
-          ['Gian hàng nón nhiều màu sắc ở làng Chuông', 'チュオン村の色とりどりの笠の店'],
+          // Sheet dòng 29: ảnh nhóm gán cho mục này (Quốc phòng Thủ đô)
+          ['Người thợ làng Chuông bên những chiếc nón vẽ, nón trang trí — nguồn: Báo Quốc phòng Thủ đô', '絵付けや飾りの笠に囲まれたチュオン村の職人 — 出典：クオックフォントゥードー紙'],
+          // soát 06/11 (R4): bỏ ảnh nón lụa xanh ngọc 1 — cùng chiếc nón, cùng bối cảnh ảnh xanh ngọc 2 ở mục 1.3.2
           ['Nón lá treo trang trí trên phố', '通りに飾られたノンラー'],
         ],
       },
@@ -237,17 +251,7 @@ export const ending = {
   },
   references: {
     title: ['Tài liệu tham khảo', '{参考文献|さんこうぶんけん}'],
-    items: [
-      ['Đinh Hạnh (chủ biên). (2019). Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội. NXB Hà Nội.', 'ディン・ハイン編（2019）『タンロン＝ハノイの代表的な手工芸村』ハノイ出版社。'],
-      ['Hoàng Đức Nhuận và cộng sự. (2009). Hỏi đáp về làng nghề truyền thống Việt Nam. NXB Quân đội nhân dân.', 'ホアン・ドゥック・ニュアン{他|ほか}（2009）『ベトナムの伝統工芸村Q&A』人民軍隊出版社。'],
-      ['Vũ Từ Trang, Henri Oger. (2020). Nghề cổ nước Việt – Từ truyền thống đến hiện đại. NXB Phụ nữ Việt Nam.', 'ヴー・トゥー・チャン、アンリ・オジェ（2020）『ベトナムの古い手仕事：伝統から現代へ』ベトナム女性出版社。'],
-      ['Nguyễn Vỵ. (1977). Nghề đẹp quê hương. Ty Văn hóa Thông tin Hà Sơn Bình.', 'グエン・ヴィー（1977）『ふるさとの美しい手仕事』ハーソンビン{省|しょう}文化情報{局|きょく}。'],
-      ['Hữu Ngọc (chủ biên). Từ điển văn hóa cổ truyền Việt Nam. NXB Kim Đồng.', 'フウ・ゴック編『ベトナム{伝統文化辞典|でんとうぶんかじてん}』キムドン出版社。'],
-      ['Báo Tuổi Trẻ, Báo Dân trí, VietNamNet, VnExpress, Báo Người Lao Động, Báo Quân đội nhân dân — các bài viết về nón lá và làng Chuông.', 'トゥオイチェー紙、ザンチー紙、ベトナムネット、VnExpress、グオイラオドン紙、人民軍隊紙 ― ノンラーとチュオン村に関する記事。'],
-      ['Hà Nội hào hoa thanh lịch: Người dệt hồn quê lên vành nón lá.', '「{華|はな}やかで{上品|じょうひん}なハノイ：笠に故郷の心を{織|お}り{込|こ}む人」（記事）。'],
-      ['Làng Chuông: Sáng tạo trên vành nón cũ.', '「チュオン村：古い笠に生まれる新しい創作」（記事）。'],
-      ['Tư liệu điều tra thực địa và phỏng vấn nghệ nhân Lê Văn Tuy, Tạ Thu Hương tại làng Chuông (2026).', 'チュオン村での現地調査、職人レー・ヴァン・トゥイ、ター・トゥー・フオンへのインタビュー（2026年）。'],
-    ],
-    note: ['(Danh mục đang được nhóm hoàn thiện)', '（リストは現在{整理中|せいりちゅう}です）'],
+    // 55 mục, nguyên văn tab "Danh sách tài liệu tham khảo" của Doc (04/11/2026)
+    items: refs,
   },
 }

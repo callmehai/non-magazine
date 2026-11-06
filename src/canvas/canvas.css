@@ -27,9 +27,10 @@
 .cv-el.has-frame {
   box-sizing: border-box;
   padding: var(--mat);
-  border: 0.7em solid #e3d6bb;
+  border: 0.45em solid #e6dbc3;
   background: #fffdf8;
-  box-shadow: 0 2.5em 8em rgba(70, 45, 20, 0.16);
+  /* góp ý 04/11: bóng đổ nhẹ, không nặng */
+  box-shadow: 0 0.8em 2.4em rgba(70, 45, 20, 0.08);
 }
 
 .cv-group {
@@ -69,12 +70,45 @@
   text-underline-offset: 0.2em;
 }
 
+/* mục tài liệu tham khảo: cả mục bấm được (mở bài gốc), không gạch chân sẵn — rê chuột thì gạch chân, đổi màu */
+.cv-link--ref {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cv-link--ref:hover,
+.cv-link--ref:focus-visible {
+  text-decoration: underline;
+  color: #8b5a2b;
+}
+
 /* link tới trang khác trong sách: không gạch chân */
 .cv-link--page {
   display: block;
   height: 100%;
   text-decoration: none;
   cursor: var(--cursor-leaf-hand);
+}
+
+/* số [n] ở trang tài liệu tham khảo: bấm để lật tới trang đã dùng tài liệu đó — màu son + gạch chân (soát đọc lần đầu
+   05/11: gạch chấm cùng màu nâu thì số bấm được trông y như số thường). Gạch chân đặt ở khối chữ bên trong: thẻ <a> có cỡ
+   chữ gốc rất nhỏ (trang co theo em) nên gạch chân đặt trên <a> mỏng không thấy (soát vòng 8). */
+.cv-link--refno {
+  text-decoration: none;
+}
+
+.cv-link--refno .cv-text {
+  text-decoration: underline solid rgb(168 56 43 / 0.6);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 0.08em;
+}
+
+.cv-link--refno:hover .cv-text,
+.cv-link--refno:focus-visible .cv-text {
+  color: #7a2418 !important;
+  text-decoration-color: currentColor;
+  background: rgb(168 56 43 / 0.1);
+  border-radius: 0.2em;
 }
 
 /* khối phủ cả một dòng (mục lục, dải công đoạn): rê chuột thì cả dòng sáng nền lên */
@@ -154,6 +188,53 @@
   translate: -50% -50%;
 }
 
+.cv-video-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* nút ▶ trước khi phát: tròn đỏ son (nhấn màu duy nhất của sách), viền khâu nét đứt ngà */
+/* nút ở góc dưới trái (soát vòng 8: đặt giữa thì che cằm, cổ người mẫu trên ảnh bìa); cả ảnh bìa vẫn bấm được */
+.cv-video-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: end start;
+  padding: 0 0 16px 16px;
+  border: 0;
+  background: linear-gradient(rgb(0 0 0 / 0) 55%, rgb(0 0 0 / 0.28));
+  cursor: pointer;
+}
+
+.cv-video-play__icon {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #a8382b;
+  box-shadow: 0 0 0 4px rgb(168 56 43 / 0.28), 0 6px 18px rgb(0 0 0 / 0.3);
+  outline: 1px dashed rgb(246 234 214 / 0.8);
+  outline-offset: -7px;
+  transition: transform 0.2s ease;
+}
+
+.cv-video-play:hover .cv-video-play__icon,
+.cv-video-play:focus-visible .cv-video-play__icon {
+  transform: scale(1.08);
+}
+
+.cv-video-play__icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  border-style: solid;
+  border-width: 11px 0 11px 18px;
+  border-color: transparent transparent transparent #fbf4e6;
+  translate: -50% -50%;
+}
+
 .cv-video {
   display: block;
   width: 100%;
@@ -196,14 +277,13 @@
   overflow: hidden;
 }
 
-/* ── phiên âm (furigana): chữ Hán khó có gạch chấm; rê chuột / chạm mới hiện cách đọc ──
+/* ── phiên âm (furigana): rê chuột / chạm vào chữ Hán mới hiện cách đọc ──
    Cách đọc nằm trong ô nổi phía trên chữ, cỡ chữ cố định theo px (không co theo trang) để luôn đọc được;
-   <rt> không chiếm chỗ trong dòng → khoảng cách dòng đều nhau. */
+   <rt> không chiếm chỗ trong dòng → khoảng cách dòng đều nhau.
+   Soát đọc lần đầu 05/11: gạch chấm dưới ~40 từ mỗi cặp trang (cả từ thường 存在, 日々…) trông như lỗi chính tả bị
+   bắt → bỏ gạch chấm; rê chuột vẫn sáng nền + hiện cách đọc. */
 .cv-text ruby {
   position: relative;
-  text-decoration: underline dotted rgba(140, 106, 51, 0.42);
-  text-decoration-thickness: 0.07em;
-  text-underline-offset: 0.24em;
   cursor: help;
   border-radius: 0.12em;
   outline: none;
@@ -250,6 +330,13 @@
 .cv-text ruby:focus::after {
   opacity: 1;
   translate: -50% 0;
+}
+
+/* tiếng Nhật: ngắt dòng theo cụm từ (Chrome 119+), không cắt đôi một từ ("教｜えて", "課｜題") — soát đọc lần đầu 05/11.
+   Chỉ cho chữ không canh đều (tiêu đề, câu trích, câu kết canh giữa): khối canh đều mà ngắt theo cụm thì dòng bị giãn chữ
+   lộ rõ (soát vòng 8: 88 dòng giãn > 20%) → khối canh đều giữ cách ngắt từng chữ như sắp chữ Nhật chuẩn. */
+.cv-text:lang(ja):not([style*='justify']) {
+  word-break: auto-phrase;
 }
 
 /* editor đang xem tiếng Nhật, khối chưa dịch: mờ + viền chấm */
@@ -318,15 +405,21 @@
 }
 
 .cv-paper__deco.is-top {
-  top: -14em;
-  right: -16em;
-  width: 165em;
-  opacity: 0.5;
+  top: -20em;
+  right: -26em;
+  width: 150em;
+  opacity: 0.42;
 }
 
 .cv-page.is-left .cv-paper__deco.is-top {
   right: auto;
-  left: -16em;
+  left: -26em;
+}
+
+/* review lần 2: lá tre góc trang chạy qua dòng đầu trang, trông như lỗi dàn trang → lá lùi ra mép ngoài, mờ hơn, và chữ
+   đầu trang có quầng màu giấy nên luôn đọc rõ, lá như nằm dưới chữ */
+.cv-el[data-name='Đầu trang'] .cv-text {
+  text-shadow: 0 0 1em #f4ede0, 0 0 2em #f4ede0, 0 0 3em #f4ede0, 0 0 5em #f4ede0, 0 0 8em #f4ede0, 0 0 8em #f4ede0, 0 0 12em #f4ede0;
 }
 
 .cv-paper__deco.is-watermark {
@@ -368,8 +461,11 @@
 }
 
 /* Hiệu ứng xuất hiện (el.anim): chờ trang được lật tới rồi chạy theo thứ tự delay */
+/* visibility, không chỉ opacity: phần tử có độ mờ riêng (el.opacity, ví dụ hình vẽ 0,85) đặt opacity trong style của
+   chính nó, đè mất opacity: 0 ở đây → lúc đang lật trang hình vẽ hiện ra trước rồi mới tắt đi chạy hiệu ứng */
 .cv-page.is-wait .cv-el[data-anim] {
   opacity: 0;
+  visibility: hidden;
 }
 .cv-page.is-play .cv-el[data-anim='fade'] {
   animation: cv-anim-fade var(--anim-dur) cubic-bezier(0.2, 0.7, 0.2, 1) var(--anim-delay) both;
@@ -379,6 +475,35 @@
 }
 .cv-page.is-play .cv-el[data-anim='grow-up'] {
   animation: cv-anim-grow-up var(--anim-dur) linear var(--anim-delay) both;
+}
+/* soát đọc lần đầu 05/11 (tr. 66–67): hình con đường phủ cả trang mở bằng clip-path; lúc hiệu ứng kết thúc Chrome đổi lớp
+   vẽ → nửa trang chớp trắng một khung hình. Giữ hai hình này luôn ở lớp riêng (không đổi lớp khi kết thúc). */
+.cv-page .cv-el[data-anim='grow'],
+.cv-page .cv-el[data-anim='grow-up'] {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* sách pop-up: dựng đứng lên từ mặt giấy, gập theo mép dưới, nảy nhẹ khi đứng thẳng; bóng đổ dài rồi thu về chân */
+.cv-page.is-play .cv-el[data-anim='stand'] {
+  transform-origin: 50% 100%;
+  animation: cv-anim-stand var(--anim-dur) cubic-bezier(0.25, 1.35, 0.45, 1) var(--anim-delay) both;
+}
+@keyframes cv-anim-stand {
+  from {
+    opacity: 0;
+    transform: perspective(500px) rotateX(84deg);
+    filter: drop-shadow(0 -2em 2em rgba(74, 50, 26, 0));
+  }
+  12% {
+    opacity: 1;
+  }
+  60% {
+    filter: drop-shadow(0 1.6em 1.4em rgba(74, 50, 26, 0.32));
+  }
+  to {
+    transform: perspective(500px) rotateX(0deg);
+    filter: drop-shadow(0 0 0 rgba(74, 50, 26, 0));
+  }
 }
 .cv-page.is-play .cv-el[data-anim='pop'] {
   animation: cv-anim-pop var(--anim-dur) cubic-bezier(0.3, 1.6, 0.5, 1) var(--anim-delay) both;
@@ -511,4 +636,114 @@
   .cv-img.is-spin {
     animation: none !important;
   }
+}
+
+/* ── Lớp nổi (el.pop): vật nổi khỏi mặt giấy (anh Hải 05/11: "phá vỡ không gian 2D")
+   --pz độ sâu (âm = lùi sau giấy), --mx/--my vị trí con trỏ (-1…1, App đặt). Bóng đổ theo đúng hình vật (drop-shadow
+   trên ảnh trong suốt), lệch ngược hướng con trỏ như có nguồn sáng cố định. Ảnh thu nhỏ / trang soát: đứng yên. */
+.cv-el[data-pop='obj'] {
+  filter: drop-shadow(0 calc(var(--pz) * 7em) calc(var(--pz) * 9em) rgba(74, 50, 26, 0.34));
+}
+.cv-el[data-pop='bg'] > .cv-img {
+  scale: 1.06;
+}
+.book .sheet-content:not(.is-static) .cv-el[data-pop] {
+  transform: perspective(1200px) translate3d(calc(var(--mx, 0) * var(--pz) * 9em), calc(var(--my, 0) * var(--pz) * 6em), 0)
+    rotateY(calc(var(--mx, 0) * var(--pz) * 9deg)) rotateX(calc(var(--my, 0) * var(--pz) * -7deg));
+  transition:
+    transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+/* ảnh in nổi (lift): chỉ trượt (ảnh và lớp "thoát khung" đè lên nó trượt cùng nhau, không lệch), bóng đổ dày dần theo z */
+.cv-el[data-pop='lift'] {
+  filter: drop-shadow(0 calc(var(--pz) * 6em) calc(var(--pz) * 8em) rgba(74, 50, 26, 0.26));
+}
+.book .sheet-content:not(.is-static) .cv-el[data-pop='lift'] {
+  filter: drop-shadow(calc(var(--mx, 0) * var(--pz) * -9em) calc(var(--pz) * 9em + var(--my, 0) * var(--pz) * -4em) calc(var(--pz) * 10em) rgba(74, 50, 26, 0.3));
+}
+/* lớp phẳng (nền, cụm nón nhoè phía trước): chỉ trượt theo độ sâu, không nghiêng (nghiêng lộ mép cắt của lớp) */
+.book .sheet-content:not(.is-static) .cv-el[data-pop='lift'],
+.book .sheet-content:not(.is-static) .cv-el[data-pop='flat'],
+.book .sheet-content:not(.is-static) .cv-el[data-pop='bg'] {
+  transform: translate3d(calc(var(--mx, 0) * var(--pz) * 7em), calc(var(--my, 0) * var(--pz) * 5em), 0);
+}
+.book .sheet-content:not(.is-static) .cv-el[data-pop='obj'] {
+  filter: drop-shadow(calc(var(--mx, 0) * var(--pz) * -10em) calc(var(--pz) * 10em + var(--my, 0) * var(--pz) * -4em) calc(var(--pz) * 11em) rgba(74, 50, 26, 0.36));
+}
+/* lơ lửng: nhấp nhô chậm (ảnh bên trong, không đè transform theo con trỏ của khung ngoài) */
+.book .sheet-content:not(.is-static) .cv-el[data-float] > .cv-img {
+  animation: cv-float 7s ease-in-out infinite;
+}
+@keyframes cv-float {
+  50% {
+    translate: 0 calc(var(--pf) * -1);
+    rotate: -1.2deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book .sheet-content .cv-el[data-pop] {
+    transform: none !important;
+  }
+  .cv-el[data-float] > .cv-img {
+    animation: none !important;
+  }
+}
+
+/* ── Bóng nắng xuyên lũy tre: phủ lên giấy (multiply), lay chậm như có gió; mirror = cành chĩa từ góc trái */
+.cv-el[data-name='Bóng nắng'] {
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.cv-el[data-mirror] > .cv-img {
+  scale: -1 1;
+}
+.book .sheet-content:not(.is-static) .cv-el[data-name='Bóng nắng'] > .cv-img {
+  transform-origin: 85% 0;
+  animation: cv-sway 11s ease-in-out infinite;
+}
+.book .sheet-content:not(.is-static) .cv-el[data-name='Bóng nắng'][data-mirror] > .cv-img {
+  transform-origin: 15% 0;
+  animation-delay: -4s;
+}
+@keyframes cv-sway {
+  0%,
+  100% {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+  30% {
+    rotate: 1.8deg;
+    translate: -2em 1em;
+  }
+  62% {
+    rotate: -1.1deg;
+    translate: 1.4em -0.5em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-el[data-name='Bóng nắng'] > .cv-img {
+    animation: none !important;
+  }
+}
+
+/* ô lưới kiểu nón: ảnh nền nhoè lấp phần dư của ô (ảnh chính hiện trọn phía trên) — không tràn khỏi ô */
+.cv-el[data-name='Nền ô'] {
+  overflow: hidden;
+}
+.cv-el[data-name='Nền ô'] + .cv-el.has-frame {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* thẻ (el.tab, src/canvas/tabs.js): phần của thẻ không chọn ẩn đi, đổi thẻ thì mờ dần sang */
+.cv-el[data-tab] {
+  transition: opacity 0.35s ease;
+}
+.cv-el[data-tab-off] {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
 }

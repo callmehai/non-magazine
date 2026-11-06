@@ -60,6 +60,12 @@ body {
 /* trang soát: phần tử có hiệu ứng xuất hiện hiện ở trạng thái cuối */
 .rv .cv-page .cv-el[data-anim] {
   opacity: 1 !important;
+  /* .is-wait ẩn hẳn (visibility) để khỏi hiện sẵn lúc lật trang — trang soát thì luôn hiện */
+  visibility: visible !important;
   animation: none !important;
   clip-path: none !important;
+}
+/* lũy tre lớn dần (GroveWidget): trang soát không lật trang → hiện hình tĩnh trọn vẹn */
+.rv .cvw-grove.is-wait {
+  visibility: visible !important;
 }

@@ -25,6 +25,7 @@ export default function Controls({
   onTogglePanel,
   hidden,
   rtl,
+  before,
 }) {
   // sách lật kiểu Nhật: nút bên trái là "trang sau"
   const back = { onClick: onPrev, disabled: !canPrev, label: t('prevPage') }
@@ -36,6 +37,12 @@ export default function Controls({
         <span style={{ transform: `scaleX(${progress})` }} />
       </div>
       <div className="controls__row">
+        {before && (
+          <>
+            {before}
+            <span className="controls__sep" aria-hidden="true" />
+          </>
+        )}
         <button type="button" className="ctrl" onClick={left.onClick} disabled={left.disabled} aria-label={left.label} title={`${left.label} (←)`}>
           <Icon name="prev" />
         </button>
@@ -93,7 +100,7 @@ function PageInput({ label, total, onGoTo }) {
       inputMode="numeric"
       value={draft ?? label}
       placeholder={label}
-      size={Math.max(3, String(draft ?? label).length)}
+      size={Math.max(3, String(draft ?? label).length + 2)}
       aria-label={t('goToPage')}
       title={t('goToPage')}
       onFocus={(e) => {

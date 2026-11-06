@@ -57,6 +57,7 @@ export default function ThumbnailPanel({ open, magazine, visible, onSelect, onCl
 
 function labelOf(page, i) {
   if (page.thumbnailLabel) return page.thumbnailLabel
+  if (page.thumbnailKey) return t(page.thumbnailKey)
   if (page.type === 'cover') return page.variant === 'back' ? t('backCover') : t('cover')
   if (page.title) return page.title
   if (page.type === 'custom-html') {

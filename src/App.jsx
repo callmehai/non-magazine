@@ -203,7 +203,11 @@ export default function App({ magazine: source }) {
   const fullscreen = useFullscreen(appRef)
   const idle = useIdle(3200, panelOpen || phase !== 'reading')
   const [overControls, setOverControls] = useState(false)
-  const uiHidden = phase !== 'reading' || (idle && !overControls)
+  // lịch sử các trang đã đứng trước mỗi lần bấm link trong sách (xem goToPage); nút "Quay lại" về trang gần nhất.
+  // Còn nút "Quay lại" thì thanh điều khiển không tự ẩn
+  const [jumpStack, setJumpStack] = useState([])
+  const jumpBack = jumpStack.length ? jumpStack[jumpStack.length - 1] : null
+  const uiHidden = phase !== 'reading' || (idle && !overControls && jumpBack == null)
 
   const selectPage = useCallback(
     (i) => {
@@ -252,10 +256,42 @@ export default function App({ magazine: source }) {
     return () => window.removeEventListener('wheel', onWheel)
   }, [zoomIn, zoomOut])
 
-  // khi zoom: cuộn về giữa sách
+  // màn cảm ứng: chạm hai lần vào trang = phóng 2× đúng chỗ chạm, chạm hai lần nữa = về 100% (review lần 2: chữ thân bài
+  // trên điện thoại chỉ ~9,8px). Chạm giữa trang không còn lật (disableFlipByClick trong useFlipBook), vuốt vẫn lật
+  const zoomFocus = useRef(null)
+  useEffect(() => {
+    const s = stageRef.current
+    if (!s || !isTouch) return
+    let last = null
+    const onUp = (e) => {
+      if (e.pointerType !== 'touch') return
+      if (e.target instanceof Element && e.target.closest('button, a, input, select, video, [data-no-flip], [role="button"]')) {
+        last = null
+        return
+      }
+      const now = performance.now()
+      if (last && now - last.t < 320 && Math.hypot(e.clientX - last.x, e.clientY - last.y) < 36) {
+        last = null
+        const r = s.getBoundingClientRect()
+        zoomFocus.current = { fx: (e.clientX - r.left + s.scrollLeft) / s.scrollWidth, fy: (e.clientY - r.top + s.scrollTop) / s.scrollHeight }
+        setZoom((z) => (z > 1 ? 1 : 2))
+      } else last = { t: now, x: e.clientX, y: e.clientY }
+    }
+    s.addEventListener('pointerup', onUp)
+    return () => s.removeEventListener('pointerup', onUp)
+  }, [])
+
+  // khi zoom: cuộn về giữa sách (phóng bằng chạm hai lần: về đúng chỗ vừa chạm)
   useLayoutEffect(() => {
     const s = stageRef.current
     if (!s) return
+    const f = zoomFocus.current
+    zoomFocus.current = null
+    if (f && zoom > 1) {
+      s.scrollLeft = f.fx * s.scrollWidth - s.clientWidth / 2
+      s.scrollTop = f.fy * s.scrollHeight - s.clientHeight / 2
+      return
+    }
     s.scrollLeft = (s.scrollWidth - s.clientWidth) / 2
     s.scrollTop = (s.scrollHeight - s.clientHeight) / 2
   }, [zoom])
@@ -280,18 +316,72 @@ export default function App({ magazine: source }) {
     }
   }, [reducedMotion])
 
-  const pauseMusic = music.pause
+  // video trong sách chạy thì nhạc nền tạm dừng; video dừng / hết / lật đi thì nhạc chạy lại nếu trước đó đang chạy
+  // (review lần 2: dừng video thì nhạc không tự chạy lại)
+  const musicByVideo = useRef(false)
+  const { playing: musicPlaying, pause: musicPause, play: musicPlay } = music
+  const pauseMusic = useCallback(() => {
+    if (!musicPlaying) return
+    musicByVideo.current = true
+    musicPause()
+  }, [musicPlaying, musicPause])
+  const resumeMusic = useCallback(() => {
+    if (!musicByVideo.current) return
+    musicByVideo.current = false
+    musicPlay()
+  }, [musicPlay])
   const flipTo = book.flipTo
+  // anh Hải 05/11: bấm link trong sách (dòng mục lục, số tài liệu tham khảo…) thì lật tới trang đó; có nút "Quay lại trang …"
+  // để về trang vừa đứng. Lùi từng bước như nút Back của trình duyệt (anh Hải: mục lục → tr. 116 → bấm [1] → tr. 18 thì
+  // "Quay lại" phải về 116, bấm tiếp mới về mục lục — bản đầu chỉ nhớ trang gốc).
+  const pageRef = useRef(currentPage)
+  useEffect(() => {
+    pageRef.current = currentPage
+  }, [currentPage])
+  const goToPage = useCallback(
+    (i) => {
+      setJumpStack((st) => (st[st.length - 1] === pageRef.current ? st : [...st, pageRef.current]))
+      flipTo(i)
+    },
+    [flipTo]
+  )
   const ctx = useMemo(
     () => ({
       openLightbox: (images, index) => setLightbox({ images, index }),
       openReader: setReader,
       reducedMotion,
       onPageAudioPlay: pauseMusic,
-      goToPage: flipTo,
+      onPageAudioStop: resumeMusic,
+      goToPage,
+      // màn hẹp chỉ hiện một trang: widget có phần hiển thị ở trang kế (mô hình 3 lớp → ảnh lớp ở tr. 53) tự lật sang
+      portrait: layout.orientation === 'portrait',
+      nextPage: book.next,
     }),
-    [reducedMotion, pauseMusic, flipTo]
+    [reducedMotion, pauseMusic, resumeMusic, goToPage, layout.orientation, book.next]
   )
+
+  // nút "Quay lại trang …" nằm đầu thanh điều khiển (đặt nổi riêng thì đè lên mép dưới sách khi thanh điều khiển ẩn)
+  const jumpBackBtn =
+    jumpBack != null && phase === 'reading' && !visible.includes(jumpBack) ? (
+      <div className="jump-back">
+        <button
+          type="button"
+          className="jump-back__go"
+          aria-label={t('jumpBack').replace('{n}', jumpBack + 1)}
+          onClick={() => {
+            flipTo(jumpBack)
+            setJumpStack((st) => st.slice(0, -1))
+          }}
+        >
+          <Icon name="prev" />
+          <span className="jump-back__label">{t('jumpBack').replace('{n}', jumpBack + 1)}</span>
+          <span className="jump-back__short">{jumpBack + 1}</span>
+        </button>
+        <button type="button" className="jump-back__x" aria-label={t('jumpBackClose')} onClick={() => setJumpStack([])}>
+          ×
+        </button>
+      </div>
+    ) : null
 
   const back = { onClick: book.prev, disabled: currentPage === 0, 'aria-label': t('prevPage') }
   const forward = { onClick: book.next, disabled: lastVisible >= count - 1, 'aria-label': t('nextPage') }
@@ -347,7 +437,7 @@ export default function App({ magazine: source }) {
             <Icon name="next" size={26} strokeWidth={1.2} />
           </button>
 
-          <Hint show={hint && phase === 'reading'} touch={isTouch} />
+          <Hint show={hint && phase === 'reading'} touch={isTouch} side={layout.orientation === 'landscape' && (window.innerWidth - layout.pageW) / 2 > 340 ? layout.pageW : 0} />
           <div className={`toast ${fullscreen.error ? 'is-shown' : ''}`} role="status" aria-live="polite">
             {fullscreen.error}
           </div>
@@ -373,6 +463,7 @@ export default function App({ magazine: source }) {
               onTogglePanel={() => setPanelOpen((o) => !o)}
               hidden={uiHidden}
               rtl={rtl}
+              before={jumpBackBtn}
             />
             <AudioPlayer audio={music} soundOn={soundOn} needsGesture={needsGesture && soundOn} onEnable={enableSound} hidden={phase !== 'reading'} />
           </div>
@@ -393,7 +484,7 @@ export default function App({ magazine: source }) {
 const LANG_KEY = 'non-book-lang'
 const LANG_NAMES = { vi: 'VI', ja: '日本語' }
 
-/** ngôn ngữ mở sách: ?lang= trên địa chỉ → lần chọn trước → ngôn ngữ mặc định của sách */
+/** ngôn ngữ mở sách: ?lang= trên địa chỉ → lần chọn trước → trình duyệt tiếng Nhật → ngôn ngữ mặc định của sách */
 function initialLang(languages, fallback) {
   if (!languages) return fallback
   const fromUrl = new URLSearchParams(location.search).get('lang')
@@ -404,6 +495,9 @@ function initialLang(languages, fallback) {
   } catch {
     /* bỏ qua */
   }
+  // review lần 2: người đọc chính là người Nhật — trình duyệt để tiếng Nhật thì lần đầu mở bản JA (chưa chọn lần nào)
+  const nav = typeof navigator !== 'undefined' ? navigator.languages?.[0] || navigator.language || '' : ''
+  if (/^ja\b/i.test(nav) && languages.includes('ja')) return 'ja'
   return languages.includes(fallback) ? fallback : languages[0]
 }
 

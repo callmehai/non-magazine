@@ -89,7 +89,7 @@ function Slot({ n, pages, side }) {
   return (
     <div className="rv-page" data-n={n} style={{ height: (PW * PAGE_H) / PAGE_W }}>
       <CanvasPage page={pages[n - 1]} mode="read" visible={false} side={side} />
-      <span className="rv-no">{n}</span>
+      <span className="rv-no">{pages[n - 1]?.reviewNo ?? n}</span>
     </div>
   )
 }
