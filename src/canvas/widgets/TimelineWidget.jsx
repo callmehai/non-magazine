@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useCanvasLang, parseRuby } from '../lang.js'
 import { asset } from '../../lib/assets.js'
 import { MagazineContext } from '../../lib/context.js'
@@ -35,13 +35,81 @@ export default function TimelineWidget({ el, interactive }) {
   const t = L[lang]
   const items = el.items || []
   const [i, setI] = useState(0)
+  // 07/11 (anh Hải: "chuyển tab giật nhanh quá"): khung thẻ đứng yên, chỉ nội dung đổi — thẻ cũ mờ dần + trượt nhẹ ra,
+  // thẻ mới mờ dần + trượt vào cùng lúc (trước: cả khung thẻ dựng lại, hiện từ trong suốt trong 0,5s → chớp)
+  const [out, setOut] = useState(null) // { k: mốc vừa rời, dir: 1 tiến / -1 lùi }
+  const [entering, setEntering] = useState(false) // thẻ mới đang mờ dần vào (giữ lớp is-in tới hết hiệu ứng)
+  const [dir, setDir] = useState(1) // giữ hướng tới hết hiệu ứng vào (thẻ cũ xong trước thì hướng không đổi giữa chừng)
   const { goToPage } = useContext(MagazineContext)
+  // tải trước ảnh các mốc: ảnh thẻ mới có sẵn khi mờ dần vào, không bật lên giữa chừng
+  useEffect(() => {
+    for (const x of items) if (x.img) new Image().src = x.img
+  }, [items])
   if (!items.length) return null
   const n = items.length
   // mốc đầu / cuối lùi vào 15%: nhãn tên rộng 150em canh giữa mốc không tràn mép trang (07/11: "タ・トゥ・フオン" sát mép)
   const at = (k) => (n === 1 ? 50 : 15 + (70 * k) / (n - 1))
-  const go = (k) => interactive && setI(Math.max(0, Math.min(n - 1, k)))
-  const it = items[i]
+  const go = (k) => {
+    if (!interactive) return
+    const to = Math.max(0, Math.min(n - 1, k))
+    if (to === i) return
+    setOut({ k: i, dir: to > i ? 1 : -1 })
+    setEntering(true)
+    setDir(to > i ? 1 : -1)
+    setI(to)
+  }
+  const body = (it, k, cls) => (
+    <div
+      className={`cvw-tl__body ${cls}`}
+      key={cls === 'is-out' ? `out-${k}` : `cur-${k}`}
+      aria-hidden={cls === 'is-out' ? true : undefined}
+      onAnimationEnd={(e) => {
+        if (e.target !== e.currentTarget) return
+        if (cls === 'is-out') setOut(null)
+        else setEntering(false)
+      }}
+    >
+      {it.group && (
+        <div className="cvw-tl__group">
+          <Ruby text={it.group[li] ?? it.group[0]} />
+        </div>
+      )}
+      <div className="cvw-tl__kicker">
+        <span className="cvw-tl__big">{it.year[li] ?? it.year[0]}</span>
+        <span className="cvw-tl__role">
+          <Ruby text={it.role[li]} />
+        </span>
+      </div>
+      <div className="cvw-tl__name">
+        <Ruby text={it.name[li]} />
+      </div>
+      <div className="cvw-tl__bio">
+        <Ruby text={it.bio[li]} />
+      </div>
+      {it.link && (
+        <button
+          type="button"
+          className="cvw-tl__more"
+          onClick={() => interactive && goToPage?.(it.link - 1)}
+          tabIndex={interactive && cls !== 'is-out' ? 0 : -1}
+        >
+          {t.more(it.link)} →
+        </button>
+      )}
+      {it.img ? (
+        <figure className="cvw-tl__photo">
+          <img src={it.img} alt={String(it.name[li] ?? '').replace(/\{([^|}]+)\|[^}]+\}/g, '$1')} style={it.fit === 'contain' ? { objectFit: 'contain', background: '#fff' } : undefined} />
+          {it.cap && (
+            <figcaption>
+              <Ruby text={it.cap[li] ?? it.cap[0]} />
+            </figcaption>
+          )}
+        </figure>
+      ) : (
+        <img className="cvw-tl__still" src={asset('assets/book/deco/still-non.svg')} alt="" />
+      )}
+    </div>
+  )
   return (
     <div className={`cvw cvw-tl${lang === 'ja' ? ' is-ja' : ''}`} style={{ '--acc': el.accent || '#3f7676' }}>
       <div className="cvw-tl__hint">{t.hint}</div>
@@ -67,47 +135,12 @@ export default function TimelineWidget({ el, interactive }) {
           </button>
         ))}
       </div>
-      <div className="cvw-tl__card" key={i}>
+      <div className="cvw-tl__card">
         <img className="cvw-tl__art" src={asset('assets/book/deco/vong-non.svg')} alt="" />
-        {it.group && (
-          <div className="cvw-tl__group">
-            <Ruby text={it.group[li] ?? it.group[0]} />
-          </div>
-        )}
-        <div className="cvw-tl__kicker">
-          <span className="cvw-tl__big">{it.year[li] ?? it.year[0]}</span>
-          <span className="cvw-tl__role">
-            <Ruby text={it.role[li]} />
-          </span>
+        <div className="cvw-tl__stage" style={{ '--dir': dir }}>
+          {out && out.k !== i && body(items[out.k], out.k, 'is-out')}
+          {body(items[i], i, entering ? 'is-in' : '')}
         </div>
-        <div className="cvw-tl__name">
-          <Ruby text={it.name[li]} />
-        </div>
-        <div className="cvw-tl__bio">
-          <Ruby text={it.bio[li]} />
-        </div>
-        {it.link && (
-          <button
-            type="button"
-            className="cvw-tl__more"
-            onClick={() => interactive && goToPage?.(it.link - 1)}
-            tabIndex={interactive ? 0 : -1}
-          >
-            {t.more(it.link)} →
-          </button>
-        )}
-        {it.img ? (
-          <figure className="cvw-tl__photo">
-            <img src={it.img} alt={String(it.name[li] ?? '').replace(/\{([^|}]+)\|[^}]+\}/g, '$1')} loading="lazy" style={it.fit === 'contain' ? { objectFit: 'contain', background: '#fff' } : undefined} />
-            {it.cap && (
-              <figcaption>
-                <Ruby text={it.cap[li] ?? it.cap[0]} />
-              </figcaption>
-            )}
-          </figure>
-        ) : (
-          <img className="cvw-tl__still" src={asset('assets/book/deco/still-non.svg')} alt="" />
-        )}
         <div className="cvw-tl__nav">
           <button type="button" onClick={() => go(i - 1)} disabled={i === 0} aria-label={t.prev}>
             ‹

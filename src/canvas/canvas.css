@@ -742,11 +742,12 @@
 
 /* thẻ (el.tab, src/canvas/tabs.js): phần của thẻ không chọn ẩn đi, đổi thẻ thì mờ dần sang */
 .cv-el[data-tab] {
-  transition: opacity 0.35s ease;
+  /* 07/11 (anh Hải: chuyển thẻ giật nhanh quá): mờ chéo chậm hơn — ảnh mới hiện 0,6s, ảnh cũ mờ 0,45s */
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .cv-el[data-tab-off] {
   opacity: 0 !important;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  transition: opacity 0.45s ease, visibility 0s linear 0.45s;
 }

@@ -793,7 +793,42 @@
   box-shadow: 0 10em 28em rgba(70, 45, 20, 0.08);
   display: flex;
   flex-direction: column;
-  animation: cvw-tl-in 0.5s ease both;
+}
+/* 07/11: nội dung thẻ đổi kiểu mờ nối tiếp — thẻ cũ mờ hẳn + trượt nhẹ ra theo hướng đi (--dir: 1 tiến, -1 lùi), rồi thẻ
+   mới mờ dần + trượt vào (mờ chéo cùng lúc thì hai lớp chữ chồng nhau, rối); khung thẻ, thanh mốc, nút ‹ › đứng yên */
+.cvw-tl__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.cvw-tl__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cvw-tl__body.is-in {
+  animation: cvw-tl-in 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.22s both;
+}
+.cvw-tl__body.is-out {
+  pointer-events: none;
+  animation: cvw-tl-out 0.28s cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes cvw-tl-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--dir) * -12em));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cvw-tl__body.is-in,
+  .cvw-tl__body.is-out {
+    animation-duration: 0.01s;
+  }
 }
 .cvw-tl__card::before {
   content: '';
@@ -807,7 +842,7 @@
 @keyframes cvw-tl-in {
   from {
     opacity: 0;
-    transform: translateY(10em);
+    transform: translateX(calc(var(--dir) * 14em));
   }
   to {
     opacity: 1;
