@@ -1248,6 +1248,23 @@ class Flow {
       Rp.els.slice(n0).forEach((e) => (e.y = r1(e.y + gap / 2)))
       this.y += gap / 2
     }
+    // review lần 2 (nhịp tr. 100–105): các chủ đề chương 3 trang nào cũng "chữ trên, ảnh dưới" → chủ đề xen kẽ (o.flip) đảo
+    // trang phải thành ảnh trên, chữ dưới. Chỉ đảo khi trang phải là một khối chữ + một khối ảnh (không lưới, không "Đọc thêm")
+    if (o.flip && !grid && !more && right.length && Rp.els.length > n0) {
+      const textEls = Rp.els.slice(0, n0).filter((e) => e.name === 'Đoạn văn' && e.y >= TOP - 1)
+      const mediaEls = Rp.els.slice(n0)
+      const mTop = Math.min(...mediaEls.map((e) => e.y))
+      const mBot = Math.max(...mediaEls.map((e) => e.y + e.h))
+      const tTop = Math.min(...textEls.map((e) => e.y))
+      const tBot = Math.max(...textEls.map((e) => e.y + e.h))
+      if (textEls.length && mTop > tBot) {
+        const dm = TOP - mTop
+        mediaEls.forEach((e) => (e.y = r1(e.y + dm)))
+        const dt = mBot + dm + 24 - tTop
+        textEls.forEach((e) => (e.y = r1(e.y + dt)))
+        this.y = Math.max(this.y, tBot + dt + 18)
+      }
+    }
     this.p = Rp
     this.close()
     return rest
@@ -2731,16 +2748,20 @@ let stripRight = null
     // soát 04/11 (B10): chân dung cũng có chú thích "Ảnh N: … (Nguồn: …)"
     g2.people.map((per, i) => [per, ar.image[i], ar.image[i]]).filter((_, i) => i !== huongAt),
     ([[name]]) => {
-      f.quote(ar.sayings[/Tuy/.test(name[0]) ? 'Tuy' : 'Hương'], { size: 17, inset: 18, gap: 18, color: ACC[3] })
-      return /Tuy/.test(name[0])
-        ? f.row(
-            [
-              ['Bằng công nhận danh hiệu Nghệ nhân Hà Nội (2019) của ông Lê Văn Tuy', '2019年にレ・ヴァン・トゥイ氏に授与された「ハノイ市職人」の称号認定証'],
-              ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏の展示スペース'],
-            ],
-            { ratio: R.std }
-          )
-        : f.pool.unshift(['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥ・フオン氏（赤い服）と、工房を訪れた若者たち'])
+      if (!/Tuy/.test(name[0])) {
+        f.quote(ar.sayings.Hương, { size: 17, inset: 18, gap: 18, color: ACC[3] })
+        return f.pool.unshift(['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥ・フオン氏（赤い服）と、工房を訪れた若者たち'])
+      }
+      // soát 07/11: câu trích trước thì hàng ảnh bằng công nhận + gian trưng bày không vừa, sang trang sau → trang tiểu sử
+      // trống 40% dưới câu trích. Hàng ảnh lên trước (ngay dưới tiểu sử), câu trích sau
+      f.row(
+        [
+          ['Bằng công nhận danh hiệu Nghệ nhân Hà Nội (2019) của ông Lê Văn Tuy', '2019年にレ・ヴァン・トゥイ氏に授与された「ハノイ市職人」の称号認定証'],
+          ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏の展示スペース'],
+        ],
+        { ratio: R.std }
+      )
+      f.quote(ar.sayings.Tuy, { size: 17, inset: 18, gap: 18, color: ACC[3] })
     }
   )
   if (huongAt >= 0 && !huongSpread()) people([[g2.people[huongAt], ar.image[huongAt], ar.image[huongAt]]], () => f.quote(ar.sayings.Hương, { size: 17, inset: 18, gap: 18, color: ACC[3] }))
@@ -2749,7 +2770,7 @@ let stripRight = null
   // mỗi chủ đề một cặp trang (luật trang đôi): chữ chia cân hai trang, ảnh / video khung chuẩn, dài thì "Đọc thêm";
   // đoạn dẫn của mục đứng đầu cặp trang của chủ đề đầu tiên
   const topics = (list, lead) => {
-    list.forEach((t, i) => f.story({ lead: i === 0 ? lead : null, h: t.h, paras: t.p, gallery: t.gallery, images: [t.video && { video: t.video }, ...(t.images ?? [t.image])].filter(Boolean) }))
+    list.forEach((t, i) => f.story({ lead: i === 0 ? lead : null, h: t.h, paras: t.p, gallery: t.gallery, flip: i % 2 === 1, images: [t.video && { video: t.video }, ...(t.images ?? [t.image])].filter(Boolean) }))
   }
   const ps = ch.preservation
   mark(2, ps.title, f.section('3.2', ps.title), '3.2')

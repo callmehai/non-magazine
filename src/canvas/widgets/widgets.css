@@ -665,6 +665,19 @@
   .cvw-pc__size {
     display: none;
   }
+  /* review lần 2: trên điện thoại ảnh để chọn chỉ 61×35px → bưu thiếp xem trước nhỏ lại một chút, lưới ảnh cao hơn
+     (đo ở trang rộng 365px: 80×53px, cả khối vẫn vừa khung) */
+  .cvw .cvw-pc__card {
+    width: 225em;
+  }
+  .cvw-pc {
+    gap: 14em;
+  }
+  .cvw-pc__thumbs {
+    min-height: 175em;
+    gap: 7em;
+    margin-bottom: 12em;
+  }
 }
 .cvw-pc__size {
   margin: 0.6em 0 0;
