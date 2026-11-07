@@ -2675,18 +2675,31 @@ let stripRight = null
       { gap: 26, max: 1, fill }
     )
   const g1 = ar.groups[0]
-  f.label(g1.name)
+  const g2 = ar.groups[1]
   // DÒNG THỜI GIAN bấm được: mỗi mốc năm một câu chuyện (chữ nguyên văn Doc), xếp theo năm.
   // 06/11 nhóm chốt (comment ở tab Hỏi nhóm): "Bỏ hẳn ND ông Tửu, hiện sẽ lấy có 3 ảnh của ng: ông Canh, ông Tuy và bà
   // Hương. Ông Hai Cát k có ảnh" → còn ông Hai Cát (không ảnh) và ông Canh (ảnh nhóm gắn, Báo QĐND)
   const [cat, canh] = g1.people
   const canhImg = ['Nghệ nhân Phạm Trần Canh', '職人ファム・チャン・カイン氏']
+  // 07/11 (anh Hải: "còn 2 người - 2 mốc, trông hơi cụt"): thêm hai mốc của nhóm "đưa nghề đi tiếp" — ông Tuy 2019, bà Hương
+  // 2022. Thẻ của hai người chỉ in câu có năm đó, nguyên văn tiểu sử của nhóm (VI + JA), và nút sang trang tiểu sử đầy đủ
+  // (không lặp cả tiểu sử). Tên nhóm (giữ lại nghề / đưa nghề đi tiếp) ghi ở đầu từng thẻ thay cho nhãn trên dòng thời gian.
+  const tuy = g2.people.find(([nm]) => /Tuy/.test(nm[0]))
+  const huong = g2.people.find(([nm]) => /Hương/.test(nm[0]))
+  const yearSent = (bio, y) => [
+    (String(bio[0]).match(new RegExp(`[^.]*Năm ${y}[^.]*\\.`, 'g')) ?? []).map((x) => x.trim()).join(' '),
+    (String(bio[1]).match(new RegExp(`[^。\\n]*${y}年[^。]*。`, 'g')) ?? []).map((x) => x.trim()).join(''),
+  ]
   const tl = [
-    [['1930', '1930年'], cat, ['Ông Hai Cát', 'ハイ・カット']],
-    [['2006', '2006年'], canh, ['Phạm Trần Canh', 'ファム・チャン・カイン'], canhImg],
-  ].map(([year, [name, role, bio], short, img]) => ({ year, name, role, bio, short, ...(img && PHOTOS[img[0]] ? { img: PHOTOS[img[0]], cap: fmtCap(img, img[0]) } : {}) }))
+    [['1930', '1930年'], cat, ['Ông Hai Cát', 'ハイ・カット'], null, g1.name],
+    [['2006', '2006年'], canh, ['Phạm Trần Canh', 'ファム・チャン・カイン'], canhImg, g1.name],
+    // ảnh đúng mốc: bằng Nghệ nhân Hà Nội 2019 của ông Tuy (chuyển từ hàng ảnh tr. 97, chỗ đó thay bằng bằng Nghệ nhân làng
+    // nghề Việt Nam); bà Hương: ảnh bà cùng các bạn trẻ tại cơ sở của bà (trước chưa in)
+    [['2019', '2019年'], [tuy[0], tuy[1], yearSent(tuy[2], 2019)], ['Lê Văn Tuy', 'レ・ヴァン・トゥイ'], ['Bằng công nhận danh hiệu Nghệ nhân Hà Nội (2019) của ông Lê Văn Tuy', '2019年にレ・ヴァン・トゥイ氏に授与された「ハノイ市職人」の称号認定証'], g2.name, tuy],
+    [['2022', '2022年'], [huong[0], huong[1], yearSent(huong[2], 2022)], ['Tạ Thu Hương', 'タ・トゥ・フオン'], ['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥ・フオン氏（赤い服）と、工房を訪れた若者たち'], g2.name, huong],
+  ].map(([year, [name, role, bio], short, img, group, who]) => ({ year, name, role, bio, short, group, who, ...(img && PHOTOS[img[0]] ? { img: PHOTOS[img[0]], cap: fmtCap(img, img[0]), fit: fitOf(img) } : {}) }))
+  for (const it of tl) if (!it.bio[0] || !it.bio[1]) throw new Error(`dòng thời gian: thiếu câu có năm ${it.year[0]} trong tiểu sử`)
   f.place(BOT - f.y - 6, (p, y) => p.add(WIDGET(p.x0, y, CW, BOT - y - 6, 'timeline', { name: 'Dòng thời gian nghệ nhân', data: { items: tl, accent: ACC[3] } })), 0)
-  const g2 = ar.groups[1]
   f.page()
   f.label(g2.name)
   f.prose([g2.intro], { size: 14.5 })
@@ -2756,7 +2769,8 @@ let stripRight = null
       // trống 40% dưới câu trích. Hàng ảnh lên trước (ngay dưới tiểu sử), câu trích sau
       f.row(
         [
-          ['Bằng công nhận danh hiệu Nghệ nhân Hà Nội (2019) của ông Lê Văn Tuy', '2019年にレ・ヴァン・トゥイ氏に授与された「ハノイ市職人」の称号認定証'],
+          // 07/11: bằng Nghệ nhân Hà Nội (2019) lên thẻ mốc 2019 của dòng thời gian → ở đây bằng Nghệ nhân làng nghề Việt Nam
+          ['Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy', 'レ・ヴァン・トゥイ氏の「ベトナム{工芸村|こうげいむら}職人」{認定|にんてい}証'],
           ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏の展示スペース'],
         ],
         { ratio: R.std }
@@ -2765,6 +2779,16 @@ let stripRight = null
     }
   )
   if (huongAt >= 0 && !huongSpread()) people([[g2.people[huongAt], ar.image[huongAt], ar.image[huongAt]]], () => f.quote(ar.sayings.Hương, { size: 17, inset: 18, gap: 18, color: ACC[3] }))
+  // nút "đọc tiếp" trên thẻ ông Tuy / bà Hương của dòng thời gian → trang có tiểu sử đầy đủ (số trang biết sau khi dàn)
+  for (const it of tl) {
+    const who = it.who
+    delete it.who
+    if (!who) continue
+    const key = splitName(who[0])[0][0]
+    const pg = pages.find((q) => q.els.some((e) => e.name === 'Tên nghệ nhân' && (Array.isArray(e.text) ? e.text[0] : e.text) === key))
+    if (!pg) throw new Error(`dòng thời gian: không thấy trang tiểu sử ${key}`)
+    it.link = pg.n
+  }
 
   // 3.2 bảo tồn, 3.3 thách thức: mỗi chủ đề = tiêu đề nhỏ + đoạn văn + ảnh
   // mỗi chủ đề một cặp trang (luật trang đôi): chữ chia cân hai trang, ảnh / video khung chuẩn, dài thì "Đọc thêm";
