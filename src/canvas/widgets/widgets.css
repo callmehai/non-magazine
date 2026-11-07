@@ -902,12 +902,13 @@
 }
 .cvw-tl__still {
   display: block;
+  /* 07/11 (anh Hải: không có ảnh thì chỉ hình nhỏ phụ thôi): hình vẽ nón ở thẻ không ảnh (ông Hai Cát) nhỏ lại, nhạt hơn */
   margin: auto auto 0;
-  width: 78%;
-  max-height: 40%;
+  width: 38%;
+  max-height: 18%;
   min-height: 0;
   object-fit: contain;
-  opacity: 0.9;
+  opacity: 0.55;
   pointer-events: none;
 }
 .cvw-tl__photo {
