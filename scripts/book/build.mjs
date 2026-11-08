@@ -3112,8 +3112,8 @@ let stripRight = null
       ]],
     ]
     const note = [
-      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và ảnh bưu thiếp: nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
-      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像：チョン・カイ撮影。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
+      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và ba ảnh bưu thiếp (phiên chợ, bó vòng nứa, bàn tay nâng chồng nón): nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
+      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像3点（市場、ヌアの輪の束、ノンラーを持つ手）：チョン・カイ撮影。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
     ]
     f.page()
     const p = f.p
@@ -3229,10 +3229,12 @@ let stripRight = null
     y += lh + 14
     const card = (hint, pos) => ({ src: PHOTOS[hint[0]] ?? '', cap: hint.map(pageCap), pos })
     const photos = [
-      card(['Ảnh trang lót: phiên chợ Chuông lúc chiều muộn trước sân đình', '見返し写真：夕暮れの亭の前で開かれるチュオンの市'], [50, 70]),
-      card(['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンのノンラー市場'], [50, 40]),
-      card(['Ảnh toàn trang: nón lá làm duyên cho tà áo dài trong đình Chuông', '全面写真：チュオン村の亭で、アオザイに添えられたノンラー'], [30, 45]),
-      card(['Chợ nón Chuông — những chiếc nón trắng bày bán', 'チュオン村のノンラー市場 — 並べられた白いノンラー'], [50, 60]),
+      // anh Hải 08/11: "chọn 4 ảnh khác đc ko, tránh dùng ảnh thành viên nhóm tại cho người khác tải về" → 4 ảnh làng / chợ,
+      // không có thành viên nhóm (trước: ảnh áo dài trong đình là nhóm tác giả)
+      card(['Người mua kẻ bán tấp nập trong phiên chợ nón Chuông', '売り手と買い手でにぎわうチュオンのノンラー市場'], [50, 55]),
+      card(['Ảnh toàn trang: nón lá xếp chồng ở chợ Chuông', '全面写真：チュオンの市場に積まれたノンラー'], [50, 60]),
+      card(['Bó vòng nứa vót sẵn bày bán ở chợ Chuông', 'チュオンの市場に並ぶ、削ったヌアの輪の束'], [50, 50]),
+      card(['Bàn tay người bán nâng chồng nón trắng', 'チュオン{村|むら}のノンラー市場で売られている伝統的なノンラー'], [45, 50]),
     ]
     const verses = [
       ['Muốn ăn cơm trắng cá trê\nMuốn đội nón tốt thì về làng Chuông', '白いご飯とナマズを食べたいなら、\nよいノンラーをかぶりたいなら、チュオン村へ。'],
