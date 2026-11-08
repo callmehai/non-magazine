@@ -24,7 +24,8 @@ const zoomable = (el) =>
   el.w < PAGE_W * 0.95 &&
   el.w * el.h < PAGE_W * PAGE_H * 0.8
 const captionOf = (el, lang) => {
-  const c = plainText(lang === 'ja' ? el.hintJa || el.hint : el.hint)
+  // cap/capJa: chú thích đã định dạng như trên trang (build.mjs); sách cũ chưa có thì dùng gợi ý ảnh
+  const c = plainText(lang === 'ja' ? el.capJa || el.hintJa || el.cap || el.hint : el.cap || el.hint)
   return /^GIF\b/.test(c) ? '' : c
 }
 
