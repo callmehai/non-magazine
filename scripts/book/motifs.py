@@ -79,6 +79,36 @@ def cone(cx, apex, rim, rx, ry, rings=(0.38, 0.62, 0.82), ribs=7, fill=PAPER):
     return out
 
 
+SON = '#b4533a'  # quai lụa (điểm son duy nhất)
+PINK = '#f0d3c6'
+LEAF = '#dfe6cc'
+
+
+def hat(cx, by, rx, ry, h=None, rings=(0.3, 0.5, 0.68, 0.84), ribs=9):
+    """nón Chuông đặt ngửa mặt lên trời (chóp trên), nhìn chếch từ trên: thành thẳng, cao 0,66 bán kính vành;
+    nửa sau vành thấy được hai bên thân nón (vẽ trước, thân tô giấy che phần giữa); vành trước đôi (cạp); núm chóp tròn"""
+    h = h or rx * 0.66
+    ap = by - h
+    out = [P(arc(cx, by, rx, ry, 180, 360, 48), sw=0.8)]
+    out.append(P(f'M{f(cx)} {f(ap)} L {f(cx - rx)} {f(by)} A {f(rx)} {f(ry)} 0 0 0 {f(cx + rx)} {f(by)} Z', fill=PAPER))
+    for t in rings:  # vòng nứa hằn qua lá: chỉ nửa trước, nằm trong thân
+        out.append(P(arc(cx, ap + h * t, rx * t * 0.97, ry * t, 14, 166, 30), sw=0.5, op='.55'))
+    for k in range(1, ribs):  # sống lá chạy từ chóp xuống vành
+        a = 180 - 180 * k / ribs
+        ex, ey = cx + rx * math.cos(math.radians(a)) * 0.97, by + ry * math.sin(math.radians(a)) * 0.9
+        out.append(P(f'M{f(cx)} {f(ap + 5)} L {f(ex)} {f(ey)}', sw=0.4, op='.4'))
+    out.append(P(arc(cx, by + 2.2, rx * 0.99, ry * 0.96, 6, 174, 48), sw=0.8, op='.75'))  # cạp vành
+    out.append(f'<circle cx="{f(cx)}" cy="{f(ap + 1.5)}" r="2.6" fill="{PAPER}" stroke-width="0.9"/>')
+    return out, ap
+
+
+def strap(x0, x1, y, low, curl):
+    """quai lụa buộc trong lòng nón: hai đầu khuất sau thân (vẽ trước thân), võng xuống nằm trên nền, uốn một vòng"""
+    d = (f'M{f(x0)} {f(y)} C {f(x0 - 2)} {f(low)}, {f(x0 + 20)} {f(low + 3)}, {f((x0 + x1) / 2 + curl)} {f(low + 2)} '
+         f'C {f(x1 + 10)} {f(low + 1)}, {f(x1 + 2)} {f(low - 6)}, {f(x1)} {f(y)}')
+    return [f'<path d="{d}" stroke="{SON}" stroke-width="1.15"/>', f'<path d="{d}" stroke="{SON}" stroke-width="2.6" opacity=".18"/>']
+
+
 # 1. chồng nón trắng ở chợ Chuông: một chiếc trên cùng + mép các chiếc xếp lồng bên dưới
 b = []
 cx, apex, rim, rx, ry = 120, 22, 92, 96, 11
@@ -164,31 +194,15 @@ for t, leaves in CL:
         b += blade(px, py, ang, L, 5)
 svg('m-canh-tre', (220, 160), b)
 
-# 6. nón ngửa (lòng nón) đặt nghiêng: vòng nứa đồng tâm, hai mảng chỉ nhôi sát vành, quai lụa vắt qua vành trước rồi
-# buông thành một vòng mềm trên nền (08/11: bản đầu đối xứng trông như mặt cười → nghiêng + nhôi sát vành)
-b = []
-cx, cy, rx, ry, rot = 100, 56, 84, 28, -9
-g = [f'<g transform="rotate({rot} {cx} {cy})">',
-     f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="{PAPER}"/>',
-     f'<ellipse cx="{cx}" cy="{cy}" rx="{rx - 4}" ry="{ry - 1.6}" stroke-width="0.6"/>']
-for k in range(1, 6):
-    t = 1 - k * 0.16
-    g.append(f'<ellipse cx="{f(cx + 4 * (1 - t))}" cy="{f(cy + 5 * (1 - t))}" rx="{f((rx - 6) * t)}" ry="{f((ry - 3) * t)}" stroke-width="0.5" opacity=".65"/>')
-g.append(f'<circle cx="{cx + 4}" cy="{cy + 5}" r="2.2" fill="{PAPER}"/>')
-L, R = cx - rx + 16, cx + rx - 16
-for x in (L, R):
-    g.append(P(f'M{x - 4} {cy - 2} L {x + 4} {cy + 4} M{x - 4} {cy + 4} L {x + 4} {cy - 2}', sw=0.7))
-g.append('</g>')
+# 6. nón Chuông đặt trên nền, quai lụa buông võng trước vành; sau lưng một bó lá lụi phơi (thay "nón ngửa": anh Hải 08/11
+# "hoạ tiết cái nón trông xấu vl, làm lại hoặc làm cái khác")
+b = ground(12, 198, 107)  # đất vẽ trước: nón + quai đè lên
+for a, L in ((-128, 58), (-116, 66), (-104, 70), (-92, 66), (-80, 58)):  # bó lá dựng sau nón, gốc khuất sau thân
+    b += blade(52, 102, a, L, 5.5)
+b.append(P('M40 70 Q 46 73 54 71 L 54 77 Q 46 79 40 76 Z', fill=PAPER, sw=0.9))  # lạt buộc
+b += strap(98, 146, 98, 110, 6)
+g, _ = hat(122, 90, 66, 14.5)
 b += g
-# quai: từ nhôi phải (đã xoay) vắt qua vành trước, vòng mềm trên nền, quay lên nhôi trái
-a = math.radians(rot)
-rt = lambda x, y: (cx + (x - cx) * math.cos(a) - (y - cy) * math.sin(a), cy + (x - cx) * math.sin(a) + (y - cy) * math.cos(a))
-(lx, ly), (qx, qy) = rt(L, cy + 1), rt(R, cy + 1)
-# đầu kia của quai luồn xuống dưới nón: dừng đúng mép vành trước (điểm trên viền ở góc 112°)
-ex, ey = rt(cx + rx * math.cos(math.radians(112)), cy + ry * math.sin(math.radians(112)))
-b.append(P(f'M{f(qx)} {f(qy)} C {f(qx - 6)} {f(qy + 26)}, {f(qx + 14)} {f(qy + 44)}, {f(qx - 18)} {f(qy + 52)} '
-           f'C {f(qx - 56)} {f(qy + 60)}, {f(ex - 6)} {f(ey + 30)}, {f(ex)} {f(ey)}', sw=1.4))
-b += ground(14, 196, 107)  # vòng quai nằm trên nền
 svg('m-non-ngua', (210, 116), b)
 
 # 7. chuồn chuồn đậu ngọn cỏ ao làng (cả con nằm trọn trong hình, không chạm mép)
@@ -219,14 +233,28 @@ for x, y in ((150, 96), (100, 104), (40, 72)):
     b.append(f'<circle cx="{x}" cy="{y}" r="0.9" fill="{INK}" stroke="none" opacity=".6"/>')
 svg('m-la-tre', (200, 120), b)
 
-# 9. bó vành nứa: vành to nhỏ treo lồng nhau, chạm nhau ở đỉnh, buộc một nút dây ở chỗ chạm (treo trên móc)
-b = []
-cx, top = 104, 24
-b.append(P(f'M{cx} 6 L {cx} {top - 4}', sw=1))  # dây treo
-b.append(P(f'M{cx - 5} 6 L {cx + 5} 6', sw=1.2))
-for k, (rx, ry) in enumerate(((86, 52), (74, 46), (62, 40), (50, 34), (38, 27))):
-    b.append(f'<ellipse cx="{cx}" cy="{top + ry}" rx="{rx}" ry="{ry}" stroke-width="{1.1 if k == 0 else 0.8}"/>')
-b.append(P(f'M{cx - 7} {top - 3} C {cx - 3} {top + 6}, {cx + 3} {top + 6}, {cx + 7} {top - 3}', sw=1.4, fill=PAPER))  # nút buộc
-b.append(P(f'M{cx - 3} {top + 4} q -4 10 -10 14 M{cx + 3} {top + 4} q 4 10 10 14', sw=0.9))  # hai đầu dây
+# 9. nón vẽ (mục "Đổi mới sản phẩm": nón vẽ, nón lụa, du khách trải nghiệm vẽ nón): trên thân nón một cành sen vừa vẽ,
+# cạnh đó đĩa màu + cây bút gác lên đĩa (thay "bó vành nứa": anh Hải 08/11 chê hình nón xấu)
+b = ground(12, 198, 121)  # đất vẽ trước: nón, quai, đĩa màu đè lên
+b += strap(58, 112, 108, 123, -4)
+g, ap = hat(86, 102, 70, 16)
+b += g
+# cành sen vẽ trên mặt trước, lệch trái (nằm gọn trong thân nón): lá sen, nụ, hoa
+b.append(P('M66 100 C 66 94, 68 88, 72 84', sw=0.6))
+b.append(P('M72 98 C 75 95, 80 94, 84 96', sw=0.6))
+b.append(P('M84 96 C 88 90, 98 90, 101 95 C 97 99, 89 100, 84 96 Z', fill=LEAF, sw=0.6))  # lá sen
+b.append(P('M88 95.5 L 99 94.5', sw=0.4, op='.7'))
+for a, L, W in ((-140, 10, 3.2), (-40, 10, 3.2), (-115, 12, 3.6), (-65, 12, 3.6), (-90, 13, 3.8)):
+    b += blade(72, 84, a, L, W, rib=False, fill=PINK, sw=0.6)
+b.append(P('M60 99 C 59 95, 58 92, 58 89', sw=0.55))
+b += blade(58, 89, -96, 8, 2.6, rib=False, fill=PINK, sw=0.55)  # nụ
+# đĩa màu + bút lông gác chéo
+b.append(f'<ellipse cx="174" cy="115" rx="17" ry="4.8" fill="{PAPER}"/>')
+b.append(f'<ellipse cx="174" cy="114.4" rx="11" ry="2.6" stroke-width="0.6" opacity=".7"/>')
+b.append(f'<ellipse cx="170" cy="114.3" rx="3.4" ry="1.3" fill="{PINK}" stroke="none"/>')
+b.append(f'<ellipse cx="178.5" cy="114.6" rx="2.8" ry="1.1" fill="{LEAF}" stroke="none"/>')
+b.append(P('M180 111 L 196 85', sw=1.2))  # cán tre
+b.append(P('M178.6 113.2 L 181.6 108.4', sw=2.6, op='.9'))  # khâu bút
+b += blade(178.6, 113.2, 122, 6.5, 1.8, rib=False, fill=PINK, sw=0.6)  # ngòi lông chấm màu
 svg('m-vong-nua', (210, 132), b)
 print('ok')
