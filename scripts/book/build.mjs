@@ -1806,46 +1806,42 @@ tocPages.forEach((p) => (p.fixed = true))
 let contents = null
 let guidePage = null
 {
+  // 09/11 (Zalo 00:18 Sơ hở là giãy: "Phần mở đầu có thể gói gọn 1 trang đc k em" / "phần nội dung chữ á" / "thay thử giúp chị
+  // ảnh này full tràn viền luôn nhé" / "nè em tham khảo thử bố cục này nhé"; tab Bổ sung: "Thay thử ảnh lời mở đầu: Ảnh nhóm
+  // đồ án.jpg → mẫu tham khảo"): trái = ảnh nhóm tràn viền (chú thích trên dải mờ chân ảnh, số ảnh không đổi);
+  // phải = trọn năm đoạn lời mở đầu + ký tên trên một trang (cỡ chữ co tới khi vừa)
   const f = new Flow(0, ['LỜI MỞ ĐẦU', 'はじめに'], [])
-  const p = f.unit()
-  mark(1, preface.title, p, '—')
+  padLeft(f.pool, 0, f.runLabel)
+  f.bleed(preface.photo)
+  mark(1, preface.title, pages[pages.length - 1], '—')
+  const p = f.page()
   p.add({ ...DECO('sen-canh', p.x1 - 96, 58, 96, 96, 0.5), name: 'Họa tiết' })
   const to = { size: 34, font: F.head, lh: 1.15, jaSize: 31 }
   p.add(T(p.x0, 90, p.cw - 130, 44, preface.title, { ...to, color: C.title, jaFont: F.jaHead, name: 'Tiêu đề' }))
   p.add(HL(p.x0, 144, 56, ACC[0], 1.4))
-  const [p1, p2, p3, p4, p5] = preface.paras
-  // góp ý: thu nhỏ chữ lời mở đầu một chút để gọn trong một cặp trang
-  const PO = { size: 13, lh: 1.6, jaSize: jaPt(13, 1.12) }
-  const po = { free: true, budget: false, after: 10, ...PO }
-  // 08/11 (tab Bổ sung: "to ảnh hơn, nguồn ghi xuống dưới"): ảnh nhóm khung lớn nhất mà đoạn 1 vẫn vừa trang trái
-  // (đoạn 2 sang trang phải), chú thích ngay dưới ảnh thay cho cột bên cạnh
-  const ph = capH(preface.photo, CW) + 6 + 18
-  const need = textH(p1, CW, PO) + 12
-  const r = [R.std, 0.7, R.wide, R.cin, R.pan, 0.4].find((x) => 164 + CW * x + ph + need <= BOT) ?? 0.4
-  f.y = figure(p, p.x0, 164, CW, CW * r, preface.photo, { capBelow: true }) + 18
-  f.prose([p1], po)
-  f.page()
-  f.prose([p2, p3, p4, p5], po)
   const sg = { size: 15, lh: 1.45, font: F.hand, jaSize: 14 }
   const sh = textH(preface.sign, 260, sg)
-  f.place(sh, (pg, y) => pg.add(T(pg.x1 - 260, y, 260, sh, preface.sign, { ...sg, align: 'right', color: C.ink2, jaFont: F.jaHand, name: 'Ký tên' })), 12)
-  // 08/11: đoạn 2 sang trang phải (ảnh nhóm to hơn) → trang phải chỉ còn chữ: hình nón vẽ nét nhỏ ở góc dưới, cạnh chữ ký
-  {
-    const q = f.p
-    if (BOT - f.y > 30) q.add({ ...DECO('non-line', q.x0 - 4, Math.min(f.y - sh - 4, BOT - 60), 84, 58, 0.55), name: 'Hình vẽ' })
+  const GAP = 9
+  const po = (s) => ({ size: s, lh: 1.55, jaSize: jaPt(s, 1.12) })
+  const tot = (s) => preface.paras.reduce((a, x) => a + textH(x, CW, po(s)) + GAP, 0)
+  let size = 13
+  while (size > 10.5 && 164 + tot(size) + 6 + sh > BOT) size -= 0.25
+  let y = 164
+  for (const para of preface.paras) {
+    const h = textH(para, CW, po(size))
+    p.add(T(p.x0, y, CW, h, para, { ...po(size), align: 'justify', color: C.ink, jaFont: F.jaBody, name: 'Đoạn văn' }))
+    y += h + GAP
   }
+  p.add(T(p.x1 - 260, y + 6, 260, sh, preface.sign, { ...sg, align: 'right', color: C.ink2, jaFont: F.jaHand, name: 'Ký tên' }))
+  // còn chỗ dưới chữ ký → cụm sen nét mảnh lấp chân trang
   {
-    // cụm sen nét mảnh lấp chân trang phải (góp ý: trang này đơn giản thôi, có thể thêm họa tiết hoa sen)
-    const q = f.p
-    const room = BOT - f.y - 6
+    const room = BOT - (y + 6 + sh) - 6
     if (room > 60) {
-      const dh = Math.min(room, 190)
-      q.add({ ...DECO('lotus-pond', q.x0 + (q.cw - dh * 1.6) / 2, BOT - dh, dh * 1.6, dh, 0.6), name: 'Hình vẽ' })
+      const dh = Math.min(room, 150)
+      p.add({ ...DECO('lotus-pond', p.x0 + (p.cw - dh * 1.6) / 2, BOT - dh, dh * 1.6, dh, 0.55), name: 'Hình vẽ' })
     }
-    q.fixed = true
   }
-  f.p.fixed = true
-  pages[pages.length - 2].fixed = true
+  p.fixed = true
   f.p = null
 
   // "Trong cuốn sách này": trọn một trang đơn (góp ý: tr. 6 chỉ chiếm một trang A4) — tiêu đề + ba thẻ chương

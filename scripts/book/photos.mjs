@@ -220,7 +220,8 @@ export const photos = {
   "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": "new/IMG_2611",
   // vòng góp ý 04/11/2026: ảnh nhóm gán trong Doc (tải từ Drive ngày 04/11, thư mục webp "new/")
   "Ảnh bìa: chiếc nón lá Làng Chuông": "new/cai-non-tach-nen",
-  "Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội": "new/Ảnh nhóm",
+  // 09/11 tab Bổ sung "Thay thử ảnh lời mở đầu: Ảnh nhóm đồ án.jpg" (Drive, Zalo 00:18) — trang trái lời mở đầu tràn viền
+  "Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội": "doc-0911/anh-nhom-do-an",
   "Nón lá làng Chuông tại quầy trưng bày của Bảo tàng Dân tộc học Việt Nam": "new/IMG_2577",
   "Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam": "new/Nón ba tầm",
   "Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam": "new/Ảnh nón Dân tộc Kinh _ Tre, Lá dưa, lồng chim, bạc",
