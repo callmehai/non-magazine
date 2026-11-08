@@ -127,7 +127,21 @@ export default function TimelineWidget({ el, interactive }) {
             aria-pressed={k === i}
           >
             <span className="cvw-tl__year">{x.year[li] ?? x.year[0]}</span>
-            <span className="cvw-tl__dot" />
+            {/* anh Hải 08/11 ("thanh này nhồi concept gì vào, đơn điệu"): mỗi mốc một chiếc nón — mốc chưa tới mới là khung
+                nứa (các vòng), mốc đã qua đã lợp lá, mốc đang xem nón trắng có quai son: các thế hệ nối nhau làm nên chiếc nón */}
+            <svg className="cvw-tl__dot" viewBox="0 0 36 24" aria-hidden="true">
+              <path className="cvw-tl__leaf" d="M3 17 L18 7 L33 17 Q18 20.2 3 17 Z" />
+              <g className="cvw-tl__rings">
+                <path d="M7.6 14 Q18 15.8 28.4 14" />
+                <path d="M11.6 11.3 Q18 12.5 24.4 11.3" />
+                <path d="M15 9 Q18 9.6 21 9" />
+                <path d="M18 7 L10 16.6 M18 7 L26 16.6" />
+              </g>
+              <path className="cvw-tl__cone" d="M3 17 L18 7 L33 17" />
+              <ellipse className="cvw-tl__rim" cx="18" cy="17.4" rx="15.6" ry="2.3" />
+              <path className="cvw-tl__quai" d="M9 18.6 Q18 24 27 18.6" />
+              <circle className="cvw-tl__tip" cx="18" cy="6.6" r="1.3" />
+            </svg>
             <span className="cvw-tl__who">
               {/* tên Nhật chỉ xuống dòng ở dấu ・ (không ngắt giữa "トゥ / イ") */}
               <Ruby text={String(x.short?.[li] ?? x.name[li]).replace(/・/g, '・\u200b')} />

@@ -325,7 +325,7 @@ export const ch1 = {
           },
           {
             name: ['Nón lụa hai mặt', '内側と外側に絹布を使用したノンラー'],
-            credit: ['Ảnh: nghệ nhân Lê Văn Tuy', '写真：職人レ・ヴァン・トゥイ氏'],
+            // 08/11 ~22h: nguồn theo mẫu "chú thích (nguồn)" — ảnh thư mục nghệ nhân Lê Văn Tuy → "(nghệ nhân Lê Văn Tuy cung cấp)"
             text: [
               'Được thiết kế với hai mặt có màu sắc hoặc họa tiết khác nhau, tạo sự đa dạng về hình thức trang trí. Sản phẩm giữ dáng nón chóp quen thuộc, đồng thời tăng tính linh hoạt trong cách phối màu và lựa chọn kiểu dáng, phù hợp làm phụ kiện thời trang và quà lưu niệm.',
               '内側と外側に{異|こと}なる色や{柄|がら}を用いることで、装飾に{変化|へんか}を持たせています。なじみのある{円錐形|えんすいけい}を保ちながら、配色やデザインの選択の幅を広げた製品で、ファッション{小物|こもの}や{土産|みやげ}物に適しています。',

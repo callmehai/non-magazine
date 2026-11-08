@@ -42,7 +42,7 @@ export const preface = {
   contentsTitle: ['Trong cuốn sách này', '本書の{構成|こうせい}'],
   chapters: [
     { icon: 'non', text: ['Nón lá trong đời sống, lịch sử và chân dung làng Chuông', '暮らしと歴史の中のノンラー、そしてチュオン村の{横顔|よこがお}'] },
-    { icon: 'tool-quay-non', text: ['Ba lớp lá, mười sáu vành nứa và tám công đoạn làm nên một chiếc nón', '三層の葉、十六本の輪、八つの工程から生まれる一つのノンラー'] },
+    { icon: 'tool-quay-non', text: ['Ba lớp lá, mười sáu vành nứa và bảy bước dựng nên một chiếc nón', '三層の葉、十六本の輪、七つの工程から生まれる一つのノンラー'] },
     { icon: 'tre-mang', text: ['Những ghi nhận, nỗ lực bảo tồn và thách thức của nghề nón hôm nay', '評価と保存の取り組み、そして今日のノンラー作りが向き合う課題'] },
   ],
   turn: ['Mời bạn lật trang, cùng về làng Chuông →', 'さあ、ページをめくってチュオン村へ →'],

@@ -716,13 +716,15 @@
 .cvw-tl__fill {
   position: absolute;
   left: 0;
-  top: 44em;
-  height: 3em;
-  border-radius: 2em;
+  top: 41em;
+  height: 8em;
+  /* vành nứa (hai sợi) có mũi chỉ khâu quấn chéo — cùng một mẫu cho thanh nền và đoạn đã đi (tô màu qua mask) */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M0 2.2H12M0 5.8H12' stroke='%23000' stroke-width='0.9'/%3E%3Cpath d='M3 0.4L8 7.6' stroke='%23000' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center / 12em 8em;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M0 2.2H12M0 5.8H12' stroke='%23000' stroke-width='0.9'/%3E%3Cpath d='M3 0.4L8 7.6' stroke='%23000' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center / 12em 8em;
 }
 .cvw-tl__line {
   right: 0;
-  background: repeating-linear-gradient(90deg, #c9b48f 0 6em, transparent 6em 10em);
+  background: #cdb993;
 }
 .cvw-tl__fill {
   background: var(--acc);
@@ -752,43 +754,102 @@
   color: #8f7b62;
   transition: color 0.3s, transform 0.3s;
 }
+/* nón nhỏ ở mỗi mốc: vành nằm đúng trên thanh */
 .cvw-tl__dot {
-  margin-top: 4em;
-  width: 18em;
-  height: 18em;
-  border-radius: 50%;
-  background: #fbf7ee;
-  border: 2.5em solid #c9b48f;
-  transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  margin-top: -7em;
+  width: 48em;
+  height: 32em;
+  overflow: visible;
+  transform-origin: 50% 70%;
+  transition: transform 0.3s;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cvw-tl__leaf {
+  fill: #fbf7ee;
+  transition: fill 0.3s;
+}
+.cvw-tl__rings {
+  stroke: #b89e72;
+  stroke-width: 0.8;
+  transition: opacity 0.3s;
+}
+.cvw-tl__cone,
+.cvw-tl__rim {
+  stroke: #b89e72;
+  stroke-width: 1.3;
+  transition: stroke 0.3s;
+}
+.cvw-tl__rim {
+  fill: #fbf7ee;
+}
+.cvw-tl__tip {
+  fill: #b89e72;
+}
+.cvw-tl__quai {
+  stroke: #a8382b;
+  stroke-width: 1.1;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 .cvw-tl__who {
   word-break: keep-all;
-  margin-top: 0.6em;
+  margin-top: 0.3em;
   font-size: 12.5em;
   line-height: 1.3;
   color: #5d4c3c;
   text-align: center;
 }
-.cvw-tl__node.is-past .cvw-tl__dot {
-  border-color: var(--acc);
-  background: var(--acc);
+/* đã qua: nón đã lợp lá (tô màu chương nhạt), hết thấy khung vòng */
+.cvw-tl__node.is-past .cvw-tl__leaf,
+.cvw-tl__node.is-past .cvw-tl__rim {
+  fill: color-mix(in srgb, var(--acc) 30%, #fbf7ee);
+}
+.cvw-tl__node.is-past .cvw-tl__cone,
+.cvw-tl__node.is-past .cvw-tl__rim {
+  stroke: var(--acc);
+}
+.cvw-tl__node.is-past .cvw-tl__tip {
+  fill: var(--acc);
+}
+.cvw-tl__node.is-past .cvw-tl__rings,
+.cvw-tl__node.is-on .cvw-tl__rings {
+  opacity: 0;
 }
 .cvw-tl__node.is-on .cvw-tl__year {
   color: var(--acc);
   transform: translateY(-0.1em) scale(1.12);
 }
+/* đang xem: nón trắng hoàn chỉnh, vành cạp màu chương, quai son */
 .cvw-tl__node.is-on .cvw-tl__dot {
-  border-color: var(--acc);
-  background: #fbf7ee;
-  transform: scale(1.35);
-  box-shadow: 0 0 0 6em color-mix(in srgb, var(--acc) 18%, transparent);
+  transform: scale(1.3);
+  filter: drop-shadow(0 2em 3em rgba(60, 40, 20, 0.28));
+}
+.cvw-tl__node.is-on .cvw-tl__leaf,
+.cvw-tl__node.is-on .cvw-tl__rim {
+  fill: #fffdf6;
+}
+.cvw-tl__node.is-on .cvw-tl__cone,
+.cvw-tl__node.is-on .cvw-tl__rim {
+  stroke: var(--acc);
+  stroke-width: 1.5;
+}
+.cvw-tl__node.is-on .cvw-tl__tip {
+  fill: var(--acc);
+}
+.cvw-tl__node.is-on .cvw-tl__quai {
+  opacity: 1;
 }
 .cvw-tl__node.is-on .cvw-tl__who {
   color: #2b2118;
   font-weight: 600;
 }
 .cvw-tl__node:hover .cvw-tl__dot {
-  transform: scale(1.25);
+  transform: scale(1.2);
+}
+.cvw-tl__node.is-on:hover .cvw-tl__dot {
+  transform: scale(1.3);
 }
 .cvw-tl__card {
   position: relative;
@@ -1239,8 +1300,15 @@
    nắp gập = co theo trục dọc rồi mở mặt trong, không phối cảnh 3D (ảnh không nhòe, không tốn khung hình) */
 .cvw-env {
   overflow: visible;
+  /* anh Hải 08/11: "vùng bấm hơi to, khó lật sách, chỉ ấn ở vùng có thư thôi" — khối phong bì phủ gần cả trang
+     nhưng chỉ phong bì / lá thư / nút nhắc nhận cú bấm; chỗ trống còn lại xuyên xuống trang (lật sách được) */
+  pointer-events: none;
+}
+.cvw-env__env {
+  pointer-events: auto;
 }
 .cvw-env__hit {
+  pointer-events: none;
   position: absolute;
   inset: 0;
   border: 0;
@@ -1546,6 +1614,7 @@
   pointer-events: none;
 }
 .cvw-env__hint span {
+  pointer-events: auto; /* nhìn như nút → bấm được (khối ngoài xuyên cú bấm, xem .cvw-env) */
   display: inline-block;
   font-size: 10.5em;
   font-style: italic;
@@ -1775,21 +1844,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8em;
+  margin-top: 0.8em; /* em theo cỡ chữ của chính nó (10em) — 8em cũ = khoảng trống ~80 đơn vị dưới lưới */
   font-size: 10em;
   font-style: italic;
   color: #f4e6cc;
 }
+/* anh Hải 08/11: "nút đóng hộp, hạn chế dùng text gạch chân hết mức" → nút viền tròn, không gạch chân */
 .cvw-box__link {
   font: inherit;
   font-style: normal;
-  border: 0;
-  background: none;
+  border: 0.09em solid rgba(244, 230, 204, 0.55);
+  border-radius: 999px;
+  background: rgba(244, 230, 204, 0.1);
   color: #f4e6cc;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+  text-decoration: none;
   cursor: pointer;
-  padding: 0.2em 0.3em;
+  padding: 0.35em 1.1em;
+  white-space: nowrap;
+}
+.cvw-box__link:hover {
+  background: rgba(244, 230, 204, 0.22);
 }
 .cvw-box__detail {
   position: absolute;
@@ -1836,20 +1910,40 @@
   font-weight: 700;
   color: #5f7a3a;
 }
-.cvw-box__go {
+.cvw-box__acts {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 8em;
+  width: 100%;
+  margin-top: 2em;
+}
+.cvw-box__btn {
   font: inherit;
   font-size: 11em;
-  padding: 0.45em 1.1em;
+  line-height: 1.2;
+  padding: 0.6em 0.8em;
   border-radius: 999px;
-  border: 0;
-  background: #4e3426;
-  color: #fbf4e6;
+  border: 0.09em solid #4e3426;
   cursor: pointer;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
-.cvw-box__detail .cvw-box__link {
-  color: #6b5236;
-  font-size: 10.5em;
+.cvw-box__go {
+  background: #4e3426;
+  color: #fbf4e6;
+}
+.cvw-box__btn.is-back {
+  background: transparent;
+  color: #4e3426;
+}
+.cvw-box__btn:hover {
+  filter: brightness(1.12);
+}
+.cvw-box__btn.is-back:hover {
+  background: rgba(78, 52, 38, 0.08);
 }
 /* nắp hộp: gỗ vân dọc, viền khung, nhãn giấy ở giữa; mở → nhấc lên quanh mép trên rồi mờ đi */
 .cvw-box__lid {

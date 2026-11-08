@@ -6,11 +6,11 @@ import { setTab } from '../tabs.js'
  * Xếp lại các công đoạn (cặp trang sau mục 2.3.2; anh Hải 08/11: tương tác kéo thả, sắp xếp).
  * Các thẻ công đoạn bị xáo; người đọc kéo thẻ lên / xuống (hoặc bấm hai thẻ để đổi chỗ) rồi bấm "Kiểm tra".
  * Thẻ đúng chỗ viền xanh, sai chỗ viền son. Xếp đúng hết → thẻ el.set chuyển sang 1: trang phải hiện chiếc nón hoàn thiện.
- * el.steps = [{ no, name: [vi, ja], sub: [vi, ja], src }] theo đúng thứ tự, el.set = tên nhóm thẻ, el.accent = màu chương
+ * el.steps = [{ no, name: [vi, ja], sub: [vi, ja], src }] theo đúng thứ tự (no: 0 = khâu hoàn thiện, không mang số bước), el.set = tên nhóm thẻ, el.accent = màu chương
  */
 const T = {
-  vi: { hint: 'Kéo thẻ lên xuống, hoặc bấm hai thẻ để đổi chỗ', check: 'Kiểm tra', again: 'Xáo lại', ok: (k, n) => `Đúng ${k}/${n} bước — thử tiếp nhé!`, done: 'Chính xác! Chiếc nón đã hoàn thiện.', step: 'Bước' },
-  ja: { hint: 'カードを上下にドラッグ、または二枚をクリックして入れ替え', check: '答え合わせ', again: 'シャッフル', ok: (k, n) => `${n}工程中${k}つ正解 — もう一度！`, done: '正解！ノンラーが完成しました。', step: '工程' },
+  vi: { hint: 'Kéo thẻ lên xuống, hoặc bấm hai thẻ để đổi chỗ', check: 'Kiểm tra', again: 'Xáo lại', ok: (k, n) => `Đúng ${k}/${n} thẻ — thử tiếp nhé!`, done: 'Chính xác! Chiếc nón đã hoàn thiện.', step: 'Bước', fin: 'Hoàn thiện' },
+  ja: { hint: 'カードを上下にドラッグ、または二枚をクリックして入れ替え', check: '答え合わせ', again: 'シャッフル', ok: (k, n) => `${n}枚中${k}枚正解 — もう一度！`, done: '正解！ノンラーが完成しました。', step: '工程', fin: '仕上げ' },
 }
 // xáo cố định (ảnh thu nhỏ / trang soát luôn giống nhau), không bao giờ trùng thứ tự đúng
 const shuffle = (n, seed = 7) => {
@@ -125,7 +125,7 @@ export default function SortWidget({ el, interactive }) {
               </span>
               {checked && v === p && (
                 <span className="cvw-sort__no">
-                  {t.step} {s.no}
+                  {s.no ? `${t.step} ${s.no}` : t.fin}
                 </span>
               )}
               <span className="cvw-sort__grip" aria-hidden="true">

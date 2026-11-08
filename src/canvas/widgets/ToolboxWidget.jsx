@@ -48,14 +48,17 @@ export default function ToolboxWidget({ el, interactive }) {
             <span className="cvw-box__info">
               <span className="cvw-box__grp">{pick(el.groups?.[it.group])}</span>
               <span className="cvw-box__title">{pick(it.name)}</span>
-              {it.page && (
-                <button type="button" className="cvw-box__go" onClick={() => goToPage?.(it.page - 1)}>
-                  {t.see(it.page)}
+              {/* anh Hải 08/11: "mở lại hộp / đến trang — cho 2 nút to ngang nhau" → hai nút cùng cỡ, một hàng */}
+              <span className="cvw-box__acts">
+                <button type="button" className="cvw-box__btn is-back" onClick={() => setCur(null)}>
+                  {t.back}
                 </button>
-              )}
-              <button type="button" className="cvw-box__link" onClick={() => setCur(null)}>
-                {t.back}
-              </button>
+                {it.page && (
+                  <button type="button" className="cvw-box__btn cvw-box__go" onClick={() => goToPage?.(it.page - 1)}>
+                    {t.see(it.page)}
+                  </button>
+                )}
+              </span>
             </span>
           </div>
         )}

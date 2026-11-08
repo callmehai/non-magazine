@@ -280,7 +280,11 @@ function clipUnderCover(pf, render) {
   const area = pf.getFlipController().getCalculation()?.getBottomClipArea()
   if (!page || !area) return
   const { pageWidth: w, height: h } = render.getRect()
-  const pts = area.filter(Boolean).map((p) => `${(back ? w - p.x : p.x).toFixed(1)} ${p.y.toFixed(1)}`)
+  // anh Hải 08/11 ("lỗi ở cả 2 đầu sách, lúc đóng mở lộ ra đường viền"): vùng nhấc của thư viện tính theo bề ngang
+  // làm tròn (437) trong khi trang rộng lẻ (437,68) → còn một dải < 1px ở mép ngoài không bị khoét, hiện thành vạch dọc.
+  // Điểm nằm sát mép trang (≤ 1,5px) đẩy hẳn ra ngoài 2px để lỗ khoét trùm hết mép.
+  const snap = (v, max) => (v <= 1.5 ? -2 : v >= max - 1.5 ? max + 2 : v)
+  const pts = area.filter(Boolean).map((p) => `${snap(back ? w - p.x : p.x, w).toFixed(1)} ${snap(p.y, h).toFixed(1)}`)
   if (pts.length < 3) return
   const d = `M0 0 H${w} V${h} H0 Z M${pts.join(' L')} Z`
   const el = page.getElement()

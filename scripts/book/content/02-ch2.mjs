@@ -156,7 +156,7 @@ export const ch2 = {
       ],
     },
     stepsH: { id: '2.3.2', h: ['Quy trình dựng và hoàn thiện nón', 'ノンラーの組み立てと仕上げ'] },
-    journey: ['Tám chặng đường làm nên một chiếc nón — bấm vào chặng để xem kỹ', 'ノンラーができるまでの八つの{道|みち}のり ― 気になる工程をクリック'],
+    journey: ['Bảy bước dựng nón và khâu hoàn thiện — bấm vào chặng để xem kỹ', 'ノンラーができるまでの七つの{工程|こうてい}と仕上げ ― 気になる工程をクリック'],
     done: ['Chiếc nón trắng\nhoàn thiện!', '白いノンラーの\n完成！'],
     stripTitle: ['Quy trình chế tác', '製作工程'],
     steps: [

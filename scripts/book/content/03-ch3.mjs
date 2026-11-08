@@ -184,7 +184,8 @@ export const ch3 = {
         // 08/11: ảnh 3-29 … 3-34 của tab パート3 — trái: hai trung tâm OCOP (bà Hương, ông Tuy) cạnh đoạn về Trung tâm;
         // phải: lưới bốn ảnh trải nghiệm + biển lớp học
         pairLeft: true,
-        gallery: true,
+        // tab Bổ sung 08/11 khuya (lưới ảnh 133–136): "Chỉnh lại ảnh giúp chị, tránh bị cắt mất viền nhé" → khung đúng tỉ lệ ảnh gốc
+        gallery: 'nat',
         images: [
           ['Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông, cơ sở của nghệ nhân Tạ Thu Hương', 'チュオン{村|むら}のノンラー{工芸村|こうげいむら}におけるOCOP製品の創造的デザイン・紹介・広報・販売センター（タ・トゥ・フオン氏の施設）'],
           ['Trung tâm thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP làng nghề nón Chuông — cơ sở của nghệ nhân Lê Văn Tuy', 'チュオン{村|むら}のノンラー{工芸村|こうげいむら}におけるOCOP製品の創造的デザイン・紹介・広報・販売センター（レ・ヴァン・トゥイ氏の施設）'],

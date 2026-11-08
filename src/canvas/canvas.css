@@ -66,8 +66,8 @@
 
 .cv-link {
   color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+  /* anh Hải 08/11: hạn chế chữ gạch chân hết mức */
+  text-decoration: none;
 }
 
 /* mục tài liệu tham khảo: cả mục bấm được (mở bài gốc), không gạch chân sẵn — rê chuột thì gạch chân, đổi màu */
@@ -78,8 +78,8 @@
 
 .cv-link--ref:hover,
 .cv-link--ref:focus-visible {
-  text-decoration: underline;
   color: #8b5a2b;
+  background: rgb(139 90 43 / 0.08);
 }
 
 /* link tới trang khác trong sách: không gạch chân */
@@ -98,9 +98,10 @@
 }
 
 .cv-link--refno .cv-text {
-  text-decoration: underline solid rgb(168 56 43 / 0.6);
-  text-underline-offset: 0.22em;
-  text-decoration-thickness: 0.08em;
+  /* anh Hải 08/11: hạn chế gạch chân → số bấm được = màu son + nền son nhạt bo tròn (vẫn khác số thường) */
+  color: #a8382b !important;
+  background: rgb(168 56 43 / 0.09);
+  border-radius: 0.3em;
 }
 
 .cv-link--refno:hover .cv-text,

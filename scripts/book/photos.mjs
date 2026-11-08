@@ -25,14 +25,14 @@ export const photos = {
   "Nón lá bên tà áo dài": "Chương 1/Tại làng Chuông/IMG_3549",
   "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": "Chương 1/BTPN/IMG_20260929_102311",
   "Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3840",
-  "Nón lá hình chóp truyền thống — ảnh sản phẩm": "new/IMG_7347",
-  "Nón Ba tầm — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón ba tầm/IMG_7330-nen",
-  "Nón Quai thao — ảnh sản phẩm": "new/IMG_7879",
+  "Nón lá hình chóp truyền thống — ảnh sản phẩm": "doc-0811/chop-ngoai",
+  "Nón Ba tầm — ảnh sản phẩm": "doc-0811/ba-tam-ngoai",
+  "Nón Quai thao — ảnh sản phẩm": "doc-0811/quai-thao-ngoai",
   // nón thúng: thư mục "Nón Thúng" trên Drive của nhóm còn trống → ảnh báo QĐND chụp tại Làng Chuông (nón của bà Trần Thị Hoa), ghi nguồn dưới ảnh
-  "Nón thúng — ảnh sản phẩm": "new/IMG_8480",
-  "Nón nhà sư (Nón thầy tu) — ảnh sản phẩm": "Chương 1/Tại làng Chuông/1.3.2 Các loại nón ở Làng Chuông/Nón nhà sư/IMG_7319-nen",
+  "Nón thúng — ảnh sản phẩm": "doc-0811/thung-ngoai",
+  "Nón nhà sư (Nón thầy tu) — ảnh sản phẩm": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/06-non-nha-su",
   "Nón lụa — ảnh sản phẩm": "doc-0811/non-lua-sp",
-  "Nón lụa hai mặt — ảnh sản phẩm": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón lá 2 mặt lụa - xanh ngọc 2",
+  "Nón lụa hai mặt — ảnh sản phẩm": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/IMG_9094",
   "Nón cô dâu — ảnh sản phẩm": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/02_Nón Cô Dâu.2",
   // chương 2
   "Chiếc nón đang lợp dở: lớp mo nang lộ ra giữa các lớp lá": "Chương 2/Tại làng Chuông/2.1. Cấu tạo của nón lá/2.1.1 Cấu trúc 3 lớp lá lợp/Lớp mo nang/IMG_3313-nen",
@@ -225,7 +225,7 @@ export const photos = {
   "Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam": "new/Nón ba tầm",
   "Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam": "new/Ảnh nón Dân tộc Kinh _ Tre, Lá dưa, lồng chim, bạc",
   "Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy": "new/IMG_8547",
-  "Nón lá già ghép sống — ảnh sản phẩm": "new/IMG_8606",
+  "Nón lá già ghép sống — ảnh sản phẩm": "doc-0811/la-gia-ngoai",
   "Nón lá già ghép sống — mặt nón": "new/IMG_8606",
   "Nón Quai thao — mặt trên": "new/IMG_7879",
   "Nón thúng — lòng nón và quai": "new/IMG_8481",
@@ -320,4 +320,16 @@ export const photos = {
   "Người thợ cắt phần lá thừa của chiếc nón": "doc-0811/cat-la-thua",
   "Du khách đội nón lá làng Chuông chụp ảnh lưu niệm": "doc-0811/du-khach-doi-non",
   "Nón trang trí làm phụ kiện thời trang — nguồn: nghệ nhân Tạ Thu Hương": "doc-0811/huong-non-thoi-trang",
+  // tab パート1 (ND Nhật) 08/11 khuya: mỗi loại nón Chuông hai ảnh — mặt ngoài + lòng nón (ảnh nhóm đổi nền lá xanh, thư mục Drive
+  // của nhóm; "Nón lá già" mặt ngoài chưa có file gốc trên Drive → tạm lấy ảnh nhúng trong Doc, 463 px)
+  "Nón lá hình chóp truyền thống — lòng nón": "doc-0811/chop-trong",
+  "Nón lá già ghép sống — lòng nón": "doc-0811/la-gia-trong",
+  "Nón Ba tầm — lòng nón": "doc-0811/ba-tam-trong",
+  "Nón Quai thao — lòng nón": "doc-0811/quai-thao-trong",
+  "Nón thúng — lòng nón": "doc-0811/thung-trong",
+  // 08/11 ~22h (tab パート1): nón lụa hai mặt hai ảnh tím (IMG_9094 / IMG_9095, thư mục Drive "Nón lụa 2 mặt"), nón nhà sư ảnh
+  // "Ảnh bác tuy" — nguồn 「出典：職人レ・ヴァン・トゥイ氏提供」
+  "Nón lụa hai mặt — lòng nón": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/IMG_9095",
+  // tab Bổ sung 08/11 khuya (Ảnh 145 Kết luận): "thay ảnh khác tươi sáng hơn. Tham khảo: Ảnh ở đình.jpg, Ảnh nhóm"
+  "Thiếu nữ áo dài cầm nón lá trong hành lang đình Chuông": "doc-0811/o-dinh",
 }
