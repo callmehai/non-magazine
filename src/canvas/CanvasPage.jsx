@@ -63,7 +63,9 @@ function CanvasPage({ page, mode = 'read', renderEl, visible, side = 'right' }) 
     () =>
       mode === 'read'
         ? (page.elements || [])
-            .filter((el) => zoomable(el) && (!el.tab || el.tab.i === tab))
+            // el.only: ảnh riêng một thứ tiếng (vd. ảnh minh họa trang hướng dẫn) — không đếm bản của thứ tiếng kia
+            // (anh Hải 09/11: lightbox tr. 7 hiện "3 / 12" vì gộp cả ảnh VI lẫn JA)
+            .filter((el) => zoomable(el) && (!el.tab || el.tab.i === tab) && (!el.only || el.only === (lang === 'ja' ? 'ja' : 'vi')))
             .map((el) => ({ id: el.id, src: el.src, alt: el.alt, caption: captionOf(el, lang) }))
         : null,
     [page.elements, mode, lang, tab]
