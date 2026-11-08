@@ -1830,7 +1830,7 @@
   object-fit: cover;
 }
 .cvw-box__nm {
-  font-size: 9.5em;
+  font-size: 13em;
   line-height: 1.25;
   font-weight: 600;
   color: #4e3426;
@@ -1845,7 +1845,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 0.8em; /* em theo cỡ chữ của chính nó (10em) — 8em cũ = khoảng trống ~80 đơn vị dưới lưới */
-  font-size: 10em;
+  font-size: 14em;
   font-style: italic;
   color: #f4e6cc;
 }
@@ -1859,7 +1859,8 @@
   color: #f4e6cc;
   text-decoration: none;
   cursor: pointer;
-  padding: 0.35em 1.1em;
+  padding: 0.45em 1.3em;
+  font-weight: 600;
   white-space: nowrap;
 }
 .cvw-box__link:hover {
@@ -1897,7 +1898,7 @@
   padding: 0 4em 4em;
 }
 .cvw-box__grp {
-  font-size: 9.5em;
+  font-size: 12.5em;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 700;
@@ -1905,7 +1906,7 @@
 }
 .cvw-box__title {
   font-family: 'Playfair Display', 'Shippori Mincho', serif;
-  font-size: 19em;
+  font-size: 27em;
   line-height: 1.25;
   font-weight: 700;
   color: #5f7a3a;
@@ -1920,7 +1921,7 @@
 }
 .cvw-box__btn {
   font: inherit;
-  font-size: 11em;
+  font-size: 15em;
   line-height: 1.2;
   padding: 0.6em 0.8em;
   border-radius: 999px;
@@ -1974,7 +1975,7 @@
 }
 .cvw-box__label {
   width: 76%;
-  padding: 14em 12em 12em;
+  padding: 26em 20em 22em;
   background: #fbf7ee;
   border-radius: 3em;
   box-shadow: 0 2em 6em rgba(40, 24, 10, 0.35);
@@ -1983,16 +1984,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6em;
+  gap: 12em;
   transform: rotate(-1.2deg);
 }
 .cvw-box__label svg {
-  width: 46em;
-  height: 23em;
+  width: 76em;
+  height: 38em;
 }
 .cvw-box__name {
   font-family: 'Playfair Display', 'Shippori Mincho', serif;
-  font-size: 17em;
+  font-size: 28em;
   word-break: keep-all;
   font-weight: 700;
   color: #4e3426;
@@ -2000,16 +2001,25 @@
   line-height: 1.25;
 }
 .cvw-box__hint {
-  font-size: 10.5em;
-  font-style: italic;
-  color: #8b7355;
+  /* anh Hải 08/11: "chữ mở hộp … nhỏ vl" → nút viên thuốc rõ ràng */
+  font-size: 15em;
+  font-style: normal;
+  font-weight: 600;
+  color: #fbf4e6;
+  background: #4e3426;
+  border-radius: 999px;
+  padding: 0.5em 1.4em;
+  box-shadow: 0 0.15em 0.4em rgba(40, 24, 10, 0.3);
+}
+.cvw-box__lid:not(:disabled):hover .cvw-box__hint {
+  background: #6a4632;
 }
 .cvw-box__latch {
   position: absolute;
   bottom: 6em;
   left: 50%;
-  width: 34em;
-  height: 12em;
+  width: 50em;
+  height: 16em;
   transform: translateX(-50%);
   border-radius: 2em 2em 4em 4em;
   background: linear-gradient(180deg, #d9b778, #a98544);

@@ -1750,26 +1750,37 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   // anh Hải 05/11: bìa giấy phẳng + nón dán lên trông xấu; nhóm muốn như ảnh minh họa bìa trong tab "Góp ý sửa (1)" (trông như
   // ảnh chụp thật), kèm ghi chú "Chỉ có nón ( Cái nón.jpg ), thêm một số họa tiết trang trí / Chỉ để một thứ tiếng thôi".
   // Ảnh nền tràn bìa dựng bằng scripts/book/cover.py: nền lá xoá phông + mặt vải + chiếc nón của nhóm có bóng đổ + gáy sách.
-  const p = new Page({ hideNumber: true, bg: '#efe4cc', paper: null })
+  // anh Hải 08/11 khuya: "tiện làm lại bìa cho đẹp hơn", "màu trắng ngà này đang trông hơi bẩn", "cần 1 sự tinh tế hơn"
+  // → bỏ ảnh nền nhiều nón nhoè (xám đục) + cụm nón nhoè phía trước + nhánh tre / cành lá vàng; giấy ngà sáng, sạch;
+  // một chiếc nón thật (ảnh nhóm gửi Zalo 22:35, tách nền, đủ vành cạp) đứng giữa mười sáu vòng tre nét vàng rất mảnh
+  // (concept "ba lớp lá, mười sáu vòng tre"); tên sách canh giữa nét thanh; đường khâu nét đứt quanh bìa; một điểm son (dấu)
+  const p = new Page({ hideNumber: true, bg: '#f8f3e9', paper: null })
   p.fixed = true
-  const ink = '#3b2a1b'
+  const ink = '#33251a'
+  const gold = '#a8854f'
+  const cx = W / 2
+  const hatW = 372
+  const hatH = hatW / (878 / 759)
+  const ringD = 452
+  const ringY = 316
   p.add(
-    // ba lớp của cover.py — nền, chiếc nón chính (bóng đổ vẽ sẵn trong ảnh), cụm nón nhoè phía trước. Anh Hải 08/11: "bìa thì
-    // ko cần 3d đâu, m tạo ra 1 cái ảnh bìa tĩnh thôi" → ba lớp đứng yên như một ảnh (bỏ lơ lửng / trượt theo con trỏ)
-    { ...IMG(0, 0, W, H, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-nen.webp', fit: 'cover' }), name: 'Ảnh bìa' },
-    { ...IMG(...COVER_LAY.non, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa' },
-    { ...IMG(...COVER_LAY.truoc, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-truoc.webp', fit: 'fill' }), name: 'Ảnh bìa' },
-    SUN(W - 470, -20, 500, false, 0.6),
-    // họa tiết nét vàng: nhánh tre bên phải, cành lá dưới góc (như ảnh minh họa của nhóm)
-    { ...DECO('bamboo', W - 128, 300, 110, 240, 0.7), name: 'Họa tiết' },
-    { ...DECO('leaf-sprig', W - 176, H - 150, 136, 136, 0.7), name: 'Họa tiết' },
-    T(60, 70, 470, 130, ['NÓN LÁ\nLÀNG CHUÔNG', 'チュオン村の\nノンラー'], { font: F.head, size: 58, weight: 700, lh: 1.05, tracking: 1.5, color: ink, jaFont: F.jaHead, jaSize: 50, name: 'Tên sách' }),
-    T(64, 204, 470, 50, front.subtitle.map(strip), { font: F.script, size: 36, lh: 1.3, color: '#6a4a2a', jaFont: F.jaHead, jaSize: 24, name: 'Tên phụ' }),
-    HL(66, 270, 80, '#a07a3c', 1.4),
-    ...SEAL(W - 52 - 60, 74),
+    RECT(22, 22, W - 44, H - 44, 'none', { stroke: gold, sw: 0.7, dash: '3 2.5', opacity: 0.55, name: 'Đường khâu' }),
+    SUN(W - 440, -36, 470, false, 0.22),
+    T(0, 84, W, 14, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 8.5, tracking: 3.4, weight: 600, align: 'center', color: gold, jaFont: F.jaSans, jaSize: 9, name: 'Dòng nhỏ' }),
+    { ...T(0, 104, W, 92, ['Nón lá', ''], { font: F.head, size: 76, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 196, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 112, W, 26, ['', 'チュオン{村|むら}の'], { size: 18, tracking: 6, lh: 1.3, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 18, name: 'Tên sách' }), only: 'ja' },
+    { ...T(0, 140, W, 80, ['', 'ノンラー'], { size: 60, lh: 1.2, tracking: 4, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 60, name: 'Tên sách' }), only: 'ja' },
+    T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 25, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
+    HL(cx - 28, 286, 56, gold, 0.9),
+    // mười sáu vòng tre — quầng mảnh sau chiếc nón
+    { ...DECO('vong-non', cx - ringD / 2, ringY, ringD, ringD, 0.2), name: 'Họa tiết' },
+    { ...IMG(cx - hatW / 2, ringY + ringD / 2 - hatH * 0.56, hatW, hatH, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa' },
+    ...SEAL(W - 50 - 44, 52, 44),
+    { ...HL(56, H - 112, W - 112, gold, 0.6), dash: '3 2.5', opacity: 0.6 },
     // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
-    IMG(60, H - 92, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
-    T(190, H - 88, 330, 34, front.team, { size: 10.5, lh: 1.5, color: ink, jaFont: F.jaSans, name: 'Thông tin' })
+    IMG(56, H - 86, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
+    T(W - 56 - 300, H - 84, 300, 34, front.team, { size: 10, lh: 1.5, align: 'right', color: '#5a4634', jaFont: F.jaSans, name: 'Thông tin' })
   )
 }
 
