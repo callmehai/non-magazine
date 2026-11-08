@@ -2336,12 +2336,27 @@ let stripRight = null
     const rh = 206
     f.place(rh, (p, y) =>
       p.add({
-        ...WIDGET(p.x0, y, p.cw, rh, 'rings', { name: 'Kéo vòng nứa lên khuôn', data: { accent: ACC[2], labels: { apex: ['← Chóp nón', '← 頂点'], rim: ['← Vòng cạp (vòng 16)', '← 外縁の輪（16本目）'] } } }),
+        ...WIDGET(p.x0, y, p.cw, rh, 'rings', { name: 'Kéo vòng nứa lên khuôn', data: { set: 'rings16', accent: ACC[2], labels: { apex: ['← Chóp nón', '← 頂点'], rim: ['← Vòng cạp (vòng 16)', '← 外縁の輪（16本目）'] } } }),
         alt: ['Khuôn nón và bó 16 vòng nứa — kéo từng vòng lên khuôn', 'ノンラーの型と16本のヌアの輪 — 輪をドラッグして型に付ける'],
       })
     )
   }
   f.figure(['Khung nón 16 vòng nứa', 'ヌアで作られた16本の輪からなる骨組み'])
+  {
+    // anh Hải 08/11: "có thể xem xét cho chơi xong mới hiện ảnh" — ảnh khung nón thật phủ giấy mờ (thẻ rings16 = 0) tới khi
+    // người đọc kéo đủ 16 vòng lên khuôn ở trang bên (RingsWidget đặt thẻ = 1); trang soát / ảnh thu nhỏ: thấy lớp phủ
+    const q = f.p
+    const im = q && [...q.els].reverse().find((e) => e.type === 'image' && String(e.hint ?? '').startsWith('Khung nón 16 vòng nứa'))
+    if (im) {
+      const tab = { set: 'rings16', i: 0 }
+      const dw = Math.min(180, im.w * 0.45)
+      q.add(
+        { ...RECT(im.x, im.y, im.w, im.h, '#f4ede0', { opacity: 0.93, name: 'Giấy phủ' }), tab },
+        { ...DECO('vong-non', im.x + im.w / 2 - dw / 2, im.y + im.h / 2 - dw / 2 - 18, dw, dw, 0.5), name: 'Hình vẽ', tab },
+        { ...T(im.x + 20, im.y + im.h / 2 + dw / 2 - 8, im.w - 40, 44, ['Lên đủ 16 vòng nứa ở trang bên để xem khung nón thật', '隣のページで16本の輪をすべて付けると、本物の骨組みが見られます'], { size: 14, italic: true, lh: 1.45, align: 'center', color: C.muted, jaFont: F.jaSans, jaSize: 12.5, name: 'Lời nhắc' }), tab },
+      )
+    }
+  }
   f.prose(fr.after)
   f.figure(fr.image)
   // 08/11: ảnh 2-03 nhóm gắn cuối mục 2.1.1 (trước đây là ảnh mở mục 1.3.2)

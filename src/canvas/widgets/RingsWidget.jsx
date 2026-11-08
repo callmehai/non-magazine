@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useCanvasLang, plainText } from '../lang.js'
+import { setTab } from '../tabs.js'
 
 /**
  * Kéo vòng nứa lên khuôn (mục 2.1.1 "Cấu trúc khung 16 vòng"; anh Hải 08/11: thêm tương tác kéo thả).
@@ -27,6 +28,12 @@ export default function RingsWidget({ el, interactive }) {
   const [placed, setPlaced] = useState(() => new Set())
   const [drag, setDrag] = useState(null) // { i, x, y, moved }
   const all = !interactive || placed.size === N
+  // anh Hải 08/11: "có thể xem xét cho chơi xong mới hiện ảnh" — đủ 16 vòng → thẻ el.set = 1: ảnh khung nón thật ở trang
+  // bên cạnh hiện ra (đang phủ giấy mờ); làm lại → phủ lại
+  const done = interactive && placed.size === N
+  useEffect(() => {
+    if (el.set && interactive) setTab(el.set, done ? 1 : 0)
+  }, [done, el.set, interactive])
   const has = (i) => !interactive || placed.has(i)
 
   // khuôn: chóp (cx, ay), vành rộng fw, cao fH — dáng thấp như nón thật (cao ≈ 0,7 × bán kính vành)
