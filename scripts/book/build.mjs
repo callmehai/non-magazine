@@ -2903,9 +2903,10 @@ let stripRight = null
     p.add({ ...WIDGET(p.x0, y, p.cw, BOT - y, 'sort', { name: 'Xếp lại các công đoạn', data: { steps, set: 'sort8', accent: acc } }), alt: ['Các thẻ công đoạn làm nón — kéo để xếp đúng thứ tự', 'ノンラー作りの工程カード — ドラッグして正しい順に並べる'] })
     p.fixed = true
     const q = stepFlow.page()
-    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → chiếc nón vừa xong được đội lên: thiếu nữ áo dài
-    // đội nón trên bậc thềm (ảnh nhóm, chưa dùng ở trang nào), khung theo tỉ lệ ảnh, thấp lại nếu chật
-    const hint = ['Nón lá bên tà áo dài', 'アオザイとノンラー']
+    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → (bản đầu: ảnh các bạn trong nhóm mặc áo dài — anh Hải:
+    // "bên kia sẽ hơi ngại khi hiện ảnh họ ở đây") → chiếc nón trắng nhóm gửi Zalo 22:35 (tách nền) đặt trên giấy ngà, bóng
+    // mềm dưới vành: đúng "chiếc nón trắng hoàn thiện", không có mặt người
+    const hint = ['Chiếc nón lá trắng hoàn thiện', 'できあがった白いノンラー']
     const iw = q.cw
     const ih = Math.round(Math.min(iw * (natR(hint) ?? 1.02), BOT - TOP - 10 - 150))
     const iy = TOP + 10

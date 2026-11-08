@@ -23,6 +23,8 @@ export const photos = {
   // chương 1
   "Nón lá trong đời sống thường ngày: che nắng, che mưa khi lao động": "Chương 1/BTHN/IMG_20261002_150751",
   "Nón lá bên tà áo dài": "Chương 1/Tại làng Chuông/IMG_3549",
+  // anh Hải 08/11: ảnh khi xếp xong trò "Xếp lại các công đoạn" — nón nhóm gửi Zalo 22:35, tách nền, đặt trên giấy ngà
+  "Chiếc nón lá trắng hoàn thiện": "zalo-0811/non-hoan-thien",
   "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": "Chương 1/BTPN/IMG_20260929_102311",
   "Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3840",
   "Nón lá hình chóp truyền thống — ảnh sản phẩm": "doc-0811/chop-ngoai",
