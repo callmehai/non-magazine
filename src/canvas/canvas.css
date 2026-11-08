@@ -651,8 +651,8 @@
   scale: 1.06;
 }
 .book .sheet-content:not(.is-static) .cv-el[data-pop] {
-  transform: perspective(1200px) translate3d(calc(var(--mx, 0) * var(--pz) * 9em), calc(var(--my, 0) * var(--pz) * 6em), 0)
-    rotateY(calc(var(--mx, 0) * var(--pz) * 9deg)) rotateX(calc(var(--my, 0) * var(--pz) * -7deg));
+  /* 08/11 (màn to "ảnh vỡ … lag"): bỏ xoay phối cảnh theo con trỏ — ảnh trong lớp 3D bị vẽ ở độ phân giải thấp rồi kéo giãn */
+  transform: translate3d(calc(var(--mx, 0) * var(--pz) * 9em), calc(var(--my, 0) * var(--pz) * 6em), 0);
   transition:
     transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1),
     filter 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -663,7 +663,7 @@
   filter: drop-shadow(0 calc(var(--pz) * 6em) calc(var(--pz) * 8em) rgba(74, 50, 26, 0.26));
 }
 .book .sheet-content:not(.is-static) .cv-el[data-pop='lift'] {
-  filter: drop-shadow(calc(var(--mx, 0) * var(--pz) * -9em) calc(var(--pz) * 9em + var(--my, 0) * var(--pz) * -4em) calc(var(--pz) * 10em) rgba(74, 50, 26, 0.3));
+  filter: drop-shadow(0 calc(var(--pz) * 9em) calc(var(--pz) * 10em) rgba(74, 50, 26, 0.3));
 }
 /* lớp phẳng (nền, cụm nón nhoè phía trước): chỉ trượt theo độ sâu, không nghiêng (nghiêng lộ mép cắt của lớp) */
 .book .sheet-content:not(.is-static) .cv-el[data-pop='lift'],
@@ -672,7 +672,7 @@
   transform: translate3d(calc(var(--mx, 0) * var(--pz) * 7em), calc(var(--my, 0) * var(--pz) * 5em), 0);
 }
 .book .sheet-content:not(.is-static) .cv-el[data-pop='obj'] {
-  filter: drop-shadow(calc(var(--mx, 0) * var(--pz) * -10em) calc(var(--pz) * 10em + var(--my, 0) * var(--pz) * -4em) calc(var(--pz) * 11em) rgba(74, 50, 26, 0.36));
+  filter: drop-shadow(0 calc(var(--pz) * 10em) calc(var(--pz) * 11em) rgba(74, 50, 26, 0.36));
 }
 /* lơ lửng: nhấp nhô chậm (ảnh bên trong, không đè transform theo con trỏ của khung ngoài) */
 .book .sheet-content:not(.is-static) .cv-el[data-float] > .cv-img {

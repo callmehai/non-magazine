@@ -304,9 +304,12 @@ export default function App({ magazine: source }) {
     s.scrollTop = (s.scrollHeight - s.clientHeight) / 2
   }, [zoom])
 
-  // parallax nhẹ cho ảnh có animation "parallax" (biến CSS, không re-render)
+  // parallax nhẹ cho ảnh có animation "parallax" (biến CSS, không re-render) — chỉ sách kiểu cũ (trang ảnh / bài viết).
+  // Sách canvas (Nón lá) không dùng: anh Hải 08/11 "mở trên máy tính, màn to, ảnh vỡ … lag": --mx/--my đặt ở gốc là biến
+  // kế thừa → mỗi lần rê chuột trình duyệt tính lại style toàn bộ phần tử của các trang đang mở
+  const pointerFx = useMemo(() => pages.some((p) => p.type !== 'canvas'), [pages])
   useEffect(() => {
-    if (reducedMotion) return
+    if (reducedMotion || !pointerFx) return
     let raf = 0
     const onMove = (e) => {
       cancelAnimationFrame(raf)
@@ -322,7 +325,7 @@ export default function App({ magazine: source }) {
       cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onMove)
     }
-  }, [reducedMotion])
+  }, [reducedMotion, pointerFx])
 
   // video trong sách chạy thì nhạc nền tạm dừng; video dừng / hết / lật đi thì nhạc chạy lại nếu trước đó đang chạy
   // (review lần 2: dừng video thì nhạc không tự chạy lại)

@@ -298,6 +298,11 @@ export const photos = {
   "Người bán nón lá ở chợ Chuông": "Trọng Khải/IMG_6541",
   // 08/11 (tab Bổ sung: "Bổ sung ảnh nhóm"): ảnh "Ảnh nhóm đồ án.jpg" trong thư mục Drive "Ảnh nhóm" của nhóm
   "Nhóm thực hiện": "doc-0811/nhom-cong",
+  // Zalo chị Linh 08/11 19:05: "phần cuối nhóm em để ảnh cá nhân từng người nha" — thư mục Drive "Ảnh nhóm"
+  "Thành viên: Phùng Thị Khánh Linh": "doc-0811/tv-khanh-linh",
+  "Thành viên: Mai Khánh Huyền": "doc-0811/tv-khanh-huyen",
+  "Thành viên: Nguyễn Minh Ánh": "doc-0811/tv-minh-anh",
+  "Thành viên: Nguyễn Thị Thu Nguyệt": "doc-0811/tv-thu-nguyet",
   // chú thích theo nhóm cho ảnh kho đã có (3-04, 3-05, 3-36)
   "Giấy chứng nhận OCOP (4 sao) cho sản phẩm nón lá do UBND thành phố Hà Nội cấp năm 2022": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón lá truyền thống đặc biệt",
   "Nón chùm của làng Chuông (nón treo trang trí) — sản phẩm OCOP 4 sao": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Nón chùm-ảnh",

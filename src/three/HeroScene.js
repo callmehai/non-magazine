@@ -161,6 +161,8 @@ export class HeroScene {
 
   setPointer(x, y) {
     this.pointer.set(x, y)
+    // đang đọc: nón chỉ là nền — rê chuột trên sách không đánh thức vòng vẽ WebGL toàn màn hình (màn to: giật, 08/11)
+    if (this.mode === 'reading' && this.modeT >= 1) return
     this.lastInput = performance.now()
     this.wake()
   }

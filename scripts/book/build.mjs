@@ -1676,11 +1676,11 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   p.fixed = true
   const ink = '#3b2a1b'
   p.add(
-    // bìa nổi (anh Hải 05/11: "sáng tạo hơn, wao hơn, phá vỡ không gian 2D"): ba lớp của cover.py — nền, chiếc nón chính
-    // nổi khỏi mặt bìa (bóng đổ theo hình nón, lơ lửng, nghiêng theo con trỏ), cụm nón nhoè phía trước trôi nhanh hơn
-    { ...IMG(0, 0, W, H, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-nen.webp', fit: 'cover' }), name: 'Ảnh bìa', pop: { z: -0.5, kind: 'bg' } },
-    { ...IMG(...COVER_LAY.non, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa', pop: { z: 1, float: 7 } },
-    { ...IMG(...COVER_LAY.truoc, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-truoc.webp', fit: 'fill' }), name: 'Ảnh bìa', pop: { z: 1.8, kind: 'flat' } },
+    // ba lớp của cover.py — nền, chiếc nón chính (bóng đổ vẽ sẵn trong ảnh), cụm nón nhoè phía trước. Anh Hải 08/11: "bìa thì
+    // ko cần 3d đâu, m tạo ra 1 cái ảnh bìa tĩnh thôi" → ba lớp đứng yên như một ảnh (bỏ lơ lửng / trượt theo con trỏ)
+    { ...IMG(0, 0, W, H, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-nen.webp', fit: 'cover' }), name: 'Ảnh bìa' },
+    { ...IMG(...COVER_LAY.non, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa' },
+    { ...IMG(...COVER_LAY.truoc, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-truoc.webp', fit: 'fill' }), name: 'Ảnh bìa' },
     SUN(W - 470, -20, 500, false, 0.6),
     // họa tiết nét vàng: nhánh tre bên phải, cành lá dưới góc (như ảnh minh họa của nhóm)
     { ...DECO('bamboo', W - 128, 300, 110, 240, 0.7), name: 'Họa tiết' },
@@ -3240,24 +3240,32 @@ let stripRight = null
     // 08/11 (tab Bổ sung: "Bổ sung ảnh nhóm"): ảnh nhóm ở cổng đình (thư mục ảnh nhóm, chụp ngang) — khác buổi chụp với ảnh
     // Lời mở đầu (tr. 4) và tr. 15 (soát độc lập: hai ảnh cùng buổi). Ảnh rộng hết khổ, dưới là lưới 2×2 tên thành viên
     const pch = capH(photo, p.cw)
-    const gridH = 26 + 2 * 50
-    const ph = r1(Math.max(p.cw * 0.38, Math.min(p.cw * 0.62, BOT - 10 - y - (6 + pch + 16 + gridH + 20 + 18 + ch + 22))))
+    // Zalo chị Linh 08/11: "phần cuối nhóm em để ảnh cá nhân từng người nha" → hàng bốn ảnh chân dung (thư mục "Ảnh nhóm"),
+    // tên + mã sinh viên dưới từng ảnh; ảnh cả nhóm thu lại phía trên
+    const tw4 = (p.cw - 3 * 12) / 4
+    const th4 = r1(tw4)
+    const nameO = { font: F.head, size: 13.5, align: 'center', lh: 1.25, jaFont: F.jaHead, jaSize: 12.5 }
+    const nh4 = Math.max(...e.team.members.map(([name]) => textH(name, tw4, nameO)))
+    const gridH = 26 + th4 + 6 + nh4 + 18 + 10
+    const ph = r1(Math.max(p.cw * 0.27, Math.min(p.cw * 0.62, BOT - 10 - y - (6 + pch + 12 + gridH + 12 + 18 + ch + 22))))
     p.add(IMG(p.x0, y, p.cw, ph, photo, { pos: '50% 45%' }))
     p.add(T(p.x0, y + ph + 6, p.cw, pch, fmtCap(photo), { ...capOpt, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
-    y += ph + 6 + pch + 16
-    y += Math.max(0, (BOT - 10 - y - (gridH + 20 + 18 + ch + 22)) / 2)
+    y += ph + 6 + pch + 12
+    y += Math.max(0, (BOT - 10 - y - (gridH + 12 + 18 + ch + 22)) / 2)
     p.add(T(p.x0, y, p.cw, 16, e.team.membersTitle.map((s) => s.toUpperCase()), { size: S.label, tracking: 2.4, weight: 700, color: ACC[9], align: 'center', jaFont: F.jaSans, name: 'Nhóm' }))
     y += 26
-    const mw = (p.cw - 14) / 2
+    // khung vuông, ảnh dọc 3:4 chụp nửa người: phóng quanh mặt từng người (đầu + vai)
+    const FACE = [{ x: 50, y: 40, z: 1.7 }, { x: 35, y: 40, z: 1.7 }, { x: 51, y: 42, z: 1.6 }, { x: 48, y: 40, z: 1.7 }]
     e.team.members.forEach(([name, code], i) => {
-      const mx = p.x0 + (i % 2) * (mw + 14)
-      const my = y + Math.floor(i / 2) * 50
+      const mx = p.x0 + i * (tw4 + 12)
+      const hint = [`Thành viên: ${name[0]}`, name[1]]
       p.add(
-        T(mx, my, mw, 22, name, { font: F.head, size: 16.5, align: 'center', lh: 1.3, jaFont: F.jaHead, jaSize: 15, name: 'Tên thành viên' }),
-        T(mx, my + 24, mw, 16, [code, null], { size: 12, tracking: 1.4, align: 'center', color: C.muted, name: 'Mã sinh viên' })
+        { ...IMG(mx, y, tw4, th4, hint, PHOTOS[hint[0]] ? { crop: FACE[i] } : {}), name: 'Ảnh thành viên', alt: name },
+        T(mx - 4, y + th4 + 6, tw4 + 8, nh4, name, { ...nameO, name: 'Tên thành viên' }),
+        T(mx, y + th4 + 6 + nh4 + 2, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' })
       )
     })
-    y += 2 * 50 + 20
+    y += th4 + 6 + nh4 + 18 + 12
   } else {
     const blockH = 30 + 2 * 110 + 26 + 18 + ch + 22
     y += Math.max(0, (BOT - 10 - y - blockH) / 2)
