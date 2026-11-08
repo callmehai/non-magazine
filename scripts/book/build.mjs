@@ -618,7 +618,8 @@ const SRC_BY_PATH = [
   [/^online\/trong-dong/, ['Wikimedia Commons', 'ウィキメディア・コモンズ']],
   [/^online\/hang-non-1896/, ['André Salles, Thư viện Quốc gia Pháp', 'アンドレ・サル、フランス国立図書館']],
   [/^online\/bia-cho-non/, ['Hà Trang / Báo Văn Hóa', 'ハー・チャン／ヴァンホア紙']],
-  [/^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/, ['nhiếp ảnh Trọng Khải', '写真家チョン・カイ']],
+  // tab Bổ sung 08/11: "Nguồn Trọng Khải cung cấp ghi tiếng Nhật: チョン・カイ氏提供"
+  [/^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/, ['nhiếp ảnh Trọng Khải', 'チョン・カイ氏']],
   [/Nón Lê Văn Tuy\/|^new\/IMG_854[78]/, ['nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏']],
   // Doc (Thu Nguyệt, mở đầu chương 2): "Ảnh 2: Nghệ Nhân Tạ Thu Hương cung cấp"
   [/Nón Tạ Thu Hương\/|^new\/IMG_861|^new\/Người thợ hoàn thiện bước luồn nhôi cuối cùng$/, ['nghệ nhân Tạ Thu Hương', '職人タ・トゥ・フオン氏']],
@@ -653,7 +654,7 @@ function fmtCap(cap, key) {
   const sv0 = flat(src?.[0])
   const sv = /^nghệ nhân /i.test(sv0 ?? '') && !/cung cấp$/.test(sv0) ? `${sv0} cung cấp` : sv0
   const sj0 = src ? flat(src[1] ?? src[0]) : null
-  const sj = /^職人.+氏$/.test(sj0 ?? '') ? `${sj0}提供` : sj0
+  const sj = /氏$/.test(sj0 ?? '') ? `${sj0}提供` : sj0 // 職人…氏 / チョン・カイ氏 → …氏提供
   const out = src ? [`${vi} (${sv})`, ja ? `${ja}（${sj}）` : ja] : [vi, ja]
   out.fmt = true
   return out
@@ -1909,13 +1910,31 @@ let guidePage = null
     const ratio = [R.por, R.sq, R.std, R.wide, R.cin].find((r) => f.y + pw * r + 6 + pch <= f.bot) ?? R.std
     f.row(pics, { ratio })
   }
-  for (const b of hi.blocks) {
+  // tab Bổ sung 08/11: "ND trang 22, 23, 24 mỗi luận điểm cho 1 trang: VD: Sự thay đổi…: 1 trang, Nón lá trong hoạt
+  // động… 1 trang" → hai luận điểm đầu mỗi luận điểm trọn một trang (trái 22 · phải 23): chữ + ảnh của chính luận điểm,
+  // khung ảnh thu theo chỗ còn lại (4:3 → 3:2 → 16:9 → 2:1), không để ảnh rơi sang trang sau. Luận điểm thứ ba ("Từ nón lá
+  // nói chung…") là đoạn chuyển sang 1.3 → chảy như cũ trên cặp 24–25, 1.3 vẫn mở ở trang 26
+  hi.blocks.forEach((b, i) => {
+    if (i > 0 && f.p && !f.fresh) f.page()
     f.block(b.h)
+    if (i < 2 && b.images) {
+      // tắt kho ảnh lấp trong lúc đặt chữ: trang chưa có ảnh thì prose() chèn ảnh kho giữa hai đoạn → đoạn sau rơi trang
+      const pool = f.pool
+      f.pool = []
+      f.prose(b.p)
+      f.pool = pool
+      const n = b.images.length
+      const w = (CW - 14 * (n - 1)) / n
+      const ch = Math.max(...b.images.map((c) => capH(c, w)))
+      const ratio = [...(n > 1 ? [R.sq] : []), R.std, R.wide, R.cin, R.pan].find((r) => f.y + w * r + 6 + ch <= f.bot) ?? R.pan
+      f.row(b.images, { ratio })
+      return
+    }
     f.pending = b.images?.[0] ?? null
     f.prose(b.p)
     f.pending = null
     if (b.images) f.row(b.images)
-  }
+  })
 
   // 1.3 — làng Chuông: kho ảnh lấp trang chỉ còn ảnh nón / chợ / đình làng Chuông (góp ý: ảnh nón bảo tàng khác
   // không phải nón Chuông thì không đặt trong mục này)
@@ -3182,7 +3201,7 @@ let stripRight = null
     ]
     const note = [
       `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và hai ảnh bưu thiếp (chợ đèn lồng, bàn tay nâng chồng nón): nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
-      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像2点（提灯の下の市場、ノンラーを持つ手）：チョン・カイ撮影。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
+      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像2点（提灯の下の市場、ノンラーを持つ手）：チョン・カイ氏提供。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
     ]
     f.page()
     const p = f.p
@@ -3819,6 +3838,31 @@ pages.forEach(bottomFlora)
       const hit = e.capSrcOnly ? caps.find((c) => /^Ảnh \d+: \(/.test(c.text)) : caps.find((c) => bare(c.text) === vi || (ja && bare(c.ja) === ja))
       e.cap = hit ? hit.text : vi
       e.capJa = hit ? hit.ja ?? null : ja
+    }
+  }
+}
+// tab Bổ sung 08/11: "Thống nhất STT footnote toàn sách: 1,2,3,4,..." — dấu chú thích (¹ ²…) gõ trong nội dung đánh lại
+// từ 1 theo từng mục; sau khi xếp trang, đánh lại liền một mạch cả sách, riêng từng thứ tiếng (bản Nhật có chú thích
+// bản Việt không có). Dấu và chú thích của nó luôn chung một trang (đoạn có dấu không tách sang trang sau) → trên mỗi
+// trang, số cục bộ n (theo thứ tự gặp trong đoạn văn, trên xuống) ↦ số kế tiếp của cả sách; dòng chú thích theo cùng bảng
+{
+  const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹'
+  const fromSup = (s) => +[...s].map((c) => SUP.indexOf(c)).join('')
+  const toSup = (n) => [...String(n)].map((d) => SUP[+d]).join('')
+  const RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g
+  const isNote = (e) => e.name === 'Chú thích'
+  for (const key of ['text', 'ja']) {
+    let g = 0
+    for (const p of pages) {
+      const map = new Map()
+      const take = (n) => map.get(n) ?? (map.set(n, ++g), g)
+      const body = p.els.filter((e) => e.type === 'text' && !isNote(e) && typeof e[key] === 'string' && /[⁰¹²³⁴⁵⁶⁷⁸⁹]/.test(e[key])).sort((a, b) => a.y - b.y || a.x - b.x)
+      for (const e of body) for (const m of e[key].matchAll(RE)) take(fromSup(m[0]))
+      const notes = p.els.filter((e) => e.type === 'text' && isNote(e) && typeof e[key] === 'string')
+      for (const e of notes) for (const m of e[key].matchAll(/^([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/gm)) take(fromSup(m[1]))
+      if (!map.size) continue
+      for (const e of body) e[key] = e[key].replace(RE, (s) => toSup(map.get(fromSup(s))))
+      for (const e of notes) e[key] = e[key].replace(/^([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/gm, (s) => toSup(map.get(fromSup(s))))
     }
   }
 }
