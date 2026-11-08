@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="#8b8460" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M100 122 C 79.2 102.5, 44.7 84.8, 20 75.8 C 40.1 92.7, 72.7 113.8, 100 122 Z" fill="#f8f2e6"/>
+<path d="M93.6 118.3 L 31.2 82.3" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 125.8 110.1, 155.2 84.6, 172.8 65.1 C 149.6 77.5, 117.8 99.8, 100 122 Z" fill="#f8f2e6"/>
+<path d="M105.8 117.4 L 162.6 73.1" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 83.5 97, 52.8 70.1, 30 54.4 C 46.4 76.6, 74.5 106.4, 100 122 Z" fill="#f8f2e6"/>
+<path d="M94.4 116.6 L 39.8 63.9" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 123.1 103, 146.7 69.6, 159.9 45.3 C 139.5 64, 112.8 95, 100 122 Z" fill="#f8f2e6"/>
+<path d="M104.8 115.9 L 151.5 56.1" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 89.3 92.6, 64.9 57.2, 45.8 35.3 C 57.1 62, 78.2 99.4, 100 122 Z" fill="#f8f2e6"/>
+<path d="M95.7 115.1 L 53.4 47.5" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 118.4 96.6, 134.1 56.6, 141.6 28.6 C 125.8 52.9, 106.5 91.3, 100 122 Z" fill="#f8f2e6"/>
+<path d="M103.3 114.5 L 135.7 41.7" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 96.3 89.4, 80.5 47.3, 66.9 20.1 C 71.8 50.1, 83.9 93.5, 100 122 Z" fill="#f8f2e6"/>
+<path d="M97.4 113.9 L 71.5 34.4" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 112 91.5, 117.9 46.8, 118.6 16.5 C 108.9 45.3, 99.2 89.2, 100 122 Z" fill="#f8f2e6"/>
+<path d="M101.5 113.6 L 116 31.3" stroke-width="0.55" opacity=".7"/>
+<path d="M100 122 C 104.1 88, 98.9 41.2, 92.2 10.3 C 89.8 41.9, 91.2 88.9, 100 122 Z" fill="#f8f2e6"/>
+<path d="M99.4 113.1 L 93.3 25.9" stroke-width="0.55" opacity=".7"/>
+<path d="M87 110 Q 100 115 113 110 L 111 120 Q 100 125 89 120 Z" fill="#f8f2e6"/>
+<path d="M93 122 L 91 136 M100 123 L 100 138 M107 122 L 109 136" stroke-width="0.8"/>
+<path d="M40 140 C 76 138, 124 142, 160 140" stroke-width="0.8" opacity=".6"/>
+<path d="M58 146 L 86 146 M100 146 L 134 146" stroke-width="0.6" opacity=".45"/>
+</svg>

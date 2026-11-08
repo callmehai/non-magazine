@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" fill="none" stroke="#8b8460" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M70 86 L70 112 M110 86 L110 112 M150 86 L150 112 M190 86 L190 112" stroke-width="0.9"/>
+<path d="M60 112 L200 112" stroke-width="0.9"/>
+<path d="M28 72 Q 40 88 58 86 L 202 86 Q 220 88 232 72 Q 218 80 200 60 L 60 60 Q 42 80 28 72 Z" fill="#f8f2e6"/>
+<path d="M70 63 L 66.4 84" stroke-width="0.5" opacity=".6"/>
+<path d="M80 63 L 77 84" stroke-width="0.5" opacity=".6"/>
+<path d="M90 63 L 87.6 84" stroke-width="0.5" opacity=".6"/>
+<path d="M100 63 L 98.2 84" stroke-width="0.5" opacity=".6"/>
+<path d="M110 63 L 108.8 84" stroke-width="0.5" opacity=".6"/>
+<path d="M120 63 L 119.4 84" stroke-width="0.5" opacity=".6"/>
+<path d="M130 63 L 130 84" stroke-width="0.5" opacity=".6"/>
+<path d="M140 63 L 140.6 84" stroke-width="0.5" opacity=".6"/>
+<path d="M150 63 L 151.2 84" stroke-width="0.5" opacity=".6"/>
+<path d="M160 63 L 161.8 84" stroke-width="0.5" opacity=".6"/>
+<path d="M170 63 L 172.4 84" stroke-width="0.5" opacity=".6"/>
+<path d="M180 63 L 183 84" stroke-width="0.5" opacity=".6"/>
+<path d="M190 63 L 193.6 84" stroke-width="0.5" opacity=".6"/>
+<path d="M60 60 L 200 60" stroke-width="1.4"/>
+<path d="M96 42 L96 58 M164 42 L164 58" stroke-width="0.8"/>
+<path d="M64 33 Q 76 46 94 44 L 166 44 Q 184 46 196 33 Q 182 38 164 22 L 96 22 Q 78 38 64 33 Z" fill="#f8f2e6"/>
+<path d="M104.5 25 L 103 42" stroke-width="0.5" opacity=".6"/>
+<path d="M113 25 L 112 42" stroke-width="0.5" opacity=".6"/>
+<path d="M121.5 25 L 121 42" stroke-width="0.5" opacity=".6"/>
+<path d="M130 25 L 130 42" stroke-width="0.5" opacity=".6"/>
+<path d="M138.5 25 L 139 42" stroke-width="0.5" opacity=".6"/>
+<path d="M147 25 L 148 42" stroke-width="0.5" opacity=".6"/>
+<path d="M155.5 25 L 157 42" stroke-width="0.5" opacity=".6"/>
+<path d="M96 22 L 164 22" stroke-width="1.4"/>
+<path d="M96 22 q -6 -8 -12 -4 M164 22 q 6 -8 12 -4" stroke-width="0.9"/>
+<path d="M130 22 L130 14 M126 16 L134 16" stroke-width="0.8" opacity=".8"/>
+<path d="M34 118 C 91.6 116, 168.4 120, 226 118" stroke-width="0.8" opacity=".6"/>
+<path d="M52 124 L 80 124 M166 124 L 200 124" stroke-width="0.6" opacity=".45"/>
+</svg>

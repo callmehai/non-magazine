@@ -286,6 +286,48 @@ const IMG = (x, y, w, h, hint, o = {}) => ({
 })
 const VIDEO = (x, y, w, h, src, o = {}) => ({ id: id(), type: 'video', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src, ...(o.poster ? { poster: o.poster } : {}), name: o.name ?? 'Video' })
 const DECO = (name, x, y, w, h, opacity = 0.55) => ({ id: id(), type: 'image', x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, src: `assets/book/deco/${name}.svg`, fit: 'contain', opacity, name: 'Họa tiết' })
+// ── họa tiết lấp trang (anh Hải 08/11: "spam lắm hoạ tiết trùng nhau quá, sáng tạo cho t 7-10 mẫu hoạ tiết dùng đan xen"):
+// 9 mẫu mới (scripts/book/motifs.py) + 5 mẫu cũ, chọn xoay vòng theo chỗ đặt; không lặp một mẫu trong vòng hai trang mỗi
+// bên (cặp trang và cặp liền kề), mỗi trang tối đa một hình lấp (fillDeco). [cao / rộng, chỗ dùng: c giữa trang · k góc /
+// chân trang · s cột trống cạnh ảnh dọc · h biểu tượng góc tiêu đề mục · t cột hẹp dưới số thứ tự trang loại nón]
+const MOTIFS = {
+  'm-chong-non': [150 / 240, 'ch'],
+  'm-canh-tre': [160 / 220, 'kcs'],
+  'm-mai-dinh': [130 / 260, 'ch'],
+  'sen-goc': [240 / 280, 'kcs'],
+  'm-bo-la': [160 / 200, 'csh'],
+  'm-la-tre': [120 / 200, 'k'],
+  'm-kim-chi': [142 / 200, 'ch'],
+  'hoa-dai': [320 / 220, 'st'],
+  'm-chuon-chuon': [166 / 200, 'kst'],
+  'm-non-ngua': [116 / 210, 'ch'],
+  'co-hoa': [92 / 280, 'k'],
+  'm-vong-nua': [132 / 210, 'csh'],
+  'tre-mang': [1, 'sht'],
+  'sen-canh': [420 / 260, 't'],
+  'still-non': [310 / 640, 'c'],
+}
+const motifUsed = new Map() // số trang → các mẫu đã đặt
+const motifCur = { c: 0, k: 0, s: 0, h: 0, t: 0 }
+/** chọn mẫu cho chỗ `slot` của trang p trong khung tối đa maxW × maxH: mẫu kế tiếp trong vòng, chưa dùng ở 2 trang mỗi bên,
+ *  vừa khung với kích thước đủ nhìn (cao ≥ minH). Trả { name, w, h } hoặc null */
+function pickMotif(p, slot, maxW, maxH, minH = 50) {
+  const list = Object.entries(MOTIFS).filter(([, [, sl]]) => sl.includes(slot))
+  const near = new Set()
+  for (let d = -2; d <= 2; d++) for (const m of motifUsed.get(p.n + d) ?? []) near.add(m)
+  for (let k = 0; k < list.length; k++) {
+    const [name, [ar]] = list[(motifCur[slot] + k) % list.length]
+    if (near.has(name)) continue
+    const h = Math.min(maxH, maxW * ar)
+    if (h < minH) continue
+    motifCur[slot] = (motifCur[slot] + k + 1) % list.length
+    if (!motifUsed.has(p.n)) motifUsed.set(p.n, new Set())
+    motifUsed.get(p.n).add(name)
+    return { name, w: h / ar, h }
+  }
+  return null
+}
+const hasFill = (p) => p.els.some((e) => e.fillDeco)
 const shape = (kind) => (x, y, w, h, fill, o = {}) => ({ id: id(), type: 'shape', shape: kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, fill, ...(o.stroke ? { stroke: o.stroke, strokeWidth: o.sw ?? 0.8 } : {}), ...(o.radius ? { radius: o.radius } : {}), ...(o.dash ? { dash: o.dash } : {}), ...(o.opacity != null ? { opacity: o.opacity } : {}), ...(o.link ? { link: o.link } : {}), ...(o.alt ? { alt: o.alt } : {}), name: o.name ?? 'Hình' })
 const RECT = shape('rect')
 /** con dấu son "Làng Chuông": vuông nhỏ, viền trong mảnh, chữ in hoa — kiểu dấu trên họa đồ Henri Oger */
@@ -520,7 +562,11 @@ function sectionHead(p, y, num, title, kicker) {
   const o = { size: S.sec, font: F.head, lh: 1.2, jaSize: 27 }
   const th = textH(title, tw, o)
   const kick = kicker ?? SEC_KICKER[p.chapter] ?? CH_LABEL[p.chapter]
-  p.add({ ...DECO(SEC_ICON[p.chapter] ?? 'non', p.x1 - 80, y - 6, 80, 80, 0.9), name: 'Hình vẽ' })
+  // 08/11: biểu tượng góc tiêu đề xoay vòng trong bộ họa tiết (trước: mỗi chương một hình, chương 3 toàn tre măng)
+  {
+    const m = pickMotif(p, 'h', 96, 80, 36)
+    if (m) p.add({ ...DECO(m.name, p.x1 - m.w, y - 6 + (80 - m.h) / 2, m.w, m.h, 0.9), name: 'Hình vẽ' })
+  }
   if (kick) p.add(T(x, y, tw, 24, kick.map(strip), { font: F.hand, size: 19, lh: 1.2, jaSize: 16, color: acc, jaFont: F.jaHand, name: 'Dòng chương' }))
   const ty = y + 32
   p.add(T(x, ty, tw, th, title, { ...o, color: C.title, jaFont: F.jaHead, name: 'Tên mục' }))
@@ -721,16 +767,12 @@ function sideFigure(p, y, bh, cap, iw) {
   // (soát vòng 5: hình nhỏ ~99pt mờ 0,55 ở cột hẹp gần như không thấy → chỉ đặt khi cột đủ rộng, hình to + rõ hơn)
   const empty = bh - sh - 30
   if (empty >= 130 && side >= 120) {
-    const [name, ar] = SIDE_DECO[SIDEDECO++ % SIDE_DECO.length]
-    const dh = Math.min(empty - 24, side * 0.92 * ar, 240)
-    const dw = dh / ar
-    if (dh >= 110) p.add({ ...DECO(name, cx + (side - dw) / 2, y + 12 + (empty - 24 - dh) / 2, dw, dh, 0.7), name: 'Hình vẽ' })
+    const m = pickMotif(p, 's', side * 0.92, Math.min(empty - 24, 240), 110)
+    if (m) p.add({ ...DECO(m.name, cx + (side - m.w) / 2, y + 12 + (empty - 24 - m.h) / 2, m.w, m.h, 0.7), name: 'Hình vẽ', fillDeco: true })
   }
   return y + bh
 }
 // hình vẽ lấp cột trống cạnh ảnh dọc: [tên, cao / rộng]
-const SIDE_DECO = [['hoa-dai', 320 / 220], ['tre-mang', 1], ['sen-goc', 240 / 280]]
-let SIDEDECO = 0
 /**
  * ảnh chụp dọc đặt lệch mà khung hẹp (dưới 60% bề ngang) → cột chú thích bên cạnh thành khoảng trống lớn (anh Hải 05/11,
  * tr. 108). Tìm trong kho (6 ảnh đầu) một ảnh đi cặp: hai ảnh cạnh nhau cùng khung, không ảnh nào mất quá 8% vật chính.
@@ -824,12 +866,10 @@ function footnotes(p, notes) {
   // Việt (như hình lấp đáy trang bottomFlora) vào đúng dải đó
   if (!notes.some((n) => n[0])) {
     const band = BOT + 24 - (top - 26)
-    const h = Math.min(band - 16, band >= 120 ? 110 : 70)
-    if (h >= 50) {
-      const sen = band >= 120
-      const w = sen ? h * (280 / 240) : h * (280 / 92)
-      const x = p.side === 'left' ? p.x0 - 10 : p.x1 - w + 10
-      p.add({ ...DECO(sen ? 'sen-goc' : 'co-hoa', x, BOT + 24 - h, w, h, 0.6), name: 'Hình vẽ', only: 'vi' })
+    const m = pickMotif(p, 'k', p.cw * 0.5, Math.min(band - 16, 110))
+    if (m) {
+      const x = p.side === 'left' ? p.x0 - 10 : p.x1 - m.w + 10
+      p.add({ ...DECO(m.name, x, BOT + 24 - m.h, m.w, m.h, 0.6), name: 'Hình vẽ', only: 'vi', fillDeco: true })
     }
   }
   return top - 26
@@ -1989,7 +2029,8 @@ let guidePage = null
     const colH = y + th - (y - 26 - nh + 100)
     if (colH > 120) {
       const dh2 = Math.min(colH, 190)
-      p.add({ ...DECO(typeNo % 2 ? 'sen-canh' : 'hoa-dai', p.x0 - 6, y + th - dh2, Math.min(dh2 * 0.62, 100), dh2, 0.7), name: 'Hình vẽ' })
+      const m = pickMotif(p, 't', Math.min(dh2 * 0.62, 100), dh2, 80)
+      if (m) p.add({ ...DECO(m.name, p.x0 - 6, y + th - m.h, m.w, m.h, 0.7), name: 'Hình vẽ' })
     }
     y = Math.max(y + th, TOP + 96) + 18
     // khung đặc điểm (cuối trang) + chú thích cuối trang (nếu có)
@@ -2244,11 +2285,8 @@ let stripRight = null
               p.add(IMG(p.x1 - wb, BOT - hb, wb, hb, B, { fit: 'cover' }), HL(p.x0 + wB - 40, BOT - hc - 12, 40, col, 1.4), T(p.x0, BOT - hc, wB, hc, cB, { ...capOpt, italic: true, align: 'right', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
               // khoảng trống dưới ảnh ngang, cạnh ảnh dọc: cụm sen nét mảnh mờ (họa tiết chân trang của sách)
               const free = BOT - hc - 24 - (top + ha + 10)
-              if (free >= 70) {
-                const dh = Math.min(free, 130)
-                const dw = Math.min(dh * (280 / 240), wB - 10)
-                p.add({ ...DECO('sen-goc', p.x0 + (wB - dw) / 2, top + ha + 10 + (free - dh) / 2, dw, dh, 0.5), name: 'Hình vẽ' })
-              }
+              const m = free >= 70 && pickMotif(p, 'k', wB - 10, Math.min(free, 130))
+              if (m) p.add({ ...DECO(m.name, p.x0 + (wB - m.w) / 2, top + ha + 10 + (free - m.h) / 2, m.w, m.h, 0.5), name: 'Hình vẽ', fillDeco: true })
             }],
           ]
           // thứ tự phần tử = thứ tự số ảnh (Ảnh N) và lớp chồng: ảnh dọc vẽ sau để đè lên góc ảnh ngang
@@ -2256,12 +2294,8 @@ let stripRight = null
           p.els.slice(from).forEach((e) => (e.tab = { set: TABS, i }))
           return
         }
-        if (gap >= 64) {
-          const sen = gap >= 110
-          const fh = sen ? Math.min(gap - 14, 120) : Math.min(gap - 10, 70)
-          const fw = sen ? fh * (280 / 240) : fh * (280 / 92)
-          p.els.push({ ...DECO(sen ? 'sen-goc' : 'co-hoa', p.x1 - fw + 10, BOT + 24 - fh, fw, fh, 0.6), name: 'Hình vẽ' })
-        }
+        const fm = gap >= 64 && pickMotif(p, 'k', p.cw * 0.5, Math.min(gap - 12, 120))
+        if (fm) p.els.push({ ...DECO(fm.name, p.x1 - fm.w + 10, BOT + 24 - fm.h, fm.w, fm.h, 0.6), name: 'Hình vẽ', fillDeco: true })
         let x = p.x0
         pair.forEach((c, k) => {
           const w = k ? best.w2 : best.w1
@@ -2677,7 +2711,13 @@ let stripRight = null
   // nghệ nhân
   const ar = ch.artisans
   f.section(null, ar.title)
-  f.prose([ar.intro])
+  // anh Hải 08/11 (tr. 94 "nội dung tab trái đang hơi ít và trống"): bản Nhật của đoạn dẫn dài hơn hẳn → khung theo chữ Nhật,
+  // bản Việt chỉ 4 dòng, hở ~100pt trên ảnh. Đoạn dẫn kiểu tạp chí: chữ Việt to dần tới khi cao ngang chữ Nhật (Nhật giữ cỡ thường)
+  {
+    const jh = textH1(ar.intro, CW, { ...BODY, paraGap: 8 }, 1)
+    const vs = [18, 17.5, 17, 16.5, 16, 15.5, 15].find((z) => textH1(ar.intro, CW, { size: z, lh: BODY.lh, paraGap: 8, jaSize: BODY.jaSize }, 0) <= jh + 4) ?? BODY.size
+    f.prose([ar.intro], { size: vs, jaSize: BODY.jaSize, color: C.ink2 })
+  }
   // 08/11: ảnh nhóm gắn ở đầu phần nghệ nhân (3-11, Lễ báo công 2025)
   f.figure(ar.photos.honor)
   f.fillRest()
@@ -3031,9 +3071,10 @@ let stripRight = null
   // soát 07/11: 6 trang tài liệu chỉ có chữ → mỗi trang một hình vẽ nét nhỏ ở góc dưới phía ngoài (nón, nhánh tre xen nhau)
   pages.slice(refP0).forEach((q, i) => {
     if (q.els.some((e) => e.type === 'image')) return
-    const w = 58
-    const x = q.side === 'left' ? q.x0 - 6 : q.x1 - w + 6
-    q.add({ ...DECO(i % 2 ? 'leaf-sprig' : 'non-line', x, H - 58, w, 40, 0.5), name: 'Hình vẽ' })
+    const m = pickMotif(q, 'k', 64, 40, 24)
+    if (!m) return
+    const x = q.side === 'left' ? q.x0 - 6 : q.x1 - m.w + 6
+    q.add({ ...DECO(m.name, x, H - 18 - m.h, m.w, m.h, 0.5), name: 'Hình vẽ' })
   })
   // nguồn ảnh: trang riêng (trang phải) — bảng hai cột "nguồn | ảnh nào", chia nhóm báo chí / kho ảnh mở / video, bản đồ
   // (góp ý: khối chữ dày nửa trên, nửa dưới trống → trình bày lại cho đẹp). Ảnh còn lại do nhóm tự chụp.
@@ -3520,7 +3561,6 @@ function settle(p) {
 }
 // trang chỉ có chữ còn chỗ ở đáy → một hình vẽ nét mảnh theo chương (họa tiết nón / tre / sen theo góp ý của nhóm),
 // trang không còn trơn chữ và không để dải trống
-const VIGNETTE = { 0: 'still-non', 1: 'non', 2: 'tool-quay-non', 3: 'tre-mang', 9: 'still-non' }
 function vignette(p) {
   if (p.fixed || p.noFlora || p.grove || p.hasImg || p.els.some((e) => e.type === 'image' && e.name === 'Hình vẽ')) return
   // chú thích cuối trang (và gạch ngắn phía trên nó) neo đáy, không tính là nội dung
@@ -3532,12 +3572,9 @@ function vignette(p) {
   const anchoredTop = footTop
   const room = anchoredTop - bottom - 24
   if (room < 64) return
-  // ít chỗ thì chỉ một chiếc nón nhỏ làm hoa văn cuối trang
-  const name = room < 110 ? 'non' : VIGNETTE[p.chapter] ?? 'non'
-  const ratio = name === 'still-non' ? 310 / 640 : name === 'lotus-pond' || name === 'tre-mang' ? 1 : name === 'non' ? 260 / 300 : 1
-  const h = Math.min(room, 200)
-  const w = Math.min(p.cw, h / ratio)
-  p.add({ ...DECO(name, p.x0 + (p.cw - w) / 2, bottom + 24 + (room - h) / 2, w, h, 0.9), name: 'Hình vẽ' })
+  // 08/11: mẫu xoay vòng (pickMotif), không còn mỗi chương một hình lặp lại
+  const m = pickMotif(p, 'c', p.cw * 0.62, Math.min(room, 200), 60)
+  if (m) p.add({ ...DECO(m.name, p.x0 + (p.cw - m.w) / 2, bottom + 24 + (room - m.h) / 2, m.w, m.h, 0.85), name: 'Hình vẽ', fillDeco: true })
 }
 pages.forEach(vignette)
 pages.forEach(settle)
@@ -3550,12 +3587,9 @@ function tailpiece(p) {
   if (!content.length) return
   const bottom = Math.max(...content.map((e) => e.y + e.h))
   const room = footTop - bottom - 20
-  if (room < 84) return
-  const name = VIGNETTE[p.chapter] === 'still-non' && room >= 110 ? 'still-non' : SEC_ICON[p.chapter] ?? 'non'
-  const ratio = name === 'still-non' ? 310 / 640 : 1
-  const h = Math.min(room - 16, 120)
-  const w = Math.min(p.cw, h / ratio)
-  p.add({ ...DECO(name, p.x0 + (p.cw - w) / 2, bottom + 20 + (room - h) / 2, w, h, 0.85), name: 'Hình vẽ' })
+  if (room < 84 || hasFill(p)) return
+  const m = pickMotif(p, 'c', p.cw * 0.5, Math.min(room - 16, 120), 60)
+  if (m) p.add({ ...DECO(m.name, p.x0 + (p.cw - m.w) / 2, bottom + 20 + (room - m.h) / 2, m.w, m.h, 0.8), name: 'Hình vẽ', fillDeco: true })
 }
 pages.forEach(tailpiece)
 // tâm khung theo khuôn mặt — tính sau cùng, khi khung ảnh đã chốt kích thước
@@ -3652,19 +3686,17 @@ pages.forEach(centerTail)
  * hoa lá nét mảnh ở chân trang (theo mockup của nhóm: cây cỏ, hoa sen nét mảnh ở lề): trang thường còn khoảng trống
  * dưới đáy thì đặt dải cỏ hoa ở góc ngoài, không chạm chữ / ảnh; xen kẽ cụm sen thấp và dải cỏ hoa
  */
-let flourish = 0
 function bottomFlora(p) {
-  if (p.fixed || p.noFlora) return
+  if (p.fixed || p.noFlora || hasFill(p)) return
   const body = contentEls(p)
   if (!body.length) return
   const bottom = Math.max(...body.map((e) => e.y + e.h))
   const gap = BOT + 24 - bottom
   if (gap < 64) return
-  const sen = flourish++ % 2 === 0 && gap >= 110
-  const h = sen ? Math.min(gap - 14, 120) : Math.min(gap - 10, 70)
-  const w = sen ? h * (280 / 240) : h * (280 / 92)
-  const x = p.side === 'left' ? p.x0 - 10 : p.x1 - w + 10
-  p.els.push({ ...DECO(sen ? 'sen-goc' : 'co-hoa', x, BOT + 24 - h, w, h, 0.6), name: 'Hình vẽ' })
+  const m = pickMotif(p, 'k', p.cw * 0.5, Math.min(gap - 12, 120))
+  if (!m) return
+  const x = p.side === 'left' ? p.x0 - 10 : p.x1 - m.w + 10
+  p.els.push({ ...DECO(m.name, x, BOT + 24 - m.h, m.w, m.h, 0.6), name: 'Hình vẽ', fillDeco: true })
 }
 pages.forEach(bottomFlora)
 // số thứ tự ảnh "Ảnh N:" theo thứ tự trang (góp ý: "Ảnh stt: nội dung (nguồn: …)"); khung chú thích nới nếu dài thêm dòng
