@@ -1766,7 +1766,9 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
     // anh Hải 09/11: sen ghép "xấu quá" → nền ao sen (Gemini vẽ thêm sen + lá lên chính bìa này, anh Hải chọn — "ảnh trong
     // phần tải về mới nhất"; logo Gemini đã xoá; Canva Pro "Làm nét ảnh" lên 2480×3508); nón trên nền thay lại bằng ảnh nón
     // thật của nhóm (bia-non.webp) cho nét vân lá, bông sen phải vẫn đứng trước vành; chân trang phủ sương ngà nhạt để
-    // logo + dòng nhóm đọc rõ. Ảnh nền đã có sẵn đường khâu, bóng lá, mười sáu vòng tre. Ghép: scripts/book/out/covers/gem/
+    // logo + dòng nhóm đọc rõ. Ảnh nền có sẵn bóng lá, mười sáu vòng tre. Ghép: scripts/book/out/covers/gem/
+    // anh Hải 09/11 01:50: "viền dưới hơi xấu, trông ảnh này nó tách khỏi nền luôn ấy, làm bìa tràn viền cho t" → bỏ lề ngà + đường
+    // khâu của ảnh, phóng phần trong ra kín trang (lá sen tràn mép), sương ngà chân bìa phủ tới mép dưới (hop-3-tran.png)
     { ...IMG(0, 0, W, H, ['Ảnh bìa: chiếc nón lá Làng Chuông bên ao sen (ao sen tạo bằng AI)', '表紙写真：蓮池とチュオン村のノンラー（蓮池はAIで作成）'], { src: 'assets/book/cover/bia-ao-sen.webp', fit: 'fill' }), name: 'Ảnh bìa' },
     T(0, 84, W, 14, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 8.5, tracking: 3.4, weight: 600, align: 'center', color: gold, jaFont: F.jaSans, jaSize: 9, name: 'Dòng nhỏ' }),
     { ...T(0, 104, W, 92, ['Nón lá', ''], { font: F.head, size: 76, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
