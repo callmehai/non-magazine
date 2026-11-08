@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCanvasLang, plainText } from '../lang.js'
 import { setTab } from '../tabs.js'
+import Cta, { HAND } from './Cta.jsx'
 
 /**
  * Kéo vòng nứa lên khuôn (mục 2.1.1 "Cấu trúc khung 16 vòng"; anh Hải 08/11: thêm tương tác kéo thả).
@@ -13,8 +14,8 @@ import { setTab } from '../tabs.js'
  */
 const N = 16
 const T = {
-  vi: { hint: 'Kéo từng vòng nứa từ bó sang khuôn', count: (k) => `Đã lên ${k}/16 vòng`, done: 'Khung 16 vòng đã xong!', all: 'Lên hết vòng', reset: 'Làm lại', bundle: 'Bó vòng nứa', mold: 'Khuôn nón' },
-  ja: { hint: '束からヌアの輪をドラッグして型に付けよう', count: (k) => `${k}/16本の輪を付けました`, done: '16本の輪の骨組みが完成！', all: 'すべて付ける', reset: 'やり直す', bundle: 'ヌアの輪の束', mold: 'ノンラーの型' },
+  vi: { hint: 'Kéo từng vòng nứa từ bó sang khuôn', tag: 'TRÒ CHƠI', count: (k) => `Đã lên ${k}/16 vòng`, done: 'Khung 16 vòng đã xong!', all: 'Lên hết vòng', reset: 'Làm lại', bundle: 'Bó vòng nứa', mold: 'Khuôn nón' },
+  ja: { hint: '束からヌアの輪をドラッグして型に付けよう', tag: 'ミニゲーム', count: (k) => `${k}/16本の輪を付けました`, done: '16本の輪の骨組みが完成！', all: 'すべて付ける', reset: 'やり直す', bundle: 'ヌアの輪の束', mold: 'ノンラーの型' },
 }
 
 export default function RingsWidget({ el, interactive }) {
@@ -95,8 +96,11 @@ export default function RingsWidget({ el, interactive }) {
     return { x: cx + s.rx * Math.cos(a), y: s.y + s.ry * Math.sin(a), back: Math.sin(a) < 0 }
   })
   const label = (p) => plainText(p?.[li] ?? p?.[0] ?? '')
+  // chưa chạm: vòng mẫu bay từ bó sang khuôn (nấc 11) + bàn tay, bó vòng phập phồng, viên "TRÒ CHƠI" ở thanh dưới
+  const idle = interactive && placed.size === 0 && !drag
+  const demo = slot(10)
   return (
-    <div className={`cvw cvw-rings ${all ? 'is-done' : ''}`} data-no-flip={interactive ? '' : undefined} style={{ '--acc': acc }}>
+    <div className={`cvw cvw-rings ${all ? 'is-done' : ''} ${idle ? 'is-idle' : ''}`} data-no-flip={interactive ? '' : undefined} style={{ '--acc': acc }}>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
@@ -147,6 +151,14 @@ export default function RingsWidget({ el, interactive }) {
             </text>
           </g>
         )}
+        {idle && (
+          <g className="cvw-rings__demo" style={{ '--dx': `${bx - demo.x}px`, '--dy': `${by - demo.y}px` }}>
+            <ellipse cx={demo.x} cy={demo.y} rx={demo.rx} ry={Math.max(3, demo.ry)} />
+            <svg className="cvw-rings__hand" x={demo.x + demo.rx * 0.35} y={demo.y - 2} width="22" height="22" viewBox="0 0 24 24" overflow="visible">
+              {HAND.props.children}
+            </svg>
+          </g>
+        )}
         {/* vòng đang kéo: đúng cỡ của nó trên khuôn */}
         {drag?.moved && <ellipse cx={drag.x} cy={drag.y} rx={slot(drag.i).rx} ry={Math.max(3, slot(drag.i).ry)} className="cvw-rings__nua is-drag" />}
         {all && el.labels && (
@@ -162,9 +174,13 @@ export default function RingsWidget({ el, interactive }) {
       </svg>
       {interactive && (
         <div className="cvw-rings__bar">
-          <span className="cvw-rings__count" aria-live="polite">
-            {placed.size === N ? t.done : placed.size ? t.count(placed.size) : t.hint}
-          </span>
+          {idle ? (
+            <Cta tag={t.tag}>{t.hint}</Cta>
+          ) : (
+            <span className="cvw-rings__count" aria-live="polite">
+              {placed.size === N ? t.done : placed.size ? t.count(placed.size) : t.hint}
+            </span>
+          )}
           {placed.size < N ? (
             <button type="button" className="cvw-rings__btn" onClick={() => setPlaced(new Set([...Array(N).keys()]))}>
               {t.all}

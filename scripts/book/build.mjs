@@ -1757,33 +1757,30 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   // → bỏ ảnh nền nhiều nón nhoè (xám đục) + cụm nón nhoè phía trước + nhánh tre / cành lá vàng; giấy ngà sáng, sạch;
   // một chiếc nón thật (ảnh nhóm gửi Zalo 22:35, tách nền, đủ vành cạp) đứng giữa mười sáu vòng tre nét vàng rất mảnh
   // (concept "ba lớp lá, mười sáu vòng tre"); tên sách canh giữa nét thanh; đường khâu nét đứt quanh bìa; một điểm son (dấu)
-  const p = new Page({ hideNumber: true, bg: '#f8f3e9', paper: null })
+  // anh Hải 08/11 khuya: "trong lúc đợi thì cứ cho chọn tạm cái này nhé, làm nền" → bìa tạm: ảnh nền tạo bằng AI (Gemini,
+  // từ ảnh nón nhóm gửi) — chồng nón trắng trên sân gạch, sương sáng phía trên (đã xoá dấu sao Gemini, làm mềm dải trên,
+  // phủ sáng trên / tối dưới bằng scripts/book/out/covers/ai/prep.py) — chờ nhóm chọn bìa chính thức
+  const p = new Page({ hideNumber: true, bg: '#efe6d6', paper: null })
   p.fixed = true
-  const ink = '#33251a'
-  const gold = '#a8854f'
+  const ink = '#2f2218'
+  const gold = '#9c7a45'
   const cx = W / 2
-  const hatW = 372
-  const hatH = hatW / (878 / 759)
-  const ringD = 452
-  const ringY = 316
   p.add(
-    RECT(22, 22, W - 44, H - 44, 'none', { stroke: gold, sw: 0.7, dash: '3 2.5', opacity: 0.55, name: 'Đường khâu' }),
-    SUN(W - 440, -36, 470, false, 0.22),
+    { ...IMG(0, 0, W, H, ['Ảnh bìa: chồng nón lá trắng Làng Chuông (ảnh minh họa tạo bằng AI)', '表紙写真：チュオン村の白いノンラーの山（AIで作成したイメージ）'], { src: 'assets/book/cover/bia-ai-cho-non.webp', fit: 'cover' }), name: 'Ảnh bìa' },
+    RECT(18, 18, W - 36, H - 36, 'none', { stroke: gold, sw: 0.7, dash: '3 2.5', opacity: 0.55, name: 'Đường khâu' }),
     T(0, 84, W, 14, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 8.5, tracking: 3.4, weight: 600, align: 'center', color: gold, jaFont: F.jaSans, jaSize: 9, name: 'Dòng nhỏ' }),
-    { ...T(0, 104, W, 92, ['Nón lá', ''], { font: F.head, size: 76, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
-    { ...T(0, 196, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 102, W, 96, ['Nón lá', ''], { font: F.head, size: 80, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 198, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
     { ...T(0, 112, W, 26, ['', 'チュオン{村|むら}の'], { size: 18, tracking: 6, lh: 1.3, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 18, name: 'Tên sách' }), only: 'ja' },
     { ...T(0, 140, W, 80, ['', 'ノンラー'], { size: 60, lh: 1.2, tracking: 4, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 60, name: 'Tên sách' }), only: 'ja' },
-    T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 25, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
+    T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 26, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
     HL(cx - 28, 286, 56, gold, 0.9),
-    // mười sáu vòng tre — quầng mảnh sau chiếc nón
-    { ...DECO('vong-non', cx - ringD / 2, ringY, ringD, ringD, 0.2), name: 'Họa tiết' },
-    { ...IMG(cx - hatW / 2, ringY + ringD / 2 - hatH * 0.56, hatW, hatH, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa' },
-    ...SEAL(W - 50 - 44, 52, 44),
-    { ...HL(56, H - 112, W - 112, gold, 0.6), dash: '3 2.5', opacity: 0.6 },
+    ...SEAL(W - 50 - 44, 46, 44),
+    // logo trên nền ngà (chân bìa là ảnh tối), dòng thông tin màu kem
+    RECT(56, H - 26 - 36, 128, 36, 'rgba(251, 247, 238, 0.94)', { radius: 4, name: 'Nền logo' }),
     // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
-    IMG(56, H - 86, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
-    T(W - 56 - 300, H - 84, 300, 34, front.team, { size: 10, lh: 1.5, align: 'right', color: '#5a4634', jaFont: F.jaSans, name: 'Thông tin' })
+    IMG(64, H - 26 - 32, 112, 28, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
+    T(W - 56 - 300, H - 26 - 34, 300, 34, front.team, { size: 10, lh: 1.5, align: 'right', color: '#fbf2e2', jaFont: F.jaSans, name: 'Thông tin' })
   )
 }
 
@@ -2351,13 +2348,9 @@ let stripRight = null
     const q = f.p
     const im = q && [...q.els].reverse().find((e) => e.type === 'image' && String(e.hint ?? '').startsWith('Khung nón 16 vòng nứa'))
     if (im) {
-      const tab = { set: 'rings16', i: 0 }
-      const dw = Math.min(180, im.w * 0.45)
-      q.add(
-        { ...RECT(im.x, im.y, im.w, im.h, '#f4ede0', { opacity: 0.985, name: 'Giấy phủ' }), tab },
-        { ...DECO('vong-non', im.x + im.w / 2 - dw / 2, im.y + im.h / 2 - dw / 2 - 18, dw, dw, 0.5), name: 'Hình vẽ', tab },
-        { ...T(im.x + 20, im.y + im.h / 2 + dw / 2 - 8, im.w - 40, 44, ['Lên đủ 16 vòng nứa ở trang bên để xem khung nón thật', '隣のページで16本の輪をすべて付けると、本物の骨組みが見られます'], { size: 14, italic: true, lh: 1.45, align: 'center', color: C.muted, jaFont: F.jaSans, jaSize: 12.5, name: 'Lời nhắc' }), tab },
-      )
+      // anh Hải 08/11: "nên có hiệu ứng lock/khoá … trên cái ảnh bị ẩn đi cho ngta dừng lại coi (cả CTA cũng cho vào cùng cái
+      // khoá luôn)" → ảnh khoá (LockWidget): ổ khoá quai vòng nứa + thân dấu son, viên son mời chơi ngay dưới
+      q.add({ ...WIDGET(im.x, im.y, im.w, im.h, 'lock', { name: 'Ảnh khoá', data: { hint: ['← Lên đủ 16 vòng nứa ở trang bên để mở ảnh', '← 隣のページで16本の輪を付けて写真を開こう'] } }), tab: { set: 'rings16', i: 0 } })
     }
   }
   f.prose(fr.after)
@@ -2906,26 +2899,18 @@ let stripRight = null
     p.add({ ...WIDGET(p.x0, y, p.cw, BOT - y, 'sort', { name: 'Xếp lại các công đoạn', data: { steps, set: 'sort8', accent: acc } }), alt: ['Các thẻ công đoạn làm nón — kéo để xếp đúng thứ tự', 'ノンラー作りの工程カード — ドラッグして正しい順に並べる'] })
     p.fixed = true
     const q = stepFlow.page()
-    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → ảnh khi xếp xong phải ấn tượng ("ảnh này nó phải ấn tượng
-    // hơn chứ"; "lấy ảnh người cũng đc, miễn có cái nón hoàn thiện trong đó, ảnh người đẹp và chưa đâu có nhé tránh trùng"):
-    // hai thiếu nữ áo dài đội nón trắng bước ra từ cổng đình Chuông — cảnh cổng đình chưa có ở trang nào (nón tách nền
-    // Zalo 22:35 là ảnh bìa, không dùng lại ở đây)
-    const hint = ['Hai thiếu nữ áo dài đội nón lá trắng trước cổng đình Chuông', 'チュオン村の亭の門の前で、白いノンラーをかぶったアオザイ姿の二人']
+    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → thiếu nữ áo dài đội nón trên bậc thềm (ảnh nhóm, chưa dùng
+    // ở trang nào). Đã thử nón tách nền (là ảnh bìa) và ảnh cổng đình — anh Hải: "ảnh cũ oke nhất rồi, dùng lại đi"
+    const hint = ['Nón lá bên tà áo dài', 'アオザイとノンラー']
     const iw = q.cw
-    // chừa chỗ cho chú thích hai dòng + câu hoàn thành + nút xem lại (không đè nhau)
-    const ih = Math.round(Math.min(iw * (natR(hint) ?? 1.02), BOT - TOP - 10 - 180))
+    const ih = Math.round(Math.min(iw * (natR(hint) ?? 1.02), BOT - TOP - 10 - 150))
     const iy = TOP + 10
     const fy = figure(q, q.x0, iy, iw, ih, hint, { capBelow: true })
     // giấy mờ phủ ảnh khi chưa xếp đúng (thẻ 0), mất đi khi xếp đúng
-    q.add(
-      { ...RECT(q.x0, iy, iw, ih, '#f4ede0', { opacity: 0.985, name: 'Giấy phủ' }), tab: { set: 'sort8', i: 0 } },
-      { ...DECO('non-line', q.x0 + iw / 2 - 90, iy + ih / 2 - 92, 180, 124, 0.7), name: 'Hình vẽ', tab: { set: 'sort8', i: 0 } },
-    )
+    q.add({ ...WIDGET(q.x0, iy, iw, ih, 'lock', { name: 'Ảnh khoá', data: { hint: ['← Xếp đúng các công đoạn ở trang bên để mở ảnh', '← 隣のページで工程を正しく並べて写真を開こう'] } }), tab: { set: 'sort8', i: 0 } })
     const dO = { size: 34, font: F.script, lh: 1.15, jaSize: 24 }
     const dh = textH(pr.done, iw, dO)
     const dy = Math.min(fy + 18, BOT - dh - 40)
-    // chưa xếp đúng: lời nhắc ở chỗ câu hoàn thành sẽ hiện (dưới ảnh), không đè lên ảnh
-    q.add({ ...T(q.x0, dy + 6, iw, 52, ['Xếp đúng các công đoạn để chiếc nón hoàn thiện', '工程を正しく並べると、ノンラーが完成します'], { size: 17, italic: true, lh: 1.45, align: 'center', color: C.muted, jaFont: F.jaSans, jaSize: 15, name: 'Lời nhắc' }), tab: { set: 'sort8', i: 0 } })
     q.add({ ...T(q.x0, dy, iw, dh, pr.done, { ...dO, color: acc, align: 'center', jaFont: F.jaHead, name: 'Câu hoàn thành' }), tab: { set: 'sort8', i: 1 } })
     const mapPage = anchors.find((a) => a.label === '2.3.2')?.page
     if (mapPage)

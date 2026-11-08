@@ -12,6 +12,7 @@ import './widgets.css'
  *  - "envelope": phong bì thư (Lời mở đầu) — bấm mở nắp, lá thư mang câu ca dao trượt ra
  *  - "rings": kéo 16 vòng nứa từ bó lên khuôn nón (2.1.1)
  *  - "toolbox": hộp đồ nghề (mở 2.2) — mở nắp, bấm từng món xem ảnh + lật tới trang của món đó
+ *  - "lock": ảnh khoá — phủ ảnh phần thưởng của trò chơi ở trang bên, chơi xong thì mở
  *  - "sort": xếp lại các công đoạn làm nón (sau 2.3.2) — kéo thẻ, kiểm tra; đúng hết thì trang phải hiện nón hoàn thiện
  * Chế độ "edit" (editor, ảnh thu nhỏ) chỉ vẽ hình tĩnh; WebGL chỉ chạy khi trang đang mở ở chế độ đọc.
  */
@@ -26,6 +27,7 @@ const KINDS = {
   rings: lazy(() => import('./RingsWidget.jsx')),
   toolbox: lazy(() => import('./ToolboxWidget.jsx')),
   sort: lazy(() => import('./SortWidget.jsx')),
+  lock: lazy(() => import('./LockWidget.jsx')),
 }
 
 export default function Widget({ el, mode, visible }) {
