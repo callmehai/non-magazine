@@ -9,6 +9,10 @@ import './widgets.css'
  *  - "tabs": hàng nút chọn thẻ — đổi phần nội dung đang hiện của một nhóm (vd. ảnh thật từng lớp lá, mục 2.1.2)
  *  - "timeline": dòng thời gian bấm được — mỗi mốc năm một câu chuyện (trang nghệ nhân chương 3)
  *  - "grove": lũy tre lớn dần, nón được làm dưới gốc tre (cặp trang Lưu ý) — chỉ là hình động, không bấm
+ *  - "envelope": phong bì thư (Lời mở đầu) — bấm mở nắp, lá thư mang câu ca dao trượt ra
+ *  - "rings": kéo 16 vòng nứa từ bó lên khuôn nón (2.1.1)
+ *  - "toolbox": hộp đồ nghề (mở 2.2) — mở nắp, bấm từng món xem ảnh + lật tới trang của món đó
+ *  - "sort": xếp lại các công đoạn làm nón (sau 2.3.2) — kéo thẻ, kiểm tra; đúng hết thì trang phải hiện nón hoàn thiện
  * Chế độ "edit" (editor, ảnh thu nhỏ) chỉ vẽ hình tĩnh; WebGL chỉ chạy khi trang đang mở ở chế độ đọc.
  */
 const KINDS = {
@@ -18,6 +22,10 @@ const KINDS = {
   timeline: lazy(() => import('./TimelineWidget.jsx')),
   tabs: lazy(() => import('./TabsWidget.jsx')),
   grove: lazy(() => import('./GroveWidget.jsx')),
+  envelope: lazy(() => import('./EnvelopeWidget.jsx')),
+  rings: lazy(() => import('./RingsWidget.jsx')),
+  toolbox: lazy(() => import('./ToolboxWidget.jsx')),
+  sort: lazy(() => import('./SortWidget.jsx')),
 }
 
 export default function Widget({ el, mode, visible }) {

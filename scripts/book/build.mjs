@@ -2182,21 +2182,16 @@ let stripRight = null
   const fr = st.frame
   mark(3, fr.h, f.block(fr.h, fr.id), fr.id)
   f.prose(fr.p)
+  // anh Hải 08/11 (thêm tương tác kéo thả): sơ đồ 16 vòng thành trò kéo vòng nứa từ bó lên khuôn — dáng khuôn thấp như
+  // nón thật (cao ≈ 0,7 × bán kính vành), đủ 16 vòng thì hiện nhãn chóp nón / vòng cạp như sơ đồ cũ
   {
-    const fw = 300
-    const fH = Math.round(fw / 2 * 0.7)
-    f.place(fH + 22, (p, y) => {
-      const fx = p.x0 + (p.cw - fw) / 2 - 40
-      p.add(TRI(fx, y, fw, fH, 'none', { stroke: '#a4865a', sw: 0.8, opacity: 0.6 }), ELL(fx + fw / 2 - 5, y - 4, 10, 8, '#a4865a', { name: 'Núm chóp' }))
-      for (let i = 0; i < 16; i++) {
-        const t = (i + 1) / 16
-        const rw = fw * t
-        const ry = y + fH * t
-        const eh = Math.max(2, rw * 0.1)
-        p.add(ELL(fx + (fw - rw) / 2, ry - eh / 2, rw, eh, 'none', { stroke: i === 15 ? ACC[2] : '#a4865a', sw: i === 15 ? 1.6 : 0.9 }))
-      }
-      p.add(T(fx + fw / 2 + 16, y - 8, 150, 20, ['← Chóp nón', '← 頂点'], { size: 13.5, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }), T(fx + fw + 12, y + fH - 10, 150, 20, ['← Vòng cạp (vòng 16)', '← 外縁の輪（16本目）'], { size: 13.5, italic: true, color: ACC[2], lh: 1.3, jaFont: F.jaSans, name: 'Nhãn' }))
-    })
+    const rh = 206
+    f.place(rh, (p, y) =>
+      p.add({
+        ...WIDGET(p.x0, y, p.cw, rh, 'rings', { name: 'Kéo vòng nứa lên khuôn', data: { accent: ACC[2], labels: { apex: ['← Chóp nón', '← 頂点'], rim: ['← Vòng cạp (vòng 16)', '← 外縁の輪（16本目）'] } } }),
+        alt: ['Khuôn nón và bó 16 vòng nứa — kéo từng vòng lên khuôn', 'ノンラーの型と16本のヌアの輪 — 輪をドラッグして型に付ける'],
+      })
+    )
   }
   f.figure(['Khung nón 16 vòng nứa', 'ヌアで作られた16本の輪からなる骨組み'])
   f.prose(fr.after)
@@ -2322,6 +2317,18 @@ let stripRight = null
   // 2.2 — nguyên liệu & dụng cụ: mỗi trang hai món, ảnh so le trái / phải
   const mt = ch.materials
   mark(2, mt.title, f.section('2.2', mt.title), '2.2')
+  // anh Hải 08/11 ("hiệu ứng mở hộp"): hộp đồ nghề ở trang mở mục — mở nắp, các nguyên liệu / dụng cụ của mục hiện ra
+  // (ảnh + tên đúng như trong sách); bấm một món → ảnh to + nút lật tới trang tả món đó (số trang điền sau khi dàn)
+  const boxItems = [...mt.items.map((x) => [x, 0]), ...mt.tools.map((x) => [x, 1]), ...(mt.small ?? []).map((x) => [x, 1])].map(([[name, , hint], group]) => ({ name, group, src: hint ? PHOTOS[hint[0]] ?? '' : '' }))
+  // hộp bên trái, ảnh lá lụi phơi nắng (ảnh mở mục) bên phải — cùng một hàng, mục không dài thêm trang
+  const boxW = Math.round(CW * 0.57)
+  const boxH = 470
+  const boxEl = { ...WIDGET(0, 0, boxW, boxH, 'toolbox', { name: 'Hộp đồ nghề', data: { title: ['Hộp đồ nghề làm nón', 'ノンラー作りの道具箱'], groups: [['Nguyên liệu', '材料'], ['Dụng cụ', '道具']], items: boxItems } }), alt: ['Hộp đồ nghề làm nón — bấm để mở', 'ノンラー作りの道具箱 — クリックして開く'] }
+  f.place(boxH, (p, y) => {
+    p.add({ ...boxEl, x: r1(p.x0), y: r1(y) })
+    const pw = CW - boxW - 18
+    figure(p, p.x0 + boxW + 18, y, pw, Math.round(pw * R.por), ['Lá lụi phơi ngoài nắng', '天日に干されるラルイ'], { capBelow: true })
+  }, 16)
   const itemTo = { size: 14, lh: 1.6, jaSize: jaPt(14) }
   const iw2 = 210
   // nguyên liệu / dụng cụ: so le, mỗi trang khổ dọc đúng 2 mục (yêu cầu của nhóm); mục trên neo đầu, mục dưới neo đáy
@@ -2420,7 +2427,6 @@ let stripRight = null
   // góp ý 04/11: ảnh từng nguyên liệu theo đúng tên file nhóm gán trong Doc; ảnh tổng thể nguyên liệu (IMG_2612) mở đầu mục,
   // ảnh thứ hai của lá lụi / thanh nứa / khuôn dùng lấp chỗ trống của mục
   // soát 07/11: ảnh tủ nguyên liệu (IMG_2612) cùng tủ với ảnh tr. 46 (IMG_2611) → lá lụi phơi nắng, nguyên liệu chính
-  f.figure(['Lá lụi phơi ngoài nắng', '天日に干されるラルイ'], { ratio: R.std })
   stagger(mt.items, ['NGUYÊN LIỆU', '材料'])
   // dụng cụ: khuôn nón (một trang riêng, ảnh lớn) rồi các dụng cụ nhỏ
   const [mold] = mt.tools
@@ -2680,6 +2686,57 @@ let stripRight = null
   spread({ ...pr.finish, no: 0, ...STEP_MEDIA[8] }, { label: pr.finish.label })
   stepPages.at(-1).finish = true
   stepPages.at(-1).label = pr.finish.label
+  // anh Hải 08/11 (tương tác kéo thả, sắp xếp): cặp trang "thử tài" sau công đoạn cuối — trang trái tám thẻ công đoạn bị
+  // xáo, kéo về đúng thứ tự rồi kiểm tra; trang phải chiếc nón trắng, phủ giấy mờ tới khi xếp đúng (thẻ "sort8" → 1)
+  // thì hiện câu "Chiếc nón trắng hoàn thiện!" của nhóm + nút xem lại tám công đoạn
+  {
+    const acc = ACC[2]
+    const all = [...pr.steps, { ...pr.finish, no: 8 }]
+    const steps = all.map((s) => ({ no: s.no, name: s.name.map(strip), sub: s.sub.map(strip), src: PHOTOS[STEP_MEDIA[s.no].photos[0][0]] ?? '' }))
+    const p = stepFlow.page()
+    let y = TOP
+    p.add(T(p.x0, y, p.cw, 16, ['THỬ TÀI', '腕試し'], { size: S.label, tracking: 2.4, weight: 700, color: acc, jaFont: F.jaSans, name: 'Nhóm' }))
+    y += 26
+    const tO = { size: 30, font: F.head, lh: 1.2, jaSize: 25 }
+    const title = ['Xếp lại tám công đoạn', '八つの工程を並べ替えよう']
+    const th = textH(title, p.cw, tO)
+    p.add(T(p.x0, y, p.cw, th, title, { ...tO, color: C.title, jaFont: F.jaHead, name: 'Tên bước' }))
+    y += th + 8
+    const lead = ['Tám công đoạn dựng và hoàn thiện nón dưới đây đã bị xáo trộn. Bạn hãy kéo các thẻ về đúng thứ tự, từ rẽ lá đến quang dầu, rồi bấm “Kiểm tra”.', '下の八つの工程の順番がばらばらになっています。カードをドラッグして「ゼー・ラー」から「クアン・ザウ」まで正しい順に並べ替え、「答え合わせ」をクリックしてください。']
+    const lO = { size: 13.5, lh: 1.55, jaSize: 13.5 }
+    const lh = textH(lead, p.cw, lO)
+    p.add(T(p.x0, y, p.cw, lh, lead, { ...lO, color: C.ink2, jaFont: F.jaBody, name: 'Đoạn dẫn' }))
+    y += lh + 10
+    p.add(HL(p.x0, y, 56, acc, 1.4))
+    y += 16
+    p.add({ ...WIDGET(p.x0, y, p.cw, BOT - y, 'sort', { name: 'Xếp lại các công đoạn', data: { steps, set: 'sort8', accent: acc } }), alt: ['Tám thẻ công đoạn làm nón — kéo để xếp đúng thứ tự', 'ノンラー作りの八つの工程カード — ドラッグして正しい順に並べる'] })
+    p.fixed = true
+    const q = stepFlow.page()
+    const hint = ['Nón lá trắng truyền thống làng Chuông', 'チュオン村の伝統的な白いノンラー']
+    const iw = q.cw
+    const ih = Math.round(iw * 1.02)
+    const iy = TOP + 10
+    const fy = figure(q, q.x0, iy, iw, ih, hint, { capBelow: true })
+    // giấy mờ phủ ảnh khi chưa xếp đúng (thẻ 0), mất đi khi xếp đúng
+    q.add(
+      { ...RECT(q.x0, iy, iw, ih, '#f4ede0', { opacity: 0.9, name: 'Giấy phủ' }), tab: { set: 'sort8', i: 0 } },
+      { ...DECO('non-line', q.x0 + iw / 2 - 90, iy + ih / 2 - 92, 180, 124, 0.7), name: 'Hình vẽ', tab: { set: 'sort8', i: 0 } },
+    )
+    const dO = { size: 34, font: F.script, lh: 1.15, jaSize: 24 }
+    const dh = textH(pr.done, iw, dO)
+    const dy = Math.min(fy + 18, BOT - dh - 40)
+    // chưa xếp đúng: lời nhắc ở chỗ câu hoàn thành sẽ hiện (dưới ảnh), không đè lên ảnh
+    q.add({ ...T(q.x0, dy + 6, iw, 52, ['Xếp đúng cả tám công đoạn để chiếc nón hoàn thiện', '八つの工程を正しく並べると、ノンラーが完成します'], { size: 17, italic: true, lh: 1.45, align: 'center', color: C.muted, jaFont: F.jaSans, jaSize: 15, name: 'Lời nhắc' }), tab: { set: 'sort8', i: 0 } })
+    q.add({ ...T(q.x0, dy, iw, dh, pr.done, { ...dO, color: acc, align: 'center', jaFont: F.jaHead, name: 'Câu hoàn thành' }), tab: { set: 'sort8', i: 1 } })
+    const mapPage = anchors.find((a) => a.label === '2.3.2')?.page
+    if (mapPage)
+      q.add({
+        ...T(q.x0, dy + dh + 10, iw, 20, [`Xem lại tám công đoạn ở trang ${mapPage} →`, `八つの工程を${mapPage}ページで見直す →`], { size: 13, align: 'center', color: C.ink2, jaFont: F.jaSans, name: 'Xem lại', link: `#p${mapPage}`, linkStyle: 'refno', alt: [`Lật tới trang ${mapPage}`, `${mapPage}ページへ`] }),
+        tab: { set: 'sort8', i: 1 },
+      })
+    q.fixed = true
+    stepFlow.y = BOT
+  }
 }
 
 // ═════════════════════════════════════════ CHƯƠNG 3
@@ -2934,6 +2991,11 @@ let stripRight = null
     const pg = pages.find((q) => q.els.some((e) => e.name === 'Tên nghệ nhân' && (Array.isArray(e.text) ? e.text[0] : e.text) === key))
     if (!pg) throw new Error(`dòng thời gian: không thấy trang tiểu sử ${key}`)
     it.link = pg.n
+  }
+  // hộp đồ nghề (mở 2.2): số trang tả từng món
+  for (const it of pages.flatMap((q) => q.els).find((e) => e.kind === 'toolbox')?.items ?? []) {
+    const pg = pages.find((q) => q.els.some((e) => (e.name === 'Tên' || e.name === 'Tên dụng cụ' || e.name === 'Tiêu đề khuôn') && (Array.isArray(e.text) ? e.text[0] : e.text) === it.name[0]))
+    if (pg) it.page = pg.n
   }
 
   // 3.2 bảo tồn, 3.3 thách thức: mỗi chủ đề = tiêu đề nhỏ + đoạn văn + ảnh
@@ -3503,7 +3565,20 @@ const CH_PHOTO = {
   // trang đối diện mục lục: câu ca dao về nón Chuông + hình nón nét mảnh (trang mở đầu nhẹ nhàng trước lời mở đầu)
   const ep = tocPages[1]
   ep.add({ ...DECO('vong-non', ep.x0 + 20, 190, ep.cw - 40, ep.cw - 40, 0.12), name: 'Hình vẽ' })
-  ep.add({ ...DECO('bia-non', ep.x0 + 40, 270, ep.cw - 80, (ep.cw - 80) * 0.58, 0.95), name: 'Hình vẽ' })
+  // anh Hải 08/11 ("nhiều cái tương tác hơn — mở hộp, mở phong bì…"): hình nón vẽ thành phong bì thư gửi bạn đọc — bấm
+  // mở, lá thư trượt ra mang câu ca dao nhóm dẫn ở mục 3.1 (nguyên văn, bỏ ngoặc kép); câu "Qua đình…" vẫn in dưới
+  ep.add({
+    ...WIDGET(ep.x0 + 20, 232, ep.cw - 40, 356, 'envelope', {
+      name: 'Phong bì thư',
+      data: {
+        letter: ['Muốn ăn cơm trắng cá trê,\nMuốn đội nón tốt thì về làng Chuông', '白いご飯とナマズを食べたいなら、\n良いノンラーをかぶりたいなら、チュオン村へ'],
+        sign: ['— Ca dao —', '— カーザオ（民謡）—'],
+        to: ['Gửi bạn đọc', '読者の皆さまへ'],
+        from: ['Từ làng Chuông, Hà Nội', 'チュオン村より'],
+      },
+    }),
+    alt: ['Phong bì thư gửi bạn đọc — bấm để mở', '読者の皆さまへの手紙 — クリックして開く'],
+  })
   const verse = ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭（ディン）の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。']
   const vo = { font: F.head, size: 21, lh: 1.6, jaSize: 17 }
   const vh = textH(verse, ep.cw - 40, vo)
@@ -3519,6 +3594,7 @@ const CH_PHOTO = {
 // trang trí đứng yên: đầu trang (vùng trên TOP), họa tiết góc, lớp tối; đường kẻ / số trong vùng nội dung thì dời theo khối của nó
 const DECOR = new Set(['Đầu trang', 'Vạch màu', 'Họa tiết', 'Lớp tối', 'Bóng nắng'])
 const FRAMES = [R.pan, R.cin, R.wide, R.std, R.sq, R.por]
+const FIXED_WIDGETS = new Set(['rings', 'toolbox', 'envelope', 'sort'])
 function settle(p) {
   if (p.fixed || p.bg === '#2b2118' || p.els.some((e) => e.type === 'image' && e.w * e.h > W * H * 0.8)) return
   const movable = p.els.filter((e) => !DECOR.has(e.name) && e.y >= TOP - 10 && e.y < BOT)
@@ -3542,7 +3618,8 @@ function settle(p) {
   // (1) phóng ảnh (hàng ảnh không có chữ đứng cạnh): phần tử bên dưới ảnh trong khối và các khối sau dời xuống
   for (const [bi, b] of bands.entries()) {
     if (spare < 14) break
-    const first = b.els.find((e) => isPhoto(e) && e.fit !== 'contain' && !e.rot)
+    // trò tương tác dựng theo cỡ cố định (vòng nứa, hộp đồ nghề, phong bì, xếp công đoạn) không phóng như ảnh
+    const first = b.els.find((e) => isPhoto(e) && e.fit !== 'contain' && !e.rot && !(e.type === 'widget' && FIXED_WIDGETS.has(e.kind)))
     if (!first) continue
     const row = b.els.filter((e) => isPhoto(e) && Math.abs(e.y - first.y) < 2 && Math.abs(e.h - first.h) < 2)
     const y0 = first.y
@@ -3648,7 +3725,7 @@ function addFrames(p) {
   for (const e of p.els) {
     if (!['image', 'video', 'widget'].includes(e.type) || /deco\//.test(e.src || '') || /Logo|polaroid|tách nền|Ảnh bìa/.test(e.name || '') || e.round) continue
     // mô hình 3 lớp (2.1.2) tự có nền giấy ngà + viền đường khâu (soát 05/11: ô trắng tinh trên giấy ngà trông lạc)
-    if (e.kind === 'postcard' || e.kind === 'timeline' || e.kind === 'tabs' || e.kind === 'layers' || e.kind === 'grove') continue // bưu thiếp, dòng thời gian tự có viền + bóng, không bọc thêm khung ảnh
+    if (e.kind === 'postcard' || e.kind === 'timeline' || e.kind === 'tabs' || e.kind === 'layers' || e.kind === 'grove' || FIXED_WIDGETS.has(e.kind)) continue // bưu thiếp, dòng thời gian tự có viền + bóng, không bọc thêm khung ảnh
     if (e.x <= 0.5 || e.y <= 0.5 || e.x + e.w >= W - 0.5 || e.y + e.h >= H - 0.5) continue
     if (frames.some((f) => f.x <= e.x + 0.5 && f.y <= e.y + 0.5 && f.x + f.w >= e.x + e.w - 0.5 && f.y + f.h >= e.y + e.h - 0.5)) continue
     // góp ý 04/11: viền ảnh đừng to → lề giấy mảnh 1,5–3pt
