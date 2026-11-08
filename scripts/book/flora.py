@@ -56,19 +56,19 @@ def lotus_flower(cx, cy, s=1.0, tilt=0.0):
     for ang, L, W in ((-90 - 30, 52, 23), (-90 + 30, 52, 23)):
         p += petal(cx, cy + 4 * s, ang + tilt, L * s, W * s, veins=3, lean=0.12 if ang > -90 else -0.12)
     p += petal(cx, cy + 6 * s, -90 + tilt, 50 * s, 21 * s, veins=3)
-    # đài hoa
-    p.append(f'<path d="M{f(cx - 14 * s)} {f(cy + 2 * s)} Q {f(cx)} {f(cy + 12 * s)} {f(cx + 14 * s)} {f(cy + 2 * s)}" fill="{PAPER}"/>')
+    # (08/11: bỏ đường đài hoa — hai đầu lòi ra ngoài gốc cánh)
     return p
 
 
 def bud(bx, by, ang, s=1.0):
-    p = petal(bx, by, ang, 42 * s, 15 * s, veins=0, lean=0.04)
+    L, W = 42 * s, 15 * s
+    p = petal(bx, by, ang, L, W, veins=0, lean=0.04)
     dx, dy = unit(ang)
     nx, ny = -dy, dx
+    c = lambda t, k: (bx + dx * L * t + nx * W * k, by + dy * L * t + ny * W * k)
+    # 08/11 (anh Hải: "vẽ ẩu, nét lòi hết ra"): hai đường cánh ngoài bó nụ, đầu và cuối đều nằm trong viền nụ
     for k in (-1, 1):
-        a = (bx + nx * k * 9 * s + dx * 6 * s, by + ny * k * 9 * s + dy * 6 * s)
-        m = (bx + dx * 26 * s + nx * k * 7 * s, by + dy * 26 * s + ny * k * 7 * s)
-        e = (bx + dx * 40 * s, by + dy * 40 * s)
+        a, m, e = c(0.08, k * 0.12), c(0.42, k * 0.62), c(0.8, k * 0.12)
         p.append(f'<path d="M{f(a[0])} {f(a[1])} Q {f(m[0])} {f(m[1])} {f(e[0])} {f(e[1])}" stroke-width="0.8"/>')
     return p
 
@@ -141,30 +141,55 @@ def grass(x, y, h, lean):
     return f'<path d="M{f(x)} {f(y)} Q {f(x + lean * 0.3)} {f(y - h * 0.6)} {f(x + lean)} {f(y - h)}" stroke-width="0.8"/>'
 
 
+def wave(x0, x1, y, amp=1.6, period=18, sw=0.8, op=1.0):
+    d = [f'M{f(x0)} {f(y)}']
+    n = max(2, round((x1 - x0) / (period / 2)))
+    step = (x1 - x0) / n
+    for k in range(n):
+        x = x0 + k * step
+        d.append(f'Q {f(x + step / 2)} {f(y + (-amp if k % 2 == 0 else amp))} {f(x + step)} {f(y)}')
+    o = f' opacity="{op}"' if op < 1 else ''
+    return f'<path d="{" ".join(d)}" stroke-width="{sw}"{o}/>'
+
+
+
 # ── cành sen đứng: bông nở + nụ + lá, dùng ở lề trái / phải
+# 08/11 (anh Hải: cuống sen cụt) → các cuống chìm xuống mặt ao ở y = WLC, ba gợn sóng nước (bỏ cỏ — cỏ không mọc dưới ao)
+WLC = 404
 b = []
-b += stem([(120, 168), (112, 260), (132, 340), (124, 418)])
-b += stem([(196, 214), (186, 300), (150, 360), (138, 418)])
-b += stem([(70, 300), (84, 350), (104, 390), (112, 418)], double=False)
+b += stem([(120, 168), (112, 260), (132, 340), (124, WLC)])
+b += stem([(196, 214), (186, 300), (150, 360), (138, WLC)])
+b += stem([(70, 300), (84, 350), (104, 390), (112, WLC)], double=False)
+b += stem([(212, 332), (200, 360), (176, 392), (164, WLC)], double=False)
 b += pad(70, 292, 66, 23, rot=-12, curl=0.25)
 b += pad(212, 330, 38, 12, rot=14, curl=0.35)
-b += stem([(212, 332), (200, 360), (176, 392), (164, 418)], double=False)
 b += bud(196, 214, -78, s=1.05)
 b += lotus_flower(120, 168, s=1.12)
-for x, h, l in ((96, 46, -14), (150, 38, 10), (160, 52, 18), (88, 34, -22)):
-    b.append(grass(x, 418, h, l))
+b.append(wave(76, 210, WLC, amp=1.5, period=20, sw=0.9))
+b.append(wave(94, 194, WLC + 6, amp=1.2, period=16, sw=0.75, op=0.75))
+b.append(wave(112, 176, WLC + 11, amp=1.0, period=14, sw=0.65, op=0.55))
 svg('sen-canh', (260, 420), '\n'.join(b))
 
 # ── góc trang: cụm sen thấp (bông + lá) nghiêng, đặt góc dưới
+# anh Hải 08/11: "cuống sen hơi cụt, ít nhất có gợn sóng nước" → cuống chìm xuống mặt ao (y = WL): ba gợn sóng nước mảnh
+# nhạt dần
+WL = 226
+
+
 g = []
-g += stem([(150, 120), (150, 170), (140, 200), (138, 236)])
-g += stem([(60, 150), (80, 190), (110, 215), (124, 236)], double=False)
+# thứ tự vẽ: cuống → lá sen (tô màu giấy, che cuống phía sau) → bông, nụ → mặt nước
+g += stem([(150, 120), (150, 170), (141, 200), (139, WL)])
+g += stem([(60, 150), (80, 190), (108, 212), (122, WL)], double=False)
+g += stem([(214, 198), (200, 212), (180, 222), (166, WL)], double=False)
+g += stem([(232, 126), (236, 170), (222, 205), (200, WL)], double=False)
 g += pad(70, 150, 62, 22, rot=-8, curl=0.3)
 g += pad(214, 196, 40, 13, rot=10, curl=0.2)
-g += stem([(214, 198), (200, 214), (176, 228), (160, 236)], double=False)
 g += lotus_flower(150, 120, s=0.95, tilt=6)
 g += bud(232, 126, -70, s=0.8)
-g += stem([(232, 126), (236, 170), (220, 210), (196, 236)], double=False)
+# mặt nước: gợn chính rộng, hai gợn dưới ngắn dần, nhạt dần
+g.append(wave(86, 234, WL, amp=1.5, period=20, sw=0.9))
+g.append(wave(106, 218, WL + 6, amp=1.2, period=16, sw=0.75, op=0.75))
+g.append(wave(128, 196, WL + 11, amp=1.0, period=14, sw=0.65, op=0.55))
 svg('sen-goc', (280, 240), '\n'.join(g))
 
 # ── hoa dại: thân mảnh rẽ nhánh, ba bông năm cánh, nụ, lá thuôn

@@ -173,6 +173,15 @@ const POS = {
   'Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội': '50% 12%',
   'Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy': '50% 25%',
   'Nghệ nhân làng Chuông làm nón truyền thống': '45% 40%',
+  // soát trọng tâm ảnh 08/11 (anh Hải: "check lại các hình ảnh xem đúng trọng tâm vật chưa"): khung cắt giữa làm mất vật
+  // chính của chú thích → dời khung về phía vật
+  'Nón lá trên sàn diễn thời trang — nguồn: Báo Sóng Trẻ': '50% 0%', // nón trên đầu hai người mẫu
+  'Tổng thống Hàn Quốc đội nón lá — nguồn: Báo Thanh Niên': '85% 50%', // ông ngồi bên phải, tay nâng vành nón
+  'Khuôn nón bày bán ở chợ Chuông': '15% 85%', // khuôn xếp góc trái dưới (khung cũ theo mặt người bán)
+  'Quét lớp dầu bóng lên mặt nón': '12% 50%', // cọ + thùng dầu bên trái chiếc nón
+  'Nghệ nhân khâu nón, đặt nghiêng khung giữa hai đầu gối': '50% 88%', // khung nón giữa hai đầu gối (khung cũ chỉ có mặt)
+  'Năm 2023, nghệ nhân Lê Văn Tuy (hàng thứ ba, thứ hai từ trái) chụp ảnh lưu niệm cùng Chủ tịch nước Võ Văn Thưởng': '0% 50%', // giữ mép trái (chú thích chỉ người thứ hai từ trái)
+  'Trung tâm thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP làng nghề nón Chuông — cơ sở của nghệ nhân Lê Văn Tuy': '50% 92%', // biển + gian hàng ở dưới, trên là trời
 }
 // khung mặt người trong từng ảnh (Vision, chạy một lần trên máy): { a: rộng/cao, f: [x0, y0, x1, y1] tỉ lệ 0..1 }
 const FACES = JSON.parse(fs.readFileSync(path.join(here, 'faces.json'), 'utf8'))
@@ -1939,7 +1948,7 @@ let guidePage = null
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Đường kính khoảng 50 cm', '直径約50cm'], ['Chóp được hạ thấp', '頂を低く改良'], ['Cân đối cùng áo cà sa', '袈裟と釣り合う形'], ['Đón nhận tại Ấn Độ, nhiều nước Phật giáo', 'インドなど多くの仏教国で愛用']]],
     },
     'Nón lụa': {
-      details: [[['Lụa vẽ hoa', '花を描いた絹'], 66, 44, 2.6], [['Mặt lụa vân hoa', '花模様の絹地'], 40, 47, 3.4]],
+      details: [[['Lụa vẽ hoa', '花を描いた絹'], 44, 44, 2.6], [['Mặt lụa vân hoa', '花模様の絹地'], 24, 82, 3.4]],
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Bọc lụa tơ tằm Vạn Phúc (Hà Đông)', 'ヴァンフック（ハドン）の絹で包む'], ['Màu sắc, hoa văn đa dạng', '豊かな色と柄'], ['Phụ kiện thời trang, quà lưu niệm', 'ファッション小物・お土産']]],
     },
     'Nón lụa hai mặt': {
@@ -2377,10 +2386,24 @@ let stripRight = null
   f.unit()
   f.label(['DỤNG CỤ', '道具'])
   f.place(26, (p, y) => p.add(T(p.x0, y, p.cw, 26, mold[0], { font: F.head, size: 22, weight: 700, color: ACC[2], lh: 1.25, jaFont: F.jaHead, name: 'Tên' })), 10)
-  f.figure(mold[2], { ratio: R.cin })
-  f.prose([mold[1], ...mt.moldMore], { size: 14.5 })
-  // soát 04/11: chỗ trống trang khuôn nón = ảnh khuôn (trước là ảnh lá lụi phơi, không khớp đoạn văn)
-  f.pool.unshift(['Khuôn nón bày bán ở chợ Chuông', 'チュオンの市場で売られるノンラーの製作型'])
+  // anh Hải 08/11 (tr. 62–63 "trông đang hơi trống"): hạn mức chữ mỗi trang đẩy ba đoạn khuôn nón ra hai cặp trang, chỗ
+  // trống lấp ảnh người khâu nón (không phải khuôn). Nay một cặp trang: trái = ảnh khuôn (dọc, chú thích cột bên) + đoạn 1;
+  // phải = hai đoạn thợ làng Vác / làng Đôn Thư làm khuôn + ảnh khuôn nón bày bán ở chợ Chuông, khung cao tới đáy trang
+  const pO = { size: 14.5, budget: false, free: true }
+  const pH = textH([mold[1]], CW, { size: 14.5, lh: BODY.lh, paraGap: 8, jaSize: jaPt(14.5, 1.14) })
+  const nat = natR(mold[2]) ?? 1.33
+  const bh = Math.min(f.room - 22 - pH - 12, CW * 0.62 * nat)
+  const yy = bh > 200 && sideFigure(f.p, f.y, bh, mold[2], bh / nat)
+  if (yy) f.y = yy + 22
+  else f.figure(mold[2], { ratio: R.cin })
+  f.prose([mold[1]], pO)
+  f.page()
+  f.prose(mt.moldMore, pO)
+  const market = ['Khuôn nón bày bán ở chợ Chuông', 'チュオンの市場で売られるノンラーの製作型']
+  const rm = (f.room - 6 - capH(market, CW) - 6) / CW
+  f.y += 6
+  if (rm >= 0.45) f.figure(market, { ratio: Math.min(R.sq, rm), plain: true })
+  else f.pool.unshift(market)
   // góp ý 04/11 (Khánh Huyền): dụng cụ có chú thích ngắn dồn vào một trang (dao kéo + dụng cụ là lá cùng một trang)
   f.fillRest()
   f.page()
@@ -2606,7 +2629,7 @@ let stripRight = null
     4: { gif: ['GIF công đoạn quay nón', '「クアイ・ノン」のGIF'], photos: [['Xếp từng lớp lá lụi lên khuôn', 'ラルイを一枚ずつ型に重ねる']] }, // soát 06/11 (R1): bỏ IMG_3856 — gần y hệt IMG_3854 ở trang lớp lá ngoài
     5: { gif: ['GIF công đoạn khâu nón', '「カウ・ノン」のGIF'], photos: [['Cận cảnh mũi kim, sợi cước xuyên qua lớp lá', '葉の層を通る針と糸のクローズアップ'], ['Nghệ nhân khâu nón, đặt nghiêng khung giữa hai đầu gối', '型を両膝の間に斜めに置いてノンラーを縫う職人']] },
     // soát 04/11: GIF gốc cắt ngang cằm người thợ → phóng vào tay và vành nón
-    6: { gifCrop: { x: 60, y: 70, z: 1.45 }, gif: ['GIF công đoạn nức nón', '「ヌック・ノン」のGIF'], photos: [['Cắt lá thừa và khâu viền vành nón', '余分な葉を切り、外縁を縫う'], ['Khâu viền vành nón', 'ノンラーの外縁を縫う']] },
+    6: { gifCrop: { x: 60, y: 52, z: 1.45 }, gif: ['GIF công đoạn nức nón', '「ヌック・ノン」のGIF'], photos: [['Cắt lá thừa và khâu viền vành nón', '余分な葉を切り、外縁を縫う'], ['Khâu viền vành nón', 'ノンラーの外縁を縫う']] },
     // hai ảnh luồn nhôi chụp liền nhau gần như giống hệt → chỉ giữ một
     7: { gif: ['GIF công đoạn luồn nhôi', '「ルオン・ノイ」のGIF'], photos: [['Chỉ màu luồn trong lòng nón', 'ノンラーの内側に通した色糸']] },
     // góp ý 04/11: thêm ảnh thật của nhóm cho bước quang dầu (IMG_4614)
@@ -2735,8 +2758,29 @@ let stripRight = null
         const r = Math.min(R.wide, (f.room - 6 - capH(ar.photos.hoa, CW) - 4) / CW)
         return f.figure(ar.photos.hoa, r >= 0.4 ? { ratio: r, plain: true } : {})
       }
-      const dh = Math.min(200, f.bot - f.y - 30)
-      if (dh > 90) f.place(dh, (p, y) => p.add({ ...DECO('still-non', p.x0 + (CW - dh * (640 / 310)) / 2, y + 10, dh * (640 / 310), dh, 0.55), name: 'Hình vẽ' }))
+      // anh Hải 08/11: "tận 2 đống họa tiết, cái trên cái dưới trông hơi dở" (hình nón vẽ + cụm tre lấp đáy) → bỏ cả hai;
+      // chỗ trống (ông không có ảnh) là khối chữ kiểu tạp chí giữa phần còn lại: năm 1930 thật to + câu có năm đó trong tiểu
+      // sử của nhóm (nguyên văn, như thẻ dòng thời gian)
+      const p = f.p
+      const yo = { size: 72, font: F.head, lh: 1.15 }
+      const so = { size: 19, font: F.head, lh: 1.45, jaSize: jaPt(19) - 1 }
+      const sw = CW - 80
+      const sent = yearSent(cat[2], 1930)
+      const YH = 90
+      const bh = YH + 18 + 22 + textH(sent, sw, so)
+      const room = f.bot - f.y
+      if (room >= bh + 40) {
+        // khối hơi cao hơn giữa (thị giác), không để dải trống lớn ngay dưới tiểu sử
+        const y0 = f.y + (room - bh) * 0.38
+        p.add(
+          T(p.x0, y0, CW, YH, ['1930', '1930年'], { ...yo, align: 'center', color: ACC[3], jaFont: F.jaHead, jaSize: 60, name: 'Năm nổi bật' }),
+          HL(p.x0 + (CW - 60) / 2, y0 + YH + 18, 60, ACC[3], 1.2),
+          T(p.x0 + 40, y0 + YH + 18 + 22, sw, textH(sent, sw, so), sent, { ...so, italic: true, align: 'center', color: C.ink2, jaFont: F.jaHead, name: 'Câu nổi bật' })
+        )
+        p.noFlora = true
+        p.fixed = true // không để bước dàn đều khoảng trống (settle) kéo câu nổi bật tách khỏi số năm
+        f.y = f.bot
+      }
     }
   )
   f.page()
@@ -3478,7 +3522,7 @@ function settle(p) {
 // trang không còn trơn chữ và không để dải trống
 const VIGNETTE = { 0: 'still-non', 1: 'non', 2: 'tool-quay-non', 3: 'tre-mang', 9: 'still-non' }
 function vignette(p) {
-  if (p.fixed || p.grove || p.hasImg || p.els.some((e) => e.type === 'image' && e.name === 'Hình vẽ')) return
+  if (p.fixed || p.noFlora || p.grove || p.hasImg || p.els.some((e) => e.type === 'image' && e.name === 'Hình vẽ')) return
   // chú thích cuối trang (và gạch ngắn phía trên nó) neo đáy, không tính là nội dung
   const foot = p.els.find((e) => e.name === 'Chú thích' && e.y > BOT - 200)
   const footTop = foot ? foot.y - 16 : BOT
@@ -3610,7 +3654,7 @@ pages.forEach(centerTail)
  */
 let flourish = 0
 function bottomFlora(p) {
-  if (p.fixed) return
+  if (p.fixed || p.noFlora) return
   const body = contentEls(p)
   if (!body.length) return
   const bottom = Math.max(...body.map((e) => e.y + e.h))
@@ -3651,7 +3695,11 @@ pages.forEach(bottomFlora)
   }
 }
 // ảnh gốc có viền đen (chụp từ màn hình video): phóng nhẹ quanh tâm cho mất viền — { x, y, z } như el.crop
-const CROP_FIX = { 'Người thợ khâu nón ngay trong nếp nhà': { x: 50, y: 50, z: 1.12 } }
+const CROP_FIX = {
+  'Người thợ khâu nón ngay trong nếp nhà': { x: 50, y: 50, z: 1.12 },
+  // soát 08/11: chú thích nói khung 16 vòng nứa (ảnh gần trùng ảnh ông Tuy bên khung nón tr. 49) → cận vào khung trên tay ông
+  'Lớp lá lụi trong — trước khi lợp: khung 16 vòng nứa': { x: 76, y: 64, z: 1.5 },
+}
 for (const [hint, c] of Object.entries(CROP_FIX)) {
   const src = PHOTOS[hint]
   if (src) for (const p of pages) for (const e of p.els) if (e.type === 'image' && e.src === src && !e.crop) e.crop = c
