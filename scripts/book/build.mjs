@@ -2913,7 +2913,9 @@ let stripRight = null
     const mapPage = anchors.find((a) => a.label === '2.3.2')?.page
     if (mapPage)
       q.add({
-        ...T(q.x0, dy + dh + 10, iw, 20, [`Xem lại các công đoạn ở trang ${mapPage} →`, `工程を${mapPage}ページで見直す →`], { size: 13, align: 'center', color: C.ink2, jaFont: F.jaSans, name: 'Xem lại', link: `#p${mapPage}`, linkStyle: 'refno', alt: [`Lật tới trang ${mapPage}`, `${mapPage}ページへ`] }),
+        // anh Hải 09/11: "XEM LẠI mà m cho mũi tên sang phải à, cta cũng ko rõ" → lùi về trang trước = mũi tên trái đứng đầu;
+        // viên son đậm chữ kem (cùng kiểu viên mời chơi), cỡ vừa chữ, canh giữa dưới câu hoàn thành
+        ...T(q.x0 + (iw - 300) / 2, dy + dh + 8, 300, 30, [`← Xem lại các công đoạn ở trang ${mapPage}`, `← ${mapPage}ページで工程を見直す`], { size: 13.5, weight: 600, lh: 1.2, align: 'center', color: '#fbf4e6', jaFont: F.jaSans, name: 'Xem lại', link: `#p${mapPage}`, linkStyle: 'cta', alt: [`Lật về trang ${mapPage}`, `${mapPage}ページへ戻る`] }),
         tab: { set: 'sort8', i: 1 },
       })
     q.fixed = true

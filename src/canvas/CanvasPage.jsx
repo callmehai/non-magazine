@@ -206,7 +206,7 @@ function TextBody({ el, mode }) {
   const ref = useRef(null)
   useFillLeading(ref, el, shown, mode === 'read' && el.fillLeading)
   const body = (
-    <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''}`} style={textStyle(el, shown)} lang={shown}>
+    <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''} ${el.linkStyle === 'cta' ? 'is-cta' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
         <p key={i}>{p ? <RubyText text={p} /> : '\u00a0'}</p>
       ))}

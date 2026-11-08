@@ -763,3 +763,23 @@
 .cv-el[data-tab-off] .cvw-lock__pad {
   animation: none;
 }
+
+/* nút lật trang dạng viên son (anh Hải 09/11: "cta cũng ko rõ") — vd. "← Xem lại các công đoạn ở trang 68" tr. 87 */
+.cv-link--cta {
+  text-decoration: none;
+}
+.cv-text.is-cta {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #fbf4e6 !important;
+  background: #a8382b;
+  border-radius: 999px;
+  box-shadow: 0 0.15em 0.5em rgba(120, 30, 18, 0.3);
+  transition: background 0.2s, transform 0.2s;
+}
+.cv-link--cta:hover .cv-text.is-cta,
+.cv-link--cta:focus-visible .cv-text.is-cta {
+  background: #8e2c21;
+  transform: translateY(-0.08em);
+}
