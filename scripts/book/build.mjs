@@ -3112,8 +3112,8 @@ let stripRight = null
       ]],
     ]
     const note = [
-      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')}: nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
-      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像：チョン・カイ撮影。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
+      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và hai ảnh bưu thiếp (chợ đèn lồng, bàn tay nâng chồng nón): nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
+      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像2点（提灯の下の市場、ノンラーを持つ手）：チョン・カイ撮影。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
     ]
     f.page()
     const p = f.p
@@ -3233,8 +3233,9 @@ let stripRight = null
       // dùng lại ảnh đc miễn nó đẹp": 4 ảnh nhóm tự chụp, không có thành viên nhóm, hợp khung gần vuông của tấm thiếp
       card(['Đình Chuông — không gian sinh hoạt của làng nghề', 'チュオン村のディン（村の共同祭祀施設）'], [50, 50]),
       card(['Ảnh trang lót: phiên chợ Chuông lúc chiều muộn trước sân đình', '見返し写真：夕暮れの亭の前で開かれるチュオンの市'], [50, 70]),
-      card(['Ảnh toàn trang: nón lá xếp chồng ở chợ Chuông', '全面写真：チュオンの市場に積まれたノンラー'], [50, 90]),
-      card(['Lòng nón lá trắng với chỉ nhôi đỏ – xanh', '赤と青のノイの糸が見える白いノンラーの内側'], [50, 50]),
+      // anh Hải: "2 ảnh này xấu mà" (nón xếp chồng, lòng nón chỉ nhôi) → chợ đèn lồng (ảnh cũ) + bàn tay nâng chồng nón
+      card(['Chợ nón Chuông dưới mái che treo đèn lồng', '提灯の下がる屋根の下のチュオンのノンラー市場'], [50, 40]),
+      card(['Bàn tay người bán nâng chồng nón trắng', 'チュオン{村|むら}のノンラー市場で売られている伝統的なノンラー'], [45, 50]),
     ]
     const verses = [
       ['Muốn ăn cơm trắng cá trê\nMuốn đội nón tốt thì về làng Chuông', '白いご飯とナマズを食べたいなら、\nよいノンラーをかぶりたいなら、チュオン村へ。'],
