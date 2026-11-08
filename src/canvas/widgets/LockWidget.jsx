@@ -43,25 +43,19 @@ export default function LockWidget({ el, interactive }) {
           <g className="cvw-lock__shackle">
             <path d="M29 60 V38 a21 21 0 0 1 42 0 V60" className="cvw-lock__nua" />
             <path d="M29 60 V38 a21 21 0 0 1 42 0 V60" className="cvw-lock__nua-hi" />
-            {/* đốt nứa */}
-            {[
-              [29, 46],
-              [36, 22],
-              [64, 22],
-              [71, 46],
-            ].map(([x, y], k) => (
-              <circle key={k} cx={x} cy={y} r="2.1" className="cvw-lock__dot" />
+            {/* đốt nứa: vạch ngang thân vòng */}
+            {[[24.4, 47, 33.6, 47], [39.2, 25.66, 33.14, 18.73], [60.8, 25.66, 66.86, 18.73], [66.4, 47, 75.6, 47]].map(([x1, y1, x2, y2], k) => (
+              <line key={k} x1={x1} y1={y1} x2={x2} y2={y2} className="cvw-lock__dot" />
             ))}
           </g>
           <rect x="12" y="54" width="76" height="62" rx="9" className="cvw-lock__body" />
           <rect x="17.5" y="59.5" width="65" height="51" rx="5.5" className="cvw-lock__frame" />
           {/* nón lá: thân, vành, núm chóp */}
-          <path d="M50 67 L71 86.5 Q50 92 29 86.5 Z" className="cvw-lock__non" />
-          {/* vòng nứa trên thân nón + vành cạp, cùng màu son của thân khoá */}
-          <path d="M43.2 73.4 Q50 75 56.8 73.4" className="cvw-lock__vong-non" />
-          <path d="M36.6 79.6 Q50 82.6 63.4 79.6" className="cvw-lock__vong-non" />
-          <path d="M29 86.5 Q50 92 71 86.5" className="cvw-lock__rim" />
-          <circle cx="50" cy="66.6" r="1.5" className="cvw-lock__non" />
+          {/* nón lá một khối: chóp + vành cong; hai vòng nứa mảnh màu son trên thân (anh Hải: núm chóp + đầu vành tròn
+              trông như "3 chấm" → bỏ) */}
+          <path d="M50 66.5 L72 86.6 Q50 93 28 86.6 Z" className="cvw-lock__non" />
+          <path d="M42.4 73.8 Q50 75.8 57.6 73.8" className="cvw-lock__vong-non" />
+          <path d="M35.2 80.4 Q50 83.8 64.8 80.4" className="cvw-lock__vong-non" />
           {/* lỗ khoá */}
           <circle cx="50" cy="99" r="3.4" className="cvw-lock__hole" />
           <path d="M48.3 100.5 L47.4 107 H52.6 L51.7 100.5 Z" className="cvw-lock__hole" />
