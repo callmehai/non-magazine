@@ -1614,7 +1614,13 @@ function chapterOpener(ch, photo) {
   left.add(HL(lx, ry, left.cw, C.line, 0.9))
   // ảnh: khung dọc 3:4 lệch phải, cụm sen vẽ sau ảnh ở góc trái dưới (ảnh che một phần như mockup)
   // soát 04/11 (B10): ảnh mở chương cũng có chú thích "Ảnh N: … (Nguồn: …)" dưới ảnh
-  const oc = fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0])
+  // tab Bổ sung (08/11): "Ảnh bìa mỗi chương chỉ cần ghi nguồn, không cần ghi chú thích" → "Ảnh N: (nguồn)" / 「画像N：（出典）」
+  const srcOnly = (fc) => {
+    const o = [fc[0].match(/\([^()]*\)$/)?.[0] ?? fc[0], fc[1] ? fc[1].match(/（[^（）]*）$/)?.[0] ?? fc[1] : fc[1]]
+    o.fmt = true
+    return o
+  }
+  const oc = srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
   const pw0 = left.cw - 70
   const och = capH(oc, pw0)
   const ph = BOT + 14 - (ry + 26) - 6 - och
@@ -1628,6 +1634,7 @@ function chapterOpener(ch, photo) {
   const fy = sjo ? Math.min(ry + 26 + ph - fh, ry + 30 + (photo.breakOut.top - photo.breakOut.head) * (pw / sjo.a)) : ry + 26
   left.add({
     ...IMG(left.x1 - pw, fy, pw, fh, photo.main, { name: 'Ảnh mở chương', ...(sjo ? { pos: '50% 100%' } : null) }),
+    capSrcOnly: true,
     pop: { z: 0.5, kind: 'lift' },
     ...(sjo ? { breakOut: { src: photo.breakOut.src, a: sjo.a } } : null),
   })
@@ -3723,7 +3730,7 @@ pages.forEach(bottomFlora)
       const fc = fmtCap([e.hint, e.hintJa ?? null])
       const vi = strip(pageCap(fc[0]) ?? '')
       const ja = fc[1] ? strip(pageCap(fc[1])) : null
-      const hit = caps.find((c) => bare(c.text) === vi || (ja && bare(c.ja) === ja))
+      const hit = e.capSrcOnly ? caps.find((c) => /^Ảnh \d+: \(/.test(c.text)) : caps.find((c) => bare(c.text) === vi || (ja && bare(c.ja) === ja))
       e.cap = hit ? hit.text : vi
       e.capJa = hit ? hit.ja ?? null : ja
     }
