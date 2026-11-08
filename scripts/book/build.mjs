@@ -340,7 +340,8 @@ const SEAL = (x, y, s = 60) => [
   RECT(x, y, s, s, '#a8382b', { radius: 3, name: 'Con dấu' }),
   RECT(x + 3.5, y + 3.5, s - 7, s - 7, 'none', { stroke: '#f6e9d6', sw: 0.8, radius: 2, name: 'Viền dấu' }),
   // góp ý 04/11: đối tượng chính là NÓN LÁ Làng Chuông → chữ dấu "Nón lá Làng Chuông"
-  T(x + 2, y + s / 2 - 17, s - 4, 34, ['NÓN LÁ\nLÀNG\nCHUÔNG', 'チュオン村\nの\nノンラー'], { font: F.head, size: 8, weight: 700, tracking: 0.4, lh: 1.3, align: 'center', color: '#f6e9d6', jaFont: F.jaHead, jaSize: 8, name: 'Chữ dấu' }),
+  // chữ dấu co theo cỡ dấu (dấu 44pt trên bìa mới: chữ 8pt cũ chạm viền)
+  T(x + 2, y + s / 2 - (17 * s) / 60, s - 4, (34 * s) / 60, ['NÓN LÁ\nLÀNG\nCHUÔNG', 'チュオン村\nの\nノンラー'], { font: F.head, size: (8 * s) / 60, weight: 700, tracking: 0.4, lh: 1.3, align: 'center', color: '#f6e9d6', jaFont: F.jaHead, jaSize: (8 * s) / 60, name: 'Chữ dấu' }),
 ]
 const ELL = shape('ellipse')
 const TRI = shape('triangle')
