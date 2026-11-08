@@ -11,7 +11,7 @@ import { ensureFont } from '../fonts.js'
  * sáp son dập hình nón kẹp hai lá tre khô. Bấm → dấu bật ra, nắp gập lên (lật 2D: co theo trục dọc rồi mở mặt trong —
  * mặt trong lót giấy in 16 vòng tre), phong bì hạ xuống, lá thư giấy dó trượt lên rồi đáp ra phía trước để đọc.
  * Bấm lần nữa: thư cất vào, nắp đóng, dấu gắn lại. Chế độ không tương tác (ảnh thu nhỏ, trang soát): phong bì đóng.
- * el.letter = [vi, ja] (xuống dòng bằng \n), el.sign = [vi, ja], el.to = [vi, ja], el.from = [vi, ja]
+ * el.letter = [vi, ja] (xuống dòng bằng \n), el.sign = [vi, ja], el.to = [vi, ja], el.from = [vi, ja], el.note = [vi, ja] (chú thích nhỏ trong thư)
  */
 const L = {
   vi: { open: 'Bấm để mở thư', close: 'Bấm để cất thư' },
@@ -75,8 +75,9 @@ export default function EnvelopeWidget({ el, interactive }) {
   const closedY = (H - eh) / 2 - 18
   const openY = H - eh - 52
   const up = -(ltop + lh + 8)
-  // đáp xuống: đầu thư che mũi nắp đã mở, hai bên vẫn thấy nắp lót vòng tre
-  const land = up + lh * 0.28
+  // đáp xuống thấp: gần nửa trên nắp đã mở (lót 16 vòng tre) lộ trên đầu thư, "Gửi bạn đọc" vẫn thấy dưới thư
+  // (soát 08/11: thư che kín nắp, chỉ thò hai mẩu góc — nhìn như lỗi vẽ)
+  const land = -eh * 0.66 * 0.5 - ltop + lh * 0.03
   const fh = eh * 0.66 // nắp: sâu 2/3 thân
   const ids = useMemo(() => `env${Math.random().toString(36).slice(2, 7)}`, [])
   const clip = useMemo(() => deckle(), [])
@@ -88,13 +89,21 @@ export default function EnvelopeWidget({ el, interactive }) {
     const sh = y0 + dir * (fh - 9)
     return `M0 ${y0} L${ew} ${y0} L${cx + 20} ${sh} Q${cx} ${tip + dir * 2} ${cx - 20} ${sh} Z`
   }
+  const busy = useRef(false)
   const toggle = () => {
-    if (!interactive) return
+    if (!interactive || busy.current) return
+    busy.current = true
     clearTimeout(timer.current)
     if (st === 'open') {
       setSt('closing')
-      timer.current = setTimeout(() => setSt('closed'), 2000)
-    } else setSt('open')
+      timer.current = setTimeout(() => {
+        setSt('closed')
+        busy.current = false
+      }, 2000)
+    } else {
+      setSt('open')
+      timer.current = setTimeout(() => (busy.current = false), 2000)
+    }
   }
   const open = st === 'open'
   return (
@@ -144,9 +153,10 @@ export default function EnvelopeWidget({ el, interactive }) {
             <span className="cvw-env__sheet" style={{ left: `${(ew - lw) / 2}em`, top: `${ltop}em`, width: `${lw}em`, height: `${lh}em` }}>
               <span className="cvw-env__paper" style={{ clipPath: clip }}>
                 <svg className="cvw-env__mark" viewBox="0 0 60 26" aria-hidden="true">
-                  <path d="M6 22 Q30 19 54 22" fill="none" stroke="#a88a5c" strokeWidth="1" />
-                  <path d="M9 21 L30 5 L51 21" fill="none" stroke="#a88a5c" strokeWidth="0.9" strokeLinejoin="round" />
-                  <circle cx="30" cy="4.6" r="1.4" fill="#a88a5c" />
+                  <path d="M8.5 20.5 L30 8 L51.5 20.5" fill="#f6efe0" stroke="#a88a5c" strokeWidth="0.9" strokeLinejoin="round" />
+                  <path d="M6.5 20.8 Q30 26.4 53.5 20.8" fill="none" stroke="#a88a5c" strokeWidth="1" />
+                  <path d="M19 14.6 Q30 16.6 41 14.6" fill="none" stroke="#a88a5c" strokeWidth="0.5" opacity="0.6" />
+                  <circle cx="30" cy="7.6" r="1.4" fill="#a88a5c" />
                 </svg>
                 <span className="cvw-env__verse">
                   {lines.map((s, i) => (
@@ -155,6 +165,7 @@ export default function EnvelopeWidget({ el, interactive }) {
                     </span>
                   ))}
                 </span>
+                {pick(el.note) && <span className="cvw-env__note">{pick(el.note)}</span>}
                 <span className="cvw-env__foot">
                   <span className="cvw-env__sign">{pick(el.sign)}</span>
                   <span className="cvw-env__chop" aria-hidden="true">
@@ -241,11 +252,12 @@ export default function EnvelopeWidget({ el, interactive }) {
                 <circle r="16.5" fill="none" stroke="#7a2118" strokeWidth="1.6" opacity="0.55" />
                 <circle r="16.5" fill="none" stroke="#e98c73" strokeWidth="0.5" opacity="0.45" transform="translate(-0.5 -0.6)" />
                 <g fill="none" stroke="#f3d6c4" strokeWidth="1.05" strokeLinejoin="round" strokeLinecap="round" opacity="0.88">
-                  <path d="M-10 0.5 Q0 -1.6 10 0.5" />
-                  <path d="M-8.4 -0.2 L0 -9.5 L8.4 -0.2" />
-                  <path d="M-4.4 -4.8 Q0 -5.5 4.4 -4.8" strokeWidth="0.6" opacity="0.7" />
+                  <path d="M-11.6 1.4 L0 -6.4 L11.6 1.4" />
+                  <path d="M-12.6 1.6 Q0 6.2 12.6 1.6" />
+                  <path d="M-6.2 -2.3 Q0 -0.6 6.2 -2.3" strokeWidth="0.55" opacity="0.65" />
+                  <path d="M-3.4 6.4 Q0 9.6 3.4 6.4" strokeWidth="0.7" opacity="0.7" />
                 </g>
-                <circle cy="-9.8" r="0.9" fill="#f3d6c4" opacity="0.88" />
+                <circle cy="-6.9" r="1.1" fill="#f3d6c4" opacity="0.88" />
                 <ellipse cx="-7" cy="-11" rx="5" ry="2.2" fill="#fff" opacity="0.16" transform="rotate(-30 -7 -11)" />
               </svg>
             </span>

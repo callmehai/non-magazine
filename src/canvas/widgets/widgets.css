@@ -621,6 +621,13 @@
   display: block;
   text-wrap: pretty;
 }
+/* soát 08/11: câu bát rớt đuôi xuống dòng ("…thì về / làng Chuông") → bản Việt mỗi câu một dòng trọn */
+:lang(vi) .cvw-pc__verse {
+  font-size: 12.5em;
+}
+:lang(vi) .cvw-pc__verse span {
+  text-wrap: nowrap; /* text-wrap: pretty ở trên đặt lại chế độ xuống dòng → phải tắt ngay trên dòng */
+}
 /* lục bát: câu lục thụt vào, câu bát sát lề */
 .cvw-pc__verse span:first-child {
   padding-left: 1.2em;
@@ -628,9 +635,11 @@
 :lang(ja) .cvw-pc__verse {
   font-style: normal;
   font-weight: 500;
-  font-size: 12em;
-  line-height: 1.4;
+  font-size: 11em;
+  line-height: 1.45;
   line-break: strict;
+  /* ngắt theo cụm từ, không cắt giữa chữ (「遊びに行／こう。」) */
+  word-break: auto-phrase;
 }
 :lang(ja) .cvw-pc__verse span:first-child {
   padding-left: 0;
@@ -1467,9 +1476,17 @@
 .cvw-env.is-ja .cvw-env__verse {
   /* mỗi câu một dòng trọn (không ngắt giữa chữ "ノンラー") */
   font-family: 'Noto Serif JP', serif;
-  font-size: calc(11.2em * var(--k, 1));
+  font-size: calc(11.6em * var(--k, 1));
   line-height: 2;
   align-items: center;
+  text-align: center;
+}
+.cvw-env__note {
+  margin-top: calc(-4em * var(--k, 1));
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: calc(6.6em * var(--k, 1));
+  line-height: 1.5;
+  color: #9a8466;
   text-align: center;
 }
 .cvw-env__foot {

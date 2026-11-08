@@ -3242,9 +3242,12 @@ let stripRight = null
     // khung dọc 2:3 (thư mục "Ảnh nhóm", ảnh gốc 3:4 cùng nền hoa giấy), tên + mã sinh viên dưới từng ảnh
     const gap = 12
     const tw4 = (p.cw - 3 * gap) / 4
-    const th4 = r1(tw4 * 1.5)
-    const nameO = { font: F.head, size: 14, align: 'center', lh: 1.25, jaFont: F.jaHead, jaSize: 13 }
-    const nh4 = Math.max(...e.team.members.map(([name]) => textH(name, tw4 + 8, nameO)))
+    // soát 08/11: khung 2:3 để lại hai dải trống ~65pt trên / dưới khối → khung cao hơn (4:7); tên cỡ 11,8 trên ô rộng hơn
+    // để cả bốn tên tiếng Việt vừa một dòng (trước: hai tên rớt một chữ xuống dòng)
+    const th4 = r1(tw4 * 1.75)
+    const nameO = { font: F.head, size: 11.8, align: 'center', lh: 1.25, jaFont: F.jaHead, jaSize: 12.5 }
+    const nh4 = Math.max(...e.team.members.map(([name]) => textH(name, tw4 + 12, nameO)))
+    const nhVi = Math.max(...e.team.members.map(([name]) => textH1(name, tw4 + 12, nameO, 0)))
     const gridH = 30 + th4 + 8 + nh4 + 4 + 14
     // khối thành viên + lời nhắn đặt giữa phần trang còn lại
     y += Math.max(0, (BOT - 10 - y - (gridH + 34 + 18 + ch + 22)) / 2)
@@ -3253,14 +3256,18 @@ let stripRight = null
     // cùng một chuẩn cắt cho cả bốn (khung xem trước: scratchpad cropsheet.py): mắt trên đường một phần ba, mặt to bằng nhau
     // (Khánh Linh đứng xa → phóng nhiều hơn, Thu Nguyệt đứng gần → phóng ít), lấy từ đỉnh đầu (trọn chiếc nón của Minh Ánh,
     // bó sen của Khánh Linh) xuống ngang eo; Khánh Huyền nhìn sang phải → chừa khoảng trước mặt
-    const FACE = [{ x: 49.9, y: 52.8, z: 1.78 }, { x: 41, y: 53, z: 1.62 }, { x: 49.3, y: 59.8, z: 1.5 }, { x: 48.6, y: 52.9, z: 1.4 }]
+    // khung 4:7 hẹp hơn ảnh 3:4 → phóng ít hơn để vành nón Minh Ánh (57% bề ngang ảnh) vẫn trọn: z ≤ 1,33; ba ảnh kia giảm
+    // cùng tỉ lệ (mặt vẫn bằng nhau), tâm dọc tính lại cho mắt vẫn ở đường một phần ba
+    const FACE = [{ x: 49.9, y: 54, z: 1.58 }, { x: 41, y: 54.3, z: 1.44 }, { x: 49.3, y: 61.2, z: 1.33 }, { x: 48.6, y: 54.4, z: 1.24 }]
     e.team.members.forEach(([name, code], i) => {
       const mx = p.x0 + i * (tw4 + gap)
       const hint = [`Thành viên: ${name[0]}`, name[1]]
       p.add(
         { ...IMG(mx, y, tw4, th4, hint, { crop: FACE[i] }), name: 'Ảnh thành viên', alt: name },
-        T(mx - 4, y + th4 + 8, tw4 + 8, nh4, name, { ...nameO, name: 'Tên thành viên' }),
-        T(mx, y + th4 + 8 + nh4 + 4, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' })
+        T(mx - 6, y + th4 + 8, tw4 + 12, nh4, name, { ...nameO, name: 'Tên thành viên' }),
+        // mã sinh viên ngay dưới tên của từng bản (tên Việt một dòng, tên Nhật hai dòng)
+        { ...T(mx, y + th4 + 8 + nhVi + 4, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' }), only: 'vi' },
+        { ...T(mx, y + th4 + 8 + nh4 + 4, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' }), only: 'ja' }
       )
     })
     y += th4 + 8 + nh4 + 4 + 14 + 34
@@ -3581,11 +3588,12 @@ const CH_PHOTO = {
         sign: ['— Ca dao —', '— ベトナムの民謡（カーザオ）—'],
         to: ['Gửi bạn đọc', '読者の皆さまへ'],
         from: ['Từ làng Chuông · Thanh Oai, Hà Nội', 'ハノイ・チュオン村より'],
+        // soát 08/11: chú thích 亭 để ở chân trang thì lơ lửng lúc thư còn đóng → in nhỏ ngay trong lá thư (bản Nhật)
+        note: [null, '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。'],
       },
     }),
     alt: ['Phong bì thư gửi bạn đọc — bấm để mở', '読者の皆さまへの手紙 — クリックして開く'],
   })
-  ep.add({ ...T(ep.x0, BOT - 22, ep.cw, 18, ['亭', '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。'], { size: 9.5, lh: 1.4, jaSize: 9.5, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích' }), only: 'ja' })
 }
 
 // ── dàn lại từng trang: không để dải trống dưới đáy trang
