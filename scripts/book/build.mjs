@@ -162,6 +162,8 @@ function T(x, y, w, h, pair, o = {}) {
 const FILL_LEADING = new Set(['Đoạn văn', 'Mô tả', 'Tiểu sử', 'Ghi chú', 'Mô tả lớp', 'Đoạn dẫn'])
 // tâm khung theo ảnh (khóa = chú thích tiếng Việt); ảnh có người không ghi ở đây thì tự canh theo khuôn mặt (faces.json)
 const POS = {
+  // tr. 51: ảnh khung nón 16 vòng (4:3) trong khung 3:2 — cắt giữa để giữ cả chóp lẫn chân khung (soát độc lập 08/11)
+  'Khung nón 16 vòng nứa': '50% 50%',
   // người đứng sát mép phải ảnh bị cắt nửa người → dịch khung sang trái
   'Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông': '0% 50%',
   'Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông': '50% 88%',
@@ -341,7 +343,7 @@ const SEAL = (x, y, s = 60) => [
   RECT(x + 3.5, y + 3.5, s - 7, s - 7, 'none', { stroke: '#f6e9d6', sw: 0.8, radius: 2, name: 'Viền dấu' }),
   // góp ý 04/11: đối tượng chính là NÓN LÁ Làng Chuông → chữ dấu "Nón lá Làng Chuông"
   // chữ dấu co theo cỡ dấu (dấu 44pt trên bìa mới: chữ 8pt cũ chạm viền)
-  T(x + 2, y + s / 2 - (17 * s) / 60, s - 4, (34 * s) / 60, ['NÓN LÁ\nLÀNG\nCHUÔNG', 'チュオン村\nの\nノンラー'], { font: F.head, size: (8 * s) / 60, weight: 700, tracking: 0.4, lh: 1.3, align: 'center', color: '#f6e9d6', jaFont: F.jaHead, jaSize: (8 * s) / 60, name: 'Chữ dấu' }),
+  T(x + 2, y + s / 2 - (15.5 * s) / 60, s - 4, (34 * s) / 60, ['NÓN LÁ\nLÀNG\nCHUÔNG', 'チュオン村\nの\nノンラー'], { font: F.head, size: (8 * s) / 60, weight: 700, tracking: 0.4, lh: 1.3, align: 'center', color: '#f6e9d6', jaFont: F.jaHead, jaSize: (8 * s) / 60, name: 'Chữ dấu' }),
 ]
 const ELL = shape('ellipse')
 const TRI = shape('triangle')
@@ -2352,7 +2354,7 @@ let stripRight = null
       const tab = { set: 'rings16', i: 0 }
       const dw = Math.min(180, im.w * 0.45)
       q.add(
-        { ...RECT(im.x, im.y, im.w, im.h, '#f4ede0', { opacity: 0.93, name: 'Giấy phủ' }), tab },
+        { ...RECT(im.x, im.y, im.w, im.h, '#f4ede0', { opacity: 0.985, name: 'Giấy phủ' }), tab },
         { ...DECO('vong-non', im.x + im.w / 2 - dw / 2, im.y + im.h / 2 - dw / 2 - 18, dw, dw, 0.5), name: 'Hình vẽ', tab },
         { ...T(im.x + 20, im.y + im.h / 2 + dw / 2 - 8, im.w - 40, 44, ['Lên đủ 16 vòng nứa ở trang bên để xem khung nón thật', '隣のページで16本の輪をすべて付けると、本物の骨組みが見られます'], { size: 14, italic: true, lh: 1.45, align: 'center', color: C.muted, jaFont: F.jaSans, jaSize: 12.5, name: 'Lời nhắc' }), tab },
       )
@@ -2904,17 +2906,19 @@ let stripRight = null
     p.add({ ...WIDGET(p.x0, y, p.cw, BOT - y, 'sort', { name: 'Xếp lại các công đoạn', data: { steps, set: 'sort8', accent: acc } }), alt: ['Các thẻ công đoạn làm nón — kéo để xếp đúng thứ tự', 'ノンラー作りの工程カード — ドラッグして正しい順に並べる'] })
     p.fixed = true
     const q = stepFlow.page()
-    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → (bản đầu: ảnh các bạn trong nhóm mặc áo dài — anh Hải:
-    // "bên kia sẽ hơi ngại khi hiện ảnh họ ở đây") → chiếc nón trắng nhóm gửi Zalo 22:35 (tách nền) đặt trên giấy ngà, bóng
-    // mềm dưới vành: đúng "chiếc nón trắng hoàn thiện", không có mặt người
-    const hint = ['Chiếc nón lá trắng hoàn thiện', 'できあがった白いノンラー']
+    // anh Hải 08/11: "làm xong ra cái ảnh nón dưới đất chán vl" → ảnh khi xếp xong phải ấn tượng ("ảnh này nó phải ấn tượng
+    // hơn chứ"; "lấy ảnh người cũng đc, miễn có cái nón hoàn thiện trong đó, ảnh người đẹp và chưa đâu có nhé tránh trùng"):
+    // hai thiếu nữ áo dài đội nón trắng bước ra từ cổng đình Chuông — cảnh cổng đình chưa có ở trang nào (nón tách nền
+    // Zalo 22:35 là ảnh bìa, không dùng lại ở đây)
+    const hint = ['Hai thiếu nữ áo dài đội nón lá trắng trước cổng đình Chuông', 'チュオン村の亭の門の前で、白いノンラーをかぶったアオザイ姿の二人']
     const iw = q.cw
-    const ih = Math.round(Math.min(iw * (natR(hint) ?? 1.02), BOT - TOP - 10 - 150))
+    // chừa chỗ cho chú thích hai dòng + câu hoàn thành + nút xem lại (không đè nhau)
+    const ih = Math.round(Math.min(iw * (natR(hint) ?? 1.02), BOT - TOP - 10 - 180))
     const iy = TOP + 10
     const fy = figure(q, q.x0, iy, iw, ih, hint, { capBelow: true })
     // giấy mờ phủ ảnh khi chưa xếp đúng (thẻ 0), mất đi khi xếp đúng
     q.add(
-      { ...RECT(q.x0, iy, iw, ih, '#f4ede0', { opacity: 0.9, name: 'Giấy phủ' }), tab: { set: 'sort8', i: 0 } },
+      { ...RECT(q.x0, iy, iw, ih, '#f4ede0', { opacity: 0.985, name: 'Giấy phủ' }), tab: { set: 'sort8', i: 0 } },
       { ...DECO('non-line', q.x0 + iw / 2 - 90, iy + ih / 2 - 92, 180, 124, 0.7), name: 'Hình vẽ', tab: { set: 'sort8', i: 0 } },
     )
     const dO = { size: 34, font: F.script, lh: 1.15, jaSize: 24 }
