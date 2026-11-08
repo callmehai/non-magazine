@@ -1757,32 +1757,42 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
   // → bỏ ảnh nền nhiều nón nhoè (xám đục) + cụm nón nhoè phía trước + nhánh tre / cành lá vàng; giấy ngà sáng, sạch;
   // một chiếc nón thật (ảnh nhóm gửi Zalo 22:35, tách nền, đủ vành cạp) đứng giữa mười sáu vòng tre nét vàng rất mảnh
   // (concept "ba lớp lá, mười sáu vòng tre"); tên sách canh giữa nét thanh; đường khâu nét đứt quanh bìa; một điểm son (dấu)
-  // anh Hải 08/11 khuya: "trong lúc đợi thì cứ cho chọn tạm cái này nhé, làm nền" → bìa tạm: ảnh nền tạo bằng AI (Gemini,
-  // từ ảnh nón nhóm gửi) — chồng nón trắng trên sân gạch, sương sáng phía trên (đã xoá dấu sao Gemini, làm mềm dải trên,
-  // phủ sáng trên / tối dưới bằng scripts/book/out/covers/ai/prep.py) — chờ nhóm chọn bìa chính thức
-  const p = new Page({ hideNumber: true, bg: '#efe6d6', paper: null })
+  const p = new Page({ hideNumber: true, bg: '#f8f3e9', paper: null })
   p.fixed = true
-  const ink = '#2f2218'
-  const gold = '#9c7a45'
+  const ink = '#33251a'
+  const gold = '#a8854f'
   const cx = W / 2
+  const hatW = 372
+  const hatH = hatW / (878 / 759)
+  const ringD = 452
+  const ringY = 316
   p.add(
-    { ...IMG(0, 0, W, H, ['Ảnh bìa: chồng nón lá trắng Làng Chuông (ảnh minh họa tạo bằng AI)', '表紙写真：チュオン村の白いノンラーの山（AIで作成したイメージ）'], { src: 'assets/book/cover/bia-ai-cho-non.webp', fit: 'cover' }), name: 'Ảnh bìa' },
-    RECT(18, 18, W - 36, H - 36, 'none', { stroke: gold, sw: 0.7, dash: '3 2.5', opacity: 0.55, name: 'Đường khâu' }),
+    RECT(22, 22, W - 44, H - 44, 'none', { stroke: gold, sw: 0.7, dash: '3 2.5', opacity: 0.55, name: 'Đường khâu' }),
+    SUN(W - 440, -36, 470, false, 0.22),
     T(0, 84, W, 14, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 8.5, tracking: 3.4, weight: 600, align: 'center', color: gold, jaFont: F.jaSans, jaSize: 9, name: 'Dòng nhỏ' }),
-    { ...T(0, 102, W, 96, ['Nón lá', ''], { font: F.head, size: 80, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
-    { ...T(0, 198, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 104, W, 92, ['Nón lá', ''], { font: F.head, size: 76, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
+    { ...T(0, 196, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
     { ...T(0, 112, W, 26, ['', 'チュオン{村|むら}の'], { size: 18, tracking: 6, lh: 1.3, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 18, name: 'Tên sách' }), only: 'ja' },
     { ...T(0, 140, W, 80, ['', 'ノンラー'], { size: 60, lh: 1.2, tracking: 4, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 60, name: 'Tên sách' }), only: 'ja' },
-    T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 26, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
+    T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 25, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
     HL(cx - 28, 286, 56, gold, 0.9),
-    ...SEAL(W - 50 - 44, 46, 44),
-    // logo trên nền ngà (chân bìa là ảnh tối), dòng thông tin màu kem
-    RECT(56, H - 26 - 36, 128, 36, 'rgba(251, 247, 238, 0.94)', { radius: 4, name: 'Nền logo' }),
+    // mười sáu vòng tre — quầng mảnh sau chiếc nón
+    { ...DECO('vong-non', cx - ringD / 2, ringY, ringD, ringD, 0.2), name: 'Họa tiết' },
+    // nhóm chọn bìa giấy ngà (Zalo 09/11 00:06 Sơ hở là giãy: "Thôi chọn cái này" / "Em có thêm mấy cái liên quan thêm việt nam
+    // k em" / "Kiểu hoa sen ctct bên cạnh oa"; anh Hải: "dùng ảnh thật tách nền") → hai cụm sen thật tách nền mọc lên từ đường
+    // khâu chân bìa (như mặt ao): trái bông nở + nụ + lá sen có chuồn chuồn đậu, phải gương sen + bông hé; đứng sau vành nón.
+    // Ảnh Wikimedia Commons (Chihiro H — CC BY 3.0; H. Zell — CC BY-SA 3.0; Basile Morin — CC BY-SA 4.0), ghép bằng
+    // scripts/book/out/covers/sen/compose.py — ghi ở trang Nguồn ảnh
+    { ...IMG(20, 529, 575, 223, ['Hoa sen, gương sen, lá sen', '蓮の花・蓮の実・蓮の葉'], { src: 'assets/book/cover/sen-bia.webp', fit: 'fill' }), name: 'Hoa sen' },
+    { ...IMG(cx - hatW / 2, ringY + ringD / 2 - hatH * 0.56, hatW, hatH, ['Ảnh bìa: chiếc nón lá Làng Chuông', '表紙写真：チュオン村のノンラー'], { src: 'assets/book/cover/bia-non.webp', fit: 'fill' }), name: 'Ảnh bìa' },
+    ...SEAL(W - 50 - 44, 52, 44),
+    { ...HL(56, H - 112, W - 112, gold, 0.6), dash: '3 2.5', opacity: 0.6 },
     // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
-    IMG(64, H - 26 - 32, 112, 28, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
-    T(W - 56 - 300, H - 26 - 34, 300, 34, front.team, { size: 10, lh: 1.5, align: 'right', color: '#fbf2e2', jaFont: F.jaSans, name: 'Thông tin' })
+    IMG(56, H - 86, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
+    T(W - 56 - 300, H - 84, 300, 34, front.team, { size: 10, lh: 1.5, align: 'right', color: '#5a4634', jaFont: F.jaSans, name: 'Thông tin' })
   )
 }
+
 
 // ═════════════════════════════════════════ MỤC LỤC (cặp trang 2–3: mở bìa là thấy ngay, điền sau khi biết số trang)
 const tocPages = [new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: 'khung' }), new Page({ chapter: 0, bg: C.cream, hideNumber: true, paper: 'khung' })]
@@ -3359,6 +3369,7 @@ let stripRight = null
         [['Bảo tàng Lịch sử Quốc gia', '国立歴史博物館'], ['Trống đồng Ngọc Lũ · thạp đồng Đào Thịnh', 'ゴックルー銅鼓・ダオティン銅製容器']],
         [['Bảo tàng Hà Nội', 'ハノイ博物館'], ['Nón lá khi lao động · người dân đội nón đi chợ', '屋外での作業に使われるノンラー・市場へ行く人々']],
         [['André Salles (BnF)', 'アンドレ・サル（フランス国立図書館）'], ['Hàng bán nón Hà Nội, 1896 · phạm vi công cộng', '1896年ハノイのノンラー売り・パブリックドメイン']],
+        [['Wikimedia Commons', 'ウィキメディア・コモンズ'], ['Sen trên bìa: Chihiro H · H. Zell · Basile Morin — CC BY / BY-SA', '表紙のハス：Chihiro H・H. Zell・B. Morin（CC BY・BY-SA）']],
       ]],
       [['VIDEO VÀ BẢN ĐỒ', '動画・地図'], [
         [['Nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏'], ['Video trình diễn nón lá trên sàn diễn thời trang quốc tế (mục 3.2)', '海外のファッションショーのノンラーの動画（3.2節）']],
