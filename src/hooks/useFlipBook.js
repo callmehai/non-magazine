@@ -129,6 +129,31 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
         const b = this.render.convertToBook(t)
         return b.x > 0 && b.y > 0 && b.x < r.width && b.y < r.height && (b.x < s || b.x > r.width - s) && (b.y < s || b.y > r.height - s)
       }
+      // bấm chuột (không kéo) chỉ lật khi trúng dải sát mép ngoài trang (anh Hải 10/11: "sao ấn ở bất cứ chỗ nào trang sách
+      // cũng chuyển trang vậy, vùng chuyển trang chỉ gần mép thôi chứ"); nút mũi tên / phím ← → / vuốt / kéo góc vẫn lật như cũ
+      // (flipNext / flipPrev gọi lại flip() với điểm sát mép nên cho qua bằng cờ prog)
+      const flip0 = fc.flip.bind(fc)
+      let prog = false
+      for (const k of ['flipNext', 'flipPrev']) {
+        const f = fc[k].bind(fc)
+        fc[k] = (...a) => {
+          prog = true
+          try {
+            return f(...a)
+          } finally {
+            prog = false
+          }
+        }
+      }
+      fc.flip = function (t) {
+        if (!prog) {
+          const r = this.getBoundsRect()
+          const b = this.render.convertToBook(t)
+          const edge = r.pageWidth * 0.12
+          if (b.x > edge && b.x < r.width - edge) return
+        }
+        return flip0(t)
+      }
     }
     // showCover khiến StPageFlip ép bìa trước/sau thành "bìa cứng" (xoay phẳng như cánh cửa);
     // trang nào được yêu cầu mềm thì trả lại mềm để lật cong như giấy
