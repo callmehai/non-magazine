@@ -7,6 +7,9 @@
   font-size: calc(var(--pw, 480) * 1px / 595.28);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  /* Doc 09/11 "Thống nhất lại cỡ chữ và số sao cho nó đỡ bay nhảy hơn" (ảnh thanh mốc 1930 · 2006 · 2019 · 2022): Playfair mặc
+     định dùng số kiểu cổ (3, 9 thòng xuống dưới dòng) → số thẳng hàng cùng chiều cao trong toàn sách */
+  font-variant-numeric: lining-nums;
 }
 
 .cv-page__bg {

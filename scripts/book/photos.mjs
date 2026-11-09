@@ -234,14 +234,19 @@ export const photos = {
   "Nghệ nhân làng Chuông làm nón truyền thống": "new/Làm nón truyền thống",
   "Người thợ hoàn thiện bước luồn nhôi cuối cùng": "new/Người thợ hoàn thiện bước luồn nhôi cuối cùng",
   "Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành": "new/Nghệ nhân làm nón",
-  "Khung nón 16 vòng nứa": "new/Cấu trúc nứa 16 vòng nứa",
+  // Doc 09/11 "Trang 51: Thay ảnh 61 bằng ảnh đã cắt nền (nón ko được để dưới đất)" + "Em có thể thay nền của khung nón, các lớp lá màu
+  // phù hợp với flipbook": ảnh nhóm tách nền (グループ撮影, 2D40D851…png), nền xám studio đổi sang giấy ngà (out/r1011/recolor.py)
+  "Khung nón 16 vòng nứa": "doc-1011/khung-16-vong-nen",
   // soát 06/11 (R9): trước dùng chung file với "Khung nón 16 vòng nứa" (tr. 48) → khung đã lên đủ vành ở xưởng
   "Lớp lá lụi trong — trước khi lợp: khung 16 vòng nứa": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
-  "Lớp lá lụi trong — sau khi lợp": "new/IMG_7910",
-  "Lớp mo nang — tàu mo trước khi lợp": "new/IMG_7938",
-  "Lớp mo nang — sau khi lợp": "new/IMG_7968",
+  // Doc 09/11: "Thay ảnh 66: Nghệ nhân ngồi lợp lớp lá trong ; ảnh 67: Lớp lá 1" · "Thay ảnh 68 ( quay ngang lớp mo nang: Ảnh mo nang)" ·
+  // "Ảnh 69 Lớp mo nang" · "Ảnh 71: thay bằng lớp ngoài" — ảnh nhóm gắn link; ảnh tách nền đổi nền xám → giấy ngà
+  "Nghệ nhân ngồi lợp lớp lá trong": "doc-1011/lop-la-trong-nghe-nhan",
+  "Lớp lá lụi trong — sau khi lợp": "doc-1011/lop-la-trong",
+  "Lớp mo nang — tàu mo trước khi lợp": "doc-1011/mo-nang",
+  "Lớp mo nang — sau khi lợp": "doc-1011/lop-mo-nang",
   "Lớp lá lụi ngoài — đang lợp": "new/IMG_3854",
-  "Lớp lá lụi ngoài — sau khi lợp": "new/IMG_7929",
+  "Lớp lá lụi ngoài — sau khi lợp": "doc-1011/lop-la-ngoai",
   "Nguyên liệu làm nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": "new/IMG_2612",
   "Lá lụi phơi ngoài nắng": "new/IMG_4610",
   "Bó nứa chẻ sẵn để vót vòng": "new/IMG_2276",

@@ -317,7 +317,7 @@
 }
 .cvw-trip__km b {
   font-size: 1.7em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 .cvw-trip__credit {
   position: absolute;

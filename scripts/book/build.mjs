@@ -2123,12 +2123,13 @@ let guidePage = null
   // gỡ: cung điện kiểu Tàu, người dâng đội nón chóp (thời đó Bắc Bộ đội nón ba tầm / quai thao), chú thích "AIで作成" làm
   // người đọc Nhật nghi cả sách ảnh tư liệu. Ảnh Salles 1896 (phạm vi công cộng) ngay sau dồn lên thay chỗ.
   // hai ảnh khung 16:9 để cùng vừa một trang (ảnh AI ở trang trước chiếm chỗ → khung 3:2 đẩy IMG_2577 sang trang sau, trống nửa trang)
-  f.figure(ab.images[1], { ratio: R.cin })
+  // Doc 09/11 "Bản sửa lần 2" (tr. 28–31): "Trang 28: bỏ ảnh 36, chuyển ảnh 37 từ trang 29 sang 28. IMG_2577.JPG" ·
+  // "Trang 29: bỏ trang 3 ảnh" · "Trang 30. Bỏ ảnh 40 41 thay bằng ảnh 38 39 : Ảnh nghệ nhân Lê Văn Tuy làm nón Ảnh đình làng chuông"
+  // → bỏ ảnh Salles 1896 (ab.images[1]) và hai ảnh Bảo tàng Mỹ thuật (ab.museum[1], [2]); IMG_2577 lên ngay sau đoạn tiến cống,
+  // ông Tuy + đình Chuông xuống dưới đoạn "Ngày nay…"
   f.figure(ab.museum[0], { ratio: R.cin })
-  // 08/11: ảnh 1-30 (ông Tuy làm nón) + 1-31 (đình Chuông), nhóm gắn liền nhau ngay sau đoạn tiến cống / kháng chiến
-  f.row([ab.tuy, ab.dinh], { ratio: R.std })
   f.prose(ab.p.slice(2))
-  f.row([ab.museum[1], ab.museum[2]], { ratio: R.por })
+  f.row([ab.tuy, ab.dinh], { ratio: R.sq })
 
   // 1.3.2 các loại nón: ảnh lớn + thẻ từng loại (ảnh tách nền, khung vuông)
   const ty = vg.types
@@ -2172,8 +2173,13 @@ let guidePage = null
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Vành rất rộng', 'とても広いつば'], ['Lòng sâu như cái thúng', '籠のように深い形'], ['Đi cùng quai thao, áo tứ thân', '房飾りのあごひも、アオ・トゥータンとともに'], ['Nay dùng biểu diễn, trưng bày', '今は舞台や展示で']]],
     },
     'Nón nhà sư (Nón thầy tu)': {
-      // 08/11 ~22h (tab パート1): ảnh nghệ nhân Lê Văn Tuy gửi (ba chiếc nón, ảnh ngang) → một ảnh trọn khổ, không cột ảnh cận
-      hero: { r: 1280 / 957, pos: '50% 50%' },
+      // 08/11 ~22h (tab パート1): ảnh nghệ nhân Lê Văn Tuy gửi (ba chiếc nón, ảnh ngang).
+      // Doc 09/11 "Bố cục nón nhà sư làm giống nón lụa (3 ảnh)": ảnh lớn + hai ô cận cắt từ chính ảnh đó như nón lụa
+      // (thư mục Drive "Nón nhà sư" còn 8 ảnh nhưng đều chụp nón đặt trên nền gạch — không dùng ảnh nón để dưới đất)
+      hero: { pos: '50% 50%' },
+      details: [[['Chóp nón thấp', '低く抑えた頂'], 47, 24, 2.6], [['Quai lụa vàng', '黄色い絹のあごひも'], 24, 76, 2.4]],
+      // đoạn chữ dài, chỗ còn lại thấp hơn nón lụa → hạ ngưỡng chiều cao mỗi ô cận để vẫn đủ hai ô như nón lụa
+      detMin: 84,
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Đường kính khoảng 50 cm', '直径約50cm'], ['Chóp được hạ thấp', '頂を低く改良'], ['Cân đối cùng áo cà sa', '袈裟と釣り合う形'], ['Đón nhận tại Ấn Độ, nhiều nước Phật giáo', 'インドなど多くの仏教国で愛用']]],
     },
     'Nón lụa': {
@@ -2256,7 +2262,7 @@ let guidePage = null
     // ảnh lớn + cột ảnh chi tiết
     const room = bot - y - capH0 - (boxH ? boxH + 16 : 0)
     // cột ảnh chi tiết: mỗi ô cao ít nhất ~78pt (chỗ thấp thì bớt ô, không để thành dải mỏng)
-    const dets = (ex.details ?? []).slice(0, Math.max(1, Math.min(3, Math.floor((room + 10) / 108))))
+    const dets = (ex.details ?? []).slice(0, Math.max(1, Math.min(3, Math.floor((room + 10) / (ex.detMin ?? 108)))))
     const hw0 = dets.length ? CW * 0.64 : CW
     const hh = Math.min(room, hw0 * 1.2)
     // ex.hero.r: tỉ lệ khung (rộng / cao) cho ảnh cần thấy trọn vật — khung hẹp lại, cột ảnh chi tiết rộng ra
@@ -2483,12 +2489,32 @@ let stripRight = null
     }
     f.prose(fr.after)
   }
-  f.figure(fr.image)
-  // 08/11: ảnh 2-03 nhóm gắn cuối mục 2.1.1 (trước đây là ảnh mở mục 1.3.2)
-  f.figure(['Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy', 'ノンラーを作る職人のレ・ヴァン・トゥイ氏 — 写真：職人レ・ヴァン・トゥイ氏'])
+  // Doc 09/11 "Trang 53: bỏ 3 ảnh trang 53": bỏ ảnh ông Tuy trong xưởng + hai ảnh kho lấp chỗ (khuôn nón, nón đang lợp dở).
+  // Trang phải còn trống → ảnh ông Tuy nối vành (fr.image, trước nằm dưới chữ trang trái) thành ảnh lớn cả trang phải
+  // (không lấp bằng ảnh kho / ảnh chợ — góp ý 04/11)
+  {
+    const keep = f.pool.filter((c) => !/^Khuôn nón — tám gọng/.test(c[0]))
+    f.pool = []
+    // đóng trang chữ bằng tay: close() tự chèn trang ảnh kho khi trang cuối là trang trái — chỗ đó dành cho ảnh ông Tuy
+    const left = f.p?.side === 'left'
+    if (f.p) {
+      // trang chỉ còn một đoạn chữ → canh giữa + tre, sen như tr. 12 / 20
+      f.p.centerDeco = true
+      f.fill()
+      f.fillRest()
+      f.p = null
+    }
+    if (left) photoPage(fr.image, 2)
+    else {
+      f.figure(fr.image)
+      f.end()
+    }
+    f.pool = keep
+  }
 
   const LAYER_PHOTOS = {
-    inner: [['Lớp lá lụi trong — trước khi lợp: khung 16 vòng nứa', 'ラルイの層（内層） — 重ねる前：ヌアで作られた16本の輪からなる骨組み'], ['Lớp lá lụi trong — sau khi lợp', 'ラルイの層（内層）']],
+    // Doc 09/11 "Thay ảnh 66: Nghệ nhân ngồi lợp lớp lá trong" — chú thích theo đúng tên nhóm đặt cho ảnh
+    inner: [['Nghệ nhân ngồi lợp lớp lá trong', '内側の葉の層を重ねる職人'], ['Lớp lá lụi trong — sau khi lợp', 'ラルイの層（内層）']],
     mo: [['Lớp mo nang — tàu mo trước khi lợp', 'ヌアの稈鞘の層'], ['Lớp mo nang — sau khi lợp', 'ヌアの稈鞘の層（中間層）']],
     outer: [['Lớp lá lụi ngoài — đang lợp', 'ラルイの層（外層） — 重ねているところ'], ['Lớp lá lụi ngoài — sau khi lợp', 'ラルイの層（外層）']],
   }
