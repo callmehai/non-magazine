@@ -131,7 +131,9 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
       }
       // bấm chuột (không kéo) chỉ lật khi trúng dải sát mép ngoài trang (anh Hải 10/11: "sao ấn ở bất cứ chỗ nào trang sách
       // cũng chuyển trang vậy, vùng chuyển trang chỉ gần mép thôi chứ"); nút mũi tên / phím ← → / vuốt / kéo góc vẫn lật như cũ
-      // (flipNext / flipPrev gọi lại flip() với điểm sát mép nên cho qua bằng cờ prog)
+      // (flipNext / flipPrev gọi lại flip() với điểm sát mép nên cho qua bằng cờ prog).
+      // anh Hải 10/11 (sau): "vùng click chuyển trang hơi nhỏ rồi, cho t 1/2 mỗi trang đi" → dải 12% thành nửa ngoài mỗi trang
+      // (nửa trái trang trái lật lùi, nửa phải trang phải lật tới; nửa sát gáy không lật)
       const flip0 = fc.flip.bind(fc)
       let prog = false
       for (const k of ['flipNext', 'flipPrev']) {
@@ -149,7 +151,7 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
         if (!prog) {
           const r = this.getBoundsRect()
           const b = this.render.convertToBook(t)
-          const edge = r.pageWidth * 0.12
+          const edge = r.pageWidth * 0.5
           if (b.x > edge && b.x < r.width - edge) return
         }
         return flip0(t)
