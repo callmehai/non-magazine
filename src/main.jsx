@@ -23,6 +23,7 @@ import { setLang, t } from './lib/i18n.js'
 import magazine from './content/magazine.js'
 import pdfBook from './content/pdfBook.js'
 import canvasBook from './content/canvasBook.js'
+import { watchUpdates } from './lib/autoUpdate.js'
 
 const root = createRoot(document.getElementById('root'))
 const render = (book) =>
@@ -73,12 +74,16 @@ if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#
   setLang(canvasBook.lang)
   document.title = `${canvasBook.title} — ${canvasBook.subtitle}`
   root.render(<p className="boot-msg">{t('bootLoading')}</p>)
+  const slug = bookParam || canvasBook.slug
+  const draft = params.get('draft') === '1'
+  const local = import.meta.env.DEV && !params.has('draft') && !params.has('published') && !bookParam
   import('./lib/canvasBook.js')
-    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, bookParam || canvasBook.slug, {
-      draft: params.get('draft') === '1',
-      local: import.meta.env.DEV && !params.has('draft') && !params.has('published') && !bookParam,
-    }))
-    .then(render, (err) => {
+    .then(({ loadCanvasBook }) => loadCanvasBook(canvasBook, slug, { draft, local }))
+    .then((book) => {
+      render(book)
+      // tự cập nhật khi có bản xuất bản / bản code mới, hoặc (dev) khi dựng lại sách — mở lại đúng trang đang đọc
+      if (!draft) watchUpdates({ publishedAt: book.publishedAt, slug, local })
+    }, (err) => {
       console.error(err)
       root.render(<p className="boot-msg">{err.message || String(err)}</p>)
     })

@@ -11,6 +11,16 @@ export default function bookMeasure() {
     name: 'book-measure',
     apply: 'serve',
     configureServer(server) {
+      // tự cập nhật (src/lib/autoUpdate.js): dựng lại sách (build.mjs ghi book.json) → báo trang đang mở tải lại, giữ trang đang đọc.
+      // book.json đọc bằng fetch, không nằm trong đồ thị module nên Vite không tự báo
+      const bookFile = path.join(server.config.root, 'scripts/book/out/book.json')
+      let t = 0
+      server.watcher.add(bookFile)
+      server.watcher.on('change', (f) => {
+        if (path.resolve(f) !== bookFile) return
+        clearTimeout(t)
+        t = setTimeout(() => server.ws.send({ type: 'custom', event: 'non:book' }), 500)
+      })
       server.middlewares.use('/__book-measure', (req, res) => {
         if (req.method !== 'POST') {
           res.statusCode = 405

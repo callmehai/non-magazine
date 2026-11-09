@@ -79,7 +79,14 @@ export function createSupabaseStore() {
       const book = await bookBySlug(slug)
       const { data, error } = await sb.from('publications').select('pages, published_at').eq('book_id', book.id).order('published_at', { ascending: false }).limit(1).maybeSingle()
       if (error) throw error
-      return data ? { book, pages: data.pages.map(rowToPage) } : null
+      return data ? { book, pages: data.pages.map(rowToPage), publishedAt: data.published_at } : null
+    },
+    /** thời điểm xuất bản mới nhất (tự cập nhật: lib/autoUpdate.js hỏi mỗi phút) */
+    async latestPublishedAt(slug) {
+      const book = await bookBySlug(slug)
+      const { data, error } = await sb.from('publications').select('published_at').eq('book_id', book.id).order('published_at', { ascending: false }).limit(1).maybeSingle()
+      if (error) throw error
+      return data?.published_at ?? null
     },
 
     async savePage(id, data, version) {

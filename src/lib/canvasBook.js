@@ -29,6 +29,7 @@ export async function loadCanvasBook(config, slug, { draft = false, local = fals
   return {
     ...config,
     title: config.title || res.book.title,
+    publishedAt: draft || local ? undefined : res.publishedAt, // tự cập nhật: so với bản xuất bản mới nhất
     settings: { ...config.settings, pageWidth: PAGE_W, pageHeight: PAGE_H },
     pages,
   }

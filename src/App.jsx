@@ -12,6 +12,7 @@ import Lightbox from './components/Lightbox.jsx'
 import Reader from './components/Reader.jsx'
 import Icon from './components/common/Icon.jsx'
 import { useFlipBook } from './hooks/useFlipBook.js'
+import { resume, setPageGetter } from './lib/autoUpdate.js'
 import { useBookLayout } from './hooks/useBookLayout.js'
 import { useFullscreen } from './hooks/useFullscreen.js'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation.js'
@@ -88,14 +89,19 @@ export default function App({ magazine: source }) {
   )
 
   // ───────────── sách
-  const book = useFlipBook({ pages, settings, layout, zoomed: zoom > 1, onFlipStart })
+  // tự cập nhật (lib/autoUpdate.js): vừa tự tải lại → mở thẳng trang đang đọc dở, bỏ màn mở đầu
+  const startPage = resume && resume.page < count ? resume.page : 0
+  const book = useFlipBook({ pages, settings, layout, zoomed: zoom > 1, onFlipStart, startPage })
+  const pageNowRef = useRef(0)
+  pageNowRef.current = book.currentPage
+  useEffect(() => setPageGetter(() => pageNowRef.current), [])
   const { currentPage, rtl } = book
   const visible = useMemo(() => visiblePages(currentPage, layout.orientation, count), [currentPage, layout.orientation, count])
   const lastVisible = visible[visible.length - 1]
 
   // ───────────── intro: luôn chạy hết hiệu ứng, bấm "Mở tạp chí" mới vào đọc
   const introEnabled = settings.intro !== false
-  const [phase, setPhase] = useState(introEnabled ? 'intro' : 'reading') // intro → bow → leaving → reading
+  const [phase, setPhase] = useState(introEnabled && !resume ? 'intro' : 'reading') // intro → bow → leaving → reading
   const [sceneStatus, setSceneStatus] = useState(settings.background3D === false && !introEnabled ? 'off' : 'loading')
   const [sceneIntroDone, setSceneIntroDone] = useState(false)
   const [replayKey, setReplayKey] = useState(0)

@@ -15,17 +15,17 @@ const NO_FLIP = 'a, button, input, select, textarea, label, video, audio, iframe
  * nên các trang được đưa vào thư viện theo thứ tự ngược (bìa trước nằm cuối, mở ở mép trái).
  * Mọi số trang đi ra khỏi hook này (currentPage, flipTo…) vẫn là số trang "đọc" 0, 1, 2…
  */
-export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart }) {
+export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart, startPage = 0 }) {
   const hostRef = useRef(null)
   const flipRef = useRef(null)
   const zoomedRef = useRef(zoomed)
   const onFlipStartRef = useRef(onFlipStart)
-  const currentRef = useRef(0)
+  const currentRef = useRef(startPage)
   const layoutRef = useRef(layout)
   const redrawRef = useRef(0) // số khung hình còn phải vẽ lại sau một thay đổi
   const wakeRef = useRef(null) // đánh thức vòng lặp render đang ngủ
   layoutRef.current = layout
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(startPage)
   const [flipState, setFlipState] = useState('read')
   // hướng lật đang chạy theo thứ tự đọc: 'next' | 'prev' (để dời sách vào giữa ngay trong lúc lật bìa)
   const [flipDir, setFlipDir] = useState(null)
