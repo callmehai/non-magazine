@@ -236,7 +236,9 @@ export const photos = {
   "Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành": "new/Nghệ nhân làm nón",
   // Doc 09/11 "Trang 51: Thay ảnh 61 bằng ảnh đã cắt nền (nón ko được để dưới đất)" + "Em có thể thay nền của khung nón, các lớp lá màu
   // phù hợp với flipbook": ảnh nhóm tách nền (グループ撮影, 2D40D851…png), nền xám studio đổi sang giấy ngà (out/r1011/recolor.py)
-  "Khung nón 16 vòng nứa": "doc-1011/khung-16-vong-nen",
+  // anh Hải 10/11 ("ảnh cắt đẹp hơn đi, mất hình r"): khung ảnh tr. 49 bè ngang 1,86:1, ảnh 4:3 → mất chóp + vành; nới nền
+  // ngà hai bên (scripts/book/out/r1011/wide) cho đúng tỉ lệ khung, cả khung nón hiện trọn
+  "Khung nón 16 vòng nứa": "doc-1011/khung-16-vong-rong",
   // soát 06/11 (R9): trước dùng chung file với "Khung nón 16 vòng nứa" (tr. 48) → khung đã lên đủ vành ở xưởng
   "Lớp lá lụi trong — trước khi lợp: khung 16 vòng nứa": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
   // Doc 09/11: "Thay ảnh 66: Nghệ nhân ngồi lợp lớp lá trong ; ảnh 67: Lớp lá 1" · "Thay ảnh 68 ( quay ngang lớp mo nang: Ảnh mo nang)" ·
