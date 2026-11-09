@@ -11,6 +11,7 @@ import './widgets.css'
  *  - "grove": lũy tre lớn dần, nón được làm dưới gốc tre (cặp trang Lưu ý) — chỉ là hình động, không bấm
  *  - "envelope": phong bì thư (Lời mở đầu) — bấm mở nắp, lá thư mang câu ca dao trượt ra
  *  - "rings": kéo 16 vòng nứa từ bó lên khuôn nón (2.1.1)
+ *  - "rings2": cùng trò đó, trải trang đôi (khuôn nằm giữa gáy, hai phần tử L / R dùng chung trạng thái)
  *  - "toolbox": hộp đồ nghề (mở 2.2) — mở nắp, bấm từng món xem ảnh + lật tới trang của món đó
  *  - "lock": ảnh khoá — phủ ảnh phần thưởng của trò chơi ở trang bên, chơi xong thì mở
  *  - "sort": xếp lại các công đoạn làm nón (sau 2.3.2) — kéo thẻ, kiểm tra; đúng hết thì trang phải hiện nón hoàn thiện
@@ -25,6 +26,7 @@ const KINDS = {
   grove: lazy(() => import('./GroveWidget.jsx')),
   envelope: lazy(() => import('./EnvelopeWidget.jsx')),
   rings: lazy(() => import('./RingsWidget.jsx')),
+  rings2: lazy(() => import('./RingsSpreadWidget.jsx')),
   toolbox: lazy(() => import('./ToolboxWidget.jsx')),
   sort: lazy(() => import('./SortWidget.jsx')),
   lock: lazy(() => import('./LockWidget.jsx')),

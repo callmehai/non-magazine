@@ -18,11 +18,11 @@ export const photos = {
   "Ảnh toàn trang: nón lá trên cánh đồng lúa": "Chương 1/Tại làng Chuông/IMG_3669",
   // mở chương
   "Ảnh mở chương: hai thiếu nữ áo dài đội nón lá trước cổng đình làng Chuông": "Chương 1/Tại làng Chuông/IMG_3610",
-  "Ảnh mở chương: đôi bàn tay nghệ nhân khâu nón trên khuôn": "Chương 2/Tại làng Chuông/2.1. Cấu tạo của nón lá/2.1.1 Cấu trúc 3 lớp lá lợp/Lớp lá lụi ngoài/IMG_7418",
+  "Ảnh mở chương: nghệ nhân khâu nón giữa gian hàng nón ở làng Chuông": "doc-0911/IMG_3850" /* Bản sửa lần 2: "Anh bìa 56 đổi lại thành IMG_3850.JPG" */,
   "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": "Chương 3/Ghi nhận OCOP/Nón Lê Văn Tuy/Ảnh em bé cầm nón",
   // chương 1
   "Nón lá trong đời sống thường ngày: che nắng, che mưa khi lao động": "Chương 1/BTHN/IMG_20261002_150751",
-  "Nón lá bên tà áo dài": "Chương 1/Tại làng Chuông/IMG_3549",
+  "Nón lá bên tà áo dài": "doc-0911/IMG_4359", // Bản sửa lần 2: "Thay ảnh 98 thành: IMG_4359.JPG"
   "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": "Chương 1/BTPN/IMG_20260929_102311",
   "Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3840",
   "Nón lá hình chóp truyền thống — ảnh sản phẩm": "doc-0811/chop-ngoai",
@@ -55,7 +55,7 @@ export const photos = {
   "Nghệ nhân ngồi là lá bên bếp điện": "new/IMG_2247",
   "GIF công đoạn bứt vòng": "gif/but-vong.webp",
   "Khuôn nón — nơi đặt lần lượt 16 vành nứa": "new/IMG_2252",
-  "Khuôn nón với các vòng nứa nhìn từ trên xuống": "Chương 2/Tại làng Chuông/2.1. Cấu tạo của nón lá/2.1.1 Cấu trúc 3 lớp lá lợp/Lớp lá lụi trong/IMG_3319",
+  "Khuôn nón với các vòng nứa nhìn từ trên xuống": "doc-0911/khung-16-vong" /* "Ảnh 89 thay thành: 5D3C4B22-746C-4C1B-B8A6-4355EE6D552A.png" */,
   "GIF công đoạn quay nón": "gif/quay-non.webp",
   "Xếp từng lớp lá lụi lên khuôn": "new/IMG_2261",
   "Trải đều lá quanh khung nón": "Chương 2/Tại làng Chuông/2.1. Cấu tạo của nón lá/2.1.1 Cấu trúc 3 lớp lá lợp/Lớp lá lụi ngoài/IMG_3856",
@@ -69,7 +69,7 @@ export const photos = {
   "Chỉ màu luồn trong lòng nón": "new/IMG_2278",
   "Nghệ nhân luồn sợi chỉ màu vào lòng nón": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/IMG_7464",
   "GIF công đoạn quang dầu": "gif/quang-dau.webp",
-  "Chiếc nón hoàn thiện nhìn từ trên xuống: lớp lá phẳng, đều": "Chương 1/Tại làng Chuông/IMG_20261013_114331",
+  "Chiếc nón hoàn thiện nhìn từ trên xuống: lớp lá phẳng, đều": "doc-0911/IMG_4829" /* "Ảnh 97: đổi thành IMG_4829.jpg" */,
   // chương 3
   "Chợ nón Chuông — những chiếc nón trắng bày bán": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3157",
   "Đình Chuông — không gian sinh hoạt của làng nghề": "Chương 1/Tại làng Chuông/IMG_3567",
@@ -112,7 +112,7 @@ export const photos = {
   "Bó liếc bày bán ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3205",
   "Lá lụi và nón thành phẩm trong phiên chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3153",
   "Khung nón bày bán ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3194",
-  "Người bán nón bên những chồng nón trắng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3275",
+  "Người bán nón bên những chồng nón trắng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3161" /* "Thay giúp c ảnh 143 (ảnh nào nét nét tí em nhé)" */,
   "Biển “Lớp học giữ nghề nón làng Chuông”": "Chương 3/IMG_3259",
   "Trung tâm Thiết kế sáng tạo, giới thiệu, quảng bá và bán sản phẩm OCOP – làng nghề Nón Chuông": "Chương 3/IMG_3330",
   "Du khách trải nghiệm làm nón tại làng Chuông": "Chương 3/IMG_3724",
@@ -279,7 +279,7 @@ export const photos = {
   // trong tab JA パート1–3, tải lại từ Doc ngày 08/11 (thư mục doc-0811/). Ảnh thay ảnh cũ cùng nội dung giữ khoá cũ (ở trên).
   // Chú thích JA nguyên văn nhóm; VI dịch sát; nguồn theo nhóm ghi trong ngoặc.
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá": "doc-0811/bia-chuong-1",
-  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": "doc-0811/non-la-huong",
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": "doc-0911/non" /* Bản sửa lần 2: "Ảnh 3 đổi thành ảnh này : Nón.jpg" */,
   "Người dân đội nón lá đi chợ — nguồn: Bảo tàng Hà Nội": "doc-0811/bthn-di-cho",
   "Thiếu nữ trong tà áo dài bên những chiếc nón lá": "doc-0811/ao-dai-1",
   "Những người phụ nữ trong tà áo dài cùng nón lá": "doc-0811/ao-dai-2",

@@ -2509,3 +2509,37 @@
 .cvw-rings__bar .cvw-cta {
   font-size: 11.5em;
 }
+
+/* trò vòng nứa trang đôi (rings2): hai nửa phủ rộng trên trang, chỉ bó vòng và thanh nút nhận chuột — phần còn lại để
+   bấm xuyên xuống ảnh / chữ / lật trang bên dưới */
+.cvw-rings2,
+.cvw-rings2 .cvw-rings__svg {
+  pointer-events: none;
+}
+.cvw-rings2 .cvw-rings__grab,
+.cvw-rings2 .cvw-rings__bar {
+  pointer-events: auto;
+}
+.cvw-rings2 .cvw-rings__svg {
+  overflow: hidden;
+}
+.cvw-rings__cap.is-side {
+  text-anchor: end;
+  font-size: 12px;
+}
+.cv-el:has(> .cvw-rings2),
+.cv-el:has(> * > .cvw-rings2) {
+  pointer-events: none;
+}
+.cvw-rings2 .cvw-rings__bar {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  row-gap: 8em;
+}
+.cvw-rings2 .cvw-rings__btn {
+  white-space: nowrap;
+}
+.cvw-rings2 .cvw-rings__bar.is-top {
+  top: 0;
+  bottom: auto;
+}
