@@ -603,6 +603,7 @@
   background: rgba(251, 246, 234, 0.92);
   color: var(--c);
   font: 400 13.5em/1 'Patrick Hand', 'Klee One', cursive;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: var(--cursor-leaf-hand);

@@ -11,6 +11,19 @@ body,
   height: 100%;
 }
 
+/* số thẳng hàng toàn web (Doc 09/11: "Thống nhất lại cỡ chữ và số sao cho nó đỡ bay nhảy hơn > Check lại toàn bài"):
+   Cormorant / Playfair mặc định số kiểu cổ (3, 4, 5, 7, 9 thòng xuống, 6, 8 nhô lên) — trong trang sách đã tắt
+   (canvas.css), ngoài trang (chú thích khung phóng ảnh, thanh điều khiển, hộp đồ nghề…) còn sót: anh Hải 10/11 "Ảnh 80". */
+html {
+  font-variant-numeric: lining-nums;
+}
+button,
+input,
+select,
+textarea {
+  font-variant-numeric: inherit;
+}
+
 /* con trỏ mũi kim khâu nón kèm sợi chỉ đỏ (góp ý 04/11: như đang khâu nón; mũi kim là điểm bấm):
    kim bạc khi trỏ thường, kim vàng khi rê lên chỗ bấm được */
 :root {
@@ -399,6 +412,7 @@ select {
   background: none;
   color: var(--ui-text-2);
   font: 500 12.5px/1 var(--font-sans);
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   letter-spacing: 0.04em;
   cursor: var(--cursor-leaf-hand);
   transition: background 0.2s, color 0.2s;

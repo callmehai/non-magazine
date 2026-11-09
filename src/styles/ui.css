@@ -38,7 +38,7 @@
   border-radius: 999px;
   font-size: 12px;
   letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .ctrl--sm {
@@ -105,7 +105,7 @@
   text-align: center;
   font-size: 13px;
   letter-spacing: 0.06em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: var(--ui-text);
 }
 
@@ -1345,6 +1345,7 @@ html[lang='ja'] .intro__cadao {
   background: none;
   color: #f6ead2;
   font: 500 13px/1.2 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   letter-spacing: 0.02em;
   white-space: nowrap;
   cursor: pointer;

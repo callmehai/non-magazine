@@ -741,7 +741,7 @@
   font-size: 0.55em;
   letter-spacing: 0.2em;
   color: rgba(244, 237, 224, 0.6);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* ── AUDIO ─────────────────────────────────── */
@@ -814,7 +814,7 @@
 .inline-audio__time {
   font-size: 0.85em;
   color: var(--ink-3);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .inline-audio__err {

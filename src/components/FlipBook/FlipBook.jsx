@@ -70,6 +70,45 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
   const loadFrom = visible[0] - 3
   const loadTo = visible[visible.length - 1] + 4
 
+  // Tải nền (anh Hải 10/11: "click 10 phát cùng lúc là chết => ko phải chỉ load trước 3-4 trang là dừng, mà load xong thì
+  // phải load tiếp luôn chứ"): ảnh các trang gần tải xong thì tải tiếp từng cặp trang ra xa dần (ưu tiên phía trước, cứ hai
+  // trang trước thì một trang sau) cho tới hết sách. Trang tải nền chỉ tải ảnh, chưa dựng widget / video (LoadMode 'warm').
+  // Mỗi bước chờ mọi ảnh đang tải xong mới thêm trang → không giành băng thông của trang đang đọc; lật tới đâu, cửa sổ
+  // gần (loadFrom…loadTo) vẫn tải ngay như cũ. Tiết kiệm dữ liệu (Save-Data) thì không tải nền.
+  const [warm, setWarm] = useState(() => new Set())
+  useEffect(() => {
+    if (navigator.connection?.saveData || warm.size >= count) return
+    let alive = true
+    let timer = 0
+    const pending = () => pageEls.some((el) => el && [...el.getElementsByTagName('img')].some((img) => img.getAttribute('src') && !img.complete))
+    const pick = () => {
+      const out = []
+      let f = Math.max(loadTo + 1, 0)
+      let b = Math.min(loadFrom - 1, count - 1)
+      for (let k = 0; out.length < 2 && (f < count || b >= 0); k++) {
+        if (k % 3 !== 2) {
+          while (f < count && warm.has(f)) f++
+          if (f < count) out.push(f++)
+        } else {
+          while (b >= 0 && warm.has(b)) b--
+          if (b >= 0) out.push(b--)
+        }
+      }
+      return out
+    }
+    const step = () => {
+      if (!alive) return
+      if (pending()) return void (timer = setTimeout(step, 150))
+      const next = pick()
+      if (next.length) setWarm((w) => new Set([...w, ...next]))
+    }
+    timer = setTimeout(step, 120)
+    return () => {
+      alive = false
+      clearTimeout(timer)
+    }
+  }, [warm, loadFrom, loadTo, count, pageEls])
+
   // Giải mã sẵn ảnh của vài trang sắp lật tới: không để ảnh mới giải mã đúng lúc trang bắt đầu cong (giật khung hình)
   useEffect(() => {
     const t = setTimeout(() => {
@@ -114,6 +153,7 @@ export default function FlipBook({ book, magazine, layout, entered, zoomed }) {
             visible={visible.includes(i)}
             revealed={revealed.has(i)}
             load={i >= loadFrom && i <= loadTo}
+            warm={warm.has(i)}
             runningHead={magazine.runningHead}
           />,
           el,

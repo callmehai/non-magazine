@@ -15,6 +15,7 @@ const ZoomList = createContext(null)
 
 // Tải ảnh/video/widget của trang: 'eager' (mặc định, editor) · 'lazy' (ảnh thu nhỏ: chỉ tải khi cuộn tới)
 // · 'off' (trang còn xa trong sách: chưa tải gì, kẻo mở web là tải cả trăm ảnh một lúc)
+// · 'warm' (tải nền: chỉ tải ảnh, chưa dựng widget / video — tới gần mới thành 'eager')
 export const LoadMode = createContext('eager')
 const zoomable = (el) =>
   el.type === 'image' &&
@@ -136,7 +137,8 @@ export function Element({ el, mode, visible }) {
 }
 
 function ElementBody({ el, mode, visible }) {
-  const loadOn = useContext(LoadMode) !== 'off'
+  const lm = useContext(LoadMode)
+  const loadOn = lm !== 'off' && lm !== 'warm'
   switch (el.type) {
     case 'text':
       return <TextBody el={el} mode={mode} />
@@ -312,6 +314,7 @@ function ImageBody({ el }) {
       className={`cv-img ${spin ? 'is-spin' : ''}`}
       src={load === 'off' ? undefined : asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
       loading={load === 'lazy' ? 'lazy' : undefined}
+      fetchPriority={load === 'warm' ? 'low' : undefined}
       alt={el.alt || ''}
       draggable="false"
       style={el.blur ? { objectFit: 'cover', objectPosition: el.pos, filter: 'blur(5em) saturate(0.9) brightness(1.04)', transform: 'scale(1.25)' } : c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
@@ -423,7 +426,7 @@ function VideoBody({ el, mode, visible }) {
     vref.current?.pause()
     setStarted(false) // lật quay lại: lại là ảnh bìa + nút ▶ (soát vòng 8)
   }, [visible])
-  if (load === 'off') return <div className="cv-video-ph" />
+  if (load === 'off' || load === 'warm') return <div className="cv-video-ph" />
   if (mode !== 'read' || !el.src) {
     // editor: chỉ hiển thị (bấm/kéo để chọn); xem video bằng nhấp đúp hoặc nút "Xem video"
     return (

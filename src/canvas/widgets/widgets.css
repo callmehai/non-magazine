@@ -276,6 +276,7 @@
     400 12em/1.25 'Patrick Hand',
     'Klee One',
     cursive;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   font-style: normal;
   white-space: nowrap;
   color: #2b2118;
@@ -297,6 +298,7 @@
     400 11em/1.25 'Patrick Hand',
     'Klee One',
     cursive;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   white-space: nowrap;
   color: #2b2118;
   animation: cvw-in 0.35s ease-out both;
@@ -347,6 +349,7 @@
     400 19em/1.2 'Patrick Hand',
     'Klee One',
     cursive;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   color: #a8321f;
 }
 .cvw-trip__card span {
@@ -952,6 +955,7 @@
   background: #fbf7ee;
   color: var(--acc);
   font: 600 13em/1.2 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   cursor: var(--cursor-leaf-hand, pointer);
 }
 .cvw-tl__more:hover {
@@ -1597,6 +1601,7 @@
   display: flex;
   flex-direction: column;
   font: 700 calc(4.4em * var(--k, 1)) / 1.2 'Playfair Display', serif;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   color: #f6e9d6;
   text-align: center;
   letter-spacing: 0.03em;
@@ -2092,6 +2097,7 @@
   display: grid;
   place-items: center;
   font: 700 11em/1 'Playfair Display', serif;
+  font-variant-numeric: lining-nums; /* font: gộp đưa số về kiểu cổ */
   width: 2em;
   height: 2em;
   background: #efe4cd;
