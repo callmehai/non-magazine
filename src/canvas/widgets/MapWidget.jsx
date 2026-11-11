@@ -31,6 +31,17 @@ const AREAS = [
   [105.79, 20.865, 'THANH OAI', 'タインオアイ'],
   [105.878, 21.005, 'Sông Hồng', 'ホン川'],
 ]
+// tên đường trên vạch đỏ (GVHD 11/11, tab "Bổ sung 2": "Nếu được muốn ghi rõ con đường đi tới làng Chuông tên là gì → Phần
+// màu đỏ"). Tên lấy từ chính tuyến OSRM (router.project-osrm.org, Hồ Hoàn Kiếm → Làng Chuông, 30,1 km): … Tây Sơn → Ngã Tư Sở →
+// Nguyễn Trãi (Thanh Xuân) → Trần Phú – Quang Trung (Hà Đông) → Ba La → Quốc lộ 21B (≈ 13 km) → đường Làng Chuông.
+// Mỗi nhãn neo vào điểm tuyến gần toạ độ đã cho nhất, xoay theo hướng đoạn đường, hiện khi vạch đỏ vẽ tới đó.
+// [kinh độ, vĩ độ, tiếng Việt, tiếng Nhật, phía đặt nhãn: -1 trên/trái vạch, 1 dưới/phải] — đoạn Tây Sơn quá ngắn ở khung toàn
+// tuyến (nhãn đè lên Nguyễn Trãi + tên quận) nên không ghi; Nguyễn Trãi đặt phía dưới vạch, tránh chữ THANH XUÂN / ĐỐNG ĐA
+const ROADS = [
+  [105.8, 20.989, 'Đường Nguyễn Trãi', 'グエン・チャイ通り', 1],
+  [105.768, 20.962, 'Đường Quang Trung', 'クアン・チュン通り', -1],
+  [105.772, 20.885, 'Quốc lộ 21B', '国道21B号線', -1],
+]
 const L = {
   vi: {
     country: 'VIỆT NAM',
@@ -49,6 +60,7 @@ const L = {
     back: 'Toàn cảnh Việt Nam',
     credit: 'Bản đồ: © OpenStreetMap contributors · Tuyến đường: OSRM · Quãng đường: Google Maps',
     areas: AREAS.map((a) => a[2]),
+    roads: ROADS.map((a) => a[2]),
   },
   ja: {
     country: 'ベトナム',
@@ -67,6 +79,7 @@ const L = {
     back: 'ベトナム全図へ',
     credit: '地図：© オープンストリートマップ（OpenStreetMap）の貢献者・ルート：OSRM・距離：Google マップ',
     areas: AREAS.map((a) => a[3]),
+    roads: ROADS.map((a) => a[3]),
   },
 }
 
@@ -96,6 +109,20 @@ const geo = (lon, lat) => [
   ((merY(trip.nw[1]) - merY(lat)) / (merY(trip.nw[1]) - merY(trip.se[1]))) * trip.h,
 ]
 const AREA_PX = AREAS.map(([lon, lat]) => geo(lon, lat))
+const ROAD_AT = ROADS.map(([lon, lat, , , side]) => {
+  const [gx, gy] = geo(lon, lat)
+  let best = 0
+  R.forEach((p, i) => {
+    if (Math.hypot(p[0] - gx, p[1] - gy) < Math.hypot(R[best][0] - gx, R[best][1] - gy)) best = i
+  })
+  const d = SEG.slice(0, best).reduce((a, b) => a + b, 0)
+  const a = R[Math.max(0, best - 2)]
+  const b = R[Math.min(R.length - 1, best + 2)]
+  let ang = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI
+  if (ang > 90) ang -= 180
+  if (ang < -90) ang += 180
+  return { x: R[best][0], y: R[best][1], d, ang, side }
+})
 // hướng xe: nhìn trước / sau một đoạn trên tuyến cho mượt (không giật ở mỗi khúc gấp)
 function heading(d) {
   const a = at(Math.max(0, d - 22))
@@ -353,6 +380,18 @@ export default function MapWidget({ el, interactive, visible }) {
               ))}
               <path d={pathD} className="cvw-sat__ghost" strokeWidth={5 / cam.s} />
               <path d={pathD} className="cvw-sat__line" strokeWidth={6 / cam.s} style={{ strokeDasharray: LEN, strokeDashoffset: LEN - (st.phase === 'done' ? LEN : st.drive * PARK) }} />
+              {ROAD_AT.map((r, i) =>
+                st.phase === 'done' || st.drive * PARK >= r.d ? (
+                  <text
+                    key={i}
+                    className="cvw-sat__road"
+                    transform={`translate(${r.x} ${r.y}) rotate(${r.ang}) translate(0 ${(r.side > 0 ? 22 : -11) / cam.s})`}
+                    fontSize={Math.max(8, size.w / 46) / cam.s}
+                  >
+                    {t.roads[i]}
+                  </text>
+                ) : null
+              )}
             </svg>
           </div>
           <div ref={fxRef} className="cvw-trip__fx" aria-hidden="true">

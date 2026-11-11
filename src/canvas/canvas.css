@@ -787,3 +787,8 @@
   background: #8e2c21;
   transform: translateY(-0.08em);
 }
+
+/* đoạn in nghiêng giữa câu (⟪…⟫ trong chữ — tên tài liệu trong danh mục APA) */
+.cv-it {
+  font-style: italic;
+}

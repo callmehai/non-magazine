@@ -195,6 +195,18 @@
   stroke-width: 0.25em;
   stroke-linejoin: round;
 }
+.cvw-sat__road {
+  /* tên đường viết dọc theo vạch đỏ (GVHD 11/11: ghi rõ tên con đường đi tới làng Chuông) */
+  fill: #a8382b;
+  font-family: 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-width: 0.3em;
+  stroke-linejoin: round;
+}
 .cvw-sat__area.is-water {
   fill: #3f7fae;
   font-style: italic;

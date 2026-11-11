@@ -364,8 +364,25 @@ function MoreBody({ el, mode }) {
   )
 }
 
-/** {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css) */
+/**
+ * {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css).
+ * ⟪…⟫ → đoạn in nghiêng giữa câu (tên sách / tên bài trong tài liệu tham khảo APA, như Doc của nhóm — GVHD 11/11)
+ */
 export function RubyText({ text }) {
+  if (String(text).includes('⟪')) {
+    return String(text)
+      .split(/(⟪[^⟪⟫]*⟫)/)
+      .filter(Boolean)
+      .map((seg, i) =>
+        seg.startsWith('⟪') ? (
+          <em key={i} className="cv-it">
+            <RubyText text={seg.slice(1, -1)} />
+          </em>
+        ) : (
+          <RubyText key={i} text={seg} />
+        )
+      )
+  }
   const parts = parseRuby(text)
   if (parts.length === 1 && typeof parts[0] === 'string') return text
   return parts.map((p, i) =>

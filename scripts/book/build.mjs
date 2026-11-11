@@ -380,6 +380,7 @@ const SEAL = (x, y, s = 60) => [
 const ELL = shape('ellipse')
 const TRI = shape('triangle')
 const HL = (x, y, w, stroke = C.line, sw = 0.6) => ({ id: id(), type: 'line', x: r1(x), y: r1(y - 2), w: r1(w), h: 4, rot: 0, x1: 0, y1: 0.5, x2: 1, y2: 0.5, stroke, strokeWidth: sw, name: 'Đường kẻ' })
+const VL = (x, y, h, stroke = C.line, sw = 0.6) => ({ id: id(), type: 'line', x: r1(x - 2), y: r1(y), w: 4, h: r1(h), rot: 0, x1: 0.5, y1: 0, x2: 0.5, y2: 1, stroke, strokeWidth: sw, name: 'Đường kẻ dọc' })
 const join = (paras) => [paras.map((q) => q[0]).join('\n'), paras.map((q) => q[1]).join('\n')]
 /** phần tử tương tác (bản đồ, mô hình 3D) — xem src/canvas/widgets */
 const WIDGET = (x, y, w, h, kind, o = {}) => ({ id: id(), type: 'widget', kind, x: r1(x), y: r1(y), w: r1(w), h: r1(h), rot: 0, name: o.name ?? 'Phần tử tương tác', ...o.data })
@@ -1763,17 +1764,23 @@ function chapterOpener(ch, photo) {
   const lx = left.x0
   left.add(
     STAND({ ...DECO('hoa-dai', left.x1 - 74, 58, 84, 122, 0.7), name: 'Hình vẽ' }, 0.9),
-    T(lx, 74, 300, 40, ['CHƯƠNG', `パート${ch.no}`], { font: F.head, size: 30, tracking: 2, color: C.title, lh: 1.2, jaFont: F.jaHead, jaSize: 22, name: 'Nhãn chương' }),
-    // phông Playfair chừa khoảng trống lớn phía trên chữ số: khung số đặt cao hơn để mặt số ngang tên chương
-    STAND(T(lx - 8, 46, 150, 270, [String(ch.no), null], { font: F.head, size: 200, color: acc, lh: 1.05, name: 'Số chương' }), 0.25, 1.2)
+    // GVHD 11/11 (tab "Bổ sung 2"): "Chỉnh lại tiêu đề số 1, 2, 3 → hiện đang mất cân bằng xí" · "Số và chữ đang chồng lên
+    // nhau" — trước: chữ CHƯƠNG / パート1 cỡ 30 đè lên đầu số 200pt, tên chương trôi giữa trang. Nay một khối: nhãn nhỏ giãn
+    // chữ trên đầu số (không chạm), số 170pt, vạch dọc mảnh, tên chương canh giữa theo chiều cao mặt số
+    T(lx, 70, 220, 22, ['CHƯƠNG', 'パート'], { size: 15, tracking: 5, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, jaSize: 14, name: 'Nhãn chương' }),
+    // Playfair: mặt số bắt đầu ~0,245 cỡ chữ dưới mép khung, cao ~0,7 cỡ chữ → khung y 70 thì mặt số 112…231
+    STAND(T(lx - 6, 70, 130, 200, [String(ch.no), null], { font: F.head, size: 170, color: acc, lh: 1.05, name: 'Số chương' }), 0.25, 1.2)
   )
-  const tx = lx + 148
+  const g0 = 112
+  const g1 = 231
+  const tx = lx + 150
+  left.add(VL(lx + 128, g0 + 4, g1 - g0 - 8, C.line, 0.9))
   const tto = { size: 22, font: F.head, lh: 1.35, jaSize: 21 }
-  const ttw = left.x1 - tx - 60
+  const ttw = left.x1 - tx - 70 // chừa cành hoa góc trên phải (vừa "チュオン村のノンラーの概要" một dòng)
   const up = [title[0].replace(/\n/g, ' ').toUpperCase(), title[1]]
   const tth = textH(up, ttw, tto)
-  left.add(T(tx, 168, ttw, tth, up, { ...tto, color: C.title, jaFont: F.jaHead, name: 'Tên chương' }))
-  const ry = Math.max(330, 168 + tth + 28)
+  left.add(T(tx, r1((g0 + g1) / 2 - tth / 2), ttw, tth, up, { ...tto, color: C.title, jaFont: F.jaHead, name: 'Tên chương' }))
+  const ry = Math.max(292, g1 + 56)
   left.add(HL(lx, ry, left.cw, C.line, 0.9))
   // ảnh: khung dọc 3:4 lệch phải, cụm sen vẽ sau ảnh ở góc trái dưới (ảnh che một phần như mockup)
   // soát 04/11 (B10): ảnh mở chương cũng có chú thích "Ảnh N: … (Nguồn: …)" dưới ảnh
@@ -2138,6 +2145,43 @@ let guidePage = null
   f.y = blockHead(f.p, f.y, ty.h, ty.id)
   f.figure(ty.hero, { ratio: R.std })
   f.prose([ty.intro])
+  // tab "Bổ sung 2" (GVHD 11/11): đoạn ngắn chia hai nhóm theo hình dáng, trước khi vào từng loại nón; dưới đoạn là khung hai
+  // nhóm (hình nón + tên từng loại, "không đánh stt các nón, chỉ cần kể tên là được") — không để trang này lấp bằng ảnh kho
+  // (ảnh kho lần đầu lấp vào là ảnh nón đặt dưới đất: anh Hải "ko dùng ảnh nào để nón dưới đất")
+  if (ty.shape) {
+    f.prose([ty.shape])
+    const byN = Object.fromEntries([...ty.list, ...ty.styled.list].map((t) => [t.name[0], t.name]))
+    const GROUPS = [
+      [ty.groups.pointed, 'non-line', ['Nón lá hình chóp truyền thống', 'Nón lá già ghép sống', 'Nón nhà sư (Nón thầy tu)', ...ty.styled.list.map((t) => t.name[0])], ACC[1]],
+      [ty.groups.wide, 'non-vanh-rong', ['Nón Ba tầm', 'Nón Quai thao', 'Nón thúng'], '#9b5a4a'],
+    ]
+    const cw2 = (CW - 24) / 2
+    const nOpt = { size: 13, lh: 1.35, jaSize: 12 }
+    const nameHs = GROUPS.map(([, , names]) => names.map((n) => textH(byN[n], cw2 - 36, nOpt)))
+    const gh = 128 + Math.max(...nameHs.map((hs) => hs.reduce((a, h) => a + h + 6, 0))) + 14
+    const keep = f.pool
+    f.pool = []
+    f.place(gh, (p, y) => {
+      GROUPS.forEach(([title, icon, names, tone], i) => {
+        const x = p.x0 + i * (cw2 + 24)
+        p.add(RECT(x, y, cw2, gh, '#fbf6ea', { radius: 6, stroke: C.line, sw: 0.8, name: 'Khung nhóm nón' }))
+        p.add({ ...DECO(icon, x + (cw2 - 150) / 2, y + 16, 150, 80, 1), name: 'Hình nón nhóm' })
+        p.add(T(x + 14, y + 100, cw2 - 28, 22, title, { font: F.head, size: 16, weight: 700, color: tone, align: 'center', lh: 1.3, jaFont: F.jaHead, jaSize: 15, name: 'Tên nhóm' }))
+        let ny = y + 128
+        names.forEach((n, j) => {
+          p.add(T(x + 18, ny, cw2 - 36, nameHs[i][j], byN[n], { ...nOpt, align: 'center', color: C.ink2, jaFont: F.jaSans, name: 'Tên nón' }))
+          ny += nameHs[i][j] + 6
+        })
+      })
+    })
+    if (f.p) {
+      f.p.centerDeco = true
+      f.fill()
+      f.fillRest()
+      f.p = null
+    }
+    f.pool = keep
+  }
   // mỗi kiểu nón một trang kiểu tạp chí (theo mockup của nhóm, tab "Yêu cầu hình thức" → Thu Nguyệt): số thứ tự thật to
   // + tên nón có gạch chân, đoạn văn thụt vào cột tên, ảnh lớn + cột ảnh cận chi tiết có nhãn, khung đặc điểm nổi bật,
   // hoa lá nét mảnh ở góc trang. Ảnh thật của nhóm (Doc: "sử dụng ảnh thật"); ảnh chi tiết cắt cận từ chính ảnh lớn.
@@ -2146,12 +2190,13 @@ let guidePage = null
       // ảnh IMG_7347 (góp ý: nón chóp cũ mất đầu): thấy trọn chiếc nón, khung gần vuông
       hero: { r: 0.95, pos: '50% 50%' },
       details: [[['Đỉnh nón', '頂'], 52, 28, 3], [['Mặt lá phẳng, đường khâu đều', '平らな葉面とそろった縫い目'], 40, 54, 3], [['Vành nón', '縁'], 80, 74, 3]],
-      box: [['Đặc điểm nổi bật', '主な特徴'], [['Dáng chóp nhọn', '先のとがった円錐形'], ['Lá lụi khâu trên 16 vòng nứa', 'ラルイを16本のヌアひごの輪に縫い付け'], ['Màu trắng sáng hoặc vàng ngà', '明るい白か象牙色'], ['Gọn nhẹ, dùng hằng ngày, làm quà tặng', '軽く、日常使いにも贈り物にも']]],
+      // GVHD 11/11: "Phần đặc điểm nổi bật ở dưới mỗi nón: ghi thêm kích thước của nón nữa" — số đo theo câu nhóm thêm vào đoạn văn
+      box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 30–40 cm', '直径30〜40cm'], ['Chóp cao 20–25 cm', '高さ20〜25cm']]], // trang có chú thích cuối trang + đoạn văn dài thêm câu kích thước → khung một hàng như Ba tầm / Quai thao (dáng, lá, màu, công dụng đã có trong đoạn văn)
     },
     'Nón lá già ghép sống': {
       hero: { r: 0.85, pos: '50% 50%' },
       details: [[['Núm chóp', '頂の飾り'], 58, 18, 3.2], [['Đường sống lá tỏa đều', '放射状の葉の筋'], 40, 58, 2.6], [['Vành nón', '縁'], 62, 72, 2.4]],
-      box: [['Đặc điểm nổi bật', '主な特徴'], [['Lá cọ già ghép, khâu trên khung', '古いヤシの葉を継ぎ、骨組みに縫う'], ['Màu nâu nhạt', '淡い茶色'], ['Sống lá tỏa từ đỉnh xuống vành', '頂から縁へ広がる葉の筋'], ['Vẻ ngoài mộc mạc', '素朴な姿']]],
+      box: [['Đặc điểm nổi bật', '主な特徴'], [['Cỡ như nón chóp truyền thống', '大きさは伝統的な円錐形と同じ'], ['Lá cọ già ghép, khâu trên khung', '古いヤシの葉を継ぎ、骨組みに縫う'], ['Màu nâu nhạt', '淡い茶色'], ['Sống lá tỏa từ đỉnh xuống vành', '頂から縁へ広がる葉の筋'], ['Vẻ ngoài mộc mạc', '素朴な姿']]],
     },
     'Nón Ba tầm': {
       // ảnh chụp trọn chiếc nón gần vuông: khung ngang 4:3 cắt mất mép trên + thành nón → khung gần vuông, canh giữa nón
@@ -2200,10 +2245,13 @@ let guidePage = null
   const bo = { size: 13, lh: 1.4, jaSize: 12.5 }
   const TONE = [ACC[1], '#9b5a4a'] // xen hai màu như mockup (xanh lá / đỏ đất)
   let typeNo = 0
-  const typeCard = (t, kicker) => {
+  // GVHD 11/11 (tab "Bổ sung 2"): "GV góp ý các số 02, 03,... của các loại nón có thể thay bằng cái hình gì đó" · "không đánh
+  // stt các nón, chỉ cần kể tên là được. Thay số bằng một chiếc nón nhỏ ở đầu trang" → chỗ số thứ tự là hình nón nét mảnh
+  // theo nhóm: nón chóp (non-line) cho nhóm chóp nhọn, nón mặt phẳng thành thấp (non-vanh-rong) cho nhóm vành rộng
+  const typeCard = (t, kicker, icon = 'non-line') => {
     const ex = TYPE_EXTRA[t.name[0]] ?? {}
     const tone = TONE[typeNo % 2]
-    const num = String(++typeNo).padStart(2, '0')
+    typeNo++
     const p = f.page()
     const ix = p.x0 + 112 // cột chữ thụt sau số thứ tự
     const iw = p.x1 - ix
@@ -2212,7 +2260,7 @@ let guidePage = null
       p.add(T(p.x0, y, CW, 16, kicker.map((x) => strip(x).toUpperCase()), { size: S.label, tracking: 2.4, weight: 700, color: tone, jaFont: F.jaSans, name: 'Nhóm' }))
       y += 46
     }
-    p.add(T(p.x0 - 4, y - 10, 112, 104, [num, null], { font: F.head, size: 84, color: tone, lh: 1.1, name: 'Số thứ tự' }))
+    p.add({ ...DECO(icon, p.x0, y + 2, 96, 51, 1), name: 'Hình nón đầu trang' })
     const tw = iw - 20
     const nh = textH(t.name, tw, no)
     p.add(T(ix, y + 4, tw, nh, t.name, { ...no, weight: 700, color: tone, jaFont: F.jaHead, name: 'Tên nón' }))
@@ -2250,7 +2298,9 @@ let guidePage = null
       const rh = []
       for (let i = 0; i < items.length; i += 2) rh.push(Math.max(...items.slice(i, i + 2).map((it) => textH(it, bw0 - 12, bo)), 16))
       const bh0 = 38 + rh.reduce((a2, h) => a2 + h + 6, 0) - 6 + 12
-      if (bot - y - 18 - (bh0 + 16) - 18 < gw0 * 0.9) [bt, items] = [null, []]
+      // khung có kích thước (GVHD 11/11: "ghi thêm kích thước của nón") thì giữ, ảnh thấp hơn một chút (tối thiểu 0,65 bề ngang)
+      const sized = items.some((it) => /cm|Kích thước/.test(it[0]))
+      if (bot - y - 18 - (bh0 + 16) - 18 < gw0 * (sized ? 0.65 : 0.9)) [bt, items] = [null, []]
     }
     const bw2 = (CW - 46) / 2
     // mỗi hàng hai ý, cao theo ý dài hơn của chính hàng đó
@@ -2313,8 +2363,17 @@ let guidePage = null
 
     f.y = BOT // mỗi kiểu một trang
   }
-  ty.list.forEach((t) => typeCard(t))
-  ty.styled.list.forEach((t, i) => typeCard(t, i === 0 ? ty.styled.h : null))
+  // thứ tự theo GVHD (tab "Bổ sung 2"): nhóm chóp nhọn (chóp truyền thống, lá già, nhà sư, rồi các mẫu cách điệu lụa, lụa
+  // hai mặt, cô dâu) → nhóm vành rộng (Ba tầm, Quai thao, thúng); tên nhóm làm dòng nhỏ đầu trang loại nón đầu tiên của nhóm
+  {
+    const byName = Object.fromEntries(ty.list.map((t) => [t.name[0], t]))
+    const pointed = ['Nón lá hình chóp truyền thống', 'Nón lá già ghép sống', 'Nón nhà sư (Nón thầy tu)'].map((n) => byName[n])
+    const wide = ['Nón Ba tầm', 'Nón Quai thao', 'Nón thúng'].map((n) => byName[n])
+    if ([...pointed, ...wide].some((t) => !t) || pointed.length + wide.length !== ty.list.length) throw new Error('1.3.2: danh sách nón đổi tên — sửa thứ tự nhóm')
+    pointed.forEach((t, i) => typeCard(t, i === 0 ? ty.groups.pointed : null, 'non-line'))
+    ty.styled.list.forEach((t, i) => typeCard(t, i === 0 ? ty.styled.h : null, 'non-line'))
+    wide.forEach((t, i) => typeCard(t, i === 0 ? ty.groups.wide : null, 'non-vanh-rong'))
+  }
   // lời kết của mục: đoạn văn thường (khối ghi chú nghiêng 15 dòng quá nặng)
   f.prose([ty.outro])
   // góp ý 04/11 (Thu Nguyệt): hai ảnh cuối mục thay bằng OCOP.JPG + Làm nón truyền thống.JPG
@@ -3453,31 +3512,23 @@ let stripRight = null
     const m = String(t).match(/^(.*?\((?:\d{4}|không ngày|n\.d\.|日付なし)[^)]*\)\.?)\s+(.*)$/s) ?? String(t).match(/^(.*?):\s+(https?:.*)$/s)
     return m ? [m[1], m[2]] : [t, '']
   }
+  // GVHD 11/11 (tab "Bổ sung 2"): "Tài liệu tham khảo trình bày như phần đã đc ghi trong docs: APA" (kèm hai ảnh mẫu) → như
+  // danh sách đánh số của Doc: số đếm lại từ 1 trong từng nhóm (Doc: mỗi nhóm một danh sách start=1), cột số riêng, mỗi mục một
+  // đoạn liền (không tách "Tác giả. (năm)." đậm + phần sau xuống dòng chữ nhỏ), tên tài liệu in nghiêng đúng như Doc (⟪…⟫ trong
+  // refs.mjs, lấy từ định dạng nghiêng của tab 参考資料), các dòng sau canh thẳng sau số
   let refNo = 0
   const putRef = (t) => {
     const url = urlOf(t)
     const lk = url ? { link: url, linkStyle: 'ref' } : {}
-    const [h, rest] = splitApa(t)
-    // 08/11 (tab Bổ sung): "đánh số thứ tự, bỏ phần chữ đỏ dùng trang" → số liền 1 → N qua các nhóm, bỏ dòng "→ dùng ở trang"
     refNo++
-    const head = [`${refNo}. ${viDate(h)}`, `${refNo}. ${h}`]
-    const tail = rest ? [viDate(rest), rest] : null
-    const used = []
-    const ho = { size: 10.5, lh: 1.38, jaSize: 10.5, weight: 700 }
-    const to = { size: 9.5, lh: 1.36, jaSize: 9.5 }
-    const uo = { size: 9, lh: 1.3, jaSize: 9, weight: 700 }
-    const h1 = textH(head, CW, ho)
-    const h2 = tail ? textH(tail, CW, to) : 0
-    const h3 = used.length ? 13 : 0
-    // soát 07/11: dòng "→ trang" đặt TRÊN tên tài liệu (chiều cao dòng nguồn tính theo thứ tiếng dài hơn → ở bản kia có khoảng hở
-    // phía trên dòng "→" nếu nó nằm dưới, trông như thuộc mục sau)
-    f.place(h1 + (h2 ? h2 + 1 : 0) + (h3 ? h3 + 1 : 0), (p, y) => {
-      const yh = y + (h3 ? h3 + 1 : 0)
-      p.add(T(p.x0, yh, p.cw, h1, head, { ...ho, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
-      if (h2) p.add(T(p.x0, yh + h1 + 1, p.cw, h2, tail, { ...to, color: C.ink2, jaFont: F.jaSans, name: 'Nguồn tài liệu', ...lk }))
-      if (h3)
-        p.add(T(p.x0, y, p.cw, h3, [`→ dùng ở trang ${used.join(', ')}`, `→ ${used.join('・')}ページで使用`], { ...uo, color: '#a8382b', jaFont: F.jaSans, name: 'Trang dùng tài liệu', link: `#p${used[0]}`, linkStyle: 'refno', alt: [`Lật tới trang ${used[0]}, nơi dùng tài liệu này`, `この資料を使った${used[0]}ページへ`] }))
-    }, 3) // 85 mục: cách 3pt để danh sách hết ở trang trái → trang Nguồn ảnh là trang phải (không thừa trang trống)
+    const body = [viDate(t), t]
+    const ro = { size: 10, lh: 1.42, jaSize: 10 }
+    const nw = 24
+    const h1 = textH(body, CW - nw, ro)
+    f.place(h1, (p, y) => {
+      p.add(T(p.x0, y, nw - 4, 15, [`${refNo}.`, `${refNo}.`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
+      p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
+    }, 12) // cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
   const refP0 = pages.length - 1
   refGroups.forEach((g, k) => {
@@ -3485,6 +3536,7 @@ let stripRight = null
     f.place(30, (p, y) => {
       p.add(T(p.x0, y + 8, p.cw, 18, [`${label[0]} · ${g.items.length}`, `${label[1]}・${g.items.length}`], { size: S.label, tracking: 1.8, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm tài liệu' }), HL(p.x0, y + 28, 40, ACC[9], 1.2))
     }, 6)
+    refNo = 0
     g.items.forEach(putRef)
   })
   // soát 07/11: 6 trang tài liệu chỉ có chữ → mỗi trang một hình vẽ nét nhỏ ở góc dưới phía ngoài (nón, nhánh tre xen nhau)
@@ -3498,41 +3550,77 @@ let stripRight = null
   // nguồn ảnh: trang riêng (trang phải) — bảng hai cột "nguồn | ảnh nào", chia nhóm báo chí / kho ảnh mở / video, bản đồ
   // (góp ý: khối chữ dày nửa trên, nửa dưới trống → trình bày lại cho đẹp). Ảnh còn lại do nhóm tự chụp.
   {
-    // ảnh của nhiếp ảnh Trọng Khải (bên thuê gửi): thư mục "Trọng Khải" + thư mục "Không gian chợ nón" của nhóm (đã so ảnh:
-    // toàn bộ là ảnh của anh) → ghi số các trang có ảnh; bưu thiếp cuối sách cũng dùng ảnh chợ đèn lồng của anh
-    const tkSrc = new Set(Object.entries(PHOTO_PATHS).filter(([, rel]) => /^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/.test(rel)).map(([h]) => PHOTOS[h]).filter(Boolean))
-    const tkPages = pages.filter((q) => q.els.some((e) => e.type === 'image' && tkSrc.has(e.src))).map((q) => q.n)
+    // GVHD 11/11 (tab "Bổ sung 2"): "Về nguồn ảnh: bổ sung số trang hoặc là STT ảnh" → mỗi dòng nguồn kèm số các ảnh dùng
+    // nguồn đó ("Ảnh 7, 20…"), tìm theo nguồn trong ngoặc cuối chú thích ảnh; số đếm y như bước đánh số "Ảnh N" lúc xuất
+    // (srcNums: bước đó đếm lại và ghi đè cho chắc). Thêm nhóm nghệ nhân / nhiếp ảnh (trước chỉ nhắc Trọng Khải theo trang),
+    // thêm Báo Pháp luật (ảnh gian trưng bày ông Tuy), bỏ dòng ảnh Salles 1896 (ảnh đã bỏ ở Bản sửa lần 2)
     const groups = [
+      [['NGHỆ NHÂN · NHIẾP ẢNH', '職人・写真家'], [
+        [['Nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏'], ['Ảnh do nghệ nhân cung cấp', '職人提供の画像'], 'Lê Văn Tuy cung cấp'],
+        [['Nghệ nhân Tạ Thu Hương', '職人タ・トゥ・フオン氏'], ['Ảnh do nghệ nhân cung cấp', '職人提供の画像'], 'Tạ Thu Hương cung cấp'],
+        [['Nhiếp ảnh Trọng Khải', 'チョン・カイ氏'], ['Chợ nón Chuông · hai ảnh bưu thiếp cuối sách (chợ đèn lồng, bàn tay nâng chồng nón)', 'チュオン村のノンラー市場・巻末の絵はがき2点（提灯の下の市場、ノンラーを持つ手）'], 'Trọng Khải'],
+      ]],
       // 08/11: theo nguồn nhóm ghi cho các ảnh nhóm gắn trong bản Nhật (tên báo để nguyên tiếng Việt như nhóm ghi)
       [['BÁO CHÍ', '新聞・ウェブメディア'], [
-        [['Báo Thanh Niên', 'Báo Thanh Niên'], ['Nón lá sen · Nhà hát Ba Nón Lá · Expo 2021 Dubai · Tổng thống Hàn Quốc', 'ノン・ラー・セン・三つのノンラー劇場・ドバイ国際博覧会2021・韓国大統領']],
-        [['Báo Quân đội nhân dân', 'Báo Quân đội Nhân dân'], ['Dao, kéo cắt lá · nghệ nhân Phạm Trần Canh · bà Trần Thị Hoa', '小刀とはさみ・職人ファム・チャン・カイン氏・トラン・ティ・ホアさん']],
-        [['VietNamNet', 'VietnamNet'], ['Phu nhân Thủ tướng Singapore · nón lá trong thiết kế trang phục', 'シンガポール首相夫人・衣装デザインに取り入れられたノンラー']],
-        [['Báo Dân Việt', 'Báo Dân Việt'], ['Nón bài thơ', 'ノン・バイ・トー']],
-        [['Báo Lao Động', 'Báo Lao Động'], ['Nón lá bàng', 'ノン・ラー・バン']],
-        [['VnExpress', 'VNEXPRESS'], ['Nón ngựa', 'ノン・グア']],
-        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）']],
-        [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）']],
-        [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ']],
-        [['Báo Sóng Trẻ', 'Báo Sóng trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー']],
-        [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー']],
-        [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」']],
-        [['Maries', 'Maries'], ['Lễ báo công năm 2025', '2025年の活動報告式']],
+        [['Báo Thanh Niên', 'Báo Thanh Niên'], ['Nón lá sen · Nhà hát Ba Nón Lá · Expo 2021 Dubai · Tổng thống Hàn Quốc', 'ノン・ラー・セン・三つのノンラー劇場・ドバイ国際博覧会2021・韓国大統領'], 'Báo Thanh Niên'],
+        [['Báo Quân đội nhân dân', 'Báo Quân đội Nhân dân'], ['Dao, kéo cắt lá · nghệ nhân Phạm Trần Canh · bà Trần Thị Hoa', '小刀とはさみ・職人ファム・チャン・カイン氏・トラン・ティ・ホアさん'], 'Quân đội nhân dân'],
+        [['VietNamNet', 'VietnamNet'], ['Phu nhân Thủ tướng Singapore · nón lá trong thiết kế trang phục', 'シンガポール首相夫人・衣装デザインに取り入れられたノンラー'], 'VietNamNet'],
+        [['Báo Dân Việt', 'Báo Dân Việt'], ['Nón bài thơ', 'ノン・バイ・トー'], 'Báo Dân Việt'],
+        [['Báo Lao Động', 'Báo Lao Động'], ['Nón lá bàng', 'ノン・ラー・バン'], 'Báo Lao Động'],
+        [['VnExpress', 'VNEXPRESS'], ['Nón ngựa', 'ノン・グア'], 'VnExpress'],
+        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
+        [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong'],
+        [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
+        [['Báo Sóng Trẻ', 'Báo Sóng trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
+        [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển'],
+        [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật（スアン・ライ）'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', '展示会でのトゥイ氏のノンラーの展示ブース'], 'Báo Pháp luật'],
+        [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」'], 'Chạm Sắc'],
+        [['Maries', 'Maries'], ['Lễ báo công năm 2025', '2025年の活動報告式'], 'Maries'],
       ]],
-      [['BẢO TÀNG · KHO ẢNH MỞ', '博物館・パブリックドメイン'], [
-        [['Bảo tàng Lịch sử Quốc gia', '国立歴史博物館'], ['Trống đồng Ngọc Lũ · thạp đồng Đào Thịnh', 'ゴックルー銅鼓・ダオティン銅製容器']],
-        [['Bảo tàng Hà Nội', 'ハノイ博物館'], ['Nón lá khi lao động · người dân đội nón đi chợ', '屋外での作業に使われるノンラー・市場へ行く人々']],
-        [['André Salles (BnF)', 'アンドレ・サル（フランス国立図書館）'], ['Hàng bán nón Hà Nội, 1896 · phạm vi công cộng', '1896年ハノイのノンラー売り・パブリックドメイン']],
+      [['BẢO TÀNG', '博物館'], [
+        [['Bảo tàng Lịch sử Quốc gia', '国立歴史博物館'], ['Trống đồng Ngọc Lũ · thạp đồng Đào Thịnh', 'ゴックルー銅鼓・ダオティン銅製容器'], 'Bảo tàng Lịch sử Quốc gia'],
+        [['Bảo tàng Hà Nội', 'ハノイ博物館'], ['Nón lá khi lao động · người dân đội nón đi chợ', '屋外での作業に使われるノンラー・市場へ行く人々'], 'Bảo tàng Hà Nội'],
       ]],
       [['VIDEO VÀ BẢN ĐỒ', '動画・地図'], [
-        [['Nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏'], ['Video trình diễn nón lá trên sàn diễn thời trang quốc tế (mục 3.2)', '海外のファッションショーのノンラーの動画（3.2節）']],
-        [['Natural Earth (phạm vi công cộng)', 'ナチュラルアース（パブリックドメイン）'], ['Bản đồ Việt Nam, bản theo quan điểm của Việt Nam', 'ベトナムの地図（ベトナムの立場による版）']],
-        [['© OpenStreetMap contributors (ODbL) · OSRM · Google Maps', '© オープンストリートマップの貢献者・OSRM・グーグルマップ'], ['Bản đồ hành trình: nền bản đồ, định tuyến, quãng đường', '旅の地図：地図データ・経路・距離']],
+        [['Nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏'], ['Video trình diễn nón lá trên sàn diễn thời trang quốc tế (mục 3.2)', '海外のファッションショーのノンラーの動画（3.2節）'], { video: 'sàn diễn thời trang quốc tế' }],
+        // hai nguồn cùng một ảnh (ảnh bản đồ hành trình) → một dòng
+        [['Natural Earth · © OpenStreetMap contributors (ODbL) · OSRM · Google Maps', 'ナチュラルアース・© オープンストリートマップの貢献者・OSRM・グーグルマップ'], ['Bản đồ hành trình: bản đồ Việt Nam (theo quan điểm của Việt Nam), nền bản đồ, định tuyến, quãng đường', '旅の地図：ベトナムの地図（ベトナムの立場による版）・地図データ・経路・距離'], 'OpenStreetMap'],
       ]],
     ]
+    // số ảnh theo nguồn — đếm như bước "Ảnh N" lúc xuất: chú thích theo thứ tự trang, mỗi thứ tiếng một bộ đếm (el.only)
+    const numsOf = (key) => {
+      if (key.video) {
+        const pg = pages.find((q) => q.els.some((e) => e.name === 'Chú thích video' && String(e.text).includes(key.video)))?.n
+        return pg ? [`tr. ${pg}`, `${pg}ページ`] : null
+      }
+      let nv = 0
+      let nj = 0
+      const vi = []
+      const ja = []
+      for (const q of pages)
+        for (const e of q.els) {
+          if (!['Chú thích ảnh', 'Chú thích video'].includes(e.name) || !e.text || !/^Ảnh \d+: /.test(e.text)) continue
+          const lines = e.text.split('\n').filter((l) => /^Ảnh \d+: /.test(l))
+          lines.forEach((l, i) => {
+            const hit = (l.match(/\(([^()]*)\)\s*$/)?.[1] ?? '').includes(key)
+            if (hit && e.only !== 'ja') vi.push(nv + i + 1)
+            if (hit && e.only !== 'vi') ja.push(nj + i + 1)
+          })
+          if (e.only !== 'ja') nv += lines.length
+          if (e.only !== 'vi') nj += lines.length
+        }
+      return vi.length || ja.length ? [`Ảnh ${vi.join(', ')}`, `画像${ja.join('・')}`] : null
+    }
+    for (const [, rows] of groups)
+      for (const r of rows) {
+        const n = numsOf(r[2])
+        if (!n) console.warn(`⚠ Nguồn ảnh: không thấy ảnh nào của "${r[0][0]}"`)
+        r.nums = n
+        r[1] = n ? [`${r[1][0]} → ${n[0]}`, `${r[1][1]} → ${n[1]}`] : r[1]
+      }
     const note = [
-      `Ảnh chợ nón Chuông ở trang ${tkPages.join(', ')} và hai ảnh bưu thiếp (chợ đèn lồng, bàn tay nâng chồng nón): nhiếp ảnh Trọng Khải. Các ảnh không ghi nguồn khác do nhóm tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.`,
-      `${tkPages.join('、')}ページのチュオン村のノンラー市場の画像と絵はがきの画像2点（提灯の下の市場、ノンラーを持つ手）：チョン・カイ氏提供。そのほか出典の記載がない画像は、チュオン村とハノイの博物館で著者が撮影したものです。`,
+      'Các ảnh không có trong bảng do nhóm tác giả tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.',
+      '表にない画像は、チュオン村とハノイの博物館で著者が撮影したものです。',
     ]
     f.page()
     const p = f.p
@@ -3549,18 +3637,18 @@ let stripRight = null
       for (const [label, rows] of groups) {
         if (draw) p.add(T(p.x0, y, p.cw, 16, label, { size: S.label - 1, tracking: 2.2, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm' }))
         y += 20
-        rows.forEach(([src, what], i) => {
+        rows.forEach(([src, what, key], i) => {
           const h = Math.max(textH(src, lw, { ...o, weight: 700 }), textH(what, dw, o))
           if (draw) {
-            if (i) p.add(HL(p.x0, y - 2.5, p.cw, C.line, 0.4))
+            if (i) p.add(HL(p.x0, y - 1.75, p.cw, C.line, 0.4))
             p.add(
               T(p.x0, y, lw, h, src, { ...o, weight: 700, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }),
-              T(p.x0 + lw + 14, y, dw, h, what, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Ảnh' })
+              { ...T(p.x0 + lw + 14, y, dw, h, what, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Ảnh' }), srcKey: typeof key === 'string' ? key : undefined }
             )
           }
-          y += h + 5
+          y += h + 3.5
         })
-        y += 8
+        y += 5
       }
       return y
     }
@@ -4221,6 +4309,36 @@ pages.forEach(bottomFlora)
       if (e.only !== 'vi') nj += lines
       e.h = r1(Math.max(e.h, textH([e.text, e.ja], e.w, { size: e.size, lh: e.lineHeight, jaSize: e.jaSize ?? e.size })))
     }
+  // bảng Nguồn ảnh (GVHD 11/11: "bổ sung số trang hoặc là STT ảnh"): dòng số ảnh của mỗi nguồn ghi lại theo số vừa đánh
+  {
+    const byKey = new Map()
+    let v = 0
+    let j = 0
+    for (const p of pages)
+      for (const e of p.els) {
+        if (!['Chú thích ảnh', 'Chú thích video'].includes(e.name) || !e.text || !/^Ảnh \d+: /.test(e.text)) continue
+        const lines = e.text.split('\n').filter((l) => /^Ảnh \d+: /.test(l))
+        const jl = (e.ja ?? '').split('\n').filter((l) => /^画像\d+：/.test(l))
+        lines.forEach((l, i) => {
+          const src = l.match(/\(([^()]*)\)\s*$/)?.[1] ?? ''
+          if (e.only !== 'ja') byKey.set(`v${v + i + 1}`, src)
+          if (e.only !== 'vi') byKey.set(`j${j + i + 1}`, src)
+        })
+        if (e.only !== 'ja') v += lines.length
+        if (e.only !== 'vi') j += lines.length
+      }
+    const pick = (pre, key) => [...byKey].filter(([k, src]) => k[0] === pre && src.includes(key)).map(([k]) => +k.slice(1))
+    for (const p of pages)
+      for (const e of p.els) {
+        if (!e.srcKey) continue
+        const nv = pick('v', e.srcKey)
+        const nj = pick('j', e.srcKey)
+        const tv = e.text.replace(/ → Ảnh [\d, ]+$/, ` → Ảnh ${nv.join(', ')}`)
+        if (tv !== e.text) console.warn(`⚠ Nguồn ảnh "${e.srcKey}": số ảnh đổi sau khi đánh số → ${nv.join(', ')}`)
+        e.text = tv
+        if (e.ja) e.ja = e.ja.replace(/ → 画像[\d・]+$/, ` → 画像${nj.join('・')}`)
+      }
+  }
   // khung phóng ảnh (lightbox) hiện đúng chú thích in trên trang ("Ảnh N: … (nguồn)"), không phải gợi ý thô
   // "— nguồn: …" / "— 出典：…" / "全面写真：…" (soát độc lập 08/11). Ảnh không có ô chú thích → chú thích đã định dạng, không số.
   const bare = (s) => (s ?? '').replace(/^Ảnh \d+: /, '').replace(/^画像\d+：/, '')

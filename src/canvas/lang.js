@@ -55,4 +55,4 @@ export function parseRuby(s) {
 }
 
 /** bỏ cú pháp phiên âm — dùng cho mô tả trang, tìm kiếm… */
-export const plainText = (s) => String(s ?? '').replace(/\{([^{}|]+)\|[^{}]+\}/g, '$1')
+export const plainText = (s) => String(s ?? '').replace(/\{([^{}|]+)\|[^{}]+\}/g, '$1').replace(/[⟪⟫]/g, '')

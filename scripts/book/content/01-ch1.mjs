@@ -258,22 +258,34 @@ export const ch1 = {
         'Nghề làm nón Làng Chuông đã được duy trì qua nhiều thế hệ, gắn liền với đời sống sinh hoạt và hoạt động sản xuất của người dân địa phương. Theo thời gian, cùng với sự phát triển của đời sống hiện đại và nhu cầu thị trường thay đổi, các sản phẩm nón của Làng Chuông đã linh hoạt chuyển mình về kiểu dáng, chất liệu và công dụng. Bên cạnh việc duy trì sản xuất nón lá chóp truyền thống, các nghệ nhân nơi đây đã sáng tạo thêm nhiều dòng sản phẩm mới, kết hợp tinh tế giữa kỹ thuật thủ công lâu đời và chất liệu hiện đại:',
         'チュオン{村|むら}のノンラー作りは、地域の人々の日常生活や生産活動と深く結びつきながら、代々受け継がれてきました。現代の暮らしの発展や市場のニーズの{変化|へんか}に伴い、村のノンラーも形や{素材|そざい}、{用途|ようと}の{面|めん}で{柔軟|じゅうなん}に変化してきました。職人たちは、伝統的な{円錐形|えんすいけい}のノンラーの生産を続ける一方で、長年受け継がれてきた手仕事の技術と現代の素材を巧みに組み合わせ、次のような新たな製品も生み出しています。',
       ],
+      // tab "Bổ sung 2" (GVHD, 11/11): "Thêm đoạn ngắn nội dung trước khi đi vào các nón: ( Bố cục đã ổn, chỉ cần đổi vị trí các
+      // loại nón); không đánh stt các nón, chỉ cần kể tên là được. Thay số bằng một chiếc nón nhỏ ở đầu trang." — đoạn Việt
+      // nguyên văn của nhóm; bản Nhật em dịch (nhóm chưa gửi) → cần nhóm soát
+      shape: [
+        'Xét theo hình dáng, nón Làng Chuông được chia thành hai nhóm chính: nón chóp nhọn và nón vành rộng. Nón chóp có kiểu dáng chóp nhọn với độ cao vừa phải, thu nhỏ dần một cách mềm mại từ vành nón lên đến đỉnh. Trong khi đó, nón vành rộng có phần vành lớn, dáng nón thấp và trải rộng hơn. Hai nhóm này thể hiện sự đa dạng về kiểu dáng trong nghề làm nón truyền thống Làng Chuông.',
+        '形から見ると、チュオン{村|むら}のノンラーは大きく二つのグループに分けられます。先の{尖|とが}った{円錐形|えんすいけい}のノンラーと、つばの広いノンラーです。円錐形のノンラーはほどよい高さで、{縁|ふち}から頂部に向かってなだらかに細くなっていきます。一方、つばの広いノンラーは縁が大きく、高さが低く、より平たく広がった形をしています。この二つのグループは、チュオン村の伝統的なノンラー作りにおける形の多様さを表しています。',
+      ],
+      // "Nhóm nón chóp nhọn:" · "Nón vành rộng:" — thứ tự GVHD: chóp truyền thống, lá già, nhà sư, lụa, lụa hai mặt, cô dâu | Ba tầm, Quai thao, thúng
+      groups: {
+        pointed: ['Nhóm nón chóp nhọn', '{円錐形|えんすいけい}のノンラー'],
+        wide: ['Nhóm nón vành rộng', 'つばの広いノンラー'],
+      },
       // 08/11: ảnh mở mục theo bản Nhật (1-32, ông Tuy cung cấp); ảnh ông Tuy trong xưởng (2-03) về mục 2.1.1 như nhóm đặt
       hero: ['Cảnh làm nón ở làng Chuông — nguồn: nghệ nhân Lê Văn Tuy', 'チュオン{村|むら}でのノンラー製作の様子 — 出典：職人レ・ヴァン・トゥイ氏'],
       list: [
         {
           name: ['Nón lá hình chóp truyền thống', '伝統的な{円錐形|えんすいけい}のノンラー'],
           text: [
-            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non)¹ đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có hai màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng và các đường khâu tương đối đều. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
-            '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉¹）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
+            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non)¹ đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng mượt với các đường chỉ khâu tương đối đều đặn. Thông thường, vành rộng của nón có đường kính mở rộng khoảng 30 đến 40 cm, tùy thuộc vào vóc dáng cùng mục đích sử dụng; kết hợp cùng chiều cao chóp từ 20 đến 25 cm giúp ôm vừa vặn vòm đầu mà vẫn giữ độ thông thoáng cần thiết. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
+            '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉¹）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。通常、ノンラーの{縁|ふち}の直径は、かぶる人の体格や用途に応じて約30～40cmです。縁から頂部までの高さは20～25cmで、こうした{寸法|すんぽう}により、頭にほどよくフィットしながら、必要な{通気性|つうきせい}も確保されています。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
           ],
           notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
         },
         {
           name: ['Nón lá già ghép sống', '古いヤシの{葉|は}で作られたノンラー'],
           text: [
-            'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón lá chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật với các đường sống lá rõ nét, tạo nên vẻ ngoài mộc mạc và khác biệt cho sản phẩm.',
-            '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。',
+            'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật bởi các đường sống lá rõ nét, mang lại vẻ ngoài mộc mạc và khác biệt. Nón có kích thước tương đương với nón chóp truyền thống.',
+            '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。大きさは伝統的な円錐形のノンラーとほぼ同じです。',
           ],
         },
         {

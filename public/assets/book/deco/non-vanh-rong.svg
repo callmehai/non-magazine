@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 170" fill="none" stroke="#8a6a3c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+<!-- nón vành rộng (Ba tầm / Quai thao / nón thúng) nét mảnh: mặt nón rộng gần phẳng, thành thấp, quai thao rủ dưới vành.
+     Đầu trang mỗi loại nón nhóm vành rộng (GVHD 11/11: "Thay số bằng một chiếc nón nhỏ ở đầu trang"); cùng kiểu non-line.svg -->
+<path d="M106 112 C 116 150, 204 150, 214 112" stroke="#b4533a" stroke-width="1.1" opacity=".85"/>
+<path d="M150 146 l -4 14 M156 147 l -1 15 M164 147 l 1 15 M170 146 l 4 14" stroke="#b4533a" stroke-width=".9" opacity=".7"/>
+<path d="M18 92 L18 103 A142 30 0 0 0 302 103 L302 92" fill="#eadbbb"/>
+<ellipse cx="160" cy="92" rx="142" ry="30" fill="#f6eedd"/>
+<ellipse cx="160" cy="91" rx="112" ry="23.5" opacity=".45"/>
+<ellipse cx="160" cy="90" rx="82" ry="17" opacity=".45"/>
+<ellipse cx="160" cy="89" rx="52" ry="10.8" opacity=".45"/>
+<ellipse cx="160" cy="88.5" rx="24" ry="5" opacity=".55"/>
+<path d="M160 88 L 160 62 M160 88 L 284 80 M160 88 L 36 80 M160 88 L 252 110 M160 88 L 68 110 M160 88 L 160 121" opacity=".22"/>
+<ellipse cx="160" cy="87" rx="7" ry="3.2" fill="#e6d3ab"/>
+</svg>
