@@ -498,7 +498,7 @@
 @keyframes cv-anim-stand {
   from {
     opacity: 0;
-    transform: perspective(500px) rotateX(84deg);
+    transform: rotate(var(--rot, 0deg)) perspective(500px) rotateX(84deg);
     filter: drop-shadow(0 -2em 2em rgba(74, 50, 26, 0));
   }
   12% {
@@ -508,7 +508,7 @@
     filter: drop-shadow(0 1.6em 1.4em rgba(74, 50, 26, 0.32));
   }
   to {
-    transform: perspective(500px) rotateX(0deg);
+    transform: rotate(var(--rot, 0deg)) perspective(500px) rotateX(0deg);
     filter: drop-shadow(0 0 0 rgba(74, 50, 26, 0));
   }
 }

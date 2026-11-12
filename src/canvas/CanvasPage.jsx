@@ -101,6 +101,8 @@ export function boxStyle(el) {
     width: `${el.w}em`,
     height: `${el.h}em`,
     transform: el.rot ? `rotate(${el.rot}deg)` : undefined,
+    // hiệu ứng Dựng đứng (transform trong keyframes) giữ góc xoay của phần tử
+    '--rot': el.rot ? `${el.rot}deg` : undefined,
     opacity: el.opacity ?? undefined,
   }
 }
@@ -308,7 +310,7 @@ function ImageBody({ el }) {
   // el.spin = số giây một vòng: xoay chậm mãi. Mốc theo đồng hồ chung (không theo lúc gắn ảnh) → hai nửa một hình
   // vắt qua gáy sách (mỗi trang một nửa) luôn cùng góc, liền một khối
   const [spinDelay] = useState(() => (el.spin ? `-${((performance.now() / 1000) % el.spin).toFixed(2)}s` : undefined))
-  const spin = el.spin ? { animation: `cv-spin ${el.spin}s linear ${spinDelay} infinite` } : null
+  const spin = el.spin ? { animation: `cv-spin ${el.spin}s linear ${spinDelay ?? '0s'} infinite` } : null
   const pic = (
     <img
       className={`cv-img ${spin ? 'is-spin' : ''}`}

@@ -145,7 +145,9 @@ export function MotionPanel({ selection, onChange, onUpdateMany }) {
   const kinds = [...new Set(selection.map((e) => e.anim?.kind || ''))]
   const current = kinds.length === 1 ? kinds[0] : null
   const first = selection.find((e) => e.anim) || selection[0]
-  const delay = first.anim?.delay ?? 0
+  // thanh "Bắt đầu sau" = lúc phần tử sớm nhất hiện ra (kéo thanh thì cả nhóm dời theo)
+  const starts = selection.filter((e) => e.anim).map((e) => e.anim.delay ?? 0)
+  const delay = starts.length ? Math.min(...starts) : 0
   const dur = first.anim?.dur ?? effectOf(current)?.dur ?? 0.6
   const images = selection.filter((e) => e.type === 'image')
   const ids = selection.map((e) => e.id).join()
@@ -153,17 +155,20 @@ export function MotionPanel({ selection, onChange, onUpdateMany }) {
 
   const pick = (kind) => {
     if (!kind) {
-      onChange({ anim: undefined }, 'anim')
+      onChange({ anim: undefined }, 'anim:none')
       return
     }
     const fx = effectOf(kind)
     // mỗi phần tử giữ độ trễ riêng (đã xếp "lần lượt"), chỉ đổi kiểu + thời lượng mặc định của kiểu đó
     const patches = Object.fromEntries(selection.map((e) => [e.id, { anim: { kind, delay: e.anim?.delay ?? 0, dur: fx.dur } }]))
-    onUpdateMany(patches, `${ids}:anim`)
+    onUpdateMany(patches, `${ids}:anim:${kind}`)
     requestAnimationFrame(() => playOnStage(selection.map((e) => ({ ...e, anim: patches[e.id].anim }))))
   }
+  // thời lượng: như nhau cho cả nhóm; bắt đầu sau: dời cả nhóm cùng một khoảng (giữ thứ tự "Hiện lần lượt")
   const setAll = (field, v) => {
-    const patches = Object.fromEntries(selection.filter((e) => e.anim).map((e) => [e.id, { anim: { ...e.anim, [field]: v } }]))
+    const shift = field === 'delay' ? v - delay : 0
+    const val = (e) => (field === 'delay' ? Math.max(0, round1((e.anim.delay ?? 0) + shift)) : v)
+    const patches = Object.fromEntries(selection.filter((e) => e.anim).map((e) => [e.id, { anim: { ...e.anim, [field]: val(e) } }]))
     onUpdateMany(patches, `${ids}:anim-${field}`)
   }
   // lần lượt: theo thứ tự trên trang (trên xuống, trái sang), mỗi phần tử chậm hơn phần trước 0,3 giây
@@ -173,6 +178,9 @@ export function MotionPanel({ selection, onChange, onUpdateMany }) {
     onUpdateMany(patches, `${ids}:anim-stagger`)
     requestAnimationFrame(() => playOnStage(order.map((e) => ({ ...e, anim: patches[e.id].anim }))))
   }
+
+  // xoay chậm chỉ ghi vào ảnh (chữ, hình khối không có xoay)
+  const setSpin = (v, key) => onUpdateMany(Object.fromEntries(images.map((e) => [e.id, { spin: v }])), `${ids}:${key}`)
 
   return (
     <>
@@ -201,11 +209,11 @@ export function MotionPanel({ selection, onChange, onUpdateMany }) {
         <>
           <h4 className="ed-panel__sub">Chuyển động liên tục</h4>
           <label className="ed-check">
-            <input type="checkbox" checked={spinning} onChange={(e) => onChange({ spin: e.target.checked ? 90 : undefined }, 'spin')} />
+            <input type="checkbox" checked={spinning} onChange={(e) => setSpin(e.target.checked ? 90 : undefined, 'spin')} />
             Xoay chậm mãi
           </label>
           {spinning && (
-            <Slider label="Một vòng" value={images[0].spin} min={10} max={240} step={5} suffix=" giây" onChange={(v) => onChange({ spin: v }, 'spin-s')} />
+            <Slider label="Một vòng" value={images[0].spin} min={10} max={240} step={5} suffix=" giây" onChange={(v) => setSpin(v, 'spin-s')} />
           )}
         </>
       )}
