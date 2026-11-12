@@ -33,9 +33,12 @@ export const ch2 = {
       'Nón lá Làng Chuông gồm hai phần chính: phần khung nón và phần lá lợp. Phần khung có chức năng định hình dáng chóp, nâng đỡ và duy trì hình dáng của nón, trong khi đó phần lá lợp tạo nên bề mặt bên ngoài của nón. Sự kết hợp giữa hai phần tạo nên chiếc nón có vẻ ngoài thanh mảnh nhưng vẫn chắc chắn, và độ bền cao trong quá trình sử dụng.',
       'チュオン村のノンラーは、主に{骨組|ほねぐ}みと、それを覆う葉の二つの部分から構成されています。骨組みは円錐形を形作り、ノンラーを{支|ささ}えてその形を保つ{役割|やくわり}を{担|にな}い、葉はノンラーの{外側|そとがわ}の表面を形成します。この二つが組み合わさることで、すっきりとした外観でありながら、しっかりとした構造と使用時の高い耐久性を備えたノンラーになります。',
     ],
+    // Bổ sung 2 (12/11): "Trang 47: footnote lá mo nang" — nhóm chưa gửi lời chú thích → lấy nguyên câu nhóm viết về mo nang ở
+    // mục 2.2 (Nguyên liệu), cả bản Việt và bản Nhật; cần nhóm soát
+    partsNotes: [['¹ Mo nang (lớp mo nứa): được đặt làm lớp giữa các lớp lá, giúp chiếc nón giữ được độ chắc chắn và cứng cáp.', '¹ モーナン（ヌア竹の皮）：ノンラーの葉の層の間に挟み込まれ、ノンラーの強度と硬さを保つ役割を果たします。']],
     parts: [
       [['Phần khung nón', 'ノンラーの骨組み'], ['Gồm 16 vành nứa có đường kính giảm dần từ đáy lên chóp. Các vành được sắp xếp theo dáng nón, giúp định hình và nâng đỡ phần lá lợp.', '底部から頂点に向かって直径が徐々に小さくなる16本のヌアひごの輪で構成されています。各輪はノンラーの形に合わせて配置され、形を整えるとともに、表面を覆う葉を支えます。']],
-      [['Phần lá lợp', '表面を覆う葉'], ['Gồm ba lớp vật liệu xếp chồng lên nhau, bao gồm lớp lá lụi bên ngoài, lớp mo nang ở giữa và lớp lá lụi bên trong. Các lớp này góp phần che chắn, tạo độ ổn định và hoàn thiện bề mặt nón.', '外側のラルイ、中間のヌアの皮、内側のラルイという三層の材料を{重|かさ}ねた構造です。これらの層は、ノンラーの覆いとしての機能を担い、形を安定させ、表面を整える役割を果たします。']],
+      [['Phần lá lợp', '表面を覆う葉'], ['Gồm ba lớp vật liệu xếp chồng lên nhau, bao gồm lớp lá lụi bên ngoài, lớp mo nang¹ ở giữa và lớp lá lụi bên trong. Các lớp này góp phần che chắn, tạo độ ổn định và hoàn thiện bề mặt nón.', '外側のラルイ、中間のヌアの皮¹、内側のラルイという三層の材料を{重|かさ}ねた構造です。これらの層は、ノンラーの覆いとしての機能を担い、形を安定させ、表面を整える役割を果たします。']],
     ],
     layers: {
       id: '2.1.2',

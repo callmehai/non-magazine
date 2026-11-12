@@ -190,7 +190,8 @@ export const photos = {
   "Logo FPT Education": "online/logo-fpt-edu",
   // ảnh dọc làm trang ảnh tràn trang (mỗi ảnh dùng một lần)
   "Ảnh toàn trang: những chiếc khung nón xếp chồng ở chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3138",
-  "Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3175",
+  // Bổ sung 2 (12/11): "Trang 41: bỏ (ảnh 51) thay bằng IMG_9226.JPG ( vẫn là chợ nón buổi sáng)" (Drive của nhóm)
+  "Ảnh toàn trang: người bán bên những chồng nón trong phiên chợ Chuông": "doc-1211/IMG_9226",
   "Ảnh toàn trang: phiên chợ lá lụi lúc tờ mờ sáng": "Chương 1/Tại làng Chuông/không gian chợ nón/IMG_3152",
   // ảnh thay sau đợt soát 2026-10-22 (ảnh trùng cảnh / nhắm mắt / cúi mặt / chú thích không khớp)
   "Nón lá trắng và tà áo dài trước sân đình Chuông": "Chương 1/Tại làng Chuông/IMG_3577",
@@ -286,7 +287,12 @@ export const photos = {
   // trong tab JA パート1–3, tải lại từ Doc ngày 08/11 (thư mục doc-0811/). Ảnh thay ảnh cũ cùng nội dung giữ khoá cũ (ở trên).
   // Chú thích JA nguyên văn nhóm; VI dịch sát; nguồn theo nhóm ghi trong ngoặc.
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá": "doc-0811/bia-chuong-1",
-  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": "doc-0911/non" /* Bản sửa lần 2: "Ảnh 3 đổi thành ảnh này : Nón.jpg" */,
+  // Bản sửa lần 2 + Bổ sung 2 (12/11): "Ảnh 3 ( ở trang 10 ) đổi thành ảnh này : Nón.jpg" — file gốc trên Drive (3072×4080;
+  // doc-0911/non trước là ảnh khác)
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": "doc-1211/non",
+  // Bổ sung 2 (12/11) trang 50: "Khung để làm nón" · "Chiếc nón hoàn chỉnh" (Drive của nhóm)
+  "Khung để làm nón": "doc-1211/khung-lam-non",
+  "Chiếc nón hoàn chỉnh": "doc-1211/non-hoan-chinh",
   "Người dân đội nón lá đi chợ — nguồn: Bảo tàng Hà Nội": "doc-0811/bthn-di-cho",
   "Thiếu nữ trong tà áo dài bên những chiếc nón lá": "doc-0811/ao-dai-1",
   "Những người phụ nữ trong tà áo dài cùng nón lá": "doc-0811/ao-dai-2",

@@ -190,7 +190,8 @@ const POS = {
   // "Chỉnh lại ảnh k bị mất góc" (tr. 95): chồng nón dọc trong khung ngang mất chóp → neo phía chóp nón
   'Nón làng Chuông xếp chồng — Bảo tàng Dân tộc học Việt Nam': '50% 14%',
   // ô vuông tr. 13–14 (không còn nền nhoè): khung dời về chiếc nón
-  'Nón lá bàng — Thành phố Huế': '100% 50%',
+  // Bổ sung 2 (12/11): "Sửa lại ảnh này cho hình cái nón ở giữa khung hình ( dính bông hoa cũng không sao nhe)" — nón x 480–1150 / 1282 px, khung vuông → tâm khung 815 px
+  'Nón lá bàng — Thành phố Huế': '81% 50%',
   'Nón người Tày — Thái Nguyên': '96% 50%',
   'Nón ba tầm — Hà Nội': '50% 0%',
   'Nón thúng — Nghệ An': '50% 22%',
@@ -672,8 +673,7 @@ const SRC_IN_CAP_JA = /\s*(?:[—―・]\s*(?:出典|写真|提供)\s*[：:]\s*(
 const CAP_OVR = {
   // はじめに: 「アオザイをまとったベトナム人女性とノンラー (グループ撮影。)」
   'Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội': { ja: 'アオザイをまとったベトナム人女性とノンラー' },
-  // Bản sửa lần 2 "Ảnh 3 đổi thành ảnh này : Nón.jpg"; パート1 「ノンラー (グループ撮影。)」
-  'Nón lá — nguồn: nghệ nhân Tạ Thu Hương': { src: ['nhóm tác giả', 'グループ撮影'] },
+  // nguồn ảnh 3 (Nón.jpg): theo sheet "Chú thích ảnh" (12/11) — 職人タ・トゥ・フオン氏提供, xem SHEET_JA
   // "Chú thích ảnh 4 và ảnh 5 sửa lại như này": 「(グエン・ドゥック・カン氏撮影・ハノイ博物館展示資料)」 — tên tiếng Việt đọc trên
   // biển ảnh gốc ở Bảo tàng Hà Nội ("© Nguyễn Đức Cần", IMG_20261002_150751)
   'Nón lá trong đời sống thường ngày: che nắng, che mưa khi lao động': { src: ['Nguyễn Đức Cần chụp, tư liệu trưng bày tại Bảo tàng Hà Nội', 'グエン・ドゥック・カン氏撮影・ハノイ博物館展示資料'] },
@@ -703,6 +703,63 @@ const CAP_OVR = {
   'Nghệ nhân khâu nón, đặt nghiêng khung giữa hai đầu gối': { vi: 'Nghệ nhân đang khâu những mũi cuối cho chiếc nón', ja: 'ノンラーの最後の縫い目を縫う職人' },
   // "Ảnh 89 thay thành: 5D3C4B22-….png" — ảnh mới là khung nón 16 vòng nứa (không còn nhìn từ trên xuống)
   'Khuôn nón với các vòng nứa nhìn từ trên xuống': { vi: 'Khung nón với 16 vòng nứa', ja: 'ヌアで作られた16本の輪からなる骨組み' },
+}
+/**
+ * Bổ sung 2 (12/11): "chú thích ảnh tiếng Nhật theo sheet này : Chú thích ảnh" (Google Sheet của nhóm: STT / Chú thích /
+ * Nguồn cung cấp / Nguồn ảnh). Khoá = chú thích tiếng Việt gốc (khoá ảnh) → [chú thích Nhật | null = giữ, nguồn Nhật | null = giữ,
+ * nguồn Việt | null = giữ]. Chỉ ghi dòng khác bản đang có; chữ Nhật nguyên văn sheet (bỏ dấu cách / 。 thừa). Ảnh dạng lưới
+ * (tên nón in riêng) chỉ đổi nguồn.
+ */
+const SHEET_JA = {
+  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "制作グループ提供", null], // 2
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "職人タ・トゥ・フオン氏提供", "nghệ nhân Tạ Thu Hương cung cấp"], // 3
+  "Nón lá làng Chuông — Hà Nội": [null, "制作グループ提供", null], // 10
+  "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "制作グループ提供", null], // 15
+  "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "制作グループ提供", null], // 15
+  "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "制作グループ提供", null], // 16
+  "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "制作グループ提供", null], // 16
+  "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "制作グループ提供", null], // 16
+  "Nghệ nhân ngồi lợp lớp lá trong": ["座ってノンラーを作る職人の様子", "職人レ・ヴァン・トゥイ氏提供", "nghệ nhân Lê Văn Tuy cung cấp"], // 40
+  "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "グループ撮影", null], // 41
+  "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "グループ撮影", null], // 42
+  "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "グループ撮影", null], // 43
+  "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "グループ撮影", null], // 44
+  "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "グループ撮影", null], // 44
+  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "制作グループ提供", null], // 45
+  "Lá lụi phơi ngoài nắng": ["ラルイ（若いヤシの葉）", "制作グループ提供", null], // 46
+  "Búp lá cọ non phơi khô, màu trắng ngà": ["ラルイ（若いヤシの葉）", "制作グループ提供", null], // 46
+  "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "制作グループ提供", null], // 47
+  "Lớp mo nang": ["モーナン（ヌア竹の皮）", "制作グループ提供", null], // 48
+  "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "制作グループ提供", null], // 49
+  "Cây liếc — ruột và vỏ": ["リエックの茎の芯（シダ類の植物）", "制作グループ提供", null], // 50
+  "Sợi chỉ màu": ["ノイを作るための色糸", "制作グループ提供", null], // 51
+  "Khuôn nón hình chóp 16 vòng": ["ノンラーの製作型", "制作グループ提供", null], // 52
+  "Dao, kéo cắt lá": ["ナイフ・はさみ", null, null], // 53
+  "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "制作グループ提供", null], // 54
+  "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "制作グループ提供", null], // 55
+  "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "制作グループ提供", null], // 56
+  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "制作グループ提供", null], // 57
+  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "制作グループ提供", null], // 58
+  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "制作グループ提供", null], // 59
+  "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "制作グループ提供", null], // 60
+  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "制作グループ提供", null], // 61
+  "Cắt lá thừa và khâu viền vành nón": ["ステップ6：ヌック・ノン（ノンラーの外縁を縫って補強する作業）", "制作グループ提供", null], // 62
+  "Chỉ màu luồn trong lòng nón": ["ステップ7：ルオン・ノイ（あごひもを通して固定する部分を色糸で作る作業）", "制作グループ提供", null], // 63
+  "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "制作グループ提供", null], // 64
+  "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": ["チュオン村のノンラーに囲まれた子ども", "職人レ・ヴァン・トゥイ氏提供", null], // 65
+  "Các sản phẩm nón đa dạng của làng Chuông": [null, "制作グループ提供", null], // 67
+  "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Lễ Báo Công Dâng Bác Tại Khu Di Tích Chủ Tịch Hồ Chí Minh - Maries", null], // 73
+  "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "制作グループ撮影", null], // 83
+  "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "制作グループ撮影", null], // 84
+  "Trải nghiệm vẽ trên nón lá ở làng Chuông": ["チュオン村でのノンラーの絵付け体験", "制作グループ撮影", null], // 87
+  "Du khách trải nghiệm vẽ nón ở làng Chuông": [null, "制作グループ撮影", null], // 91
+  "Du khách nước ngoài trải nghiệm vẽ nón ở làng Chuông": [null, "制作グループ撮影", null], // 91
+  "Biển “Lớp học giữ nghề nón làng Chuông”": [null, "制作グループ撮影", null], // 93
+  "Cụ bà bán nón ở làng Chuông": [null, "制作グループ撮影", "nhóm tác giả"], // 95
+  "Người phụ nữ mang nón ở chợ Chuông": [null, "制作グループ撮影", "nhóm tác giả"], // 96
+  "Người thợ cắt phần lá thừa của chiếc nón": ["ノンラーを作る職人", "制作グループ撮影", null], // 97
+  "Nụ cười người thợ làng Chuông bên chiếc nón": [null, "制作グループ撮影", null], // 98
+  "Du khách đội nón lá làng Chuông chụp ảnh lưu niệm": [null, "制作グループ撮影", null], // 99
 }
 function fmtCap(cap, key) {
   if (!cap || cap.fmt) return cap
@@ -739,7 +796,11 @@ function fmtCap1(cap, key, srcOvr) {
   const sv = /^nghệ nhân /i.test(sv0 ?? '') && !/cung cấp$/.test(sv0) ? `${sv0} cung cấp` : sv0
   const sj0 = src ? flat(src[1] ?? src[0]) : null
   const sj = /氏$/.test(sj0 ?? '') ? `${sj0}提供` : sj0 // 職人…氏 / チョン・カイ氏 → …氏提供
-  const out = src ? [`${vi} (${sv})`, ja ? `${ja}（${sj}）` : ja] : [vi, ja]
+  const sh = SHEET_JA[strip(key ?? cap[0] ?? '')]
+  const jaF = sh?.[0] ?? ja
+  const sjF = sh?.[1] ?? sj
+  const svF = sh?.[2] ?? sv
+  const out = src ? [`${vi} (${svF})`, jaF ? `${jaF}（${sjF}）` : jaF] : [vi, jaF]
   out.fmt = true
   return out
 }
@@ -1520,9 +1581,19 @@ class Flow {
   /** ảnh rộng cả khối, khung 3:2 (chật thì 16:9; không vừa thì sang trang) */
   figure(cap, o = {}) {
     const ch = capH(cap, CW)
-    const ratios = o.ratio ? [o.ratio] : [R.wide, R.cin]
+    const ratios = o.ratio ? [o.ratio] : (o.ratios ?? [R.wide, R.cin])
     if (!this.p) this.page()
     let r = ratios.find((x) => this.room >= CW * x + 6 + ch)
+    // o.squeeze: ảnh dọc mà trang còn thấp hơn khung ngang (vd. chú thích cuối trang chiếm chỗ) → ảnh cạnh chú thích, cao vừa
+    // chỗ còn lại, không đẩy sang trang mới
+    if (!r && o.squeeze && natR(cap) > 1 && this.room >= 200) {
+      const bh = this.room - 4
+      const yy = sideFigure(this.p, this.y, bh, cap, bh / natR(cap))
+      if (yy) {
+        this.y = yy + 22
+        return
+      }
+    }
     if (!r) {
       this.page()
       r = ratios[0]
@@ -1956,8 +2027,10 @@ let guidePage = null
   // 08/11: ảnh theo bản Nhật của nhóm — sau đoạn khái niệm: nón (1-02); sau đoạn công dụng: 1-03, 1-04
   for (const b of s11.blocks.slice(0, 2)) {
     f.block(b.h)
-    f.prose(b.p)
-    if (b.images?.length === 1) f.figure(b.images[0])
+    // Bổ sung 2 (12/11): chú thích ヤシ "chuyển lên phần 1.1" (bản Nhật: ラルイ（若いヤシの葉¹）) — chú thích cùng trang đoạn
+    if (b.notes) f.noted(b.p, b.notes)
+    else f.prose(b.p)
+    if (b.images?.length === 1) f.figure(b.images[0], { squeeze: !!b.notes })
     else if (b.images) f.row(b.images)
   }
 
@@ -2201,8 +2274,9 @@ let guidePage = null
     'Nón Ba tầm': {
       // ảnh chụp trọn chiếc nón gần vuông: khung ngang 4:3 cắt mất mép trên + thành nón → khung gần vuông, canh giữa nón
       hero: { r: 1.15, pos: '50% 47%' },
-      details: [[['Núm chóp', '頂の飾り'], 50, 37, 3.4], [['Lá Hồ lợp tỉ mỉ', '丁寧に葺かれたホー葉'], 28, 46, 3], [['Thành nón cao', '高い側面'], 50, 84, 2.6]],
-      box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 70–80 cm', '直径70〜80cm'], ['Thành cao 10–12 cm', '側面の高さ10～12cm'], ['Còn gọi là nón Mười', '別名「ノン・ムオイ」'], ['Lợp từ lá Hồ tuyển chọn', '選び抜いたホー葉で葺く']]],
+      details: [[['Núm chóp', '頂の飾り'], 50, 37, 3.4], [['Lá lụi lợp tỉ mỉ', '丁寧に重ねたラルイ'], 28, 46, 3], [['Thành nón cao', '高い側面'], 50, 84, 2.6]],
+      // Bổ sung 2 (12/11): "Đổi lại lợp bằng lá lụi"; bản Nhật đã bỏ tên nón Mười → ý "khâu ba vòng" (cả hai bản đều có)
+      box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 70–80 cm', '直径70〜80cm'], ['Thành cao 10–12 cm', '側面の高さ10～12cm'], ['Khâu ba vòng ở lòng nón', '内側を三重の輪状に縫う'], ['Lợp bằng lá lụi', '厳選したラルイを重ねる']]],
     },
     'Nón Quai thao': {
       // ảnh IMG_7879 (08/11: đúng ảnh nhóm gắn 1-36 — mặt trên, quai lụa đỏ): chụp từ trên xuống, thấy trọn mặt nón
@@ -2375,14 +2449,16 @@ let guidePage = null
     wide.forEach((t, i) => typeCard(t, i === 0 ? ty.groups.wide : null, 'non-vanh-rong'))
   }
   // lời kết của mục: đoạn văn thường (khối ghi chú nghiêng 15 dòng quá nặng)
-  f.prose([ty.outro])
+  if (ty.outroNotes) f.noted([ty.outro], ty.outroNotes)
+  else f.prose([ty.outro])
   // góp ý 04/11 (Thu Nguyệt): hai ảnh cuối mục thay bằng OCOP.JPG + Làm nón truyền thống.JPG
   f.row(
     [
       ['Giấy chứng nhận OCOP và các mẫu nón trưng bày tại một cơ sở làng Chuông', 'OCOPの認定証'],
       ['Nghệ nhân làng Chuông làm nón truyền thống', 'ノンラーの作り手と一緒にノンラーを作る様子'],
     ],
-    { ratio: R.sq }
+    // chú thích OCOP cuối trang (Bổ sung 2, 12/11) bớt chỗ → khung 4:3 cho hai ảnh vẫn cùng trang với đoạn văn
+    { ratio: f.room >= ((CW - 14) / 2) * R.sq + 40 ? R.sq : R.std }
   )
   f.end()
 }
@@ -2441,6 +2517,7 @@ let stripRight = null
   f.figure(['Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam', 'ベトナム民族学博物館で展示されているノンラーの製作材料'])
   f.fillRest()
   f.page()
+  if (st.partsNotes) f.notes(st.partsNotes)
   {
     // hai phần chính theo mockup của nhóm: mỗi phần một hàng — hình vẽ nét mảnh, số tròn, tên phần, mô tả
     const to = { size: 13.5, lh: 1.55, jaSize: jaPt(13.5) }
@@ -2462,7 +2539,8 @@ let stripRight = null
         )
       }, 26)
     })
-    f.figure(['Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành', '輪をすべて付け終えた骨組みを手にする職人レ・ヴァン・トゥイ氏'])
+    // chú thích mo nang cuối trang (Bổ sung 2, 12/11) bớt chỗ → cho phép khung thấp hơn để ảnh vẫn ở trang này
+    f.figure(['Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành', '輪をすべて付け終えた骨組みを手にする職人レ・ヴァン・トゥイ氏'], { ratios: [R.wide, R.cin, R.pan, 0.45] })
   }
   // 2.1.1 — khung 16 vòng (thứ tự theo Doc: khung trước, lá lợp sau): sơ đồ vòng, dáng thấp như nón thật
   // (cao ≤ 0,72 × bán kính vành, chóp có núm tròn nhỏ — góp ý: hình nón vẽ nhọn quá)
@@ -2556,6 +2634,20 @@ let stripRight = null
     f.pool = []
     // đóng trang chữ bằng tay: close() tự chèn trang ảnh kho khi trang cuối là trang trái — chỗ đó dành cho ảnh ông Tuy
     const left = f.p?.side === 'left'
+    if (f.p && left) {
+      // Bổ sung 2 (12/11): "Trang 50: hình như ko thể xóa đc trang sách đúng ko em, hôm trước c note bỏ nên nó đang bị trống.
+      // Em thêm giúp chị ảnh bên trái" — hai ảnh nhóm gắn dưới đoạn chữ: khung để làm nón (dọc 3:4) + chiếc nón hoàn chỉnh (1:1)
+      const pics = [[['Khung để làm nón', 'ノンラーの骨組み'], 0.75], [['Chiếc nón hoàn chỉnh', '完成したノンラー'], 1]]
+      const ih = (CW - 14) / pics.reduce((a, [, r]) => a + r, 0)
+      const ch = Math.max(...pics.map(([c, r]) => capH(c, ih * r)))
+      f.place(ih + 6 + ch, (p, y) => {
+        let x = p.x0
+        for (const [c, r] of pics) {
+          figure(p, x, y, ih * r, ih, c, { capBelow: true })
+          x += ih * r + 14
+        }
+      })
+    }
     if (f.p) {
       // trang chỉ còn một đoạn chữ → canh giữa + tre, sen như tr. 12 / 20
       f.p.centerDeco = true
@@ -3173,7 +3265,8 @@ let stripRight = null
   // thành dải ngang) dành cho hai ảnh nón lụa hai mặt (sản phẩm của làng) → không lấp ảnh kho lạc đề; đoạn OCOP ³ + ảnh OCOP sau trang ảnh
   f.row(ri.silk)
   f.bleed(ri.products)
-  f.noted([rc.p[1]], rc.notes.slice(2))
+  if (rc.notes.length > 2) f.noted([rc.p[1]], rc.notes.slice(2))
+  else f.prose([rc.p[1]]) // chú thích OCOP đã chuyển về 1.3.2 (Bổ sung 2, 12/11)
   f.row(ri.ocop)
   f.prose([rc.p[2]])
   f.row(ri.market)
@@ -4356,6 +4449,12 @@ pages.forEach(bottomFlora)
       e.capJa = hit ? hit.ja ?? null : ja
     }
   }
+  // FIGMAP=1: bảng số ảnh → khoá chú thích → đường dẫn ảnh (đối chiếu sheet "Chú thích ảnh" của nhóm)
+  if (process.env.FIGMAP)
+    fs.writeFileSync(
+      path.join(here, 'out', 'figmap.json'),
+      JSON.stringify(pages.flatMap((p, i) => p.els.filter((e) => ['image', 'video'].includes(e.type) && e.hint).map((e) => [i + 1, e.cap, e.capJa, e.hint, PHOTO_PATHS[e.hint] ?? null])), null, 0)
+    )
 }
 // tab Bổ sung 08/11: "Thống nhất STT footnote toàn sách: 1,2,3,4,..." — dấu chú thích (¹ ²…) gõ trong nội dung đánh lại
 // từ 1 theo từng mục; sau khi xếp trang, đánh lại liền một mạch cả sách, riêng từng thứ tiếng (bản Nhật có chú thích

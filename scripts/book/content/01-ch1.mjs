@@ -23,9 +23,11 @@ export const ch1 = {
         p: [
           [
             'Nón lá là sản phẩm thủ công truyền thống của Việt Nam, được làm từ các nguyên liệu tự nhiên như lá lụi, tre và nứa. Trong đó, lá được sử dụng để tạo phần lợp, còn tre, nứa được gia công thành khung và các vành nón nhằm định hình sản phẩm. Tùy theo nhu cầu sử dụng, đặc điểm văn hóa và kỹ thuật chế tác của từng địa phương, nón lá có nhiều kiểu dáng và kích thước khác nhau, góp phần tạo nên sự đa dạng của nghề làm nón truyền thống Việt Nam.',
-            'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイ（{若|わか}いヤシの葉）や竹、ヌア（ベトナムの竹の{一種|いっしゅ}）などの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
+            'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイ（{若|わか}いヤシの葉¹）や竹、ヌア（ベトナムの竹の{一種|いっしゅ}）などの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
           ],
         ],
+        // Bổ sung 2 (12/11): 'Footnote “ヤシ：…” chuyển lên phần 1.1' — chỉ bản Nhật (bản Việt giữ chú thích "Cây cọ" ở 1.3.2)
+        notes: [['', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
         // 08/11: ảnh nhóm gắn trong bản Nhật (1-02), chú thích JA nguyên văn nhóm
         images: [['Nón lá — nguồn: nghệ nhân Tạ Thu Hương', 'ノンラー — 出典：職人タ・トゥ・フオン氏']],
       },
@@ -260,10 +262,11 @@ export const ch1 = {
       ],
       // tab "Bổ sung 2" (GVHD, 11/11): "Thêm đoạn ngắn nội dung trước khi đi vào các nón: ( Bố cục đã ổn, chỉ cần đổi vị trí các
       // loại nón); không đánh stt các nón, chỉ cần kể tên là được. Thay số bằng một chiếc nón nhỏ ở đầu trang." — đoạn Việt
-      // nguyên văn của nhóm; bản Nhật em dịch (nhóm chưa gửi) → cần nhóm soát
+      // nguyên văn của nhóm; bản Nhật theo bản dịch nhóm gửi ở tab Bổ sung 2 (12/11)
       shape: [
         'Xét theo hình dáng, nón Làng Chuông được chia thành hai nhóm chính: nón chóp nhọn và nón vành rộng. Nón chóp có kiểu dáng chóp nhọn với độ cao vừa phải, thu nhỏ dần một cách mềm mại từ vành nón lên đến đỉnh. Trong khi đó, nón vành rộng có phần vành lớn, dáng nón thấp và trải rộng hơn. Hai nhóm này thể hiện sự đa dạng về kiểu dáng trong nghề làm nón truyền thống Làng Chuông.',
-        '形から見ると、チュオン{村|むら}のノンラーは大きく二つのグループに分けられます。先の{尖|とが}った{円錐形|えんすいけい}のノンラーと、つばの広いノンラーです。円錐形のノンラーはほどよい高さで、{縁|ふち}から頂部に向かってなだらかに細くなっていきます。一方、つばの広いノンラーは縁が大きく、高さが低く、より平たく広がった形をしています。この二つのグループは、チュオン村の伝統的なノンラー作りにおける形の多様さを表しています。',
+        // Bổ sung 2 (12/11): bản dịch của nhóm (nguyên văn)
+        '形状から見ると、チュオン{村|むら}のノンラーは、先端が尖った{円錐形|えんすいけい}のノンラーと、つばの広いノンラーの二つに大きく分けられます。円錐形のノンラーはほどよい高さがあり、{縁|ふち}から尖った頂部に向かってなだらかに細くなります。一方、つばの広いノンラーは、つばが大きく、円錐形のものより背が低く、横に広がった形をしています。この二つのグループは、チュオン村の伝統的なノンラー作りに見られる形の多様性を示しています。',
       ],
       // "Nhóm nón chóp nhọn:" · "Nón vành rộng:" — thứ tự GVHD: chóp truyền thống, lá già, nhà sư, lụa, lụa hai mặt, cô dâu | Ba tầm, Quai thao, thúng
       groups: {
@@ -277,23 +280,25 @@ export const ch1 = {
           name: ['Nón lá hình chóp truyền thống', '伝統的な{円錐形|えんすいけい}のノンラー'],
           text: [
             'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non)¹ đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng mượt với các đường chỉ khâu tương đối đều đặn. Thông thường, vành rộng của nón có đường kính mở rộng khoảng 30 đến 40 cm, tùy thuộc vào vóc dáng cùng mục đích sử dụng; kết hợp cùng chiều cao chóp từ 20 đến 25 cm giúp ôm vừa vặn vòm đầu mà vẫn giữ độ thông thoáng cần thiết. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
-            '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉¹）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。通常、ノンラーの{縁|ふち}の直径は、かぶる人の体格や用途に応じて約30～40cmです。縁から頂部までの高さは20～25cmで、こうした{寸法|すんぽう}により、頭にほどよくフィットしながら、必要な{通気性|つうきせい}も確保されています。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
+            '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。通常、ノンラーの{縁|ふち}の直径は、かぶる人の体格や用途に応じて約30～40cmです。縁から頂部までの高さは20～25cmで、こうした{寸法|すんぽう}により、頭にほどよくフィットしながら、必要な{通気性|つうきせい}も確保されています。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
           ],
-          notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
+          // chú thích ヤシ của bản Nhật đã chuyển lên 1.1 (Bổ sung 2, 12/11) → ở đây chỉ còn bản Việt
+          notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '']],
         },
         {
           name: ['Nón lá già ghép sống', '古いヤシの{葉|は}で作られたノンラー'],
           text: [
             'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật bởi các đường sống lá rõ nét, mang lại vẻ ngoài mộc mạc và khác biệt. Nón có kích thước tương đương với nón chóp truyền thống.',
-            '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。大きさは伝統的な円錐形のノンラーとほぼ同じです。',
+            '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。',
           ],
         },
         {
           name: ['Nón Ba tầm', 'ノン・バータム'],
-          // hai câu giữa (kích thước + "sườn cao nhất"; "lá Hồ tuyển chọn") tạm giữ bản cũ — xem ja-p1.issues.md mục (b)
+          // Bổ sung 2 (12/11): "Ở bản dịch gửi lại đã bỏ câu có tên gọi khác là nón mười. Đổi lại lợp bằng lá lụi" ·
+          // "e cứ copy phần bản dịch tiếng nhật bản chính thức sang" → bản Nhật nguyên văn tab パート1; bản Việt lá Hồ → lá lụi
           text: [
-            'Là kiểu nón hội hè truyền thống của phụ nữ miền Bắc, còn có tên gọi khác là nón Mười (tên "Ba tầm" xuất phát từ kỹ thuật khâu ba vòng ở lòng nón). Nón nổi bật với kiểu dáng xòe rộng (đường kính 70–80 cm, thành cao 10–12 cm) và phần sườn cao nhất trong các dòng nón cổ, được lợp tỉ mỉ từ lá Hồ tuyển chọn (nổi danh nhất là nón Làng Chuông). Xưa kia, từ các cô gái trẻ đến các cụ bà đều ưa chuộng đội nón Ba tầm khi đi hội, đi chùa hay trẩy chợ để tôn lên nét duyên dáng, thanh lịch. Ngày nay, nón không còn phổ biến trong sinh hoạt thường nhật mà chủ yếu xuất hiện trên sân khấu nghệ thuật, lễ hội truyền thống hoặc làm sản phẩm trưng bày di sản.',
-            'ベトナム北部の女性が祭りの際にかぶる伝統的なノンラーです。「バータム」という名称は、ノンラーの内側を{三重|さんじゅう}の輪状に縫う技法に{由来|ゆらい}します。直径70〜80cm、{縁|ふち}の高さ10〜12cmと大きく広がり、古いノンラーの中でもっとも高い{骨|ほね}をもちます。選び{抜|ぬ}いたホー{葉|ば}で丁寧に葺かれ、チュオン{村|むら}のものがもっとも名高いとされます。かつては、若い女性から年配の女性まで、祭りや{寺参|てらまい}り、市へ出かける際に、優美さや上品さを引き立てるために好んでかぶっていました。現在では、日常生活で使われることは少なくなりましたが、主に舞台芸術や伝統的な祭りで用いられるほか、{文化遺産|ぶんかいさん}を紹介する{展示|てんじ}品にもなっています。',
+            'Là kiểu nón hội hè truyền thống của phụ nữ miền Bắc, còn có tên gọi khác là nón Mười (tên "Ba tầm" xuất phát từ kỹ thuật khâu ba vòng ở lòng nón). Nón nổi bật với kiểu dáng xòe rộng (đường kính 70–80 cm, thành cao 10–12 cm) và phần sườn cao nhất trong các dòng nón cổ, được lợp tỉ mỉ từ lá lụi tuyển chọn (nổi danh nhất là nón Làng Chuông). Xưa kia, từ các cô gái trẻ đến các cụ bà đều ưa chuộng đội nón Ba tầm khi đi hội, đi chùa hay trẩy chợ để tôn lên nét duyên dáng, thanh lịch. Ngày nay, nón không còn phổ biến trong sinh hoạt thường nhật mà chủ yếu xuất hiện trên sân khấu nghệ thuật, lễ hội truyền thống hoặc làm sản phẩm trưng bày di sản.',
+            'ベトナム北部の女性が祭りの際にかぶる伝統的なノンラーです。「バータム」という名称は、ノンラーの内側を{三重|さんじゅう}の輪状に縫う技法に{由来|ゆらい}します。大きく広がった形（直径70～80cm、側面の高さ10～12cm）と、古くからあるノンラーの中で最も{骨組|ほねぐ}みが{特徴|とくちょう}です。{厳選|げんせん}したラルイを丁寧に重ねて作られ、なかでもチュオン{村|むら}のものが最もよく知られています。かつては、若い女性から年配の女性まで、祭りや{寺参|てらまい}り、市へ出かける際に、優美さや上品さを引き立てるために好んでかぶっていました。現在では、日常生活で使われることは少なくなりましたが、主に舞台芸術や伝統的な祭りで用いられるほか、{文化遺産|ぶんかいさん}を紹介する{展示|てんじ}品にもなっています。',
           ],
         },
         {
@@ -352,9 +357,17 @@ export const ch1 = {
           },
         ],
       },
+      // Bổ sung 2 (12/11): "Trang 40: footnote OCOP（One Commune One Product）：…" (bản Nhật nguyên văn nhóm); bản Việt theo
+      // chú thích [3] tab Chương 3 của nhóm
+      outroNotes: [
+        [
+          '¹ OCOP (One Commune One Product - Mỗi xã một sản phẩm): Chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.',
+          '¹ OCOP（One Commune One Product）：ベトナムの地域{特産品|とくさんひん}の開発・{振興|しんこう}を目的とした「一社一品運動」の{取|と}り{組|く}みです。製品は一定の{基準|きじゅん}に基づいて{評価|ひょうか}され、1つ星から5つ星までの{等級|とうきゅう}に分けられます。星の数が多いほど、評価が高いことを示します。',
+        ],
+      ],
       outro: [
-        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, flipbook sẽ giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
-        '本プロジェクトでは、チュオン{村|むら}の伝統的な{円錐形|えんすいけい}のノンラーを、フリップブックの主な紹介対象に選びました。先端が尖った{特徴|とくちょう}的な形を持ち、ベトナムの女性の姿と深く結びついているためです。文化的{価値|かち}や日常生活における{実用性|じつようせい}に加え、チュオン村の円錐形のノンラーはOCOPの4つ星{認定|にんてい}を{受|う}けており、地域の伝統工芸品としての価値が認められています。また、現在もこの{工芸村|こうげいむら}で広く生産されている{種類|しゅるい}です。そのため、本フリップブックでは、チュオン村のノンラーについて概説し、「{概要|がいよう}・特徴」「構造・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」「製作工程」という三つの主要な内容を通して、伝統的な円錐形のノンラーの特徴を詳しく紹介します。これにより、ノンラーの全体像や各製作工程、チュオン村の職人の技術や熟練の技に見られる特徴を伝えます。',
+        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP¹ 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, flipbook sẽ giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
+        '本プロジェクトでは、チュオン{村|むら}の伝統的な{円錐形|えんすいけい}のノンラーを、フリップブックの主な紹介対象に選びました。先端が尖った{特徴|とくちょう}的な形を持ち、ベトナムの女性の姿と深く結びついているためです。文化的{価値|かち}や日常生活における{実用性|じつようせい}に加え、チュオン村の円錐形のノンラーはOCOP¹の4つ星{認定|にんてい}を{受|う}けており、地域の伝統工芸品としての価値が認められています。また、現在もこの{工芸村|こうげいむら}で広く生産されている{種類|しゅるい}です。そのため、本フリップブックでは、チュオン村のノンラーについて概説し、「{概要|がいよう}・特徴」「構造・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」「製作工程」という三つの主要な内容を通して、伝統的な円錐形のノンラーの特徴を詳しく紹介します。これにより、ノンラーの全体像や各製作工程、チュオン村の職人の技術や熟練の技に見られる特徴を伝えます。',
       ],
     },
   },

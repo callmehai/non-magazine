@@ -27,8 +27,8 @@ export const ch3 = {
         'このベトナムの民間{詩|し}からは、チュオン{村|むら}のノンラーが古くから評判を得ていたことがうかがえます。\nディン・ハイン{編|へん}『Những làng nghề thủ công tiêu biểu của Thăng Long - Hà Nội』には、次のように記されています。「古くから、チュオン村のノンラーは、熟練した職人たちの{優|すぐ}れた技術と{巧|たく}みな手仕事によって生み出される{独特|どくとく}の美しさゆえに、{皇后|こうごう}や{王女|おうじょ}への{献上品|けんじょうひん}の一つとされていました」¹。\nまた、1930年以前には、「Hội làng nón」と呼ばれる団体がチュオン村のノンラーの品質{証明|しょうめい}書を発行し、その品質を「フエのノンラー²をも上回る」と{評価|ひょうか}したことが記録されています。',
       ],
       [
-        'Danh tiếng được lưu truyền qua nhiều thế hệ ấy tiếp tục được khẳng định bằng những hình thức công nhận trong thời kỳ hiện đại. Tên gọi “Nón Chuông” được Cục Sở hữu trí tuệ cấp chứng nhận nhãn hiệu tập thể, góp phần bảo hộ tên gọi của sản phẩm truyền thống. Năm 2021, sản phẩm “Nón lá làng Chuông” được đánh giá, phân hạng OCOP³ 4 sao. Những năm tiếp theo, các sản phẩm của nghệ nhân Lê Văn Tuy và Tạ Thu Hương cũng đạt hạng OCOP 4 sao, góp phần khẳng định chất lượng và giá trị của sản phẩm làng nghề.',
-        '何世代にもわたって語り継がれてきたチュオン{村|むら}のノンラーの名声は、現代におけるさまざまな登録や{認定|にんてい}にも表れています。\n「ノン・チュオン（Nón Chuông）」という名称は、ベトナム国家知的財産庁によって{団体商標|だんたいしょうひょう}として登録され、伝統的な製品の名称の保護につながっています。\n2021年には、「チュオン村のノンラー」がOCOP³の4つ星製品として認定されました。その後も、職人のレ・ヴァン・トゥイ氏とタ・トゥ・フオン氏の事業所が手がけた製品がOCOPの4つ星認定を受け、チュオン村のノンラー製品の品質や価値を示す事例となっています。',
+        'Danh tiếng được lưu truyền qua nhiều thế hệ ấy tiếp tục được khẳng định bằng những hình thức công nhận trong thời kỳ hiện đại. Tên gọi “Nón Chuông” được Cục Sở hữu trí tuệ cấp chứng nhận nhãn hiệu tập thể, góp phần bảo hộ tên gọi của sản phẩm truyền thống. Năm 2021, sản phẩm “Nón lá làng Chuông” được đánh giá, phân hạng OCOP 4 sao. Những năm tiếp theo, các sản phẩm của nghệ nhân Lê Văn Tuy và Tạ Thu Hương cũng đạt hạng OCOP 4 sao, góp phần khẳng định chất lượng và giá trị của sản phẩm làng nghề.',
+        '何世代にもわたって語り継がれてきたチュオン{村|むら}のノンラーの名声は、現代におけるさまざまな登録や{認定|にんてい}にも表れています。\n「ノン・チュオン（Nón Chuông）」という名称は、ベトナム国家知的財産庁によって{団体商標|だんたいしょうひょう}として登録され、伝統的な製品の名称の保護につながっています。\n2021年には、「チュオン村のノンラー」がOCOPの4つ星製品として認定されました。その後も、職人のレ・ヴァン・トゥイ氏とタ・トゥ・フオン氏の事業所が手がけた製品がOCOPの4つ星認定を受け、チュオン村のノンラー製品の品質や価値を示す事例となっています。',
       ],
       [
         'Không chỉ sản phẩm, bản thân nghề làm nón cũng được ghi nhận ở cấp độ làng nghề. Năm 2008, làng Chuông cùng sáu làng khác thuộc xã Phương Trung (cũ), gồm Liên Tân, Tân Tiến, Quang Trung, Mã Kiều, Tây Sơn và Tân Dân, đã được UBND thành phố Hà Nội công nhận làng nghề. Bên cạnh đó, tính đến cuối năm 2013, các làng này tiếp tục được ghi nhận là làng nghề thủ công truyền thống của địa phương.',
@@ -42,7 +42,7 @@ export const ch3 = {
     notes: [
       ['¹ Đinh Hạnh (chủ biên), Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội, NXB Hà Nội, 2019, tr. 122.', '¹ ディン・ハイン(編)『Những làng nghề thủ công tiêu biểu của Thăng Long - Hà Nội』、ハノイ出版社、2019年、122頁。'],
       ['² Nón Huế: Loại nón lá truyền thống nổi tiếng của vùng cố đô Huế (miền Trung Việt Nam), đặc trưng bởi dáng nón thanh mảnh, nhẹ và đường khâu tinh xảo. Tiêu biểu là nón bài thơ.', '² フエのノンラー：ベトナム中部の古都フエで作られてきた伝統的なノンラーです。軽さや丁寧な縫い目などが特徴として知られています。代表的な種類の一つに「ノン・バイ・トー（Nón bài thơ）」があります。'],
-      ['³ OCOP (Chương trình Mỗi xã một sản phẩm): Chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.', '³ OCOP（One Commune One Product）：ベトナムの地域{特産品|とくさんひん}の開発・振興を目的とした「一社一品運動」の{取|と}り{組|く}みです。製品は一定の基準に基づいて{評価|ひょうか}され、1つ星から5つ星までの等級に分けられます。星の数が多いほど、評価が高いことを示します。'],
+      // Bổ sung 2 (12/11): "Trang 40: footnote OCOP … Bỏ ở chương 3 không footnote lại nữa." → chú thích OCOP chuyển về cuối mục 1.3.2
     ],
     // 08/11 (tab Bổ sung: cặp trang OCOP tự dựng "Bỏ → Ảnh sẽ theo ND tiếng Nhật đã gán"): ảnh 3-02 … 3-09 của tab パート3,
     // mỗi nhóm ảnh đứng sau đúng đoạn như bản Nhật; chú thích JA nguyên văn nhóm, nguồn theo nhóm
