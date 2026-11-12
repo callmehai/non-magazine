@@ -1879,7 +1879,8 @@ function chapterOpener(ch, photo) {
     pop: { z: 0.5, kind: 'lift' },
     ...(sjo ? { breakOut: { src: photo.breakOut.src, a: sjo.a } } : null),
   })
-  left.add(T(left.x1 - pw, fy + fh + 6, pw, capH(oc, pw), oc, { ...capOpt, italic: true, color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+  // chú thích chỉ có nguồn, ngắn → canh phải dưới ảnh, không đè cụm sen vẽ ở góc trái dưới (soát độc lập 12/11)
+  left.add(T(left.x1 - pw, fy + fh + 6, pw, capH(oc, pw), oc, { ...capOpt, italic: true, align: 'right', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
   const p = new Page({ chapter: ch.no, hideNumber: true, bg: C.cream })
   p.fixed = true
   // trang phải: nhãn chương + đoạn dẫn, hình vẽ nét mảnh của chương ở dưới, mười sáu vòng nón in mờ, dải màu, dấu son
@@ -2374,7 +2375,9 @@ let guidePage = null
       const bh0 = 38 + rh.reduce((a2, h) => a2 + h + 6, 0) - 6 + 12
       // khung có kích thước (GVHD 11/11: "ghi thêm kích thước của nón") thì giữ, ảnh thấp hơn một chút (tối thiểu 0,65 bề ngang)
       const sized = items.some((it) => /cm|Kích thước/.test(it[0]))
-      if (bot - y - 18 - (bh0 + 16) - 18 < gw0 * (sized ? 0.65 : 0.9)) [bt, items] = [null, []]
+      // soát độc lập 12/11: Ba tầm mất khung kích thước, nón thúng (JA, có chú thích cuối trang) mất khung đặc điểm → khung luôn
+      // giữ khi ảnh còn cao ít nhất 0,5 (kích thước) / 0,6 bề ngang
+      if (bot - y - 18 - (bh0 + 16) - 18 < gw0 * (sized ? 0.5 : 0.6)) [bt, items] = [null, []]
     }
     const bw2 = (CW - 46) / 2
     // mỗi hàng hai ý, cao theo ý dài hơn của chính hàng đó
