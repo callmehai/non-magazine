@@ -834,6 +834,9 @@ function BookEditor({ store, user, onSignOut }) {
           onAddElement={addElement}
           onAddAsset={async (a) => addElement(await elementFromAsset(a))}
           onUploadFiles={uploadFiles}
+          selection={selection}
+          onChangeSelected={updateSelected}
+          onUpdateMany={updateElements}
         />
 
         <main className="ed-main">

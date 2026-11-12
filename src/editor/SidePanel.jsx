@@ -3,6 +3,7 @@ import CanvasPage, { fontStack } from '../canvas/CanvasPage.jsx'
 import { TEMPLATE_KINDS, newElement } from '../canvas/model.js'
 import { ensureFont } from '../canvas/fonts.js'
 import { UploadButton } from './ui.jsx'
+import { ElementsPanel, MotionPanel } from './LibraryPanels.jsx'
 
 export const DND_TYPE = 'application/x-non-editor'
 
@@ -36,9 +37,11 @@ const TABS = [
   ['text', 'Chữ', 'T'],
   ['uploads', 'Tải lên', '⇪'],
   ['shapes', 'Hình', '◆'],
+  ['elements', 'Thành phần', '❀'],
+  ['motion', 'Chuyển động', '↯'],
 ]
 
-export default function SidePanel({ tab, onTab, uploads, onAddPage, onAddElement, onAddAsset, onUploadFiles, uploading }) {
+export default function SidePanel({ tab, onTab, uploads, onAddPage, onAddElement, onAddAsset, onUploadFiles, uploading, selection = [], onChangeSelected, onUpdateMany }) {
   return (
     <div className={`ed-side ${tab ? 'is-open' : ''}`}>
       <nav className="ed-rail">
@@ -55,6 +58,8 @@ export default function SidePanel({ tab, onTab, uploads, onAddPage, onAddElement
           {tab === 'text' && <TextPanel onAdd={onAddElement} />}
           {tab === 'uploads' && <Uploads uploads={uploads} onAdd={onAddAsset} onUploadFiles={onUploadFiles} uploading={uploading} />}
           {tab === 'shapes' && <Shapes onAdd={onAddElement} />}
+          {tab === 'elements' && <ElementsPanel onAdd={onAddElement} dragData={dragData} />}
+          {tab === 'motion' && <MotionPanel selection={selection} onChange={onChangeSelected} onUpdateMany={onUpdateMany} />}
           <button type="button" className="ed-panel__close" onClick={() => onTab(null)} title="Thu gọn">
             ‹
           </button>

@@ -471,6 +471,131 @@
   border-color: var(--ed-focus);
 }
 
+/* ── Thành phần: hình vẽ của sách ── */
+.ed-decos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.ed-deco {
+  display: grid;
+  grid-template-rows: 64px auto;
+  justify-items: center;
+  gap: 2px;
+  padding: 6px 4px 5px;
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+  background: #f7f1e6;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--ed-text-2);
+  cursor: grab;
+}
+
+.ed-deco img {
+  width: 100%;
+  height: 64px;
+  object-fit: contain;
+}
+
+.ed-deco:hover {
+  border-color: var(--ed-focus);
+}
+
+/* ── Chuyển động ── */
+.ed-fxgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ed-fx {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 8px 4px 7px;
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ed-fx small {
+  font-size: 10.5px;
+  color: var(--ed-text-2);
+}
+
+.ed-fx:hover:not(:disabled),
+.ed-fx.is-on {
+  border-color: var(--ed-focus);
+}
+
+.ed-fx.is-on {
+  box-shadow: inset 0 0 0 1px var(--ed-focus);
+  background: #f6f0ff;
+}
+
+.ed-fx:disabled {
+  cursor: default;
+}
+
+.ed-fx__demo {
+  display: block;
+  width: 64px;
+  height: 46px;
+  margin-bottom: 3px;
+  overflow: hidden;
+}
+
+.ed-fx__demo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* rê chuột lên ô (hoặc ô đang chọn) thì hình nón mẫu chạy đúng keyframes của sách (canvas.css) */
+.ed-fx:hover .ed-fx__demo[data-k] img,
+.ed-fx.is-on .ed-fx__demo[data-k] img {
+  animation: var(--fx-name) var(--fx-dur) var(--fx-ease) 0.1s both infinite;
+}
+.ed-fx__demo[data-k='fade'] {
+  --fx-name: cv-anim-fade-demo;
+}
+.ed-fx__demo[data-k='pop'] {
+  --fx-name: cv-anim-pop;
+}
+.ed-fx__demo[data-k='stand'] {
+  --fx-name: cv-anim-stand;
+}
+.ed-fx__demo[data-k='stand'] img {
+  transform-origin: 50% 100%;
+}
+.ed-fx__demo[data-k='grow'] {
+  --fx-name: cv-anim-grow;
+}
+.ed-fx__demo[data-k='grow-up'] {
+  --fx-name: cv-anim-grow-up;
+}
+/* cv-anim-fade trượt 14em (đơn vị của trang sách) — ô mẫu nhỏ dùng quãng trượt ngắn hơn */
+@keyframes cv-anim-fade-demo {
+  from {
+    opacity: 0;
+    translate: -24px 0;
+  }
+}
+
+.ed-motion {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 /* ── vùng giữa ── */
 .ed-main {
   grid-area: main;
