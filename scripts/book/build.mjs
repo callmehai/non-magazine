@@ -712,7 +712,8 @@ const CAP_OVR = {
  */
 const SHEET_JA = {
   "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "制作グループ提供", null], // 2
-  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "職人タ・トゥ・フオン氏提供", "nghệ nhân Tạ Thu Hương cung cấp"], // 3
+  // Zalo 12/11 21:19 (Minh Ánh, ảnh 3): "chú thích ảnh này chỗ trong ngoặc sửa thành 制作グループ提供"
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "制作グループ提供", "nghệ nhân Tạ Thu Hương cung cấp"], // 3
   "Nón lá làng Chuông — Hà Nội": [null, "制作グループ提供", null], // 10
   "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "制作グループ提供", null], // 15
   "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "制作グループ提供", null], // 15
