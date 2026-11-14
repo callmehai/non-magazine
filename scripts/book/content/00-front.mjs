@@ -24,7 +24,7 @@ export const preface = {
       'ベトナム各地では、{自然|しぜん}環境や原{材料|ざいりょう}、生活{習慣|しゅうかん}に応じて、形や{構造|こうぞう}、{製作技術|せいさくぎじゅつ}にそれぞれ{特徴|とくちょう}のあるノンラーが生み出されてきました。北部に位置するハノイ市のチュオン{村|むら}は、古くからノンラー作りが盛んに行われてきたことで知られる地域の一つです。かつて、この村では人々の暮らしの{需要|じゅよう}に応えるため、さまざまな種類のノンラーが作られていました。現在も、{伝統的|でんとうてき}な円錐形のノンラーはチュオン村を代表する製品の一つであり、何世代にもわたって守り継がれてきた製作技術が生かされています。',
     ],
     [
-      'Với mong muốn giúp độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện cuốn flipbook “Nón lá làng Chuông – Nét đẹp truyền thống Việt Nam”. Cuốn flipbook gồm ba chương: Chương 1 “Khái quát về nón lá Việt Nam và nón lá Làng Chuông”, Chương 2 “Cấu tạo, nguyên liệu và kỹ thuật làm nón Làng Chuông” và Chương 3 “Những ghi nhận, hoạt động bảo tồn và thách thức đối với nón lá làng Chuông”.',
+      'Với mong muốn giúp độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện cuốn flipbook “Nón lá làng Chuông – Nét đẹp truyền thống Việt Nam”. Cuốn flipbook gồm ba phần: Phần 1 “Khái quát về nón lá Việt Nam và nón lá Làng Chuông”, Phần 2 “Cấu tạo, nguyên liệu và kỹ thuật làm nón Làng Chuông” và Phần 3 “Những ghi nhận, hoạt động bảo tồn và thách thức đối với nón lá làng Chuông”.',
       '私たちは、日本の{読者|どくしゃ}の{皆様|みなさま}にチュオン{村|むら}のノンラーの{全体像|ぜんたいぞう}を知っていただき、{理解|りかい}を深めていただきたいという思いから、本フリップブック『チュオン村のノンラー：ベトナムの{伝統美|でんとうび}』を{制作|せいさく}しました。本書は、パート1「ベトナムのノンラーとチュオン村のノンラーの{概要|がいよう}」、パート2「チュオン村のノンラーの{構造|こうぞう}・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」、パート3「チュオン村のノンラーの{評価|ひょうか}と{保存|ほぞん}・継承」の三つのパートで{構成|こうせい}されています。',
     ],
     [
@@ -39,7 +39,7 @@ export const preface = {
   sign: ['Hà Nội, tháng 11 năm 2026\nNhóm tác giả', 'ハノイ 2026年11月\n{著者|ちょしゃ}一同'],
   // góp ý 04/11: ảnh nhóm 4 người (Ảnh nhóm.jpg)
   photo: ['Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội', 'FPT大学ハノイ校日本語学科の学生4人'],
-  contentsTitle: ['Trong cuốn sách này', '本書の{構成|こうせい}'],
+  contentsTitle: ['Cấu trúc cuốn sách', '本書の{構成|こうせい}'], // 14/11: bản Việt theo bản Nhật (本書の構成)
   chapters: [
     { icon: 'non', text: ['Nón lá trong đời sống, lịch sử và chân dung làng Chuông', '暮らしと歴史の中のノンラー、そしてチュオン村の{横顔|よこがお}'] },
     { icon: 'tool-quay-non', text: ['Ba lớp lá, mười sáu vành nứa và bảy bước dựng nên một chiếc nón', '三層の葉、十六本の輪、七つの工程から生まれる一つのノンラー'] },

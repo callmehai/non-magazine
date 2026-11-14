@@ -6,10 +6,10 @@
  */
 export const ch1 = {
   no: 1,
-  label: ['Chương 1', 'パート1'],
+  label: ['Phần 1', 'パート1'], // 14/11: bản Nhật là bản chuẩn — パート = Phần
   title: ['Khái quát về nón lá Việt Nam\nvà nón lá Làng Chuông', 'ベトナムのノンラーと\nチュオン{村|むら}のノンラーの{概要|がいよう}'],
   lead: [
-    'Nhắc đến nón lá Việt Nam, nhiều người thường hình dung ngay đến chiếc nón hình chóp quen thuộc. Tuy nhiên, nón lá không chỉ có một kiểu dáng duy nhất mà còn bao gồm nhiều loại khác nhau, mỗi loại mang những đặc điểm riêng về hình dáng, công dụng và giá trị văn hóa. Để hiểu rõ hơn về sự đa dạng ấy, Chương 1 sẽ đưa độc giả tìm hiểu những đặc điểm cơ bản của nón lá Việt Nam, các kiểu nón tiêu biểu, những dấu tích lịch sử và ý nghĩa văn hóa gắn liền với chiếc nón. Từ bức tranh tổng quan đó, chương tiếp tục giới thiệu về nón lá làng Chuông (Hà Nội) là một đại diện tiêu biểu của nón lá truyền thống ở miền Bắc để tìm hiểu khái quát về làng nghề và các sản phẩm nón truyền thống, đặc biệt là chiếc nón lá hình chóp – đối tượng tìm hiểu trọng tâm của cuốn flipbook.',
+    'Nhắc đến nón lá Việt Nam, nhiều người thường hình dung ngay đến chiếc nón hình chóp quen thuộc. Tuy nhiên, nón lá không chỉ có một kiểu dáng duy nhất mà còn bao gồm nhiều loại khác nhau, mỗi loại mang những đặc điểm riêng về hình dáng, công dụng và giá trị văn hóa. Để hiểu rõ hơn về sự đa dạng ấy, Phần 1 sẽ đưa độc giả tìm hiểu những đặc điểm cơ bản của nón lá Việt Nam, các kiểu nón tiêu biểu, những dấu tích lịch sử và ý nghĩa văn hóa gắn liền với chiếc nón. Từ bức tranh tổng quan đó, phần này tiếp tục giới thiệu về nón lá làng Chuông (Hà Nội) là một đại diện tiêu biểu của nón lá truyền thống ở miền Bắc để tìm hiểu khái quát về làng nghề và các sản phẩm nón truyền thống, đặc biệt là chiếc nón lá hình chóp – đối tượng tìm hiểu trọng tâm của cuốn flipbook.',
     'ベトナムのノンラーといえば、多くの人は、なじみのある{円錐形|えんすいけい}のノンラーを思い{浮|う}かべるでしょう。しかし、ノンラーにはさまざまな{種類|しゅるい}があり、それぞれ形や{用途|ようと}、文化的{価値|かち}に{独自|どくじ}の{特徴|とくちょう}があります。こうした{多様性|たようせい}をよりよく理解できるように、パート1では、ベトナムのノンラーの基本的な特徴や代表的な種類、歴史的な{痕跡|こんせき}、ノンラーに結びついた文化的な意味について紹介します。その全体像を踏まえ、ベトナム北部の伝統的なノンラーの代表例の一つとして、ハノイ市のチュオン{村|むら}のノンラーを取り上げます。チュオン村の伝統{工芸村|こうげいむら}としての{概要|がいよう}と伝統的なノンラー製品について概説し、特に本フリップブックで主に取り上げる伝統的な円錐形のノンラーに{焦点|しょうてん}を当てます。',
   ],
 
@@ -22,12 +22,12 @@ export const ch1 = {
         h: ['Khái niệm cơ bản của nón lá', 'ノンラーの基本的な概念'],
         p: [
           [
-            'Nón lá là sản phẩm thủ công truyền thống của Việt Nam, được làm từ các nguyên liệu tự nhiên như lá lụi, tre và nứa. Trong đó, lá được sử dụng để tạo phần lợp, còn tre, nứa được gia công thành khung và các vành nón nhằm định hình sản phẩm. Tùy theo nhu cầu sử dụng, đặc điểm văn hóa và kỹ thuật chế tác của từng địa phương, nón lá có nhiều kiểu dáng và kích thước khác nhau, góp phần tạo nên sự đa dạng của nghề làm nón truyền thống Việt Nam.',
+            'Nón lá là sản phẩm thủ công truyền thống của Việt Nam, được làm từ các nguyên liệu tự nhiên như lá lụi (lá cọ non¹), tre và nứa. Trong đó, lá được sử dụng để tạo phần lợp, còn tre, nứa được gia công thành khung và các vành nón nhằm định hình sản phẩm. Tùy theo nhu cầu sử dụng, đặc điểm văn hóa và kỹ thuật chế tác của từng địa phương, nón lá có nhiều kiểu dáng và kích thước khác nhau, góp phần tạo nên sự đa dạng của nghề làm nón truyền thống Việt Nam.',
             'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイ（{若|わか}いヤシの葉¹）や竹、ヌア（ベトナムの竹の{一種|いっしゅ}）などの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
           ],
         ],
-        // Bổ sung 2 (12/11): 'Footnote “ヤシ：…” chuyển lên phần 1.1' — chỉ bản Nhật (bản Việt giữ chú thích "Cây cọ" ở 1.3.2)
-        notes: [['', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
+        // Bổ sung 2 (12/11): 'Footnote “ヤシ：…” chuyển lên phần 1.1'; 14/11 (bản Nhật là bản chuẩn): bản Việt cũng chuyển chú thích "Cây cọ" lên đây
+        notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '¹ ヤシ：ヤシ科の背の高い植物で、扇形の{葉|は}が{幹|みき}の先端にまとまって生えています。葉は屋根を{葺|ふ}いたり、ノンラーを作ったりする際などに使われます。']],
         // 08/11: ảnh nhóm gắn trong bản Nhật (1-02), chú thích JA nguyên văn nhóm
         images: [['Nón lá — nguồn: nghệ nhân Tạ Thu Hương', 'ノンラー — 出典：職人タ・トゥ・フオン氏']],
       },
@@ -279,11 +279,9 @@ export const ch1 = {
         {
           name: ['Nón lá hình chóp truyền thống', '伝統的な{円錐形|えんすいけい}のノンラー'],
           text: [
-            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non)¹ đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng mượt với các đường chỉ khâu tương đối đều đặn. Thông thường, vành rộng của nón có đường kính mở rộng khoảng 30 đến 40 cm, tùy thuộc vào vóc dáng cùng mục đích sử dụng; kết hợp cùng chiều cao chóp từ 20 đến 25 cm giúp ôm vừa vặn vòm đầu mà vẫn giữ độ thông thoáng cần thiết. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
+            'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non) đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng mượt với các đường chỉ khâu tương đối đều đặn. Thông thường, vành rộng của nón có đường kính mở rộng khoảng 30 đến 40 cm, tùy thuộc vào vóc dáng cùng mục đích sử dụng; kết hợp cùng chiều cao chóp từ 20 đến 25 cm giúp ôm vừa vặn vòm đầu mà vẫn giữ độ thông thoáng cần thiết. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
             '先端が尖った{円錐形|えんすいけい}で、下{処理|しょり}を{施|ほどこ}したラルイ（ヤシの若葉）を16本のヌアひごの{輪|わ}に{縫|ぬ}い{付|つ}けて作られます。色は一般に明るい白色または{淡|あわ}い{象牙色|ぞうげいろ}で、{葉|は}の表面は{平|たい}らに整えられ、縫い{目|め}も{比較的|ひかくてき}均一です。通常、ノンラーの{縁|ふち}の直径は、かぶる人の体格や用途に応じて約30～40cmです。縁から頂部までの高さは20～25cmで、こうした{寸法|すんぽう}により、頭にほどよくフィットしながら、必要な{通気性|つうきせい}も確保されています。かさばらず軽量で、日常生活での{実用性|じつようせい}もあるため、普段使いのほか、贈り{物|もの}にも用いられています。',
           ],
-          // chú thích ヤシ của bản Nhật đã chuyển lên 1.1 (Bổ sung 2, 12/11) → ở đây chỉ còn bản Việt
-          notes: [['¹ Cây cọ: cây cao, thuộc họ dừa, lá hình quạt, mọc thành chùm ở ngọn, thường dùng để lợp nhà, làm nón, v.v.', '']],
         },
         {
           name: ['Nón lá già ghép sống', '古いヤシの{葉|は}で作られたノンラー'],
@@ -311,13 +309,13 @@ export const ch1 = {
         {
           name: ['Nón thúng', 'ノン・トゥン'],
           // 08/11: nguồn theo bản Nhật của nhóm (ノン・トゥン / グループ撮影) → ảnh nhóm, không ghi dòng nguồn riêng
-          // 08/11 ("chú ý cả footnote nhé"): chú thích [7] [8] của bản Nhật (bản Việt không có) — chỉ in ở bản Nhật
+          // 08/11 ("chú ý cả footnote nhé"): chú thích [7] [8] của bản Nhật; 14/11: bản Việt dịch theo
           notes: [
-            ['', '¹ アオ・トゥータン：かつてベトナム北部の女性が{着用|ちゃくよう}していた、すねの中ほどまでの長さの衣服です。四枚の{身頃|みごろ}からなり、前の二枚は同じ幅で、通常は{交差|こうさ}させて結びます。'],
-            ['', '² アオ・モー・バー・モー・バイ：{内着|うちぎ}や上着、一重仕立てや{袷|あわせ}仕立ての衣服など、さまざまな衣服を重ねた装いです。通常、裕福で豪華な着こなしを表す際に使われる表現です。'],
+            ['¹ Áo tứ thân: trang phục dài đến giữa ống chân, xưa kia phụ nữ miền Bắc Việt Nam thường mặc. Áo gồm bốn vạt, hai vạt trước rộng bằng nhau, thường buộc chéo vào nhau.', '¹ アオ・トゥータン：かつてベトナム北部の女性が{着用|ちゃくよう}していた、すねの中ほどまでの長さの衣服です。四枚の{身頃|みごろ}からなり、前の二枚は同じ幅で、通常は{交差|こうさ}させて結びます。'],
+            ['² Áo mớ ba mớ bảy: cách mặc nhiều lớp áo chồng lên nhau (áo trong, áo ngoài, áo đơn, áo kép…), thường dùng để chỉ lối ăn mặc sang trọng, giàu có.', '² アオ・モー・バー・モー・バイ：{内着|うちぎ}や上着、一重仕立てや{袷|あわせ}仕立ての衣服など、さまざまな衣服を重ねた装いです。通常、裕福で豪華な着こなしを表す際に使われる表現です。'],
           ],
           text: [
-            'Là kiểu nón có vành rất rộng, dáng sâu lòng giống như cái thúng khi ngửa lên. Xưa kia, nón thúng kết hợp quai thao là món phụ kiện trang phục cao cấp đi cùng áo tứ thân, áo mớ ba mớ bảy của các bà, các chị trong dịp lễ Tết, hội hè. Ngày nay, nón chủ yếu xuất hiện trong không gian biểu diễn nghệ thuật truyền thống hoặc đóng vai trò như sản phẩm quà tặng, trưng bày di sản.',
+            'Là kiểu nón có vành rất rộng, dáng sâu lòng giống như cái thúng khi ngửa lên. Xưa kia, nón thúng kết hợp quai thao là món phụ kiện trang phục cao cấp đi cùng áo tứ thân¹, áo mớ ba mớ bảy² của các bà, các chị trong dịp lễ Tết, hội hè. Ngày nay, nón chủ yếu xuất hiện trong không gian biểu diễn nghệ thuật truyền thống hoặc đóng vai trò như sản phẩm quà tặng, trưng bày di sản.',
             'つばが非常に広く、深さがあり、裏返すとトゥン（竹編みのかご）のような形になるノンラーです。かつては、{飾|かざ}り{房|ふさ}の付いたあごひもを組み合わせたノン・トゥンが、女性たちの上質な装いの{小物|こもの}として、テト（ベトナムの旧{正月|しょうがつ}）などの祝祭日や祭りの際に、アオ・トゥータン¹やアオ・モー・バー・モー・バイ²（複数の{衣|ころも}を{重|かさ}ねる伝統的な装い）とともに用いられていました。現在では、主に伝統芸能の公演で使われるほか、贈答品や{文化遺産|ぶんかいさん}を紹介する{展示|てんじ}品としても用いられています。',
           ],
         },

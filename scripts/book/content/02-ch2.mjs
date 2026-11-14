@@ -5,7 +5,7 @@
  */
 export const ch2 = {
   no: 2,
-  label: ['Chương 2', 'パート2'],
+  label: ['Phần 2', 'パート2'],
   title: ['Cấu tạo, nguyên liệu và\nkỹ thuật làm nón Làng Chuông', 'チュオン{村|むら}のノンラーの\n{構造|こうぞう}・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}'],
   lead: [
     'Nhắc đến Làng Chuông là nhắc đến mảnh đất với những chiếc nón lá bền đẹp nổi danh khắp trong và ngoài nước. Tuy nhiên, để tạo nên một sản phẩm vừa mang tính ứng dụng cao vừa đạt đến giá trị thẩm mỹ tinh tế, đó là cả một nghệ thuật đòi hỏi sự kết hợp nhuần nhuyễn giữa nhiều yếu tố cốt lõi: từ khâu tuyển chọn nguyên liệu tự nhiên, kỹ thuật xử lý tỉ mỉ qua từng công đoạn, cho đến kinh nghiệm tích lũy và đôi bàn tay khéo léo của người thợ thủ công.',
@@ -14,11 +14,11 @@ export const ch2 = {
   // chương mở đầu bằng ba đoạn dẫn: đoạn 1 ở trang mở chương, hai đoạn sau đầu nội dung
   intro: [
     [
-      'Nhằm giúp người đọc có cái nhìn toàn diện và sâu sắc hơn về hành trình hình thành nên chiếc nón lá truyền thống, Chương 2 sẽ tập trung giới thiệu chi tiết từng khía cạnh trong quy trình chế tác tại Làng Chuông. Nội dung chương bắt đầu bằng việc trình bày đặc điểm cấu tạo 3 lớp đặc trưng của nón, tiếp đó giới thiệu các nguyên liệu như lá lụi, vòng nứa¹, chỉ khâu, và đi sâu vào từng bước trong quy trình kỹ thuật thủ công từ sơ chế lá, uốn vành, khâu nón cho đến giai đoạn hoàn thiện sản phẩm.',
+      'Nhằm giúp người đọc có cái nhìn toàn diện và sâu sắc hơn về hành trình hình thành nên chiếc nón lá truyền thống, Phần 2 sẽ tập trung giới thiệu chi tiết từng khía cạnh trong quy trình chế tác tại Làng Chuông. Nội dung phần này bắt đầu bằng việc trình bày đặc điểm cấu tạo 3 lớp đặc trưng của nón, tiếp đó giới thiệu các nguyên liệu như lá lụi, vòng nứa¹, chỉ khâu, và đi sâu vào từng bước trong quy trình kỹ thuật thủ công từ sơ chế lá, uốn vành, khâu nón cho đến giai đoạn hoàn thiện sản phẩm.',
       '{伝統的|でんとうてき}なノンラーが出来上がるまでの過程をより深層から理解できるよう、パート2ではチュオン村における製作工程の全貌を詳しく紹介します。まず、ノンラー特有の三層構造について{触|ふ}れ、続いてラルイ、ヌア¹で作られた輪、縫い糸などの材料を紹介します。さらに、{葉|は}の準備と下処理、ヌアひごを曲げて輪にする作業、{縫|ぬ}い{付|つ}けから{仕上|しあ}げに至るまでの手作業による各工程を一つずつ掘り下げていきます。',
     ],
     [
-      'Thông qua việc kết nối giữa yếu tố vật liệu, cấu trúc và thao tác kỹ thuật, chương này không chỉ phác họa rõ nét bức tranh toàn cảnh về quy trình sản xuất nón Làng Chuông, mà còn tôn vinh giá trị lao động đã được gìn giữ qua nhiều thế hệ.',
+      'Thông qua việc kết nối giữa yếu tố vật liệu, cấu trúc và thao tác kỹ thuật, phần này không chỉ phác họa rõ nét bức tranh toàn cảnh về quy trình sản xuất nón Làng Chuông, mà còn tôn vinh giá trị lao động đã được gìn giữ qua nhiều thế hệ.',
       '材料・構造・技術的な作業を関連付けながら説明することで、チュオン村のノンラー作りにおける全体像を明らかにするとともに、代々受け継がれてきた伝統工芸の価値を伝えます。',
     ],
   ],

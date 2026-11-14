@@ -8,10 +8,10 @@ import { refs } from './refs.mjs'
  */
 export const ch3 = {
   no: 3,
-  label: ['Chương 3', 'パート3'],
+  label: ['Phần 3', 'パート3'],
   title: ['Ghi nhận, bảo tồn\nnón Làng Chuông', 'チュオン{村|むら}のノンラーの\n{評価|ひょうか}と{保存|ほぞん}・{継承|けいしょう}'],
   lead: [
-    'Ở Chương 2, chúng ta đã cùng tìm hiểu cấu tạo, nguyên liệu và từng công đoạn tạo nên một chiếc nón làng Chuông. Qua các công đoạn chế tác, người thợ sử dụng kinh nghiệm và kỹ thuật thủ công để tạo nên một chiếc nón hoàn chỉnh từ những nguyên liệu truyền thống.\nKhông chỉ dừng lại ở quá trình chế tác, nghề nón làng Chuông còn mang những giá trị được ghi nhận và gìn giữ theo thời gian. Sang Chương 3 sẽ giới thiệu những ghi nhận đối với sản phẩm nón lá nói chung, song song với đó là sự ghi nhận với làng nghề và nghệ nhân, cùng các hoạt động bảo tồn, phát triển, những thách thức đối với chiếc nón, cũng như làng nghề làm nón hiện nay.',
+    'Ở Phần 2, chúng ta đã cùng tìm hiểu cấu tạo, nguyên liệu và từng công đoạn tạo nên một chiếc nón làng Chuông. Qua các công đoạn chế tác, người thợ sử dụng kinh nghiệm và kỹ thuật thủ công để tạo nên một chiếc nón hoàn chỉnh từ những nguyên liệu truyền thống.\nKhông chỉ dừng lại ở quá trình chế tác, nghề nón làng Chuông còn mang những giá trị được ghi nhận và gìn giữ theo thời gian. Sang Phần 3 sẽ giới thiệu những ghi nhận đối với sản phẩm nón lá nói chung, song song với đó là sự ghi nhận với làng nghề và nghệ nhân, cùng các hoạt động bảo tồn, phát triển, những thách thức đối với chiếc nón, cũng như làng nghề làm nón hiện nay.',
     'パート2では、チュオン{村|むら}のノンラーの{構造|こうぞう}や{材料|ざいりょう}、製作{工程|こうてい}について紹介しました。これらの工程を通じて、職人たちは長年の経験と培ってきた製作技術を生かし、伝統的な材料を用いて一つのノンラーを完成させています。\nチュオン村のノンラーは、こうした製作技術とともに、地域の歴史や文化の中で受け継がれてきました。パート3では、チュオン村のノンラー製品、{工芸村|こうげいむら}、職人たちに対する{評価|ひょうか}や{認定|にんてい}について紹介します。さらに、伝統的なノンラー作りの{保存|ほぞん}・{継承|けいしょう}と発展に向けた{取|と}り{組|く}みや、現在{直面|ちょくめん}している{課題|かだい}についても取り上げます。',
   ],
 
@@ -81,7 +81,7 @@ export const ch3 = {
         people: [
           [['Ông Hai Cát (Lê Cát)', 'ハイ・カット（Hai Cát、生没年未確認）'], ['Góp phần khôi phục nghề nón', 'ノンラー作りの{復興|ふっこう}に{貢献|こうけん}'], ['Ông Hai Cát là một trong những người có đóng góp quan trọng trong việc khôi phục nghề nón làng Chuông sau thời kỳ suy thoái. Ông đã đưa mẫu nón Xuân Kiều (Ba Đồn) về làng sản xuất, góp phần cải tiến mẫu mã và nâng cao khả năng cạnh tranh của sản phẩm. Năm 1930, nón do ông chế tác được đánh giá cao tại Hội chợ Hà Đông. Sau đó, ông tiếp tục truyền dạy kỹ thuật làm nón tại nhiều địa phương.', 'ハイ・カット氏は、{衰退期|すいたいき}を{経|へ}たチュオン{村|むら}のノンラー作りの{復興|ふっこう}に大きく{貢献|こうけん}した人物の一人です。バードン（Ba Đồn）のスアンキエウ（Xuân Kiều）で作られていた型のノンラーをチュオン村に持ち帰り、その製作に{取|と}り入れました。これにより、製品のデザインの改良や{競争|きょうそう}力の向上に貢献しました。\n1930年には、同氏が製作したノンラーがハドン（Hà Đông）の見本市で高い{評価|ひょうか}を受けました。その後も、各地でノンラー作りの技術を教えました。']],
           // 08/11: dấu ¹ (chú thích [4] ハタイ省) chỉ có ở bản Nhật của nhóm
-          [['Nghệ nhân Phạm Trần Canh (1931)', 'ファム・チャン・カイン（Phạm Trần Canh、1931年生・没年未確認）'], ['Phục dựng những mẫu nón cổ', '古いノンラーの様式を{復元|ふくげん}'], ['Nghệ nhân Phạm Trần Canh có đóng góp nổi bật trong việc phục dựng và bảo tồn các mẫu nón truyền thống, đặc biệt là nón quai thao cổ. Bên cạnh việc lưu giữ và chế tác các mẫu nón phục vụ triển lãm, ông còn truyền nghề miễn phí cho gần 100 người. Năm 2006, ông được phong danh hiệu Nghệ nhân làng nghề Hà Tây.', 'ファム・チャン・カイン氏は、伝統的なノンラーの様式の{復元|ふくげん}・{保存|ほぞん}に大きく{貢献|こうけん}し、特に古くから伝わるノン・クアイ・タオ（nón quai thao）の復元に力を注ぎました。\n展示用にさまざまな伝統的なノンラーを製作・保存するとともに、100人近くに{無償|むしょう}でノンラー作りの技術を伝えました。2006年には、「ハタイ{省|しょう}¹{工芸村|こうげいむら}職人（Nghệ nhân làng nghề Hà Tây）」の{称号|しょうごう}を授与されました。']],
+          [['Nghệ nhân Phạm Trần Canh (1931)', 'ファム・チャン・カイン（Phạm Trần Canh、1931年生・没年未確認）'], ['Phục dựng những mẫu nón cổ', '古いノンラーの様式を{復元|ふくげん}'], ['Nghệ nhân Phạm Trần Canh có đóng góp nổi bật trong việc phục dựng và bảo tồn các mẫu nón truyền thống, đặc biệt là nón quai thao cổ. Bên cạnh việc lưu giữ và chế tác các mẫu nón phục vụ triển lãm, ông còn truyền nghề miễn phí cho gần 100 người. Năm 2006, ông được phong danh hiệu Nghệ nhân làng nghề Hà Tây¹.', 'ファム・チャン・カイン氏は、伝統的なノンラーの様式の{復元|ふくげん}・{保存|ほぞん}に大きく{貢献|こうけん}し、特に古くから伝わるノン・クアイ・タオ（nón quai thao）の復元に力を注ぎました。\n展示用にさまざまな伝統的なノンラーを製作・保存するとともに、100人近くに{無償|むしょう}でノンラー作りの技術を伝えました。2006年には、「ハタイ{省|しょう}¹{工芸村|こうげいむら}職人（Nghệ nhân làng nghề Hà Tây）」の{称号|しょうごう}を授与されました。']],
         ],
       },
       {
@@ -91,8 +91,8 @@ export const ch3 = {
           '伝統的な製作技術を守り継ぐとともに、製品の改良や用途の{拡大|かくだい}に{取|と}り組む職人たちもいます。ここでは、レ・ヴァン・トゥイ氏とタ・トゥ・フオン氏の活動を紹介します。',
         ],
         people: [
-          [['Nghệ nhân Lê Văn Tuy (1969)', 'レ・ヴァン・トゥイ（Lê Văn Tuy、1969年生）'], ['Tiếp nối và đổi mới sản phẩm', '伝統技術の{継承|けいしょう}と製品の改良'], ['Nghệ nhân Lê Văn Tuy có đóng góp trong việc duy trì kỹ thuật làm nón truyền thống, cải tiến mẫu mã và truyền dạy nghề cho thế hệ trẻ. Ông tham gia hướng dẫn làm nón tại các trường học và giới thiệu sản phẩm làng Chuông đến với du khách. Năm 2019, ông được công nhận danh hiệu Nghệ nhân Hà Nội. Năm 2022, cơ sở sản xuất và kinh doanh nón lá Lê Văn Tuy có 5 sản phẩm được UBND thành phố Hà Nội công nhận OCOP 4 sao.', 'レ・ヴァン・トゥイ氏は、伝統的なノンラーの製作技術の維持・{継承|けいしょう}に加え、製品の改良や若い世代への技術の{伝承|でんしょう}に{取|と}り組んでいます。学校でノンラー作りの指導を行うほか、観光客にチュオン{村|むら}の製品を紹介する活動にも{携|たずさ}わっています。\n2019年には、「ハノイ市職人（Nghệ nhân Hà Nội）」の{称号|しょうごう}を授与されました。2022年には、同氏のノンラー製造・販売事業所が手がけた5製品¹が、ハノイ市人民委員会によってOCOPの4つ星製品として{認定|にんてい}されました。']],
-          [['Nghệ nhân Tạ Thu Hương (1968)', 'タ・トゥ・フオン（Tạ Thu Hương、1968年生）'], ['Phát triển sản phẩm và mở rộng thị trường', '製品の開発と{販路|はんろ}の{拡大|かくだい}'], ['Nghệ nhân Tạ Thu Hương có đóng góp nổi bật trong việc đa dạng hóa sản phẩm và mở rộng thị trường tiêu thụ nón làng Chuông. Năm 2022, bà được công nhận danh hiệu “Nghệ nhân làng nghề” của Hiệp hội Du lịch thành phố Hà Nội. Cơ sở của bà đã phát triển nhiều mẫu nón phù hợp với nhu cầu hiện đại, trong đó có 6 sản phẩm được công nhận OCOP 4 sao. Sản phẩm của cơ sở cũng đã được đưa đến nhiều thị trường quốc tế, góp phần quảng bá nghề nón làng Chuông ra ngoài phạm vi địa phương.', 'タ・トゥ・フオン氏は、製品の{多様化|たようか}とチュオン{村|むら}のノンラーの{販路|はんろ}{拡大|かくだい}に大きく{貢献|こうけん}しています。2022年には、ハノイ市観光協会から「{工芸村|こうげいむら}職人（Nghệ nhân làng nghề）」の{称号|しょうごう}を授与されました。\n同氏の事業所では、現代のニーズに合ったさまざまなノンラーを開発しており、そのうち6製品¹がOCOPの4つ星{認定|にんてい}を受けています。また、同事業所の製品は海外の複数の市場にも届けられ、チュオン村のノンラー製品の販路拡大につながっています。']],
+          [['Nghệ nhân Lê Văn Tuy (1969)', 'レ・ヴァン・トゥイ（Lê Văn Tuy、1969年生）'], ['Tiếp nối và đổi mới sản phẩm', '伝統技術の{継承|けいしょう}と製品の改良'], ['Nghệ nhân Lê Văn Tuy có đóng góp trong việc duy trì kỹ thuật làm nón truyền thống, cải tiến mẫu mã và truyền dạy nghề cho thế hệ trẻ. Ông tham gia hướng dẫn làm nón tại các trường học và giới thiệu sản phẩm làng Chuông đến với du khách. Năm 2019, ông được công nhận danh hiệu Nghệ nhân Hà Nội. Năm 2022, cơ sở sản xuất và kinh doanh nón lá Lê Văn Tuy có 5 sản phẩm¹ được UBND thành phố Hà Nội công nhận OCOP 4 sao.', 'レ・ヴァン・トゥイ氏は、伝統的なノンラーの製作技術の維持・{継承|けいしょう}に加え、製品の改良や若い世代への技術の{伝承|でんしょう}に{取|と}り組んでいます。学校でノンラー作りの指導を行うほか、観光客にチュオン{村|むら}の製品を紹介する活動にも{携|たずさ}わっています。\n2019年には、「ハノイ市職人（Nghệ nhân Hà Nội）」の{称号|しょうごう}を授与されました。2022年には、同氏のノンラー製造・販売事業所が手がけた5製品¹が、ハノイ市人民委員会によってOCOPの4つ星製品として{認定|にんてい}されました。']],
+          [['Nghệ nhân Tạ Thu Hương (1968)', 'タ・トゥ・フオン（Tạ Thu Hương、1968年生）'], ['Phát triển sản phẩm và mở rộng thị trường', '製品の開発と{販路|はんろ}の{拡大|かくだい}'], ['Nghệ nhân Tạ Thu Hương có đóng góp nổi bật trong việc đa dạng hóa sản phẩm và mở rộng thị trường tiêu thụ nón làng Chuông. Năm 2022, bà được công nhận danh hiệu “Nghệ nhân làng nghề” của Hiệp hội Du lịch thành phố Hà Nội. Cơ sở của bà đã phát triển nhiều mẫu nón phù hợp với nhu cầu hiện đại, trong đó có 6 sản phẩm¹ được công nhận OCOP 4 sao. Sản phẩm của cơ sở cũng đã được đưa đến nhiều thị trường quốc tế, góp phần quảng bá nghề nón làng Chuông ra ngoài phạm vi địa phương.', 'タ・トゥ・フオン氏は、製品の{多様化|たようか}とチュオン{村|むら}のノンラーの{販路|はんろ}{拡大|かくだい}に大きく{貢献|こうけん}しています。2022年には、ハノイ市観光協会から「{工芸村|こうげいむら}職人（Nghệ nhân làng nghề）」の{称号|しょうごう}を授与されました。\n同氏の事業所では、現代のニーズに合ったさまざまなノンラーを開発しており、そのうち6製品¹がOCOPの4つ星{認定|にんてい}を受けています。また、同事業所の製品は海外の複数の市場にも届けられ、チュオン村のノンラー製品の販路拡大につながっています。']],
         ],
       },
     ],
@@ -120,12 +120,12 @@ export const ch3 = {
         ['Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận', '職人タ・トゥ・フオン氏が受賞した賞状や表彰状の一部'],
       ],
     },
-    // 08/11 ("chú ý cả footnote nhé"): chú thích [4] [5] [6] của bản Nhật — bản Việt không có, chỉ in ở bản Nhật
+    // 08/11 ("chú ý cả footnote nhé"): chú thích [4] [5] [6] của bản Nhật; 14/11: bản Việt dịch theo (bản Nhật là bản chuẩn)
     notes: {
-      Canh: [['', '¹ ハタイ{省|しょう}：2008年にハノイ市に{編入|へんにゅう}された、ベトナムの旧行政区画（省）です。']],
-      Tuy: [['', '¹ レ・ヴァン・トゥイ氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（5種類）：外側に絹布を使用したノンラー（Nón lá vải lụa mặt ngoài）、伝統的な特別仕様のノンラー（Nón lá truyền thống đặc biệt）、内側と外側の両面に絹布を使用したノンラー（Nón lá hai mặt lụa）、花嫁用のノンラー（Nón cô dâu）、ノン・チュム（吊り下げて飾るノンラー）（Nón chùm）']],
+      Canh: [['¹ Hà Tây: tỉnh cũ của Việt Nam, được sáp nhập vào thành phố Hà Nội năm 2008.', '¹ ハタイ{省|しょう}：2008年にハノイ市に{編入|へんにゅう}された、ベトナムの旧行政区画（省）です。']],
+      Tuy: [['¹ 5 sản phẩm đạt OCOP 4 sao của cơ sở Lê Văn Tuy: nón lá vải lụa mặt ngoài, nón lá truyền thống đặc biệt, nón lá hai mặt lụa, nón cô dâu, nón chùm (nón treo trang trí).', '¹ レ・ヴァン・トゥイ氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（5種類）：外側に絹布を使用したノンラー（Nón lá vải lụa mặt ngoài）、伝統的な特別仕様のノンラー（Nón lá truyền thống đặc biệt）、内側と外側の両面に絹布を使用したノンラー（Nón lá hai mặt lụa）、花嫁用のノンラー（Nón cô dâu）、ノン・チュム（吊り下げて飾るノンラー）（Nón chùm）']],
       // lỗi gõ đã sửa: 「（（平たくて…」 → 「（平たくて…」, khoảng trắng trước 「（Nón trắng kỹ đẹp）」
-      Hương: [['', '¹ タ・トゥ・フオン氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（6種類）：丁寧に仕上げられた白いノンラー（Nón trắng kỹ đẹp）、絹布を使用したノンラー（Nón lá trên lụa）、ノン・クアイ・タオ（平たくてつばの広い伝統的な笠 - Nón quai thao）、ノンラー・ボーデー（菩提樹の葉を用いたノンラー）（Nón lá bồ đề）、ノン・ラー・ザー・ゲップ・ソン (成熟したヤシの葉で作られたノンラー)（Nón lá già ghép sống）、吊り下げて飾るノンラー（Nón bộ treo trang trí decor）']],
+      Hương: [['¹ 6 sản phẩm đạt OCOP 4 sao của cơ sở Tạ Thu Hương: nón trắng kỹ đẹp, nón lá trên lụa, nón quai thao, nón lá bồ đề, nón lá già ghép sống, nón bộ treo trang trí (decor).', '¹ タ・トゥ・フオン氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（6種類）：丁寧に仕上げられた白いノンラー（Nón trắng kỹ đẹp）、絹布を使用したノンラー（Nón lá trên lụa）、ノン・クアイ・タオ（平たくてつばの広い伝統的な笠 - Nón quai thao）、ノンラー・ボーデー（菩提樹の葉を用いたノンラー）（Nón lá bồ đề）、ノン・ラー・ザー・ゲップ・ソン (成熟したヤシの葉で作られたノンラー)（Nón lá già ghép sống）、吊り下げて飾るノンラー（Nón bộ treo trang trí decor）']],
     },
   },
 
@@ -157,7 +157,7 @@ export const ch3 = {
         h: ['Từ chợ làng đến thị trường rộng hơn', '村の市場からより広い{販路|はんろ}へ'],
         p: [
           ['Chợ Chuông từ lâu đã gắn bó với hoạt động sản xuất và buôn bán nón lá của người dân địa phương. Chợ thường họp vào các ngày mùng 4, 10, 14, 20, 24 và 30 âm lịch hằng tháng, với hoạt động mua bán diễn ra từ sáng sớm. Tại đây, người dân bày bán các nguyên liệu và vật dụng làm nón như lá nón, cạp nón, cước, vòng nứa, cùng những chiếc nón đã hoàn thiện. Nón thường được xếp thành từng chồng, phân loại theo kiểu dáng, kích thước để thuận tiện cho việc lựa chọn và mua bán. Chợ không chỉ phục vụ nhu cầu sản xuất của người dân trong làng mà còn là nơi các thương lái thu mua nón để đưa đến nhiều địa phương khác, góp phần duy trì hoạt động tiêu thụ sản phẩm của làng nghề.', 'チュオン市場（Chợ Chuông）は、古くから地域住民によるノンラーの製作や売買と深く結びついてきました。市場は通常、{旧|きゅう}暦（ベトナムで伝統的に用いられてきた暦）の毎月4日、10日、14日、20日、24日、30日に開かれ、早朝から売買が行われます。\n市場では、ラルイ、外縁の輪、ナイロン糸、ヌアで作られた輪など、製作に必要な{材料|ざいりょう}や部品が、完成したノンラーとともに売られています。完成したノンラーは、形や大きさごとに分けられ、買い手が選びやすいように{積|つ}み{重|かさ}ねて並べられています。\nこの市場は、村の住民がノンラー作りに必要な材料を購入する場所であるだけでなく、{仲買人|なかがいにん}がノンラーを買い付け、各地へ運ぶ場所でもあります。このように、チュオン市場は村で作られたノンラーの販売を支える役割も果たしています。'],
-          ['Từ những phiên chợ truyền thống, nón làng Chuông hiện còn được giới thiệu tại hội chợ, triển lãm, sự kiện văn hóa và các chương trình quảng bá làng nghề. Sản phẩm cũng từng xuất hiện tại một số sự kiện lớn như SEA Games và APEC. Bên cạnh đó, một số cơ sở sản xuất đã sử dụng mạng xã hội và các nền tảng trực tuyến để giới thiệu sản phẩm, nhận đơn hàng và tiếp cận khách hàng ngoài địa phương. Nón Chuông cũng đã được đưa đến một số thị trường quốc tế như Trung Quốc, Hàn Quốc, Nhật Bản, Đức…', 'チュオン市場のような伝統的な定期市に加え、現在では、チュオン{村|むら}のノンラーは見本市や展示会、文化イベント、{工芸村|こうげいむら}の広報活動などでも紹介されています。また、SEA Games¹やAPEC²関連の行事などで紹介されたこともあります。\nさらに、一部の製作事業者は、SNSやオンラインサービスを活用して製品を紹介し、注文を受け付けるとともに、地域外の顧客にも{情報|じょうほう}を発信しています。チュオン村のノンラーは中国、韓国、日本、ドイツなどの海外市場にも届けられています。'],
+          ['Từ những phiên chợ truyền thống, nón làng Chuông hiện còn được giới thiệu tại hội chợ, triển lãm, sự kiện văn hóa và các chương trình quảng bá làng nghề. Sản phẩm cũng từng xuất hiện tại một số sự kiện lớn như SEA Games¹ và APEC². Bên cạnh đó, một số cơ sở sản xuất đã sử dụng mạng xã hội và các nền tảng trực tuyến để giới thiệu sản phẩm, nhận đơn hàng và tiếp cận khách hàng ngoài địa phương. Nón Chuông cũng đã được đưa đến một số thị trường quốc tế như Trung Quốc, Hàn Quốc, Nhật Bản, Đức…', 'チュオン市場のような伝統的な定期市に加え、現在では、チュオン{村|むら}のノンラーは見本市や展示会、文化イベント、{工芸村|こうげいむら}の広報活動などでも紹介されています。また、SEA Games¹やAPEC²関連の行事などで紹介されたこともあります。\nさらに、一部の製作事業者は、SNSやオンラインサービスを活用して製品を紹介し、注文を受け付けるとともに、地域外の顧客にも{情報|じょうほう}を発信しています。チュオン村のノンラーは中国、韓国、日本、ドイツなどの海外市場にも届けられています。'],
         ],
         // 08/11: ảnh 3-26, 3-27 (chợ lúc sáng sớm) cạnh đoạn về chợ ở trang trái; video sang trang phải, cạnh đoạn hội chợ /
         // SEA Games / thị trường quốc tế (tab Bổ sung: "Đổi vị trí ảnh → video để khớp với ND")
@@ -167,10 +167,10 @@ export const ch3 = {
           ['Người vác hàng rời phiên chợ Chuông', '早朝からノンラーの売買でにぎわうチュオン市場'],
         ],
         video: ['Video: nón lá làng Chuông trên sàn diễn thời trang quốc tế — nguồn: nghệ nhân Lê Văn Tuy', '動画：国際ファッションショーに登場したチュオン{村|むら}のノンラー — 出典：職人レ・ヴァン・トゥイ氏'],
-        // chú thích [7] [8] của bản Nhật (bản Việt không có) — cùng trang với đoạn SEA Games (trang phải)
+        // chú thích [7] [8] của bản Nhật (14/11: bản Việt dịch theo) — cùng trang với đoạn SEA Games (trang phải)
         notesR: [
-          ['', '¹ SEA Games（東南アジア競技大会）：東南アジア諸国が参加する総合スポーツ大会で、原則として2年に1回開催されます。'],
-          ['', '² APEC（アジア太平洋経済協力）：アジア太平洋地域の21のエコノミー（国・地域）が参加し、貿易・投資の自由化や円滑化、経済・技術協力などを進める枠組みです。'],
+          ['¹ SEA Games (Đại hội Thể thao Đông Nam Á): đại hội thể thao tổng hợp của các nước Đông Nam Á, theo lệ hai năm tổ chức một lần.', '¹ SEA Games（東南アジア競技大会）：東南アジア諸国が参加する総合スポーツ大会で、原則として2年に1回開催されます。'],
+          ['² APEC (Diễn đàn Hợp tác Kinh tế châu Á – Thái Bình Dương): khuôn khổ hợp tác của 21 nền kinh tế khu vực châu Á – Thái Bình Dương nhằm tự do hóa, thuận lợi hóa thương mại, đầu tư và thúc đẩy hợp tác kinh tế, kỹ thuật.', '² APEC（アジア太平洋経済協力）：アジア太平洋地域の21のエコノミー（国・地域）が参加し、貿易・投資の自由化や円滑化、経済・技術協力などを進める枠組みです。'],
         ],
       },
       {

@@ -1840,7 +1840,7 @@ function chapterOpener(ch, photo) {
     // GVHD 11/11 (tab "Bổ sung 2"): "Chỉnh lại tiêu đề số 1, 2, 3 → hiện đang mất cân bằng xí" · "Số và chữ đang chồng lên
     // nhau" — trước: chữ CHƯƠNG / パート1 cỡ 30 đè lên đầu số 200pt, tên chương trôi giữa trang. Nay một khối: nhãn nhỏ giãn
     // chữ trên đầu số (không chạm), số 170pt, vạch dọc mảnh, tên chương canh giữa theo chiều cao mặt số
-    T(lx, 70, 220, 22, ['CHƯƠNG', 'パート'], { size: 15, tracking: 5, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, jaSize: 14, name: 'Nhãn chương' }),
+    T(lx, 70, 220, 22, ['PHẦN', 'パート'], { size: 15, tracking: 5, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, jaSize: 14, name: 'Nhãn chương' }),
     // Playfair: mặt số bắt đầu ~0,245 cỡ chữ dưới mép khung, cao ~0,7 cỡ chữ → khung y 70 thì mặt số 112…231
     STAND(T(lx - 6, 70, 130, 200, [String(ch.no), null], { font: F.head, size: 170, color: acc, lh: 1.05, name: 'Số chương' }), 0.25, 1.2)
   )
@@ -2001,15 +2001,15 @@ let guidePage = null
 
   // "Trong cuốn sách này": trọn một trang đơn (góp ý: tr. 6 chỉ chiếm một trang A4) — tiêu đề + ba thẻ chương
   const c = new Page({ chapter: 0 })
-  runningHead(c, ['TRONG CUỐN SÁCH NÀY', '本書の構成'])
+  runningHead(c, ['CẤU TRÚC CUỐN SÁCH', '本書の構成'])
   c.fixed = true
-  const cy = sectionHead(c, TOP, null, preface.contentsTitle, ['Ba chương của cuốn sách', '三つのパート'])
+  const cy = sectionHead(c, TOP, null, preface.contentsTitle, ['Ba phần của cuốn sách', '三つのパート'])
   const n = preface.chapters.length
   const gap = 16
   const cardH = Math.min(170, (BOT - cy - (n - 1) * gap) / n)
   const cardH2 = Math.min(cardH, (BOT - 44 - cy - (n - 1) * gap) / n)
   contents = { page: c, y: cy + Math.max(0, (BOT - 44 - cy - n * cardH2 - (n - 1) * gap) / 2), h: cardH2, gap }
-  tipBox(c, BOT - 34, ['Bấm vào một thẻ chương để lật tới chương đó', 'パートのカードをクリックすると、そのパートへ移動します'], { size: 14, jaSize: 12.5 })
+  tipBox(c, BOT - 34, ['Bấm vào thẻ của một phần để lật tới phần đó', 'パートのカードをクリックすると、そのパートへ移動します'], { size: 14, jaSize: 12.5 })
   guidePage = new Page({ chapter: 0 })
   guidePage.fixed = true
 }
@@ -3864,11 +3864,10 @@ let stripRight = null
     // còn lại của trang: ảnh chọn to (lưới 2 × 2 giãn theo chỗ), câu ca dao hiện đủ hai dòng (trước chỉ dòng đầu + "…")
     // bản tiếng Nhật: chú thích hai từ trong ca dao (nhóm dịch, tab "Câu nói hay") ngay dưới đoạn dẫn, bản tiếng Việt không cần
     // (soát 04/11: đặt ở đáy trang thì đè lên dòng "JPG 1200 × 1650" ở chân tấm thiếp)
-    q.add({ ...T(q.x0, y - 4, q.cw, 32, ['亭（ディン）', '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。\n人間棋：人が駒の役割を演じるベトナムの伝統的な遊びです。'], { size: 9.5, lh: 1.45, jaSize: 9.5, color: C.muted, jaFont: F.jaSans, name: 'Chú thích' }), only: 'ja' })
-    // soát vòng 7: bản VI không có dòng chú thích JA ở trên → khối bưu thiếp bản VI đặt cao lên 34pt (trước trống một dải)
-    q.add({ ...WIDGET(q.x0, y, q.cw, BOT - y, 'postcard', { name: 'Bưu thiếp tương tác', data: { photos, verses } }), only: 'vi' })
+    // 14/11 (bản Nhật là bản chuẩn): bản Việt cũng có dòng chú thích → một khối chung, bưu thiếp chung một chỗ
+    q.add({ ...T(q.x0, y - 4, q.cw, 32, ['Đình: công trình truyền thống của làng Việt, nơi thờ thành hoàng, đồng thời là nơi hội họp và tổ chức lễ hội.\nCờ người: trò chơi truyền thống của Việt Nam, người thật đóng vai các quân cờ.', '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。\n人間棋：人が駒の役割を演じるベトナムの伝統的な遊びです。'], { size: 9.5, lh: 1.45, jaSize: 9.5, color: C.muted, jaFont: F.jaSans, name: 'Chú thích' }) })
     y += 34
-    q.add({ ...WIDGET(q.x0, y, q.cw, BOT - y, 'postcard', { name: 'Bưu thiếp tương tác', data: { photos, verses } }), only: 'ja' })
+    q.add({ ...WIDGET(q.x0, y, q.cw, BOT - y, 'postcard', { name: 'Bưu thiếp tương tác', data: { photos, verses } }) })
     q.fixed = true
   }
   const b = new Page({ chapter: 9, hideNumber: true, bg: C.cream, paper: 'giay' })
@@ -4032,7 +4031,7 @@ const CH_PHOTO = {
       RECT(p.x0 + 5, y + 5, p.cw - 10, ch - 10, 'none', { radius: 5, stroke: acc, sw: 0.8, dash: '3 2.5', opacity: 0.7, name: 'Đường khâu' }),
       ELL(ix - 3, y + (ch - iw) / 2 - 3, iw + 6, iw + 6, 'none', { stroke: acc, sw: 1, name: 'Viền ảnh tròn' }),
       { ...IMG(ix, y + (ch - iw) / 2, iw, iw, CH_PHOTO[no], { name: 'Ảnh chương' }), round: true },
-      T(tx, ty, 160, 18, [`CHƯƠNG ${no}`, `パート${no}`], { size: 11, tracking: 2.2, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
+      T(tx, ty, 160, 18, [`PHẦN ${no}`, `パート${no}`], { size: 11, tracking: 2.2, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
       T(tx, ty + 18, tw, th, title, { ...tO, color: C.ink, jaFont: F.jaHead, name: 'Tên chương' }),
       T(tx, ty + 26 + th, tw, dh, card.text, { ...dO, italic: true, color: C.ink2, jaFont: F.jaSans, name: 'Mô tả chương' }),
       T(tx, ty + 34 + th + dh, 120, 16, [`Trang ${pad} →`, `${a.page}ページ →`], { size: 11.5, weight: 600, tracking: 0.5, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số trang chương' }),
@@ -4051,7 +4050,7 @@ const CH_PHOTO = {
   const tips = [
     ['tool-re-la', 'flip', ['Lật trang', 'ページをめくる'], ['Bấm vào mép trang hoặc kéo góc trang; cũng có thể dùng phím ← → hay hai nút mũi tên dưới sách. Gõ số trang vào ô ở thanh dưới để tới thẳng trang đó.', 'ページの端をクリックするか、角をドラッグしてめくります。キーボードの ← → や、本の下の矢印ボタンも使えます。下のバーにページ番号を入れると、そのページへ移動します。']],
     ['non', 'lb', ['Xem ảnh lớn', '画像を大きく見る'], ['Bấm vào bất kỳ bức ảnh nào để mở ảnh lớn kèm chú thích; bấm ra ngoài hoặc phím Esc để đóng.', '画像をクリックすると、説明つきで大きく表示されます。外側をクリックするか Esc キーで閉じます。']],
-    ['leaf-sprig', 'toc', ['Mục lục và thẻ chương', '目次とパートのカード'], ['Bấm vào một dòng mục lục hay một thẻ chương để lật ngay tới phần đó.', '目次の行やパートのカードをクリックすると、その部分へすぐに移動します。']],
+    ['leaf-sprig', 'toc', ['Mục lục và thẻ phần', '目次とパートのカード'], ['Bấm vào một dòng mục lục hay thẻ của một phần để lật ngay tới phần đó.', '目次の行やパートのカードをクリックすると、その部分へすぐに移動します。']],
     ['tool-quay-non', 'proc', ['Quy trình làm nón', 'ノンラー作りの工程'], [`Ở mục 2.3.2${step ? ` (trang ${step})` : ''}, bấm vào một trạm trên bản đồ các công đoạn hoặc vào số bước để tới công đoạn đó; mỗi bước có ảnh động (GIF) quay cảnh thật.`, `2.3.2節${step ? `（${step}ページ）` : ''}では、工程の地図の駅や番号をクリックすると、その工程へ移動します。各工程には実際の様子を写したGIF動画があります。`]],
     ['khung-non', 'model', ['Mô hình và bản đồ', '模型と地図'], ['Kéo để xoay nón 3D; bấm vào một lớp lá để làm nổi bật lớp đó. Bấm vào bản đồ để xem đường đến làng Chuông.', '3Dのノンラーはドラッグで回転し、葉の層をクリックするとその層が色で強調されます。地図をクリックすると、チュオン村への道のりが見られます。']],
     ['bia-non', 'post', ['Bưu thiếp cuối sách', '巻末の絵はがき'], ['Chọn một bức ảnh và một câu ca dao, rồi tải tấm bưu thiếp về làm kỷ niệm.', '画像とカーザオ（民謡）を一つずつ選び、絵はがきを保存して記念にどうぞ。']],
