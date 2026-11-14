@@ -106,7 +106,7 @@ export const ch3 = {
       // 3-10 / 3-11: cùng một ảnh nhóm gắn hai lần (cuối 3.1 và đầu phần nghệ nhân) → in một lần ở trang mở phần nghệ nhân
       honor: ['Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries', '2025年、ホー・チ・ミン主席への活動報告式に参加した全国の代表的な職人たち — 出典：Maries'],
       canh: ['Nghệ nhân Phạm Trần Canh', '職人ファム・チャン・カイン氏'],
-      hoa: ['Bà Trần Thị Hoa (sinh năm 1960), con gái nghệ nhân Phạm Trần Canh — nguồn: Báo Quân đội nhân dân', 'トラン・ティ・ホアさん（1960年生まれ）- 職人ファム・チャン・カイン氏の娘 — 出典：Báo Quân đội Nhân dân'],
+      hoa: ['Bà Trần Thị Hoa (sinh năm 1960), con gái nghệ nhân Phạm Trần Canh — nguồn: Báo Quân đội nhân dân', 'トラン・ティ・ホアさん（1960年生まれ）- 職人ファム・チャン・カイン氏の娘 — 出典：Báo Quân đội nhân dân'],
       g2: [
         ['Nghệ nhân Lê Văn Tuy — nguồn: nghệ nhân Lê Văn Tuy', 'レ・ヴァン・トゥイ氏 — 出典：職人レ・ヴァン・トゥイ氏'],
         ['Nghệ nhân Tạ Thu Hương tại gian hàng nón của bà', 'タ・トゥ・フオン氏'],
@@ -164,7 +164,7 @@ export const ch3 = {
         pairLeft: true,
         images: [
           ['Chợ nón Chuông họp từ lúc tờ mờ sáng', '早朝からノンラーの売買でにぎわうチュオン市場'],
-          ['Người vác hàng rời phiên chợ Chuông', '早朝からノンラーの売買でにぎわうチュオン市場'],
+          ['Người vác hàng rời phiên chợ Chuông', '市を終え、荷を担いでチュオン市場を後にする人'],
         ],
         video: ['Video: nón lá làng Chuông trên sàn diễn thời trang quốc tế — nguồn: nghệ nhân Lê Văn Tuy', '動画：国際ファッションショーに登場したチュオン{村|むら}のノンラー — 出典：職人レ・ヴァン・トゥイ氏'],
         // chú thích [7] [8] của bản Nhật (14/11: bản Việt dịch theo) — cùng trang với đoạn SEA Games (trang phải)

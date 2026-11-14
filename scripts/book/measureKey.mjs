@@ -4,11 +4,14 @@
 const RUBY_MIN = 12
 const stripRuby = (s) => String(s ?? '').replace(/\{([^{}|]+)\|[^{}]+\}/g, '$1')
 const r1 = (n) => Math.round(n * 100) / 100
+// số chú thích (¹ ²…) được đánh lại cả sách SAU khi xếp trang (build.mjs) → trang đo thấy "¹⁵" còn lúc xếp trang là "¹":
+// quy mọi cụm số mũ về một dạng để hai bên ra cùng khoá (soát độc lập 14/11: trước đó mọi đoạn có chú thích chỉ dùng số ước lượng)
+const noteless = (s) => s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, '¹⁰')
 
 export function measureKey({ text, ja, w, size, jaSize, lh, paraGap = 0, font, weight = 400, tracking = 0 }) {
   const small = size < RUBY_MIN
-  const vi = small ? stripRuby(text) : String(text ?? '')
-  const jp = ja ? (small ? stripRuby(ja) : String(ja)) : ''
+  const vi = noteless(small ? stripRuby(text) : String(text ?? ''))
+  const jp = noteless(ja ? (small ? stripRuby(ja) : String(ja)) : '')
   const raw = [vi, jp, r1(w), size, jaSize ?? size, lh, paraGap, font, weight, tracking].join('\u0001')
   // FNV-1a 53 bit
   let h1 = 0x811c9dc5

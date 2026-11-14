@@ -637,7 +637,7 @@ const SRC_BY_PATH = [
   [/^Chương 1\/BTHN\/IMG_20261002_150751$/, ['Bảo tàng Hà Nội', 'ハノイ博物館']],
   [/^doc-0811\/danviet-/, ['Báo Dân Việt', 'Báo Dân Việt']],
   [/^doc-0811\/thanhnien-/, ['Báo Thanh Niên', 'Báo Thanh Niên']],
-  [/^doc-0811\/vnexpress-/, ['VnExpress', 'VNEXPRESS']],
+  [/^doc-0811\/vnexpress-/, ['VnExpress', 'VnExpress']],
   [/^doc-0811\/huong-/, ['nghệ nhân Tạ Thu Hương', '職人タ・トゥ・フオン氏']],
   [/^doc-0811\/langnghe-/, ['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt']],
   [/^online\/thoi-trang/, ['Báo Dân trí', 'Báo Dân trí']],
@@ -645,10 +645,10 @@ const SRC_BY_PATH = [
   [/^online\/(non-la-bang|non-ngua)/, ['Báo Lao Động', 'Báo Lao Động']],
   // 06/11: nguồn theo cách nhóm ghi trong bản Nhật (tên báo để nguyên tiếng Việt)
   [/^online\/dong-phong-/, ['Đông Phong', 'Đông Phong']],
-  [/^online\/dtpt-/, ['Báo Dân tộc và Phát triển', 'Báo Dân tộc và phát triển']],
-  [/^online\/thanhnien-/, ['Báo Thanh Niên', 'Báo Thanh niên']],
-  [/^online\/(non-la-sen|non-la-chuong|dao-cat-la|non-thung|qdnd-)/, ['Báo Quân đội nhân dân', 'Báo Quân đội Nhân dân']],
-  [/^online\/phu-nhan/, ['VietNamNet', 'VietnamNet']],
+  [/^online\/dtpt-/, ['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển']],
+  [/^online\/thanhnien-/, ['Báo Thanh Niên', 'Báo Thanh Niên']],
+  [/^online\/(non-la-sen|non-la-chuong|dao-cat-la|non-thung|qdnd-)/, ['Báo Quân đội nhân dân', 'Báo Quân đội nhân dân']],
+  [/^online\/phu-nhan/, ['VietNamNet', 'VietNamNet']],
   [/^online\/pham-tran-canh/, ['Báo Thể thao & Văn hóa', 'テータオ＆ヴァンホア紙']],
   [/^online\/non-hoi-cho/, ['Báo Đại biểu Nhân dân', 'ダイビエウニャンザン紙']],
   [/^online\/(non-thanh-oai|thap-dong)/, ['Daderot, Wikimedia Commons (CC0)', 'Daderot、ウィキメディア・コモンズ（CC0）']],
@@ -750,7 +750,7 @@ const SHEET_JA = {
   "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "制作グループ提供", null], // 64
   "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": ["チュオン村のノンラーに囲まれた子ども", "職人レ・ヴァン・トゥイ氏提供", null], // 65
   "Các sản phẩm nón đa dạng của làng Chuông": [null, "制作グループ提供", null], // 67
-  "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Lễ Báo Công Dâng Bác Tại Khu Di Tích Chủ Tịch Hồ Chí Minh - Maries", null], // 73
+  "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Maries", null], // 73
   "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "制作グループ撮影", null], // 83
   "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "制作グループ撮影", null], // 84
   "Trải nghiệm vẽ trên nón lá ở làng Chuông": ["チュオン村でのノンラーの絵付け体験", "制作グループ撮影", null], // 87
@@ -3698,15 +3698,15 @@ let stripRight = null
       // 08/11: theo nguồn nhóm ghi cho các ảnh nhóm gắn trong bản Nhật (tên báo để nguyên tiếng Việt như nhóm ghi)
       [['BÁO CHÍ', '新聞・ウェブメディア'], [
         [['Báo Thanh Niên', 'Báo Thanh Niên'], ['Nón lá sen · Nhà hát Ba Nón Lá · Expo 2021 Dubai · Tổng thống Hàn Quốc', 'ノン・ラー・セン・三つのノンラー劇場・ドバイ国際博覧会2021・韓国大統領'], 'Báo Thanh Niên'],
-        [['Báo Quân đội nhân dân', 'Báo Quân đội Nhân dân'], ['Dao, kéo cắt lá · nghệ nhân Phạm Trần Canh · bà Trần Thị Hoa', '小刀とはさみ・職人ファム・チャン・カイン氏・トラン・ティ・ホアさん'], 'Quân đội nhân dân'],
-        [['VietNamNet', 'VietnamNet'], ['Phu nhân Thủ tướng Singapore · nón lá trong thiết kế trang phục', 'シンガポール首相夫人・衣装デザインに取り入れられたノンラー'], 'VietNamNet'],
+        [['Báo Quân đội nhân dân', 'Báo Quân đội nhân dân'], ['Dao, kéo cắt lá · nghệ nhân Phạm Trần Canh · bà Trần Thị Hoa', '小刀とはさみ・職人ファム・チャン・カイン氏・トラン・ティ・ホアさん'], 'Quân đội nhân dân'],
+        [['VietNamNet', 'VietNamNet'], ['Phu nhân Thủ tướng Singapore · nón lá trong thiết kế trang phục', 'シンガポール首相夫人・衣装デザインに取り入れられたノンラー'], 'VietNamNet'],
         [['Báo Dân Việt', 'Báo Dân Việt'], ['Nón bài thơ', 'ノン・バイ・トー'], 'Báo Dân Việt'],
         [['Báo Lao Động', 'Báo Lao Động'], ['Nón lá bàng', 'ノン・ラー・バン'], 'Báo Lao Động'],
-        [['VnExpress', 'VNEXPRESS'], ['Nón ngựa', 'ノン・グア'], 'VnExpress'],
-        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
+        [['VnExpress', 'VnExpress'], ['Nón ngựa', 'ノン・グア'], 'VnExpress'],
+        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
         [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong'],
         [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
-        [['Báo Sóng Trẻ', 'Báo Sóng trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
+        [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
         [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển'],
         [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật（スアン・ライ）'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', '展示会でのトゥイ氏のノンラーの展示ブース'], 'Báo Pháp luật'],
         [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」'], 'Chạm Sắc'],

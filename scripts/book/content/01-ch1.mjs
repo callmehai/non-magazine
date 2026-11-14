@@ -78,10 +78,10 @@ export const ch1 = {
             ['Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng', '博物館に{展示|てんじ}されているノンラー'],
             ['Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam', '博物館に{展示|てんじ}されているノンラー'],
           ],
-          theater: ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Thanh Niên', 'バクリエウ{省|しょう}にあるカオ・ヴァン・ラウ三つのノンラー{劇場|げきじょう} — 出典：Báo Thanh niên'],
+          theater: ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Thanh Niên', 'バクリエウ{省|しょう}にあるカオ・ヴァン・ラウ三つのノンラー{劇場|げきじょう} — 出典：Báo Thanh Niên'],
           fashion: [
-            ['Nón lá trong thiết kế trang phục — nguồn: VietNamNet', '衣装デザインに取り入れられたノンラー — 出典：VietnamNet'],
-            ['Nón lá trên sàn diễn thời trang — nguồn: Báo Sóng Trẻ', '衣装デザインに取り入れられたノンラー — 出典：Báo Sóng trẻ'],
+            ['Nón lá trong thiết kế trang phục — nguồn: VietNamNet', '衣装デザインに取り入れられたノンラー — 出典：VietNamNet'],
+            ['Nón lá trên sàn diễn thời trang — nguồn: Báo Sóng Trẻ', '衣装デザインに取り入れられたノンラー — 出典：Báo Sóng Trẻ'],
           ],
         },
       },
@@ -108,7 +108,7 @@ export const ch1 = {
           [['Nón lá bàng', 'ノン・ラー・バン'], ['Thành phố Huế', 'フエ市']],
           [['Nón ngựa', 'ノン・グア'], ['Tỉnh Gia Lai (Bình Định cũ)', 'ザライ{省|しょう}（旧ビンディン省）']],
           [['Nón lá làng Chuông', 'チュオン{村|むら}のノンラー'], ['Hà Nội', 'ハノイ市']],
-          // 06/11: nhóm thêm trong bản Nhật (ảnh 1-10): タイ族のノンラー ― タイグエン省 (Báo Dân tộc và phát triển)
+          // 06/11: nhóm thêm trong bản Nhật (ảnh 1-10): タイ族のノンラー ― タイグエン省 (Báo Dân tộc và Phát triển)
           [['Nón người Tày', 'タイ族のノンラー'], ['Thái Nguyên', 'タイグエン{省|しょう}']],
         ],
       },
@@ -184,9 +184,9 @@ export const ch1 = {
           // ảnh 1-25 (06/11, ảnh nhóm gắn): chú thích JA nguyên văn nhóm
           ['Giới thiệu văn hóa Việt Nam tại Triển lãm Thế giới Expo 2021 Dubai', 'ドバイ国際博覧会2021におけるベトナム文化の紹介'],
           // ảnh 1-26 (a)
-          ['Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet', 'ノンラーをかぶるシンガポール首相夫人 — 出典：VietnamNet'],
+          ['Phu nhân Thủ tướng Singapore và Phu nhân Thủ tướng Việt Nam đội nón lá (3/2025) — nguồn: VietNamNet', 'ノンラーをかぶるシンガポール首相夫人 — 出典：VietNamNet'],
           // ảnh 1-27: 08/11 đổi sang đúng ảnh nhóm gắn (Báo Thanh Niên)
-          ['Tổng thống Hàn Quốc đội nón lá — nguồn: Báo Thanh Niên', 'ノンラーをかぶる韓国大統領 — 出典：Báo Thanh niên'],
+          ['Tổng thống Hàn Quốc đội nón lá — nguồn: Báo Thanh Niên', 'ノンラーをかぶる韓国大統領 — 出典：Báo Thanh Niên'],
         ],
       },
       {
