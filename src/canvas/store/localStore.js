@@ -159,15 +159,21 @@ export function createLocalStore() {
 
     joinPresence(_bookId, user, onChange) {
       // mỗi tab là một "người" riêng để thử khoá trang
-      const self = { key: tabId, user: { ...user, name: `${user.name} · tab ${tabId.slice(0, 4)}` }, since: Date.now(), pageId: null }
+      const watcher = !user // chế độ Xem: chỉ nghe, không giữ khoá
+      const self = { key: tabId, user: user && { ...user, name: `${user.name} · tab ${tabId.slice(0, 4)}` }, since: Date.now(), pageId: null }
       const peers = new Map()
       const publish = () => onChange([self, ...peers.values()])
-      const send = (type) => channel?.postMessage({ type, from: tabId, state: self })
+      const send = (type) => {
+        if (watcher && type !== 'presence-hello') return // người chỉ xem chỉ chào để người khác báo lại mình
+        channel?.postMessage({ type, from: tabId, state: watcher ? null : self })
+      }
       const fn = (e) => {
         const m = e.data
         if (m.from === tabId || !m.type?.startsWith('presence')) return
         if (m.type === 'presence-leave') peers.delete(m.from)
-        else {
+        else if (!m.state) {
+          if (m.type === 'presence-hello') send('presence-state') // người chỉ xem vừa vào
+        } else {
           peers.set(m.from, { ...m.state, seen: Date.now() })
           if (m.type === 'presence-hello') send('presence-state')
         }
@@ -186,6 +192,7 @@ export function createLocalStore() {
       publish()
       return {
         update(state) {
+          if (watcher) return
           Object.assign(self, state)
           send('presence-state')
           publish()

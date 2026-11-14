@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { getStore, between, pageData } from '../canvas/store/index.js'
+import { getStore, between, pageData, EDITOR_USERNAME } from '../canvas/store/index.js'
 import { clonePageData, newElement, withIds, uid, ungroupElement, groupElements, pageSide, PAGE_W, PAGE_H } from '../canvas/model.js'
 import canvasBook from '../content/canvasBook.js'
 import { compressImage, fitBox, videoPoster, videoFrame } from '../canvas/media.js'
@@ -13,7 +13,7 @@ import { colorsOfPage } from './ui.jsx'
 import HistoryPanel from './HistoryPanel.jsx'
 import { CanvasLang, textField, plainText } from '../canvas/lang.js'
 import VideoPreview from './VideoPreview.jsx'
-import { useConfirm, useToasts, GlobeIcon } from './Overlays.jsx'
+import { useConfirm, useToasts, GlobeIcon, PasswordDialog } from './Overlays.jsx'
 import { TEMPLATE_KINDS } from '../canvas/model.js'
 import '../canvas/canvas.css'
 import './editor.css'
@@ -24,30 +24,31 @@ const UNDO_LIMIT = 500 // bước Ctrl+Z nhớ được cho mỗi trang (tải l
 const CHECKPOINT_GAP = 60 * 1000 // mốc "Trong lần mở này" của Lịch sử: tối đa 1 mốc / phút / trang
 const MOD = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl+'
 
+/**
+ * #/admin có hai chế độ (nút gạt góc trên bên phải):
+ *  - Xem: mặc định khi mở/tải lại trang, không cần đăng nhập — lật trang, xem bản Việt/Nhật, xem Lịch sử
+ *  - Sửa: nhập mật khẩu của tài khoản biên tập chung (EDITOR_USERNAME); về Xem thì lưu nốt rồi đăng xuất tab này
+ */
 export default function EditorApp() {
   const [store, setStore] = useState(null)
-  const [session, setSession] = useState(undefined) // undefined = đang kiểm tra, null = chưa đăng nhập
+  const [session, setSession] = useState(null) // null = chế độ Xem
 
   useEffect(() => {
     let alive = true
-    getStore().then(async (s) => {
-      if (!alive) return
-      setStore(s)
-      setSession(await s.session())
-    })
+    getStore().then((s) => alive && setStore(s))
     return () => {
       alive = false
     }
   }, [])
   useEffect(() => store?.onAuthChange((s) => setSession(s)), [store])
 
-  if (!store || session === undefined) return <div className="ed-splash">Đang tải…</div>
-  if (!session) return <Login store={store} onDone={setSession} />
+  if (!store) return <div className="ed-splash">Đang tải…</div>
   return (
     <BookEditor
       store={store}
-      user={session.user}
-      onSignOut={async () => {
+      user={session?.user ?? null}
+      onUnlock={async (password) => setSession(await store.signIn(EDITOR_USERNAME, password))}
+      onLock={async () => {
         await store.signOut()
         setSession(null)
       }}
@@ -55,50 +56,13 @@ export default function EditorApp() {
   )
 }
 
-/* ── đăng nhập ───────────────────────────────────────────── */
-function Login({ store, onDone }) {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [busy, setBusy] = useState(false)
-  return (
-    <div className="ed-login">
-      <form
-        className="ed-login__box"
-        onSubmit={async (e) => {
-          e.preventDefault()
-          setBusy(true)
-          setError('')
-          try {
-            onDone(await store.signIn(username.trim(), password))
-          } catch (err) {
-            setError(err.message || 'Không đăng nhập được')
-          } finally {
-            setBusy(false)
-          }
-        }}
-      >
-        <h1>ノン · Biên tập</h1>
-        <p>Đăng nhập bằng tài khoản được cấp.</p>
-        <label>
-          Tên đăng nhập
-          <input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus required />
-        </label>
-        <label>
-          Mật khẩu
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
-        </label>
-        {error && <div className="ed-login__error">{error}</div>}
-        <button type="submit" className="ed-btn ed-btn--primary" disabled={busy}>
-          {busy ? 'Đang đăng nhập…' : 'Đăng nhập'}
-        </button>
-      </form>
-    </div>
-  )
-}
-
 /* ── editor ─────────────────────────────────────────────── */
-function BookEditor({ store, user, onSignOut }) {
+function BookEditor({ store, user, onUnlock, onLock }) {
+  const viewing = !user // chế độ Xem: không sửa được gì, không giữ khoá trang
+  // người dùng cho khoá trang: chỉ đổi khi bật/tắt Sửa (phiên tự làm mới mỗi giờ không tính là vào lại trang)
+  const userId = user?.id ?? null
+  const userName = user?.name ?? null
+  const me = useMemo(() => (userId ? { id: userId, name: userName } : null), [userId, userName])
   const [book, setBook] = useState(null)
   const [pages, setPages] = useState([])
   const pagesRef = useRef([])
@@ -135,6 +99,8 @@ function BookEditor({ store, user, onSignOut }) {
   const [historyPanel, setHistoryPanel] = useState(null) // null | { open }
   const [historyTick, setHistoryTick] = useState(0)
   const [videoPreview, setVideoPreview] = useState(null) // null | { id, open }
+  const [unlockDialog, setUnlockDialog] = useState(null) // null | { open } — hộp nhập mật khẩu
+  const [switching, setSwitching] = useState(false) // đang lưu nốt trước khi về chế độ Xem
   const saving = useRef(new Map()) // pageId → { timer, inFlight, dirty }
   const presenceRef = useRef(null)
   const doSaveRef = useRef(null)
@@ -178,28 +144,40 @@ function BookEditor({ store, user, onSignOut }) {
         })
       })
       .catch((e) => !cancelled && setLoadError(e.message || String(e)))
-    store.listUploads().then(setUploads, () => {})
     return () => {
       cancelled = true
       unsub()
     }
   }, [store])
 
+  // thư viện "Tải lên" chỉ dùng khi sửa (danh sách tệp chỉ người biên tập đọc được)
+  useEffect(() => {
+    if (me) store.listUploads().then(setUploads, () => {})
+  }, [store, me])
+
   // ── ai đang ở trang nào (khoá trang)
   useEffect(() => {
     if (!book) return
-    const p = store.joinPresence(book.id, user, (list) => setPresence(list))
+    const p = store.joinPresence(book.id, me, (list) => setPresence(list))
     presenceRef.current = p
     return () => p.leave()
-  }, [store, book, user])
+  }, [store, book, me])
 
+  // chạy sau effect trên (cùng thứ tự khai báo) → vừa bật Sửa là báo ngay mình đang ở trang nào
   useEffect(() => {
     presenceRef.current?.update({ pageId: currentId, pageSince: Date.now() })
-  }, [currentId, book])
+  }, [currentId, book, me])
 
   const myKey = presence[0]?.key ?? null // phần tử đầu luôn là chính mình
   const holder = currentId ? lockHolder(presence, currentId) : null
-  const readOnly = !!holder && holder.key !== myKey
+  const locked = !!holder && holder.key !== myKey // người khác đang sửa trang này
+  const readOnly = viewing || locked
+  const readOnlyNote = viewing ? 'Đang ở chế độ Xem — muốn chỉnh thì bật “Sửa” ở góc trên bên phải.' : null
+
+  // về chế độ Xem: đóng Lịch sử (người xem không xem/khôi phục bản cũ)
+  useEffect(() => {
+    if (viewing) setHistoryPanel((h) => h && { open: false })
+  }, [viewing])
   const holders = useMemo(() => holdersByPage(presence), [presence])
 
   const page = pages.find((p) => p.id === currentId) || null
@@ -235,6 +213,7 @@ function BookEditor({ store, user, onSignOut }) {
           setAll(pagesRef.current.map((x) => (x.id === id ? e.page : x)))
           toast.show({ type: 'info', title: 'Trang vừa được người khác sửa', desc: 'Đã tải bản mới nhất của trang này.' })
         } else {
+          s.failed = true
           setSaveState('error')
           toast.show({ type: 'error', title: 'Chưa lưu được thay đổi', desc: e.message || String(e), action: { label: 'Thử lại', onClick: () => doSaveRef.current(id) } })
           s.inFlight = false
@@ -242,6 +221,7 @@ function BookEditor({ store, user, onSignOut }) {
         }
       }
       s.inFlight = false
+      s.failed = false
       if (s.dirty) return doSaveRef.current(id)
       const anyPending = [...saving.current.values()].some((v) => v.timer || v.inFlight)
       setSaveState(anyPending ? 'saving' : 'saved')
@@ -262,6 +242,51 @@ function BookEditor({ store, user, onSignOut }) {
     },
     [doSave]
   )
+
+  /** lưu ngay mọi thay đổi đang chờ rồi đợi xong (tối đa 15 giây) → true nếu đã lưu hết */
+  const flushSaves = useCallback(async () => {
+    for (const [id, s] of saving.current) {
+      if (!s.timer) continue
+      clearTimeout(s.timer)
+      doSave(id)
+    }
+    const pending = () => [...saving.current.values()].some((v) => v.timer || v.inFlight || v.dirty)
+    const until = Date.now() + 15000
+    while (pending() && Date.now() < until) await new Promise((r) => setTimeout(r, 100))
+    return !pending() && ![...saving.current.values()].some((v) => v.failed)
+  }, [doSave])
+
+  // ── nút gạt Xem / Sửa
+  const switchToView = useCallback(async () => {
+    if (viewing || switching) return
+    setSwitching(true)
+    setEditingId(null)
+    const ok = await flushSaves()
+    if (!ok) {
+      setSwitching(false)
+      toast.show({ type: 'error', title: 'Chưa chuyển sang Xem được', desc: 'Còn thay đổi chưa lưu. Đợi “✓ Đã lưu” rồi bấm lại.' })
+      return
+    }
+    try {
+      await onLock()
+      toast.show({ type: 'info', title: 'Đã về chế độ Xem', desc: 'Muốn sửa tiếp thì bật “Sửa” và nhập lại mật khẩu.' })
+    } catch (e) {
+      toast.show({ type: 'error', title: 'Chưa chuyển sang Xem được', desc: e.message || String(e) })
+    } finally {
+      setSwitching(false)
+    }
+  }, [viewing, switching, flushSaves, onLock, toast])
+
+  const unlock = useCallback(
+    async (password) => {
+      await onUnlock(password) // sai mật khẩu → ném lỗi, hộp thoại hiện lỗi
+      setUnlockDialog((d) => d && { open: false })
+      toast.show({ title: 'Đã bật chế độ Sửa', desc: 'Mọi thay đổi tự lưu. Bấm “Xem” để khoá lại.' })
+    },
+    [onUnlock, toast]
+  )
+  const closeUnlock = useCallback(() => setUnlockDialog((d) => d && { open: false }), [])
+  const goneUnlock = useCallback(() => setUnlockDialog(null), [])
 
   // cảnh báo nếu đóng tab khi còn thay đổi chưa lưu
   useEffect(() => {
@@ -287,7 +312,7 @@ function BookEditor({ store, user, onSignOut }) {
   const commitPage = useCallback(
     (id, patch, key) => {
       const prev = pagesRef.current.find((p) => p.id === id)
-      if (!prev) return
+      if (!prev || viewing) return
       const next = { ...prev, ...(typeof patch === 'function' ? patch(prev) : patch) }
       const h = history.current.get(id) || { past: [], future: [] }
       const last = h.past[h.past.length - 1]
@@ -303,7 +328,7 @@ function BookEditor({ store, user, onSignOut }) {
       setAll(pagesRef.current.map((p) => (p.id === id ? next : p)))
       scheduleSave(id)
     },
-    [scheduleSave, addCheckpoint]
+    [scheduleSave, addCheckpoint, viewing]
   )
 
   /** patches = { [elementId]: patch } — nhiều phần tử, một bước undo */
@@ -382,7 +407,7 @@ function BookEditor({ store, user, onSignOut }) {
 
   const layer = useCallback(
     (dir) => {
-      if (selectedIds.length !== 1) return
+      if (selectedIds.length !== 1 || readOnly) return
       commitPage(currentId, (p) => {
         const els = [...p.elements]
         const i = els.findIndex((e) => e.id === selectedIds[0])
@@ -392,7 +417,7 @@ function BookEditor({ store, user, onSignOut }) {
         return { elements: els }
       })
     },
-    [selectedIds, currentId, commitPage]
+    [selectedIds, readOnly, currentId, commitPage]
   )
 
   /** căn: 1 phần tử → theo trang; nhiều phần tử → theo khung bao của nhóm */
@@ -583,6 +608,7 @@ function BookEditor({ store, user, onSignOut }) {
   // ── thao tác với trang
   const addPage = useCallback(
     async (template, afterId = currentId) => {
+      if (viewing) return
       const list = pagesRef.current
       const i = list.findIndex((p) => p.id === afterId)
       const pos = between(list[i]?.position, list[i + 1]?.position)
@@ -591,13 +617,14 @@ function BookEditor({ store, user, onSignOut }) {
       setAll([...pagesRef.current.filter((x) => x.id !== p.id), p].sort((a, b) => a.position - b.position))
       setCurrentId(p.id)
     },
-    [store, book, currentId]
+    [store, book, currentId, viewing]
   )
 
   const duplicatePage = useCallback((id) => addPage(pagesRef.current.find((p) => p.id === id), id), [addPage])
 
   const deletePage = useCallback(
     async (id) => {
+      if (viewing) return
       const list = pagesRef.current
       const i = list.findIndex((p) => p.id === id)
       const victim = list[i]
@@ -631,18 +658,19 @@ function BookEditor({ store, user, onSignOut }) {
         },
       })
     },
-    [store, book, currentId, confirm, toast]
+    [store, book, currentId, confirm, toast, viewing]
   )
 
   const movePage = useCallback(
     async (id, toIdx) => {
+      if (viewing) return
       // thả lên trang thứ toIdx → chiếm đúng vị trí đó (kéo sang phải: nằm sau, kéo sang trái: nằm trước)
       const list = pagesRef.current.filter((p) => p.id !== id)
       const pos = between(list[toIdx - 1]?.position, list[toIdx]?.position)
       setAll(pagesRef.current.map((p) => (p.id === id ? { ...p, position: pos } : p)).sort((a, b) => a.position - b.position))
       await store.movePage(id, pos)
     },
-    [store]
+    [store, viewing]
   )
 
   const publish = useCallback(async () => {
@@ -693,6 +721,8 @@ function BookEditor({ store, user, onSignOut }) {
     const onKey = (e) => {
       const t = e.target
       if (t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return
+      const flip = /^(PageDown|PageUp|ArrowLeft|ArrowRight)$/.test(e.key)
+      if (viewing && !flip) return // chế độ Xem: chỉ lật trang
       const mod = e.metaKey || e.ctrlKey
       const k = e.key.toLowerCase()
       const single = selection.length === 1 ? selection[0] : null
@@ -731,22 +761,25 @@ function BookEditor({ store, user, onSignOut }) {
       } else if (e.key === 'Enter' && single?.type === 'text') {
         e.preventDefault()
         setEditingId(single.id)
-      } else if (e.key.startsWith('Arrow') && selection.length) {
+      } else if (e.key.startsWith('Arrow') && selection.length && !viewing) {
         e.preventDefault()
         const d = e.shiftKey ? 10 : 1
         const dx = { ArrowLeft: -d, ArrowRight: d }[e.key] || 0
         const dy = { ArrowUp: -d, ArrowDown: d }[e.key] || 0
         updateElements(Object.fromEntries(selection.map((el) => [el.id, { x: el.x + dx, y: el.y + dy }])), 'nudge')
-      } else if (e.key === 'PageDown' || e.key === 'PageUp') {
+      } else if (flip && !mod && !e.altKey) {
+        // ← → (khi không chọn gì) và PageUp/PageDown: lật sang trang trước/sau theo dải trang bên dưới
+        // (chặn mặc định: không để mũi tên cuộn dải trang thay vì lật)
+        e.preventDefault()
         const list = pagesRef.current
         const i = list.findIndex((p) => p.id === currentId)
-        const n = list[i + (e.key === 'PageDown' ? 1 : -1)]
+        const n = list[i + (e.key === 'PageDown' || e.key === 'ArrowRight' ? 1 : -1)]
         if (n) setCurrentId(n.id)
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [undo, duplicateSelected, selection, page, deleteSelected, addElements, updateElements, updateSelected, currentId, groupSelected, ungroup])
+  }, [undo, duplicateSelected, selection, page, deleteSelected, addElements, updateElements, updateSelected, currentId, groupSelected, ungroup, viewing])
 
   if (loadError) return <div className="ed-splash">Không tải được sách: {loadError}</div>
   if (!book) return <div className="ed-splash">Đang tải sách…</div>
@@ -757,15 +790,19 @@ function BookEditor({ store, user, onSignOut }) {
 
   return (
     <CanvasLang.Provider value={editLang}>
-      <div className={`ed-app ${tab ? 'has-panel' : ''}`}>
+      <div className={`ed-app ${tab && !viewing ? 'has-panel' : ''} ${viewing ? 'is-viewing' : ''}`}>
         <header className="ed-top">
           <div className="ed-top__left">
             <strong className="ed-top__title">{book.title}</strong>
-            <span className={`ed-save is-${saveState}`}>{saveState === 'saving' ? 'Đang lưu…' : saveState === 'error' ? 'Lỗi lưu!' : '✓ Đã lưu'}</span>
+            {viewing ? (
+              <span className="ed-save">Bản nháp · chỉ xem</span>
+            ) : (
+              <span className={`ed-save is-${saveState}`}>{saveState === 'saving' ? 'Đang lưu…' : saveState === 'error' ? 'Lỗi lưu!' : '✓ Đã lưu'}</span>
+            )}
             {store.kind === 'local' && <span className="ed-badge">Chế độ thử — lưu trên máy này</span>}
           </div>
           <div className="ed-top__mid">
-            <div className="ed-langswitch" role="group" aria-label="Đang sửa bản">
+            <div className="ed-langswitch" role="group" aria-label={viewing ? 'Đang xem bản' : 'Đang sửa bản'}>
               <span>Bản</span>
               <button type="button" className={editLang === 'vi' ? 'is-on' : ''} aria-pressed={editLang === 'vi'} onClick={() => setEditLang('vi')}>
                 Tiếng Việt
@@ -774,34 +811,45 @@ function BookEditor({ store, user, onSignOut }) {
                 日本語
               </button>
             </div>
-            <button
-              type="button"
-              className="ed-btn ed-btn--ghost"
-              onClick={() => undo(false)}
-              disabled={readOnly || !hist.undo}
-              title={hist.undo ? `Hoàn tác (${MOD}Z) · còn ${hist.undo} bước` : 'Chưa có gì để hoàn tác'}
-              aria-label="Hoàn tác"
-            >
-              ↶
-            </button>
-            <button
-              type="button"
-              className="ed-btn ed-btn--ghost"
-              onClick={() => undo(true)}
-              disabled={readOnly || !hist.redo}
-              title={hist.redo ? `Làm lại (${MOD}⇧Z) · còn ${hist.redo} bước` : 'Chưa có gì để làm lại'}
-              aria-label="Làm lại"
-            >
-              ↷
-            </button>
-            <button type="button" className="ed-btn ed-btn--ghost ed-histbtn" onClick={() => setHistoryPanel({ open: true })} disabled={!page} title="Xem và khôi phục bản cũ của trang này">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                <path d="M3 3v5h5" />
-                <path d="M12 7v5l4 2" />
-              </svg>
-              Lịch sử
-            </button>
+            {!viewing && (
+              <div className="ed-tools" role="group" aria-label="Hoàn tác và lịch sử">
+                <button
+                  type="button"
+                  className="ed-tools__icon"
+                  onClick={() => undo(false)}
+                  disabled={readOnly || !hist.undo}
+                  title={hist.undo ? `Hoàn tác (${MOD}Z) · còn ${hist.undo} bước` : 'Chưa có gì để hoàn tác'}
+                  aria-label="Hoàn tác"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M9 14 4 9l5-5" />
+                    <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="ed-tools__icon"
+                  onClick={() => undo(true)}
+                  disabled={readOnly || !hist.redo}
+                  title={hist.redo ? `Làm lại (${MOD}⇧Z) · còn ${hist.redo} bước` : 'Chưa có gì để làm lại'}
+                  aria-label="Làm lại"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="m15 14 5-5-5-5" />
+                    <path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13" />
+                  </svg>
+                </button>
+                <span className="ed-tools__sep" aria-hidden="true" />
+                <button type="button" className="ed-tools__btn" onClick={() => setHistoryPanel({ open: true })} disabled={!page} title="Xem và khôi phục bản cũ của trang này">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l4 2" />
+                  </svg>
+                  Lịch sử
+                </button>
+              </div>
+            )}
           </div>
           <div className="ed-top__right">
             <div className="ed-people">
@@ -814,35 +862,44 @@ function BookEditor({ store, user, onSignOut }) {
             <a className="ed-btn" href={previewUrl} target="_blank" rel="noreferrer">
               Xem thử
             </a>
-            {user.role === 'admin' && (
+            {user?.role === 'admin' && (
               <button type="button" className="ed-btn ed-btn--primary" onClick={publish}>
                 Xuất bản
               </button>
             )}
-            <button type="button" className="ed-btn ed-btn--ghost" onClick={onSignOut} title="Đăng xuất">
-              {user.name} ⎋
-            </button>
+            <div className="ed-langswitch ed-modeswitch" role="group" aria-label="Chế độ">
+              <button type="button" className={viewing ? 'is-on' : ''} aria-pressed={viewing} onClick={switchToView} disabled={switching} title={viewing ? 'Đang ở chế độ Xem' : 'Lưu nốt rồi khoá lại, chỉ xem'}>
+                {switching ? 'Đang lưu…' : 'Xem'}
+              </button>
+              <button type="button" className={viewing ? '' : 'is-on'} aria-pressed={!viewing} onClick={() => viewing && setUnlockDialog({ open: true })} title={viewing ? 'Nhập mật khẩu để sửa' : 'Đang ở chế độ Sửa'}>
+                {viewing && <LockGlyph />}
+                Sửa
+              </button>
+            </div>
           </div>
         </header>
 
-        <SidePanel
-          tab={tab}
-          onTab={setTab}
-          uploads={uploads}
-          uploading={uploading}
-          onAddPage={(tpl) => addPage(tpl)}
-          onAddElement={addElement}
-          onAddAsset={async (a) => addElement(await elementFromAsset(a))}
-          onUploadFiles={uploadFiles}
-          selection={selection}
-          onChangeSelected={updateSelected}
-          onUpdateMany={updateElements}
-        />
+        {!viewing && (
+          <SidePanel
+            tab={tab}
+            onTab={setTab}
+            uploads={uploads}
+            uploading={uploading}
+            onAddPage={(tpl) => addPage(tpl)}
+            onAddElement={addElement}
+            onAddAsset={async (a) => addElement(await elementFromAsset(a))}
+            onUploadFiles={uploadFiles}
+            selection={selection}
+            onChangeSelected={updateSelected}
+            onUpdateMany={updateElements}
+          />
+        )}
 
         <main className="ed-main">
           <ContextBar
             selection={selection}
             readOnly={readOnly}
+            readOnlyNote={readOnlyNote}
             page={page}
             pageNumber={pageIndex + 1}
             pageCount={pages.length}
@@ -859,7 +916,7 @@ function BookEditor({ store, user, onSignOut }) {
             onDuplicate={duplicateSelected}
             onDelete={deleteSelected}
           />
-          {readOnly && (
+          {locked && !viewing && (
             <div className="ed-lock" style={{ '--c': colorOf(holder.user?.id || holder.key) }}>
               <b>{holder.user?.name}</b> đang sửa trang này — bạn chỉ xem được. Trang tự mở khoá khi họ chuyển sang trang khác.
             </div>
@@ -908,6 +965,7 @@ function BookEditor({ store, user, onSignOut }) {
             currentId={currentId}
             holders={holders}
             myKey={myKey}
+            readOnly={viewing}
             onOpen={setCurrentId}
             onAddClick={() => setTab('templates')}
             onDuplicate={duplicatePage}
@@ -916,7 +974,7 @@ function BookEditor({ store, user, onSignOut }) {
           />
         </main>
 
-        {historyPanel && (
+        {historyPanel && !viewing && (
           <HistoryPanel
             open={historyPanel.open}
             store={store}
@@ -936,9 +994,19 @@ function BookEditor({ store, user, onSignOut }) {
             open={videoPreview.open}
             el={previewEl}
             readOnly={readOnly}
+            readOnlyNote={readOnlyNote}
             onSetPoster={(v) => setPosterFromFrame(v, previewEl.id)}
             onClose={closeVideo}
             onGone={goneVideo}
+          />
+        )}
+        {unlockDialog && (
+          <PasswordDialog
+            open={unlockDialog.open}
+            note={store.kind === 'local' ? 'Chế độ thử trên máy này: nhập gì cũng được.' : null}
+            onSubmit={unlock}
+            onClose={closeUnlock}
+            onGone={goneUnlock}
           />
         )}
         {toaster}
@@ -947,6 +1015,13 @@ function BookEditor({ store, user, onSignOut }) {
     </CanvasLang.Provider>
   )
 }
+
+const LockGlyph = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="4" y="11" width="16" height="10" rx="2" />
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+  </svg>
+)
 
 function naturalSize(url) {
   return new Promise((resolve) => {

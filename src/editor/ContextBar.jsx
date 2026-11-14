@@ -12,8 +12,8 @@ const BOOK_DIRECTION = canvasBook.settings.direction
  * không chọn gì → nền trang · chữ → font/cỡ/màu… · ảnh → thay ảnh · nhiều phần tử → căn hàng.
  */
 export default function ContextBar(props) {
-  const { selection, readOnly } = props
-  if (readOnly) return <div className="ed-ctx is-readonly">Chỉ xem — trang đang được người khác sửa</div>
+  const { selection, readOnly, readOnlyNote } = props
+  if (readOnly) return <div className="ed-ctx is-readonly">{readOnlyNote || 'Chỉ xem — trang đang được người khác sửa'}</div>
   if (selection.length > 1) return <MultiBar {...props} />
   const el = selection[0]
   if (!el) return <PageBar {...props} />

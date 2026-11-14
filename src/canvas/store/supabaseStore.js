@@ -20,9 +20,15 @@ const rowToPage = (r) => ({
  * Bảng/quyền: scripts/supabase/schema.sql
  */
 export function createSupabaseStore() {
+  // không nhớ đăng nhập: mở/tải lại #/admin luôn về chế độ Xem, muốn Sửa phải nhập mật khẩu lại
   const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY, {
-    auth: { persistSession: true, storageKey: 'non-book-auth' },
+    auth: { persistSession: false },
   })
+  try {
+    localStorage.removeItem('non-book-auth') // phiên đăng nhập cũ còn lưu trên máy (trước 14/11)
+  } catch {
+    /* bỏ qua */
+  }
   let profile = null
   let names = null // id → tên hiển thị (cho lịch sử trang)
 
@@ -49,7 +55,7 @@ export function createSupabaseStore() {
     },
     async signIn(username, password) {
       const { data, error } = await sb.auth.signInWithPassword({ email: toEmail(username), password })
-      if (error) throw new Error(error.status === 400 ? 'Sai tên đăng nhập hoặc mật khẩu' : error.message)
+      if (error) throw new Error(error.status === 400 ? 'Sai mật khẩu' : error.message)
       const s = await loadProfile(data.user)
       if (!s) {
         await sb.auth.signOut()
@@ -58,7 +64,8 @@ export function createSupabaseStore() {
       return s
     },
     async signOut() {
-      await sb.auth.signOut()
+      // chỉ tab này: tài khoản biên tập dùng chung, đăng xuất "global" sẽ đá cả những người khác ra
+      await sb.auth.signOut({ scope: 'local' })
       profile = null
     },
     onAuthChange(cb) {
@@ -169,7 +176,8 @@ export function createSupabaseStore() {
     joinPresence(bookId, user, onChange) {
       const key = uid()
       const topic = `presence:${bookId}` // mọi người phải chung một kênh mới thấy nhau
-      const self = { key, user: { id: user.id, name: user.name }, since: Date.now(), pageId: null, pageSince: 0 }
+      const watcher = !user // chế độ Xem: chỉ nghe, không báo mình ở trang nào → không giữ khoá
+      const self = { key, user: user && { id: user.id, name: user.name }, since: Date.now(), pageId: null, pageSince: 0 }
       let ch = null
       let left = false
       const publish = () => {
@@ -188,12 +196,13 @@ export function createSupabaseStore() {
           .on('presence', { event: 'join' }, publish)
           .on('presence', { event: 'leave' }, publish)
           .subscribe((status) => {
-            if (status === 'SUBSCRIBED') ch.track(self)
+            if (status === 'SUBSCRIBED' && !watcher) ch.track(self)
           })
       })()
       publish()
       return {
         update(state) {
+          if (watcher) return
           Object.assign(self, state)
           ch?.track(self)
           publish()
@@ -201,7 +210,7 @@ export function createSupabaseStore() {
         leave() {
           left = true
           if (!ch) return
-          ch.untrack()
+          if (!watcher) ch.untrack()
           sb.removeChannel(ch)
         },
       }

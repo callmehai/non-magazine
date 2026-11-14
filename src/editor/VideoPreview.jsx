@@ -5,7 +5,7 @@ import { asset } from '../lib/assets.js'
  * Xem video ngay trong editor (nhấp đúp vào video hoặc nút "Xem video").
  * Dừng ở cảnh đẹp rồi bấm "Dùng khung hình này làm ảnh bìa".
  */
-export default function VideoPreview({ open, el, readOnly, onSetPoster, onClose, onGone }) {
+export default function VideoPreview({ open, el, readOnly, readOnlyNote, onSetPoster, onClose, onGone }) {
   const [shown, setShown] = useState(false)
   const [busy, setBusy] = useState(false)
   const videoRef = useRef(null)
@@ -62,7 +62,7 @@ export default function VideoPreview({ open, el, readOnly, onSetPoster, onClose,
           playsInline
         />
         <div className="vp-foot">
-          <p className="vp-hint">{readOnly ? 'Người khác đang sửa trang này nên bạn chỉ xem được.' : 'Muốn đổi ảnh bìa: dừng video ở cảnh đẹp rồi bấm nút bên phải.'}</p>
+          <p className="vp-hint">{readOnly ? readOnlyNote || 'Người khác đang sửa trang này nên bạn chỉ xem được.' : 'Muốn đổi ảnh bìa: dừng video ở cảnh đẹp rồi bấm nút bên phải.'}</p>
           <div className="ov-dialog__actions vp-actions">
             {!readOnly && (
               <button type="button" className="ov-btn ov-btn--secondary" onClick={usePoster} disabled={busy}>

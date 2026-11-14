@@ -83,6 +83,106 @@ function ConfirmDialog({ open, tone = 'neutral', icon, title, body, note, confir
 }
 
 /* ════════════════════════════════════════════════════════════
+   Hộp nhập mật khẩu để bật chế độ Sửa.
+   <PasswordDialog open onSubmit={async (pw) => …ném lỗi để báo sai} onClose onGone />
+   ════════════════════════════════════════════════════════════ */
+export function PasswordDialog({ open, note, onSubmit, onClose, onGone }) {
+  const inputRef = useRef(null)
+  const [shown, setShown] = useState(false)
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  useLayoutEffect(() => {
+    if (!open) return
+    const r = requestAnimationFrame(() => setShown(true))
+    inputRef.current?.focus()
+    return () => cancelAnimationFrame(r)
+  }, [open])
+  useEffect(() => {
+    if (open) return
+    setShown(false)
+    const t = setTimeout(onGone, 120)
+    return () => clearTimeout(t)
+  }, [open, onGone])
+  useEffect(() => {
+    const key = (e) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', key, true)
+    return () => window.removeEventListener('keydown', key, true)
+  }, [onClose])
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (busy) return
+    setBusy(true)
+    setError('')
+    try {
+      await onSubmit(password)
+    } catch (err) {
+      setError(err.message || 'Không bật được chế độ Sửa')
+      setPassword('')
+      inputRef.current?.focus()
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className={`ov-layer ${shown ? 'is-open' : ''}`}>
+      <div className="ov-scrim" onClick={onClose} />
+      <form role="dialog" aria-modal="true" aria-labelledby="ov-pw-title" className="ov-dialog" onSubmit={submit}>
+        <div className="ov-dialog__grid">
+          <div className="ov-dialog__icon is-neutral">
+            <LockIcon />
+          </div>
+          <h2 id="ov-pw-title" className="ov-dialog__title">
+            Bật chế độ Sửa
+          </h2>
+          <div className="ov-dialog__body">
+            <p>Nhập mật khẩu biên tập để sửa sách. Tải lại trang sẽ về chế độ Xem.</p>
+            <input
+              ref={inputRef}
+              className={`ov-input ${error ? 'is-invalid' : ''}`}
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                setError('')
+              }}
+              autoComplete="current-password"
+              aria-label="Mật khẩu"
+              aria-invalid={!!error}
+              aria-describedby={error ? 'ov-pw-error' : undefined}
+              placeholder="Mật khẩu"
+              required
+            />
+            {error && (
+              <p id="ov-pw-error" className="ov-field-error" role="alert">
+                {error}
+              </p>
+            )}
+            {note && <div className="ov-dialog__note">{note}</div>}
+          </div>
+        </div>
+        <div className="ov-dialog__actions">
+          <button type="button" className="ov-btn ov-btn--secondary" onClick={onClose}>
+            Huỷ
+          </button>
+          <button type="submit" className="ov-btn ov-btn--primary" disabled={busy || !password}>
+            {busy ? 'Đang kiểm tra…' : 'Bật Sửa'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
    Toast — đáy giữa màn, tối đa 3 cái.
    const [toast, toaster] = useToasts()
    toast.show({ type: 'success'|'info'|'error'|'loading', title, desc, action: { label, onClick }, duration })
@@ -241,3 +341,10 @@ const AlertIcon = () =>
   )
 const XIcon = () => svg(<path d="M18 6 6 18M6 6l12 12" />, 16)
 const Spinner = () => <span className="ov-spinner" aria-hidden="true" />
+const LockIcon = () =>
+  svg(
+    <>
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </>
+  )

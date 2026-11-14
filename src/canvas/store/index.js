@@ -4,7 +4,7 @@
  *
  * Giao diện chung (mọi hàm đều async trừ khi ghi khác):
  *   session()                         → { user: { id, name, role } } | null
- *   signIn(username, password)        → session ; signOut()
+ *   signIn(username, password)        → session ; signOut()   (chỉ phiên trên tab này — tài khoản dùng chung)
  *   onAuthChange(cb)                  → huỷ đăng ký (sync)
  *   loadBook(slug)                    → { book: { id, slug, title, settings }, pages: Page[] }   (bản nháp)
  *   loadPublished(slug)               → { book, pages } | null   (bản đã xuất bản, cho người đọc)
@@ -17,10 +17,14 @@
  *   listUploads()                     → [{ url, type: 'image'|'video', name, poster? }]  (mới nhất trước, dùng chung cả nhóm)
  *   subscribe(bookId, { onPage, onDelete })          → huỷ (sync)   — thay đổi từ người khác
  *   joinPresence(bookId, me, onChange)              → { update(state), leave() }  (sync)
+ *                                       me = null: chỉ nhìn (chế độ Xem) — thấy người khác, không giữ khoá trang nào
  *   publish(bookId)                   → { publishedAt }
  *
  * Page = { id, position, version, updatedAt, updatedBy, bg, bgImage, paper, template, hideNumber, elements }
  */
+
+/** tài khoản biên tập chung: bật "Sửa" trong editor chỉ hỏi mật khẩu của tài khoản này (tạo bằng scripts/supabase/setup.mjs) */
+export const EDITOR_USERNAME = 'bientap'
 
 let storePromise
 

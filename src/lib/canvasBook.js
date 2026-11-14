@@ -11,7 +11,7 @@ export async function loadCanvasBook(config, slug, { draft = false, local = fals
   if (!res) throw new Error(`Sách "${slug}" chưa được xuất bản`)
   const list = res.pages
   // bản nháp chỉ đọc được khi đã đăng nhập editor; không có trang thì báo lỗi rõ ràng (thư viện lật trang không chạy với sách rỗng)
-  if (!list?.length) throw new Error(local ? 'scripts/book/out/book.json chưa có trang nào — chạy node scripts/book/build.mjs' : draft ? 'Bản nháp chỉ xem được khi đã đăng nhập trang biên tập (#/admin).' : `Sách "${slug}" chưa có trang nào`)
+  if (!list?.length) throw new Error(local ? 'scripts/book/out/book.json chưa có trang nào — chạy node scripts/book/build.mjs' : draft ? 'Bản nháp chưa có trang nào' : `Sách "${slug}" chưa có trang nào`)
   ensureFontsFor(list) // font Google chỉ tải cho những font sách thật sự dùng
   const n = list.length
   const pages = list.map((p, i) => ({

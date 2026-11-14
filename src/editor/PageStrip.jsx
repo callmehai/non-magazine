@@ -7,7 +7,7 @@ const BOOK_DIRECTION = canvasBook.settings.direction
 const SIDE_LABEL = { cover: ' · bìa', back: ' · bìa sau', left: ' · trái', right: ' · phải' }
 
 /** Dải trang ở dưới (giống Canva): bấm để mở, kéo để đổi thứ tự, rê chuột để nhân bản/xoá. */
-export default function PageStrip({ pages, currentId, holders, myKey, onOpen, onAddClick, onDuplicate, onDelete, onMove }) {
+export default function PageStrip({ pages, currentId, holders, myKey, readOnly, onOpen, onAddClick, onDuplicate, onDelete, onMove }) {
   const [dragId, setDragId] = useState(null)
   const [overIdx, setOverIdx] = useState(null)
   const listRef = useRef(null)
@@ -26,7 +26,7 @@ export default function PageStrip({ pages, currentId, holders, myKey, onOpen, on
             <li
               key={p.id}
               className={`ed-sthumb ${p.id === currentId ? 'is-current' : ''} ${overIdx === i ? 'is-over' : ''} ${dragId === p.id ? 'is-dragging' : ''}`}
-              draggable
+              draggable={!readOnly}
               onDragStart={(e) => {
                 setDragId(p.id)
                 e.dataTransfer.effectAllowed = 'move'
@@ -59,22 +59,26 @@ export default function PageStrip({ pages, currentId, holders, myKey, onOpen, on
                   {initials(holder.user?.name)}
                 </span>
               )}
-              <div className="ed-sthumb__actions">
-                <button type="button" onClick={() => onDuplicate(p.id)} title="Nhân bản trang">
-                  ⧉
-                </button>
-                <button type="button" onClick={() => onDelete(p.id)} title="Xoá trang" disabled={other}>
-                  🗑
-                </button>
-              </div>
+              {!readOnly && (
+                <div className="ed-sthumb__actions">
+                  <button type="button" onClick={() => onDuplicate(p.id)} title="Nhân bản trang">
+                    ⧉
+                  </button>
+                  <button type="button" onClick={() => onDelete(p.id)} title="Xoá trang" disabled={other}>
+                    🗑
+                  </button>
+                </div>
+              )}
             </li>
           )
         })}
-        <li className="ed-sthumb ed-sthumb--add">
-          <button type="button" onClick={onAddClick} title="Thêm trang">
-            +
-          </button>
-        </li>
+        {!readOnly && (
+          <li className="ed-sthumb ed-sthumb--add">
+            <button type="button" onClick={onAddClick} title="Thêm trang">
+              +
+            </button>
+          </li>
+        )}
       </ol>
     </div>
   )

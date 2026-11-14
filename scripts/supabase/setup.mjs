@@ -2,7 +2,10 @@
 /**
  * Cài đặt Supabase cho editor sách — chạy lại nhiều lần vẫn an toàn.
  *
- *   npm run supabase:setup -- --admin hai:"Trần Việt Hải" --editors an:"Nguyễn An",binh,chi
+ *   npm run supabase:setup -- --admin hai:"Trần Việt Hải" --editors bientap:"Biên tập"
+ *
+ * Editor (#/admin) mặc định ở chế độ Xem, ai cũng mở được. Bật "Sửa" thì nhập mật khẩu của
+ * tài khoản biên tập chung `bientap` (EDITOR_USERNAME trong src/canvas/store/index.js).
  *
  * 1. Tạo bảng, quyền, hàm, realtime, bucket ảnh (schema.sql) — cần SUPABASE_DB_URL
  * 2. Tạo tài khoản (mật khẩu ngẫu nhiên) — cần SUPABASE_SERVICE_ROLE_KEY
@@ -61,7 +64,7 @@ const parseUsers = (s) =>
     })
 const accounts = [
   ...parseUsers(arg('admin') || 'admin').map((a) => ({ ...a, role: 'admin' })),
-  ...parseUsers(arg('editors') || 'editor1,editor2,editor3,editor4,editor5').map((a) => ({ ...a, role: 'editor' })),
+  ...parseUsers(arg('editors') || 'bientap:Biên tập').map((a) => ({ ...a, role: 'editor' })),
 ]
 const resetPasswords = args.includes('--reset-passwords')
 

@@ -80,17 +80,22 @@ create policy "books: everyone reads" on public.books for select to anon, authen
 drop policy if exists "books: admin writes" on public.books;
 create policy "books: admin writes" on public.books for all to authenticated using (public.is_admin()) with check (public.is_admin());
 
--- bản nháp: chỉ người biên tập đọc/sửa
+-- bản nháp: ai mở #/admin cũng xem được (chế độ Xem, không cần đăng nhập — giáo viên xem bài);
+-- thêm/sửa/xoá chỉ người biên tập (chế độ Sửa, nhập mật khẩu)
 drop policy if exists "pages: editors read" on public.pages;
-create policy "pages: editors read" on public.pages for select to authenticated using (public.is_editor());
+drop policy if exists "pages: everyone reads" on public.pages;
+create policy "pages: everyone reads" on public.pages for select to anon, authenticated using (true);
 drop policy if exists "pages: editors insert" on public.pages;
 create policy "pages: editors insert" on public.pages for insert to authenticated with check (public.is_editor());
 drop policy if exists "pages: editors update" on public.pages;
 create policy "pages: editors update" on public.pages for update to authenticated using (public.is_editor()) with check (public.is_editor());
 
 drop policy if exists "page_versions: admin reads" on public.page_versions;
+-- lịch sử trang: chỉ người biên tập (chế độ Xem không có Lịch sử)
+drop policy if exists "page_versions: everyone reads" on public.page_versions;
 drop policy if exists "page_versions: editors read" on public.page_versions;
 create policy "page_versions: editors read" on public.page_versions for select to authenticated using (public.is_editor());
+drop function if exists public.editor_names();
 
 drop policy if exists "publications: everyone reads" on public.publications;
 create policy "publications: everyone reads" on public.publications for select to anon, authenticated using (true);
