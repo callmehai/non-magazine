@@ -39,7 +39,15 @@ const bookParam = params.get('book')
 // #/admin → editor (đăng nhập, sửa sách) · ?book=pdf → sách từ file PDF
 // ?book=tap-chi → tạp chí NÓN cũ · còn lại → sách làm bằng editor (mặc định "non", ?draft=1 xem bản nháp)
 // chạy dev (npm run dev): mặc định đọc bản vừa dựng scripts/book/out/book.json; ?published=1 hoặc ?draft=1 để xem bản trên Supabase
-if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#admin)
+const isAdmin = () => /^#\/?admin/.test(location.hash) // #/admin hoặc gõ thiếu dấu / (#admin)
+const startedAdmin = isAdmin()
+// đang ở trang đọc mà gõ thêm #/admin (hoặc xoá #/admin khi đang ở editor): trình duyệt chỉ đổi hash, không tải lại trang
+// → tự tải lại để vào đúng trang (anh Hải 14/11: "gõ url vào admin ko đc")
+addEventListener('hashchange', () => {
+  if (isAdmin() !== startedAdmin) location.reload()
+})
+
+if (startedAdmin) {
   setLang('vi')
   document.title = 'Biên tập — Nón lá Làng Chuông'
   import('./editor/EditorApp.jsx').then(({ default: EditorApp }) =>
