@@ -498,7 +498,7 @@ export default function App({ magazine: source }) {
   )
 }
 
-const LANG_KEY = 'non-book-lang'
+const LANG_KEY = 'non-book-lang-2' // đổi tên 14/11: mặc định sang 日本語 → ai đã lưu "VI" từ trước cũng mở lại bản Nhật một lần
 const LANG_NAMES = { vi: 'VI', ja: '日本語' }
 
 /** ngôn ngữ mở sách: ?lang= trên địa chỉ → lần chọn trước → trình duyệt tiếng Nhật → ngôn ngữ mặc định của sách */

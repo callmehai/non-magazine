@@ -22,6 +22,7 @@ const BOOK_SLUG = 'non'
 const SAVE_DELAY = 700
 const UNDO_LIMIT = 500 // bước Ctrl+Z nhớ được cho mỗi trang (tải lại trang thì mất — khi đó dùng Lịch sử)
 const CHECKPOINT_GAP = 60 * 1000 // mốc "Trong lần mở này" của Lịch sử: tối đa 1 mốc / phút / trang
+const EDIT_LANG_KEY = 'non-editor-lang-2' // đổi tên 14/11 khi mặc định sang 日本語 (lựa chọn cũ không còn giữ)
 const MOD = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl+'
 
 /**
@@ -69,19 +70,19 @@ function BookEditor({ store, user, onUnlock, onLock }) {
   const [currentId, setCurrentId] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])
   const [editingId, setEditingId] = useState(null)
-  // đang sửa bản nào của sách song ngữ (nhớ trên máy này)
+  // đang sửa bản nào của sách song ngữ (nhớ trên máy này) — mặc định 日本語: bản Nhật là bản chuẩn để nộp
   const [editLang, setEditLangState] = useState(() => {
     try {
-      return localStorage.getItem('non-editor-lang') === 'ja' ? 'ja' : 'vi'
+      return localStorage.getItem(EDIT_LANG_KEY) === 'vi' ? 'vi' : 'ja'
     } catch {
-      return 'vi'
+      return 'ja'
     }
   })
   const setEditLang = (l) => {
     setEditLangState(l)
     setEditingId(null)
     try {
-      localStorage.setItem('non-editor-lang', l)
+      localStorage.setItem(EDIT_LANG_KEY, l)
     } catch {
       /* bỏ qua */
     }
@@ -803,11 +804,11 @@ function BookEditor({ store, user, onUnlock, onLock }) {
           </div>
           <div className="ed-top__mid">
             <div className="ed-langswitch" role="group" aria-label={viewing ? 'Đang xem bản' : 'Đang sửa bản'}>
-              <button type="button" className={editLang === 'vi' ? 'is-on' : ''} aria-pressed={editLang === 'vi'} onClick={() => setEditLang('vi')}>
-                Tiếng Việt
-              </button>
               <button type="button" lang="ja" className={editLang === 'ja' ? 'is-on' : ''} aria-pressed={editLang === 'ja'} onClick={() => setEditLang('ja')} title="Chữ chưa dịch hiện mờ, viền chấm">
                 日本語
+              </button>
+              <button type="button" className={editLang === 'vi' ? 'is-on' : ''} aria-pressed={editLang === 'vi'} onClick={() => setEditLang('vi')}>
+                Tiếng Việt
               </button>
             </div>
             {!viewing && (

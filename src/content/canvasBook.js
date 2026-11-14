@@ -5,10 +5,11 @@
  */
 const canvasBook = {
   slug: 'non', // tên sách trong database
-  // Song ngữ: người đọc bấm VI / 日本語 ở góc trên phải. Mặc định tiếng Việt (người đọc chủ yếu là người Việt).
+  // Song ngữ: người đọc bấm 日本語 / VI ở góc trên phải. Bản tiếng Nhật là bản chuẩn (nhóm chỉ nộp bản Nhật,
+  // bản Việt làm theo và sau sẽ ẩn/xoá) → mặc định 日本語 và đứng trước trong nút chọn (anh Hải 14/11).
   // Mỗi khối chữ có bản tiếng Việt (text) và tiếng Nhật (ja); khối chưa dịch thì hiện tiếng Việt.
-  lang: 'vi',
-  languages: ['vi', 'ja'],
+  lang: 'ja',
+  languages: ['ja', 'vi'],
   title: 'Nón lá Làng Chuông',
   subtitle: 'Nét đẹp truyền thống Việt Nam',
   issue: 'Đồ án tốt nghiệp · ĐH FPT Hà Nội · 2026',

@@ -208,7 +208,7 @@ function TextBody({ el, mode }) {
   const missing = mode === 'edit' && !hasLang(el, lang)
   const shown = missing ? 'vi' : lang
   const ref = useRef(null)
-  useFillLeading(ref, el, shown, mode === 'read' && el.fillLeading)
+  useFillLeading(ref, el, shown, !!el.fillLeading) // cả editor lẫn trang đọc: sửa ở đâu thấy y như người đọc thấy
   const body = (
     <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''} ${el.linkStyle === 'cta' ? 'is-cta' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
@@ -237,6 +237,8 @@ function TextBody({ el, mode }) {
  * el.fillLeading (đoạn văn do builder đặt): khung chữ được tính theo bản dài hơn trong hai ngôn ngữ, nên bản ngắn hơn
  * (thường là tiếng Nhật) để hở đáy khung. Ở chế độ đọc, đo chữ thật rồi giãn dòng cho vừa khít khung
  * (giới hạn: tiếng Nhật tới 1.95, tiếng Việt tới 1.8) — không để khoảng trắng dưới đoạn văn.
+ * Đo lại mỗi khi khung đổi cỡ (ResizeObserver): trang đọc gắn mọi trang từ đầu khi trang còn ẩn (cao 0) — trước 14/11
+ * chỉ trang đang mở lúc đổi ngôn ngữ mới được giãn, các trang khác giữ nguyên → cùng trang mà mỗi lần xem một khác.
  */
 function useFillLeading(ref, el, lang, on) {
   useLayoutEffect(() => {
@@ -264,11 +266,25 @@ function useFillLeading(ref, el, lang, on) {
         node.style.lineHeight = String(lh)
       }
     }
-    fit()
+    let lastH = -1
+    const refit = () => {
+      const h = node.clientHeight
+      if (!h || h === lastH) return // ẩn (cao 0) hoặc không đổi cỡ: không đo
+      lastH = h
+      fit()
+    }
+    refit()
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refit) : null
+    ro?.observe(node)
     let alive = true
-    document.fonts?.ready.then(() => alive && fit())
+    document.fonts?.ready.then(() => {
+      if (!alive) return
+      lastH = -1 // font vừa tải xong: chữ đổi bề rộng → đo lại
+      refit()
+    })
     return () => {
       alive = false
+      ro?.disconnect()
       node.style.lineHeight = ''
     }
   }, [ref, el, lang, on])
