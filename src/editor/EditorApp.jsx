@@ -684,7 +684,7 @@ function BookEditor({ store, user, onUnlock, onLock }) {
         <>
           <p>
             <b>
-              {book.title} · {n} trang
+              {canvasBook.title} · {n} trang
             </b>{' '}
             sẽ hiện ngay cho người đọc trên web, đúng như bản bạn đang thấy.
           </p>
@@ -793,7 +793,7 @@ function BookEditor({ store, user, onUnlock, onLock }) {
       <div className={`ed-app ${tab && !viewing ? 'has-panel' : ''} ${viewing ? 'is-viewing' : ''}`}>
         <header className="ed-top">
           <div className="ed-top__left">
-            <strong className="ed-top__title">{book.title}</strong>
+            <strong className="ed-top__title">{canvasBook.title}</strong>
             {viewing ? (
               <span className="ed-save">Bản nháp · chỉ xem</span>
             ) : (
@@ -803,7 +803,6 @@ function BookEditor({ store, user, onUnlock, onLock }) {
           </div>
           <div className="ed-top__mid">
             <div className="ed-langswitch" role="group" aria-label={viewing ? 'Đang xem bản' : 'Đang sửa bản'}>
-              <span>Bản</span>
               <button type="button" className={editLang === 'vi' ? 'is-on' : ''} aria-pressed={editLang === 'vi'} onClick={() => setEditLang('vi')}>
                 Tiếng Việt
               </button>

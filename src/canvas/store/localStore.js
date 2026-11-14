@@ -22,7 +22,7 @@ export function createLocalStore() {
       /* hỏng dữ liệu → tạo lại */
     }
     const db = {
-      book: { id: 'local-book', slug: 'non', title: 'ノン — 頭上の物語', settings: {} },
+      book: { id: 'local-book', slug: 'non', title: 'Nón lá Làng Chuông', settings: {} },
       pages: TEMPLATE_PAGES.map((p, i) => ({ id: uid(), position: (i + 1) * 1000, version: 1, ...clonePageData(p) })),
       published: null,
     }

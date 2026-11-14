@@ -41,7 +41,7 @@ const bookParam = params.get('book')
 // chạy dev (npm run dev): mặc định đọc bản vừa dựng scripts/book/out/book.json; ?published=1 hoặc ?draft=1 để xem bản trên Supabase
 if (/^#\/?admin/.test(location.hash)) { // #/admin hoặc gõ thiếu dấu / (#admin)
   setLang('vi')
-  document.title = 'Biên tập — ノン'
+  document.title = 'Biên tập — Nón lá Làng Chuông'
   import('./editor/EditorApp.jsx').then(({ default: EditorApp }) =>
     root.render(
       <StrictMode>

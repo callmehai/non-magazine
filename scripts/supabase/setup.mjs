@@ -128,7 +128,7 @@ if (lines.length) {
 console.log('3/3  Sách và trang mẫu…')
 const tpl = JSON.parse(fs.readFileSync(path.join(root, 'src/canvas/templatePages.json'), 'utf8'))
 const { rows } = await db.query(
-  `insert into public.books (slug, title) values ('non', 'ノン — 頭上の物語')
+  `insert into public.books (slug, title) values ('non', 'Nón lá Làng Chuông')
    on conflict (slug) do update set slug = excluded.slug returning id`
 )
 const bookId = rows[0].id
