@@ -24,7 +24,7 @@ export const preface = {
       'ベトナム各地では、{自然|しぜん}環境や原{材料|ざいりょう}、生活{習慣|しゅうかん}に応じて、形や{構造|こうぞう}、{製作技術|せいさくぎじゅつ}にそれぞれ{特徴|とくちょう}のあるノンラーが生み出されてきました。北部に位置するハノイ市のチュオン{村|むら}は、古くからノンラー作りが盛んに行われてきたことで知られる地域の一つです。かつて、この村では人々の暮らしの{需要|じゅよう}に応えるため、さまざまな種類のノンラーが作られていました。現在も、{伝統的|でんとうてき}な円錐形のノンラーはチュオン村を代表する製品の一つであり、何世代にもわたって守り継がれてきた製作技術が生かされています。',
     ],
     [
-      'Với mong muốn giúp độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện cuốn flipbook “Nón lá làng Chuông – Nét đẹp truyền thống Việt Nam”. Cuốn flipbook gồm ba phần: Phần 1 “Khái quát về nón lá Việt Nam và nón lá Làng Chuông”, Phần 2 “Cấu tạo, nguyên liệu và kỹ thuật làm nón Làng Chuông” và Phần 3 “Những ghi nhận, hoạt động bảo tồn và thách thức đối với nón lá làng Chuông”.',
+      'Với mong muốn giúp độc giả Nhật Bản có cái nhìn tổng quan và hiểu rõ hơn về nón lá làng Chuông, nhóm tác giả thực hiện cuốn flipbook “Nón lá làng Chuông – Nét đẹp truyền thống Việt Nam”. Cuốn flipbook gồm ba phần: Phần 1 “Khái quát về nón lá Việt Nam và nón lá Làng Chuông”, Phần 2 “Cấu tạo, nguyên liệu và kỹ thuật làm nón Làng Chuông” và Phần 3 “Ghi nhận, bảo tồn nón Làng Chuông”.',
       '私たちは、日本の{読者|どくしゃ}の{皆様|みなさま}にチュオン{村|むら}のノンラーの{全体像|ぜんたいぞう}を知っていただき、{理解|りかい}を深めていただきたいという思いから、本フリップブック『チュオン村のノンラー：ベトナムの{伝統美|でんとうび}』を{制作|せいさく}しました。本書は、パート1「ベトナムのノンラーとチュオン村のノンラーの{概要|がいよう}」、パート2「チュオン村のノンラーの{構造|こうぞう}・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」、パート3「チュオン村のノンラーの{評価|ひょうか}と{保存|ほぞん}・継承」の三つのパートで{構成|こうせい}されています。',
     ],
     [

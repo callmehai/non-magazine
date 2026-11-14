@@ -672,7 +672,7 @@ const SRC_IN_CAP_JA = /\s*(?:[—―・]\s*(?:出典|写真|提供)\s*[：:]\s*(
  */
 const CAP_OVR = {
   // はじめに: 「アオザイをまとったベトナム人女性とノンラー (グループ撮影。)」
-  'Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội': { ja: 'アオザイをまとったベトナム人女性とノンラー' },
+  'Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội': { vi: 'Những người phụ nữ Việt Nam trong tà áo dài cùng nón lá', ja: 'アオザイをまとったベトナム人女性とノンラー' }, // 14/11: bản Việt theo bản Nhật
   // nguồn ảnh 3 (Nón.jpg): theo sheet "Chú thích ảnh" (12/11) — 職人タ・トゥ・フオン氏提供, xem SHEET_JA
   // "Chú thích ảnh 4 và ảnh 5 sửa lại như này": 「(グエン・ドゥック・カン氏撮影・ハノイ博物館展示資料)」 — tên tiếng Việt đọc trên
   // biển ảnh gốc ở Bảo tàng Hà Nội ("© Nguyễn Đức Cần", IMG_20261002_150751)
@@ -763,6 +763,42 @@ const SHEET_JA = {
   "Nụ cười người thợ làng Chuông bên chiếc nón": [null, "制作グループ撮影", null], // 98
   "Du khách đội nón lá làng Chuông chụp ảnh lưu niệm": [null, "制作グループ撮影", null], // 99
 }
+/**
+ * 14/11 (bản Nhật là bản chuẩn): chú thích tiếng Việt dịch theo đúng câu tiếng Nhật trong SHEET_JA (trước đây bản Nhật đổi theo
+ * sheet của nhóm còn bản Việt giữ câu cũ). Khoá = khoá ảnh cũ như SHEET_JA (không đổi khoá).
+ */
+const SHEET_VI = {
+  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": 'Những người phụ nữ Việt Nam trong tà áo dài cùng nón lá', // 2
+  "Nghệ nhân ngồi lợp lớp lá trong": 'Nghệ nhân ngồi làm nón', // 40
+  "Lớp lá lụi trong — sau khi lợp": 'Lớp lá lụi (lớp trong)', // 41
+  "Lớp mo nang — tàu mo trước khi lợp": 'Lớp mo nang (bẹ nứa)', // 42
+  "Lớp mo nang — sau khi lợp": 'Lớp mo nang (lớp giữa)', // 43
+  "Lớp lá lụi ngoài — đang lợp": 'Lớp lá lụi (lớp ngoài) — đang lợp', // 44
+  "Lớp lá lụi ngoài — sau khi lợp": 'Lớp lá lụi (lớp ngoài)', // 44
+  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": 'Ảnh nhóm chụp khi khảo sát tại Bảo tàng Dân tộc học Việt Nam (2026)', // 45
+  "Lá lụi phơi ngoài nắng": 'Lá lụi (lá cọ non)', // 46
+  "Búp lá cọ non phơi khô, màu trắng ngà": 'Lá lụi (lá cọ non)', // 46
+  "Các thanh nứa vót mỏng": 'Thanh nứa vót mỏng', // 47
+  "Lớp mo nang": 'Mo nang (bẹ nứa)', // 48
+  "Cuộn sợi cước": 'Chỉ khâu (sợi cước)', // 49
+  "Cây liếc — ruột và vỏ": 'Ruột cây liếc (một loài dương xỉ)', // 50
+  "Sợi chỉ màu": 'Chỉ màu để làm nhôi', // 51
+  "Khuôn nón hình chóp 16 vòng": 'Khuôn làm nón', // 52
+  "Dao, kéo cắt lá": 'Dao, kéo', // 53
+  "Lưỡi cày gang đặt trên bếp điện": 'Dụng cụ là phẳng lá', // 54
+  "Lá lụi tươi trước khi vò và chọn lá": 'Sơ chế lá lụi tươi trước khi phơi', // 55
+  "Phơi lá lụi dưới nắng": 'Người dân phơi lá lụi trên tấm bạt', // 56
+  "Tay nghệ nhân rẽ từng chiếc lá": 'Bước 1: Rẽ lá (vuốt phẳng chỗ nhăn, cong của lá)', // 57
+  "Nghệ nhân ngồi là lá bên bếp điện": 'Bước 2: Là lá (dùng nhiệt làm phẳng lá)', // 58
+  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": 'Bước 3: Bứt vòng (nối các vòng nón, dựng khung nón)', // 59
+  "Xếp từng lớp lá lụi lên khuôn": 'Bước 4: Quay nón (xếp lá chồng lên khuôn nón)', // 60
+  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": 'Bước 5: Khâu nón (khâu lá và mo nang vào vòng nón)', // 61
+  "Cắt lá thừa và khâu viền vành nón": 'Bước 6: Nức nón (khâu viền mép nón cho chắc)', // 62
+  "Chỉ màu luồn trong lòng nón": 'Bước 7: Luồn nhôi (làm nhôi bằng chỉ màu để luồn và giữ quai nón)', // 63
+  "Quét lớp dầu bóng lên mặt nón": 'Quang dầu (phủ lớp dầu bảo vệ lên mặt nón để chống thấm)', // 64
+  "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": 'Em bé giữa những chiếc nón lá làng Chuông', // 65
+  "Người thợ cắt phần lá thừa của chiếc nón": 'Người thợ làm nón', // 97
+}
 function fmtCap(cap, key) {
   if (!cap || cap.fmt) return cap
   const ovr = CAP_OVR[strip(cap[0] ?? '')] ?? (key ? CAP_OVR[strip(key)] : null)
@@ -802,7 +838,8 @@ function fmtCap1(cap, key, srcOvr) {
   const jaF = sh?.[0] ?? ja
   const sjF = sh?.[1] ?? sj
   const svF = sh?.[2] ?? sv
-  const out = src ? [`${vi} (${svF})`, jaF ? `${jaF}（${sjF}）` : jaF] : [vi, jaF]
+  const viF = SHEET_VI[strip(key ?? cap[0] ?? '')] ?? vi
+  const out = src ? [`${viF} (${svF})`, jaF ? `${jaF}（${sjF}）` : jaF] : [viF, jaF]
   out.fmt = true
   return out
 }
@@ -2003,7 +2040,7 @@ let guidePage = null
   const c = new Page({ chapter: 0 })
   runningHead(c, ['CẤU TRÚC CUỐN SÁCH', '本書の構成'])
   c.fixed = true
-  const cy = sectionHead(c, TOP, null, preface.contentsTitle, ['Ba phần của cuốn sách', '三つのパート'])
+  const cy = sectionHead(c, TOP, null, preface.contentsTitle, ['Ba phần', '三つのパート'])
   const n = preface.chapters.length
   const gap = 16
   const cardH = Math.min(170, (BOT - cy - (n - 1) * gap) / n)

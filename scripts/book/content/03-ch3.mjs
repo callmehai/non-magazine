@@ -65,7 +65,7 @@ export const ch3 = {
     },
   },
   artisans: {
-    title: ['Những ghi nhận đối với nghệ nhân tiêu biểu', 'チュオン{村|むら}を代表する職人たちの活動と{貢献|こうけん}'],
+    title: ['Hoạt động và đóng góp của các nghệ nhân tiêu biểu làng Chuông', 'チュオン{村|むら}を代表する職人たちの活動と{貢献|こうけん}'],
     // câu nói của hai nghệ nhân (tab "Câu nói hay" của Doc, bản tiếng Nhật do nhóm dịch) — in thành câu trích dẫn lớn
     sayings: {
       Tuy: ['“Mình cứ yêu nghề là yêu nước, cứ yêu nghề là nghề nào cũng thành công.”\n— Nghệ nhân Lê Văn Tuy', '「自分の仕事を愛することは、国を愛することにもつながると思います。どんな仕事でも、好きな気持ちがあれば、きっとうまくいきます。」\n— 職人レ・ヴァン・トゥイ'],
@@ -77,15 +77,15 @@ export const ch3 = {
     ],
     groups: [
       {
-        name: ['Những người giữ lại nghề', '伝統技術の{復興|ふっこう}・{復元|ふくげん}に{携|たずさ}わった職人たち'],
+        name: ['Nghệ nhân phục hưng, phục dựng kỹ thuật', '伝統技術の{復興|ふっこう}・{復元|ふくげん}に{携|たずさ}わった職人たち'],
         people: [
-          [['Ông Hai Cát (Lê Cát)', 'ハイ・カット（Hai Cát、生没年未確認）'], ['Góp phần khôi phục nghề nón', 'ノンラー作りの{復興|ふっこう}に{貢献|こうけん}'], ['Ông Hai Cát là một trong những người có đóng góp quan trọng trong việc khôi phục nghề nón làng Chuông sau thời kỳ suy thoái. Ông đã đưa mẫu nón Xuân Kiều (Ba Đồn) về làng sản xuất, góp phần cải tiến mẫu mã và nâng cao khả năng cạnh tranh của sản phẩm. Năm 1930, nón do ông chế tác được đánh giá cao tại Hội chợ Hà Đông. Sau đó, ông tiếp tục truyền dạy kỹ thuật làm nón tại nhiều địa phương.', 'ハイ・カット氏は、{衰退期|すいたいき}を{経|へ}たチュオン{村|むら}のノンラー作りの{復興|ふっこう}に大きく{貢献|こうけん}した人物の一人です。バードン（Ba Đồn）のスアンキエウ（Xuân Kiều）で作られていた型のノンラーをチュオン村に持ち帰り、その製作に{取|と}り入れました。これにより、製品のデザインの改良や{競争|きょうそう}力の向上に貢献しました。\n1930年には、同氏が製作したノンラーがハドン（Hà Đông）の見本市で高い{評価|ひょうか}を受けました。その後も、各地でノンラー作りの技術を教えました。']],
+          [['Ông Hai Cát (chưa rõ năm sinh, năm mất)', 'ハイ・カット（Hai Cát、生没年未確認）'], ['Góp phần khôi phục nghề nón', 'ノンラー作りの{復興|ふっこう}に{貢献|こうけん}'], ['Ông Hai Cát là một trong những người có đóng góp quan trọng trong việc khôi phục nghề nón làng Chuông sau thời kỳ suy thoái. Ông đã đưa mẫu nón Xuân Kiều (Ba Đồn) về làng sản xuất, góp phần cải tiến mẫu mã và nâng cao khả năng cạnh tranh của sản phẩm. Năm 1930, nón do ông chế tác được đánh giá cao tại Hội chợ Hà Đông. Sau đó, ông tiếp tục truyền dạy kỹ thuật làm nón tại nhiều địa phương.', 'ハイ・カット氏は、{衰退期|すいたいき}を{経|へ}たチュオン{村|むら}のノンラー作りの{復興|ふっこう}に大きく{貢献|こうけん}した人物の一人です。バードン（Ba Đồn）のスアンキエウ（Xuân Kiều）で作られていた型のノンラーをチュオン村に持ち帰り、その製作に{取|と}り入れました。これにより、製品のデザインの改良や{競争|きょうそう}力の向上に貢献しました。\n1930年には、同氏が製作したノンラーがハドン（Hà Đông）の見本市で高い{評価|ひょうか}を受けました。その後も、各地でノンラー作りの技術を教えました。']],
           // 08/11: dấu ¹ (chú thích [4] ハタイ省) chỉ có ở bản Nhật của nhóm
           [['Nghệ nhân Phạm Trần Canh (1931)', 'ファム・チャン・カイン（Phạm Trần Canh、1931年生・没年未確認）'], ['Phục dựng những mẫu nón cổ', '古いノンラーの様式を{復元|ふくげん}'], ['Nghệ nhân Phạm Trần Canh có đóng góp nổi bật trong việc phục dựng và bảo tồn các mẫu nón truyền thống, đặc biệt là nón quai thao cổ. Bên cạnh việc lưu giữ và chế tác các mẫu nón phục vụ triển lãm, ông còn truyền nghề miễn phí cho gần 100 người. Năm 2006, ông được phong danh hiệu Nghệ nhân làng nghề Hà Tây¹.', 'ファム・チャン・カイン氏は、伝統的なノンラーの様式の{復元|ふくげん}・{保存|ほぞん}に大きく{貢献|こうけん}し、特に古くから伝わるノン・クアイ・タオ（nón quai thao）の復元に力を注ぎました。\n展示用にさまざまな伝統的なノンラーを製作・保存するとともに、100人近くに{無償|むしょう}でノンラー作りの技術を伝えました。2006年には、「ハタイ{省|しょう}¹{工芸村|こうげいむら}職人（Nghệ nhân làng nghề Hà Tây）」の{称号|しょうごう}を授与されました。']],
         ],
       },
       {
-        name: ['Những người đưa nghề đi tiếp', '伝統技術の{継承|けいしょう}と製品開発に{取|と}り組む職人たち'],
+        name: ['Nghệ nhân kế thừa và phát triển sản phẩm', '伝統技術の{継承|けいしょう}と製品開発に{取|と}り組む職人たち'],
         intro: [
           'Bên cạnh việc gìn giữ những kỹ thuật được truyền lại, các thế hệ nghệ nhân tiếp nối còn tìm cách đổi mới mẫu mã, mở rộng công dụng và đưa sản phẩm đến với nhiều người hơn. Những đóng góp ấy được thể hiện qua hoạt động làm nghề của nghệ nhân Lê Văn Tuy và Tạ Thu Hương.',
           '伝統的な製作技術を守り継ぐとともに、製品の改良や用途の{拡大|かくだい}に{取|と}り組む職人たちもいます。ここでは、レ・ヴァン・トゥイ氏とタ・トゥ・フオン氏の活動を紹介します。',

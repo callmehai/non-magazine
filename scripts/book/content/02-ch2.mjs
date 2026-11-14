@@ -218,7 +218,7 @@ export const ch2 = {
       {
         no: 4,
         name: ['Quay nón', 'クアイ・ノン'],
-        sub: ['lợp nón — xếp lá lên khung nón', '型に葉を重ねてかぶせる作業'],
+        sub: ['lợp nón — xếp lá lên khuôn nón', '型に葉を重ねてかぶせる作業'],
         text: [
           [
             'Công đoạn quay nón (lợp nón) là quá trình tạo nên cấu trúc nhiều lớp cho chiếc nón, bao gồm hai lớp lá bọc ngoài và một lớp mo ở giữa.',
@@ -243,7 +243,7 @@ export const ch2 = {
         no: 5,
         name: ['Khâu nón', 'カウ・ノン'],
         // bản dịch nhóm 06/11: tên bước = phiên âm (カウ・ノン), phụ đề = việc làm; "タット・ノン" chỉ còn trong thân bài
-        sub: ['thắt nón', '葉とモーナンを輪に縫い付ける作業'],
+        sub: ['khâu lá và mo nang vào vòng nón', '葉とモーナンを輪に縫い付ける作業'],
         text: [
           [
             'Công đoạn khâu nón (thắt nón) là bước dùng kim và sợi cước để gắn chặt các lớp lá và lớp mo vào vòng nón. Quá trình này được tiến hành theo thứ tự từ trên đỉnh chóp xuống dưới vành cạp.',
@@ -275,7 +275,7 @@ export const ch2 = {
       {
         no: 7,
         name: ['Luồn nhôi', 'ルオン・ノイ'],
-        sub: ['luồn chỉ khâu cố định lá vào vành', 'あごひもを通して固定する部分を色糸で作る作業'],
+        sub: ['làm nhôi bằng chỉ màu để luồn và giữ quai nón', 'あごひもを通して固定する部分を色糸で作る作業'],
         text: [
           [
             'Trong quy trình làm nón, luồn nhôi (hay làm nhôi nón) là công đoạn hoàn thiện cuối cùng rất quan trọng để gắn và cố định phần quai nón.',

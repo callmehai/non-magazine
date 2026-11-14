@@ -359,7 +359,7 @@ export const ch1 = {
       // chú thích [3] tab Chương 3 của nhóm
       outroNotes: [
         [
-          '¹ OCOP (One Commune One Product - Mỗi xã một sản phẩm): Chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.',
+          '¹ OCOP (One Commune One Product - Mỗi xã một sản phẩm): chương trình của Việt Nam nhằm phát triển các sản phẩm đặc trưng địa phương, được đánh giá và phân hạng từ 1 đến 5 sao.',
           '¹ OCOP（One Commune One Product）：ベトナムの地域{特産品|とくさんひん}の開発・{振興|しんこう}を目的とした「一社一品運動」の{取|と}り{組|く}みです。製品は一定の{基準|きじゅん}に基づいて{評価|ひょうか}され、1つ星から5つ星までの{等級|とうきゅう}に分けられます。星の数が多いほど、評価が高いことを示します。',
         ],
       ],
