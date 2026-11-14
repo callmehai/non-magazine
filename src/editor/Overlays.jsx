@@ -174,7 +174,7 @@ export function PasswordDialog({ open, note, onSubmit, onClose, onGone }) {
             Huỷ
           </button>
           <button type="submit" className="ov-btn ov-btn--primary" disabled={busy || !password}>
-            {busy ? 'Đang kiểm tra…' : 'Bật Sửa'}
+            {busy ? 'Đang kiểm tra…' : 'Xác nhận'}
           </button>
         </div>
       </form>
