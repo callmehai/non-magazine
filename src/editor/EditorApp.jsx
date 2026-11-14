@@ -106,6 +106,7 @@ function BookEditor({ store, user, onUnlock, onLock }) {
   const presenceRef = useRef(null)
   const doSaveRef = useRef(null)
   const clipboard = useRef(null)
+  const lastFlip = useRef(0)
   const [toast, toaster] = useToasts()
   const [confirm, confirmDialog] = useConfirm()
 
@@ -772,6 +773,10 @@ function BookEditor({ store, user, onUnlock, onLock }) {
         // ← → (khi không chọn gì) và PageUp/PageDown: lật sang trang trước/sau theo dải trang bên dưới
         // (chặn mặc định: không để mũi tên cuộn dải trang thay vì lật)
         e.preventDefault()
+        // giữ phím: tối đa ~9 trang/giây để mỗi trang kịp vẽ (lật theo tốc độ lặp phím ~30 trang/giây → giật, cạn bộ nhớ ảnh)
+        const now = performance.now()
+        if (e.repeat && now - lastFlip.current < 110) return
+        lastFlip.current = now
         const list = pagesRef.current
         const i = list.findIndex((p) => p.id === currentId)
         const n = list[i + (e.key === 'PageDown' || e.key === 'ArrowRight' ? 1 : -1)]

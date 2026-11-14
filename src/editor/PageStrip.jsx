@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import CanvasPage from '../canvas/CanvasPage.jsx'
+import CanvasPage, { LoadMode } from '../canvas/CanvasPage.jsx'
 import { pageSide } from '../canvas/model.js'
 import canvasBook from '../content/canvasBook.js'
 
@@ -11,9 +11,14 @@ export default function PageStrip({ pages, currentId, holders, myKey, readOnly, 
   const [dragId, setDragId] = useState(null)
   const [overIdx, setOverIdx] = useState(null)
   const listRef = useRef(null)
+  const lastMove = useRef(0)
 
   useEffect(() => {
-    listRef.current?.querySelector('.is-current')?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+    // lật dồn dập (giữ phím mũi tên): nhảy thẳng tới, không chồng nhiều lần cuộn mượt lên nhau → dải trang không giật
+    const now = performance.now()
+    const quick = now - lastMove.current < 400
+    lastMove.current = now
+    listRef.current?.querySelector('.is-current')?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: quick ? 'auto' : 'smooth' })
   }, [currentId])
 
   return (
@@ -47,9 +52,21 @@ export default function PageStrip({ pages, currentId, holders, myKey, readOnly, 
                 setOverIdx(null)
               }}
             >
-              <button type="button" className="ed-sthumb__btn" onClick={() => onOpen(p.id)} title={`Trang ${i + 1}`}>
+              {/* không dùng <button>: trong trang có widget chứa nút (mô hình 3 lớp…) → nút lồng nút là HTML sai */}
+              <div
+                role="button"
+                tabIndex={0}
+                className="ed-sthumb__btn"
+                onClick={() => onOpen(p.id)}
+                onKeyDown={(e) => {
+                  if (e.key !== 'Enter' && e.key !== ' ') return
+                  e.preventDefault()
+                  onOpen(p.id)
+                }}
+                title={`Trang ${i + 1}`}
+              >
                 <Thumb page={p} />
-              </button>
+              </div>
               <span className="ed-sthumb__no">
                 {i + 1}
                 <em>{SIDE_LABEL[pageSide(i + 1, pages.length, BOOK_DIRECTION)]}</em>
@@ -84,10 +101,24 @@ export default function PageStrip({ pages, currentId, holders, myKey, readOnly, 
   )
 }
 
+/** chỉ dựng trang khi ô sắp cuộn vào tầm nhìn (rời xa thì gỡ → trình duyệt nhả ảnh); ảnh dùng bản thu nhỏ (canvas/thumbs.js) */
 const Thumb = memo(function Thumb({ page }) {
+  const ref = useRef(null)
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const node = ref.current
+    if (!node || typeof IntersectionObserver === 'undefined') return setNear(true)
+    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: '0px 800px' })
+    io.observe(node)
+    return () => io.disconnect()
+  }, [])
   return (
-    <span className="ed-sthumb__page">
-      <CanvasPage page={page} mode="edit" />
+    <span ref={ref} className="ed-sthumb__page">
+      {near && (
+        <LoadMode.Provider value="thumb">
+          <CanvasPage page={page} mode="edit" />
+        </LoadMode.Provider>
+      )}
     </span>
   )
 })

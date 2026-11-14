@@ -3,6 +3,7 @@ import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
 import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby, plainText } from './lang.js'
+import { useThumbSrc } from './thumbs.js'
 import { t } from '../lib/i18n.js'
 import { PAPER_BASE, paperOf } from './papers.js'
 import { useTab } from './tabs.js'
@@ -16,6 +17,7 @@ const ZoomList = createContext(null)
 // Tải ảnh/video/widget của trang: 'eager' (mặc định, editor) · 'lazy' (ảnh thu nhỏ: chỉ tải khi cuộn tới)
 // · 'off' (trang còn xa trong sách: chưa tải gì, kẻo mở web là tải cả trăm ảnh một lúc)
 // · 'warm' (tải nền: chỉ tải ảnh, chưa dựng widget / video — tới gần mới thành 'eager')
+// 'eager' | 'lazy' | 'warm' | 'off' | 'thumb' (ô thu nhỏ: ảnh thu nhỏ còn ~240px, xem canvas/thumbs.js)
 export const LoadMode = createContext('eager')
 const zoomable = (el) =>
   el.type === 'image' &&
@@ -76,13 +78,13 @@ function CanvasPage({ page, mode = 'read', renderEl, visible, side = 'right' }) 
       <div className={`cv-page is-${side}${animCls}`} style={{ background: page.bg || '#ffffff' }}>
         {paper && (
           <div className="cv-paper" aria-hidden="true">
-            <img className="cv-paper__base" src={asset(PAPER_BASE)} alt="" draggable="false" />
+            <Img className="cv-paper__base" src={asset(PAPER_BASE)} />
             {paper.layers.map((l) => (
-              <img key={l.at} className={`cv-paper__deco is-${l.at}`} src={asset(l.src)} alt="" draggable="false" />
+              <Img key={l.at} className={`cv-paper__deco is-${l.at}`} src={asset(l.src)} />
             ))}
           </div>
         )}
-        {page.bgImage && <img className="cv-page__bg" src={asset(page.bgImage)} alt="" draggable="false" />}
+        {page.bgImage && <Img className="cv-page__bg" src={asset(page.bgImage)} />}
         {(page.elements || []).map((el) => {
           const node = <Element key={animated && el.anim ? `${el.id}:${run}` : el.id} el={el} mode={mode} visible={visible} />
           return renderEl ? renderEl(el, node) : node
@@ -290,6 +292,13 @@ function useFillLeading(ref, el, lang, on) {
   }, [ref, el, lang, on])
 }
 
+/** ảnh trang trí / nền (không chú thích): ở ô thu nhỏ dùng bản thu nhỏ */
+function Img({ src, className }) {
+  const thumb = useContext(LoadMode) === 'thumb'
+  const shown = useThumbSrc(src, thumb)
+  return shown ? <img className={className} src={shown} alt="" draggable="false" /> : null
+}
+
 const isPageLink = (link) => /^#p\d+$/.test(link || '')
 
 /** link trong sách: "#p12" = lật tới trang 12 (số trang in trên sách) — dòng mục lục, dải công đoạn… */
@@ -327,10 +336,11 @@ function ImageBody({ el }) {
   // vắt qua gáy sách (mỗi trang một nửa) luôn cùng góc, liền một khối
   const [spinDelay] = useState(() => (el.spin ? `-${((performance.now() / 1000) % el.spin).toFixed(2)}s` : undefined))
   const spin = el.spin ? { animation: `cv-spin ${el.spin}s linear ${spinDelay ?? '0s'} infinite` } : null
+  const src = useThumbSrc(load === 'off' ? undefined : asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src), load === 'thumb')
   const pic = (
     <img
       className={`cv-img ${spin ? 'is-spin' : ''}`}
-      src={load === 'off' ? undefined : asset(lang === 'ja' && el.srcJa ? el.srcJa : el.src)}
+      src={src || undefined}
       loading={load === 'lazy' ? 'lazy' : undefined}
       fetchPriority={load === 'warm' ? 'low' : undefined}
       alt={el.alt || ''}
@@ -467,7 +477,7 @@ function VideoBody({ el, mode, visible }) {
     return (
       <div className="cv-video-ph">
         {el.poster ? (
-          <img src={asset(el.poster)} alt="" draggable="false" />
+          <Img src={asset(el.poster)} />
         ) : (
           el.src && <video src={firstFrame(asset(el.src))} preload="metadata" muted playsInline tabIndex={-1} />
         )}
