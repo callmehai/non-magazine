@@ -7,8 +7,12 @@ import { createContext, useContext } from 'react'
 export const CanvasLang = createContext('vi')
 export const useCanvasLang = () => useContext(CanvasLang)
 
-/** khối chữ đã có bản cho ngôn ngữ này chưa (tiếng Việt luôn có) */
-export const hasLang = (el, lang) => lang !== 'ja' || !!el.ja
+/**
+ * khối chữ đã có bản cho ngôn ngữ này chưa (tiếng Việt luôn có).
+ * Khối không có chữ cái (số chương 01, mục 1.1, số trang, dấu —…) dùng chung hai bản, không cần dịch
+ * → không bị editor đánh dấu "chưa dịch" (mờ + viền chấm) — anh Hải 14/11: "sao tiếng Việt với tiếng Nhật khác nhau"
+ */
+export const hasLang = (el, lang) => lang !== 'ja' || !!el.ja || !/\p{L}/u.test(el.text ?? '')
 
 /** chữ hiển thị: bản tiếng Nhật nếu đang xem tiếng Nhật và đã dịch, không thì bản tiếng Việt */
 export const textOf = (el, lang) => (lang === 'ja' && el.ja ? el.ja : (el.text ?? ''))
