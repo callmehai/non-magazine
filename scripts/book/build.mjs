@@ -3932,7 +3932,16 @@ let stripRight = null
     // để cả bốn tên tiếng Việt vừa một dòng (trước: hai tên rớt một chữ xuống dòng)
     const th4 = r1(tw4 * 1.75)
     const nameO = { font: F.head, size: 11.8, align: 'center', lh: 1.25, jaFont: F.jaHead, jaSize: 12.5 }
-    const nh4 = Math.max(...e.team.members.map(([name]) => textH(name, tw4 + 12, nameO)))
+    // tên Nhật dài hơn một dòng: tự xuống dòng ở dấu ・ gần giữa tên nhất ("グエン・ティ・ / トゥ・グエット"); để trình duyệt
+    // tự ngắt thì nó cắt giữa chữ katakana ("グエ / ン・ティ・トゥ・グ / エット" — soát độc lập 15/11, dòng cuối đè lên mã sinh viên)
+    const jaName = (s) => {
+      if (s.length <= 10) return s
+      const dots = [...s.matchAll(/・/g)].map((m) => m.index)
+      const at = dots.reduce((a, b) => (Math.abs(b + 1 - s.length / 2) < Math.abs(a + 1 - s.length / 2) ? b : a))
+      return `${s.slice(0, at + 1)}\n${s.slice(at + 1)}`
+    }
+    const nameT = (name) => [name[0], jaName(name[1])]
+    const nh4 = Math.max(...e.team.members.map(([name]) => textH(nameT(name), tw4 + 12, nameO)))
     const nhVi = Math.max(...e.team.members.map(([name]) => textH1(name, tw4 + 12, nameO, 0)))
     const gridH = 30 + th4 + 8 + nh4 + 4 + 14
     // khối thành viên + lời nhắn đặt giữa phần trang còn lại
@@ -3950,7 +3959,7 @@ let stripRight = null
       const hint = [`Thành viên: ${name[0]}`, name[1]]
       p.add(
         { ...IMG(mx, y, tw4, th4, hint, { crop: FACE[i] }), name: 'Ảnh thành viên', alt: name },
-        T(mx - 6, y + th4 + 8, tw4 + 12, nh4, name, { ...nameO, name: 'Tên thành viên' }),
+        T(mx - 6, y + th4 + 8, tw4 + 12, nh4, nameT(name), { ...nameO, name: 'Tên thành viên' }),
         // mã sinh viên ngay dưới tên của từng bản (tên Việt một dòng, tên Nhật hai dòng)
         { ...T(mx, y + th4 + 8 + nhVi + 4, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' }), only: 'vi' },
         { ...T(mx, y + th4 + 8 + nh4 + 4, tw4, 14, [code, null], { size: 11, tracking: 1.2, align: 'center', color: C.muted, name: 'Mã sinh viên' }), only: 'ja' }

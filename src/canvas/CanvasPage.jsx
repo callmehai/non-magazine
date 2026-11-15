@@ -211,12 +211,13 @@ function TextBody({ el, mode }) {
   const missing = mode === 'edit' && !hasLang(el, lang)
   const shown = missing ? 'vi' : lang
   const ref = useRef(null)
-  useFillLeading(ref, el, shown, !!el.fillLeading) // cả editor lẫn trang đọc: sửa ở đâu thấy y như người đọc thấy
   const fix = useOrphanFix(ref, el, shown)
+  // cả editor lẫn trang đọc: sửa ở đâu thấy y như người đọc thấy; đo lại khi việc chống chữ rơi lẻ đổi khoảng chữ / giữ đuôi
+  useFillLeading(ref, el, shown, !!el.fillLeading, JSON.stringify(fix))
   const body = (
     <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''} ${el.linkStyle === 'cta' ? 'is-cta' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
-        <p key={i} style={fix[i] && fix[i] !== 'keep' ? { letterSpacing: fix[i] } : undefined}>
+        <p key={i} style={fix[i] === 'wb' ? { wordBreak: 'normal' } : fix[i]?.startsWith('-') ? { letterSpacing: fix[i] } : undefined}>
           {p ? <ParaText text={p} el={el} lang={shown} keep={fix[i] === 'keep'} /> : '\u00a0'}
         </p>
       ))}
@@ -246,7 +247,7 @@ function TextBody({ el, mode }) {
  * Đo lại mỗi khi khung đổi cỡ (ResizeObserver): trang đọc gắn mọi trang từ đầu khi trang còn ẩn (cao 0) — trước 14/11
  * chỉ trang đang mở lúc đổi ngôn ngữ mới được giãn, các trang khác giữ nguyên → cùng trang mà mỗi lần xem một khác.
  */
-function useFillLeading(ref, el, lang, on) {
+function useFillLeading(ref, el, lang, on, fixKey) {
   useLayoutEffect(() => {
     const node = ref.current
     if (!on || !node) return
@@ -283,17 +284,23 @@ function useFillLeading(ref, el, lang, on) {
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refit) : null
     ro?.observe(node)
     let alive = true
-    document.fonts?.ready.then(() => {
+    // font vừa tải xong: chữ đổi bề rộng → đo lại. fonts.ready chỉ chờ các font đã được gọi lúc đó; bộ chữ (subset) của
+    // trang sau chỉ tải khi trang hiện ra → phải nghe cả 'loadingdone' (soát 15/11: lật tuần tự tới tr. 58, đoạn "ヌアは
+    // 竹の一種…" giữ cách giãn dòng 1.95 đo bằng font cũ → tràn khỏi khung 1,5 dòng)
+    const again = () => {
       if (!alive) return
-      lastH = -1 // font vừa tải xong: chữ đổi bề rộng → đo lại
+      lastH = -1
       refit()
-    })
+    }
+    document.fonts?.ready.then(again)
+    document.fonts?.addEventListener?.('loadingdone', again)
     return () => {
       alive = false
       ro?.disconnect()
+      document.fonts?.removeEventListener?.('loadingdone', again)
       node.style.lineHeight = ''
     }
-  }, [ref, el, lang, on])
+  }, [ref, el, lang, on, fixKey])
 }
 
 /** ảnh trang trí / nền (không chú thích): ở ô thu nhỏ dùng bản thu nhỏ */
@@ -469,31 +476,37 @@ function vnFontFor(el) {
   return 'Lora'
 }
 
-// số chữ (không tính phiên âm, khoảng trắng) nằm trên dòng cuối của đoạn — đo trên chữ đã dàn thật
-function lastLineChars(p) {
+// có dòng nào chỉ 1–2 chữ không (không tính phiên âm, khoảng trắng, ký tự nối từ) — đo trên chữ đã dàn thật.
+// Dòng cuối (chữ rơi lẻ) và cả dòng giữa đoạn: chú thích hẹp ngắt theo cụm từ, tên người không ngắt được → cụm "する"
+// đứng riêng một dòng (chú thích ảnh 59, soát độc lập 15/11)
+function hasShortLine(p) {
   const w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT)
   const chars = []
   for (let n = w.nextNode(); n; n = w.nextNode()) {
     if (n.parentElement?.closest('rt, rp')) continue // rp (dấu ngoặc của phiên âm) bị ẩn, toạ độ 0 → đếm vào là sai dòng
-    for (let i = 0; i < n.length; i++) if (!/\s/.test(n.data[i])) chars.push([n, i])
+    for (let i = 0; i < n.length; i++) if (!/[\s\u2060]/.test(n.data[i])) chars.push([n, i])
   }
-  if (chars.length < 12) return 99
+  if (chars.length < 12) return 0
   const r = document.createRange()
-  const top = (k) => {
-    r.setStart(chars[k][0], chars[k][1])
-    r.setEnd(chars[k][0], chars[k][1] + 1)
-    return r.getBoundingClientRect().top
+  const rows = []
+  for (const [n, i] of chars) {
+    r.setStart(n, i)
+    r.setEnd(n, i + 1)
+    const b = r.getBoundingClientRect()
+    if (!b.height) continue
+    const last = rows[rows.length - 1]
+    // cùng dòng: lệch dưới nửa chiều cao chữ trên màn hình (đúng cả khi sách thu nhỏ bằng transform)
+    if (last && Math.abs(last.top - b.top) < b.height * 0.5) last.n++
+    else rows.push({ top: b.top, n: 1 })
   }
-  const t = top(chars.length - 1)
-  const lh = r.getBoundingClientRect().height * 0.5 // nửa chiều cao chữ trên màn hình (đúng cả khi sách thu nhỏ bằng transform)
-  let c = 0
-  for (let k = chars.length - 1; k >= 0 && Math.abs(top(k) - t) < lh; k--) c++
-  return c
+  if (rows.length < 2) return 0
+  return rows[rows.length - 1].n <= 2 ? 2 : rows.some((row) => row.n <= 2) ? 1 : 0 // 2: dòng cuối · 1: chỉ dòng giữa
 }
 
-// bản Nhật: đoạn nào dòng cuối chỉ còn 1–2 chữ (đo thật, sau khi font tải xong) thì khép chữ cả đoạn rất nhẹ để kéo chữ lẻ
-// lên dòng trên; vẫn không được mới giữ bốn chữ cuối dính nhau. Đoạn khác để nguyên (soát độc lập 15/11: giữ đuôi ở mọi
-// đoạn làm dòng áp chót giãn chữ hở thấy rõ). { [chỉ số đoạn]: '-0.03em' | '-0.06em' | 'keep' }
+// bản Nhật: đoạn nào có dòng chỉ 1–2 chữ (đo thật, sau khi font tải xong) thì khép chữ cả đoạn rất nhẹ để kéo chữ lẻ
+// lên dòng trên; vẫn không được thì (khối ngắt theo cụm từ) ngắt từng chữ như sắp chữ Nhật chuẩn; vẫn không được mới giữ
+// bốn chữ cuối dính nhau. Đoạn khác để nguyên (soát độc lập 15/11: giữ đuôi ở mọi đoạn làm dòng áp chót giãn chữ hở thấy rõ).
+// { [chỉ số đoạn]: '-0.03em' | '-0.06em' | 'wb' | 'keep' | 'skip' }
 function useOrphanFix(ref, el, lang) {
   const [fix, setFix] = useState({})
   const key = lang === 'ja' ? `${el.ja}|${el.w}|${el.jaSize ?? el.size}` : ''
@@ -509,16 +522,26 @@ function useOrphanFix(ref, el, lang) {
       if (document.documentElement.hasAttribute('data-flipping')) return // đang lật: toạ độ chữ lệch, chờ 'book:settled'
       const out = { ...cur }
       ;[...box.children].forEach((p, i) => {
-        if (p.tagName !== 'P' || out[i] === 'keep' || lastLineChars(p) > 2) return
+        if (p.tagName !== 'P' || out[i] === 'keep' || out[i] === 'skip' || !hasShortLine(p)) return
         for (const ls of ['-0.03em', '-0.06em']) {
           p.style.letterSpacing = ls
-          if (lastLineChars(p) > 2) {
+          if (!hasShortLine(p)) {
             out[i] = ls
             return
           }
         }
         p.style.letterSpacing = ''
-        out[i] = 'keep'
+        if (getComputedStyle(p).wordBreak === 'auto-phrase') {
+          p.style.wordBreak = 'normal'
+          const ok = !hasShortLine(p)
+          p.style.wordBreak = ''
+          if (ok) {
+            out[i] = 'wb'
+            return
+          }
+        }
+        // giữ đuôi chỉ cứu được dòng cuối; dòng giữa không sửa được thì để nguyên ('skip': không đo lại nữa)
+        out[i] = hasShortLine(p) === 2 ? 'keep' : 'skip'
       })
       if (JSON.stringify(out) !== JSON.stringify(cur)) setFix((cur = out))
     }
