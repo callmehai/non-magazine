@@ -796,7 +796,7 @@ function BookEditor({ store, user, onUnlock, onLock }) {
 
   return (
     <CanvasLang.Provider value={editLang}>
-      <div className={`ed-app ${tab && !viewing ? 'has-panel' : ''} ${viewing ? 'is-viewing' : ''}`}>
+      <div className={`ed-app ${tab && (!viewing || tab === 'resources') ? 'has-panel' : ''} ${viewing ? 'is-viewing' : ''}`}>
         <header className="ed-top">
           <div className="ed-top__left">
             <strong className="ed-top__title">{canvasBook.title}</strong>
@@ -884,6 +884,8 @@ function BookEditor({ store, user, onUnlock, onLock }) {
           </div>
         </header>
 
+        {/* chế độ Xem: chỉ có tab Tài nguyên (tải ảnh nền, hình vẽ — không sửa gì trong sách) */}
+        {viewing && <SidePanel tab={tab === 'resources' ? tab : null} onTab={setTab} only={['resources']} />}
         {!viewing && (
           <SidePanel
             tab={tab}

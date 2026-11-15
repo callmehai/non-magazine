@@ -2024,3 +2024,83 @@
   animation: none !important;
   will-change: auto;
 }
+
+/* ── Tài nguyên: tải ảnh nền, nền giấy, hình vẽ ── */
+.ed-res__all {
+  width: 100%;
+  margin: 4px 0 6px;
+}
+
+.ed-res-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.ed-res-grid.is-wide {
+  grid-template-columns: 1fr;
+}
+
+.ed-res {
+  display: grid;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+  background: #f7f1e6;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--ed-text-2);
+}
+
+.ed-res__thumb {
+  display: grid;
+  place-items: center;
+  height: 76px;
+  border-radius: 5px;
+  background: #fff repeating-conic-gradient(#efe8db 0 25%, #fff 0 50%) 0 0 / 12px 12px; /* ô cờ: thấy chỗ trong suốt */
+  overflow: hidden;
+}
+
+.ed-res-grid.is-wide .ed-res__thumb {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.ed-res__thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.ed-res-grid.is-wide .ed-res__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ed-res__btns {
+  display: flex;
+  gap: 4px;
+}
+
+.ed-res__btn {
+  flex: 1;
+  padding: 3px 4px;
+  border: 1px solid var(--ed-line);
+  border-radius: 5px;
+  background: #fff;
+  font: inherit;
+  font-size: 11px;
+  color: var(--ed-text);
+  cursor: pointer;
+}
+
+.ed-res__btn:hover {
+  border-color: var(--ed-focus);
+}
+
+.ed-res__btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

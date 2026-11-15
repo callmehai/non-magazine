@@ -4,6 +4,7 @@ import { TEMPLATE_KINDS, newElement } from '../canvas/model.js'
 import { ensureFont } from '../canvas/fonts.js'
 import { UploadButton } from './ui.jsx'
 import { ElementsPanel, MotionPanel } from './LibraryPanels.jsx'
+import ResourcesPanel from './ResourcesPanel.jsx'
 
 export const DND_TYPE = 'application/x-non-editor'
 
@@ -39,13 +40,14 @@ const TABS = [
   ['shapes', 'Hình', '◆'],
   ['elements', 'Thành phần', '❀'],
   ['motion', 'Chuyển động', '↯'],
+  ['resources', 'Tài nguyên', '⬇'],
 ]
 
-export default function SidePanel({ tab, onTab, uploads, onAddPage, onAddElement, onAddAsset, onUploadFiles, uploading, selection = [], onChangeSelected, onUpdateMany }) {
+export default function SidePanel({ only, tab, onTab, uploads, onAddPage, onAddElement, onAddAsset, onUploadFiles, uploading, selection = [], onChangeSelected, onUpdateMany }) {
   return (
     <div className={`ed-side ${tab ? 'is-open' : ''}`}>
       <nav className="ed-rail">
-        {TABS.map(([k, label, icon]) => (
+        {TABS.filter(([k]) => !only || only.includes(k)).map(([k, label, icon]) => (
           <button key={k} type="button" className={`ed-rail__btn ${tab === k ? 'is-on' : ''}`} onClick={() => onTab(tab === k ? null : k)}>
             <span className="ed-rail__icon">{icon}</span>
             {label}
@@ -60,6 +62,7 @@ export default function SidePanel({ tab, onTab, uploads, onAddPage, onAddElement
           {tab === 'shapes' && <Shapes onAdd={onAddElement} />}
           {tab === 'elements' && <ElementsPanel onAdd={onAddElement} dragData={dragData} />}
           {tab === 'motion' && <MotionPanel selection={selection} onChange={onChangeSelected} onUpdateMany={onUpdateMany} />}
+          {tab === 'resources' && <ResourcesPanel />}
           <button type="button" className="ed-panel__close" onClick={() => onTab(null)} title="Thu gọn">
             ‹
           </button>

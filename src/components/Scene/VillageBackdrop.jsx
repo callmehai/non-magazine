@@ -250,14 +250,30 @@ function hatStack(x, y, n, rx) {
   return { body, rings, lit, knob }
 }
 
+/** một lớp SVG khung 1600×900 */
+const toSvg = (inner) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMax slice">${inner}</svg>`
 /** gói một lớp SVG thành ảnh data URL: trình duyệt raster một lần, sau đó chỉ dịch / nghiêng ảnh trên GPU (không vẽ lại) */
-const toImg = (inner) =>
-  'data:image/svg+xml;charset=utf-8,' +
-  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMax slice">${inner}</svg>`)
+const toImg = (svg) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg)
+
+/**
+ * Cả cảnh sảnh thành một file SVG (4 lớp chồng lên nhau, không parallax, không lá rơi) — cho tab Tài nguyên của trang
+ * Biên tập (nhóm 15/11: muốn tải ảnh nền lúc mới vào, có cổng đình, giếng nước)
+ */
+export function villageSvg() {
+  const inner = buildLayers()
+    .map((l) => l.svg.replace('<svg ', `<svg width="${VW}" height="${VH}" `))
+    .join('')
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VW} ${VH}" width="${VW}" height="${VH}">${inner}</svg>`
+}
+export const VILLAGE_SIZE = [VW, VH]
 
 /** 4 lớp ảnh theo độ sâu: nền trời + lũy tre xa / sân + cổng đình / cây, giếng, chồng nón / bụi tre gần */
 function useLayers() {
-  return useMemo(() => {
+  return useMemo(() => buildLayers().map((l) => ({ ...l, src: toImg(l.svg) })), [])
+}
+
+function buildLayers() {
+  {
     const s = {
       far: farBamboo(),
       near: nearBamboo(),
@@ -307,12 +323,12 @@ function useLayers() {
       )
       .join('')
     return [
-      { d: 0.1, src: toImg(back) },
-      { d: 0.32, src: toImg(yard) },
-      { d: 0.58, src: toImg(mid) },
-      { d: 1, src: toImg(near), cls: 'is-near' },
+      { d: 0.1, svg: toSvg(back) },
+      { d: 0.32, svg: toSvg(yard) },
+      { d: 0.58, svg: toSvg(mid) },
+      { d: 1, svg: toSvg(near), cls: 'is-near' },
     ]
-  }, [])
+  }
 }
 
 /** lá tre rơi (nhẹ, thưa) */

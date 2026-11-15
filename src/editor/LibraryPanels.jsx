@@ -10,7 +10,7 @@ import { Slider } from './ui.jsx'
  */
 
 /** [đường dẫn, tên, tỉ lệ rộng/cao] — tỉ lệ theo viewBox của file SVG */
-const DECO_GROUPS = [
+export const DECO_GROUPS = [
   [
     'Nón lá',
     [
