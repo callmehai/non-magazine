@@ -18,6 +18,8 @@ manifest.json (image paths are relative to the manifest):
   "pairs": [["pairs/x.png", "Screen", "One line on what changed"], ...],
   "shots": [["shots/y.png", "Scenario", "What it shows"], ...],
   "asks": ["...", ...],                                     # decisions still open (optional)
+  "quotes": [{"n": 1, "title": "...", "img": "loi-co/01.jpg", "quote": "nguyên văn", "done": "HTML",
+              "status": "ok|other|todo", "note": "HTML", "see": ["pairs/x.png"]}, ...],  # góp ý nguyên văn (optional)
   "labels": {"changes": "...", "checks": "...", "pairs": "...", "shots": "...", "asks": "..."}
                                                             # optional section titles, e.g. for a Doc audit
 }
@@ -53,7 +55,9 @@ def figure(cls, path, title, desc, width):
     # One embedded copy serves both the page and the zoom viewer, so the file does not double in size.
     pic = (f'<button type="button" class="zoomable" aria-label="Phóng to: {html.escape(title)}">'
            f'<img src="{src}" alt="{html.escape(title)}" loading="lazy"></button>')
-    return f'<figure class="{cls}">{cap}{pic}</figure>' if cls == 'pair' else f'<figure class="{cls}">{pic}{cap}</figure>'
+    fid = "f-" + pathlib.Path(path).stem
+    return (f'<figure class="{cls}" id="{fid}">{cap}{pic}</figure>' if cls == 'pair'
+            else f'<figure class="{cls}" id="{fid}">{pic}{cap}</figure>')
 
 
 def items(xs):
@@ -73,6 +77,29 @@ changes_html = (
     if _tables
     else f'<section class="cols"><div class="panel"><h2>{L["changes"]}</h2>{_changes}</div>{_checks_panel.format(checks=checks)}</section>'
 )
+# "quotes" (tuỳ chọn): góp ý nguyên văn của bên thuê / giáo viên, mỗi mục kèm ảnh chụp tin nhắn, việc đã làm, trạng thái và
+# link tới cặp ảnh Trước/Sau. {"n", "title", "img", "quote", "done" (HTML), "status": ok|other|todo, "note" (HTML, tuỳ chọn), "see": [path ảnh]}
+_titles = {p[0]: p[1] for p in m.get('pairs', []) + m.get('shots', [])}
+_st = {'ok': ('st-ok', 'Đã sửa'), 'other': ('st-other', 'Làm theo cách khác — anh xem lại'), 'todo': ('st-todo', 'Chưa làm')}
+
+
+def quote(q):
+    cls, label = _st[q.get('status', 'ok')]
+    pic = (f'<button type="button" class="zoomable" aria-label="Phóng to: tin nhắn {q["n"]}">'
+           f'<img src="{img(q["img"], 1400)}" alt="Tin nhắn {q["n"]}" loading="lazy"></button>')
+    said = html.escape(q['quote']).replace('\n', '<br>')
+    see = ''.join(f'<a href="#f-{pathlib.Path(x).stem}">{html.escape(_titles.get(x, pathlib.Path(x).stem))}</a>' for x in q.get('see', []))
+    note = f'<p class="q-note">{q["note"]}</p>' if q.get('note') else ''
+    return (f'<article class="q"><div class="q-img">{pic}</div><div class="q-body">'
+            f'<p class="q-head"><b>{q["n"]}. {html.escape(q["title"])}</b><span class="st {cls}">{label}</span></p>'
+            f'<blockquote>{said}</blockquote><h4>Đã làm</h4><div class="q-done">{q["done"]}</div>{note}'
+            f'{f"<p class=q-see>Xem ảnh Trước / Sau: {see}</p>" if see else ""}</div></article>')
+
+
+quotes = ''.join(quote(q) for q in m.get('quotes', []))
+quotes_html = (f'<section><h2>{L.get("quotes", "Góp ý nguyên văn và đã làm gì")}</h2>'
+               f'<p class="lead q-lead">{m.get("quotes_lead", "")}</p><div class="quotes">{quotes}</div></section>') if quotes else ''
+
 # Shots are taken at 2x (playwright.config.ts): a 1440px window is 2880 pixels, a pair twice that.
 pairs = ''.join(figure('pair', *p, 6000) for p in m.get('pairs', []))
 shots = ''.join(figure('shot', *s, 3000) for s in m.get('shots', []))
@@ -141,6 +168,27 @@ figure img {{ display: block; max-width: 100%; height: auto; border: 1px solid v
 .lb-stage img {{ margin: auto; max-width: none; border: 0; border-radius: 0; user-select: none; -webkit-user-drag: none; }}
 .lb-hint {{ padding: 6px 16px; background: #172033; color: #9aa6bd; font-size: 12.5px; }}
 .ask {{ border-color: var(--brand); background: var(--brand-wash); }}
+.q-lead {{ margin: -4px 0 16px; max-width: 80ch; }}
+.quotes {{ display: flex; flex-direction: column; gap: 18px; }}
+.q {{ display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; padding: 20px 22px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--surface); scroll-margin-top: 16px; }}
+.q-img img {{ display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; }}
+.q-body {{ display: flex; flex-direction: column; gap: 10px; min-width: 0; }}
+.q-head {{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 16px; }}
+.st {{ padding: 2px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; }}
+.st-ok {{ background: var(--ok-wash); color: var(--ok); }}
+.st-other {{ background: #fdf0d8; color: #7a4b00; }}
+.st-todo {{ background: #fbe5e5; color: #8f1d1d; }}
+blockquote {{ margin: 0; padding: 12px 16px; border-left: 4px solid #8a6d3b; background: #faf6ee; border-radius: 0 8px 8px 0;
+  font-size: 15.5px; line-height: 1.65; }}
+h4 {{ margin: 4px 0 0; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }}
+.q-done ul {{ gap: 4px; }}
+.q-note {{ padding: 8px 12px; border-radius: 8px; background: #fdf0d8; color: #5c3a00; font-size: 14px; }}
+.q-see {{ display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 14px; color: var(--muted); }}
+.q-see a {{ color: var(--brand); }}
+figure.pair {{ scroll-margin-top: 16px; }}
+figure:target figcaption h3 {{ background: #fff3c4; }}
+@media (max-width: 720px) {{ .q {{ grid-template-columns: minmax(0, 1fr); }} .q-img {{ max-width: 340px; }} }}
 </style>
 </head>
 <body>
@@ -151,6 +199,7 @@ figure img {{ display: block; max-width: 100%; height: auto; border: 1px solid v
   <p class="lead">{m.get("lead", "")}</p>
   <div class="facts">{facts}</div>
 </header>
+{quotes_html}
 {changes_html}
 {f'<section><h2>{L["pairs"]}</h2><div class="pairs">{pairs}</div></section>' if pairs else ''}
 {f'<section><h2>{L["shots"]}</h2><div class="shots">{shots}</div></section>' if shots else ''}
