@@ -110,6 +110,9 @@ export function useFlipBook({ pages, settings, layout, zoomed, onFlipStart, star
       } else if (e.data === 'read') setFlipDir(null)
       setFlipState(e.data)
       if (e.data === 'flipping') onFlipStartRef.current?.(pf)
+      // trang đang lật bị biến đổi 3D → không đo chữ lúc này; lật xong báo cho các khối chữ đo lại (chống chữ rơi lẻ bản Nhật)
+      document.documentElement.toggleAttribute('data-flipping', e.data !== 'read')
+      if (e.data === 'read') window.dispatchEvent(new Event('book:settled'))
     })
     pf.on('init', () => setReady(true))
     const order = rtl ? [...pageEls].reverse() : pageEls

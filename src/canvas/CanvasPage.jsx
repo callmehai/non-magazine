@@ -411,10 +411,13 @@ function vnSplit(s, font) {
   let last = 0
   for (const m of s.matchAll(VN_RUN)) {
     if (!VN_MARK.test(m[0])) continue
-    if (m.index > last) out.push(s.slice(last, m.index))
-    // tên ngắn (Phạm Trần Canh, Dân Việt新聞…) không ngắt giữa chừng — kể cả đuôi 新聞 / 電子雑誌 / 氏 dính sau
+    // dấu mở （「『 ngay trước tên ngắn đi cùng tên (không thì dấu mở đứng lẻ cuối dòng trên)
+    const pre = m[0].length <= 22 ? (s.slice(last, m.index).match(/[（(「『]+$/)?.[0] ?? '') : ''
+    if (m.index - pre.length > last) out.push(s.slice(last, m.index - pre.length))
+    // tên ngắn (Phạm Trần Canh, Dân Việt新聞…) không ngắt giữa chừng — kể cả đuôi 新聞 / 電子雑誌 / 氏 và dấu đóng
+    // （）」』。、) dính sau, để dấu đóng không rơi một mình xuống dòng (chú thích ảnh 107: “…nhân dân新聞” rồi “）” lẻ)
     const short = m[0].length <= 22
-    const suf = short ? (s.slice(m.index + m[0].length).match(/^(?:新聞|電子雑誌|氏)/)?.[0] ?? '') : ''
+    const suf = short ? s.slice(m.index + m[0].length).match(/^(?:新聞|電子雑誌|氏)?[）)」』。、]*/)[0] : ''
     const run = (
       <span key={short ? undefined : m.index} className="cv-vn" style={{ fontFamily: fontStack(font) }}>
         {m[0]}
@@ -423,6 +426,7 @@ function vnSplit(s, font) {
     out.push(
       short ? (
         <span key={m.index} className="cv-nb">
+          {pre}
           {run}
           {suf}
         </span>
@@ -470,7 +474,7 @@ function lastLineChars(p) {
   const w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT)
   const chars = []
   for (let n = w.nextNode(); n; n = w.nextNode()) {
-    if (n.parentElement?.closest('rt')) continue
+    if (n.parentElement?.closest('rt, rp')) continue // rp (dấu ngoặc của phiên âm) bị ẩn, toạ độ 0 → đếm vào là sai dòng
     for (let i = 0; i < n.length; i++) if (!/\s/.test(n.data[i])) chars.push([n, i])
   }
   if (chars.length < 12) return 99
@@ -481,7 +485,7 @@ function lastLineChars(p) {
     return r.getBoundingClientRect().top
   }
   const t = top(chars.length - 1)
-  const lh = parseFloat(getComputedStyle(p).fontSize) * 0.5
+  const lh = r.getBoundingClientRect().height * 0.5 // nửa chiều cao chữ trên màn hình (đúng cả khi sách thu nhỏ bằng transform)
   let c = 0
   for (let k = chars.length - 1; k >= 0 && Math.abs(top(k) - t) < lh; k--) c++
   return c
@@ -497,28 +501,39 @@ function useOrphanFix(ref, el, lang) {
     setFix({})
     if (lang !== 'ja' || el.vertical || !key) return
     let alive = true
-    document.fonts.ready.then(() =>
-      requestAnimationFrame(() => {
-        const box = ref.current
-        if (!alive || !box || !box.offsetParent) return
-        const out = {}
-        ;[...box.children].forEach((p, i) => {
-          if (p.tagName !== 'P' || lastLineChars(p) > 2) return
-          for (const ls of ['-0.03em', '-0.06em']) {
-            p.style.letterSpacing = ls
-            if (lastLineChars(p) > 2) {
-              out[i] = ls
-              return
-            }
+    let cur = {}
+    const measure = () => {
+      const box = ref.current
+      // trang chưa mở trong sách lật đang ẩn (không có kích thước) → chưa đo; ResizeObserver gọi lại khi trang hiện ra
+      if (!alive || !box || !box.getClientRects().length || !box.offsetWidth) return
+      if (document.documentElement.hasAttribute('data-flipping')) return // đang lật: toạ độ chữ lệch, chờ 'book:settled'
+      const out = { ...cur }
+      ;[...box.children].forEach((p, i) => {
+        if (p.tagName !== 'P' || out[i] === 'keep' || lastLineChars(p) > 2) return
+        for (const ls of ['-0.03em', '-0.06em']) {
+          p.style.letterSpacing = ls
+          if (lastLineChars(p) > 2) {
+            out[i] = ls
+            return
           }
-          p.style.letterSpacing = ''
-          out[i] = 'keep'
-        })
-        if (Object.keys(out).length) setFix(out)
+        }
+        p.style.letterSpacing = ''
+        out[i] = 'keep'
       })
-    )
+      if (JSON.stringify(out) !== JSON.stringify(cur)) setFix((cur = out))
+    }
+    const later = () => document.fonts.ready.then(() => requestAnimationFrame(measure))
+    // font Nhật tải từng phần theo ký tự khi trang hiện ra → bề rộng chữ đổi sau lần đo đầu: đo lại mỗi khi font tải xong
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(later)
+    if (ref.current) ro?.observe(ref.current)
+    document.fonts.addEventListener('loadingdone', later)
+    addEventListener('book:settled', later)
+    later()
     return () => {
       alive = false
+      ro?.disconnect()
+      document.fonts.removeEventListener('loadingdone', later)
+      removeEventListener('book:settled', later)
     }
   }, [key, lang, el.vertical, ref])
   return fix
