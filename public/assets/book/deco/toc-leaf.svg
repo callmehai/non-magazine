@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- ký hiệu mục lục: chiếc lá tô kín, xanh lá đậm #4f6129 (≈ 6:1 trên nền giấy kem — WCAG 1.4.11 ≥ 3:1) -->
+  <path d="M4 20 C 4 10, 10 4, 21 3 C 20 14, 14 20, 4 20 Z" fill="#4f6129"/>
+  <path d="M4.5 19.5 C 9 14, 13 10, 17.5 6.5" fill="none" stroke="#f3e8d2" stroke-width="1.1" stroke-linecap="round"/>
+</svg>

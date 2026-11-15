@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { RubyText, textStyle } from '../canvas/CanvasPage.jsx'
+import { ParaText, textStyle } from '../canvas/CanvasPage.jsx'
 import { ensureFont, ensureFontsFor } from '../canvas/fonts.js'
 import { fontOf } from '../canvas/lang.js'
 import { measureKey } from '../../scripts/book/measureKey.mjs'
@@ -98,7 +98,7 @@ function Block({ id, el, lang }) {
         {String(text ?? '')
           .split('\n')
           .map((p, i) => (
-            <p key={i}>{p ? <RubyText text={p} /> : ' '}</p>
+            <p key={i}>{p ? <ParaText text={p} el={el} lang={lang} /> : ' '}</p>
           ))}
       </div>
     </div>

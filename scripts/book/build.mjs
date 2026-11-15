@@ -38,12 +38,13 @@ const C = {
   cream: '#fbf7ee',
   ink: '#2b2118',
   ink2: '#5d4c3c',
-  muted: '#8f7b62',
+  muted: '#6b5844', // soát thị giác 15/11 (WCAG 1.4.3): #8f7b62 chỉ 3,56:1 trên nền giấy → 6:1 (chú thích ảnh, chú thích cuối trang, đầu trang)
   line: '#d9c9a8',
-  gold: '#a07a3c',
+  gold: '#7e6230', // #a07a3c 3,5:1 cho chữ nhỏ (dòng dẫn mục) → 5:1
   title: '#7a5c38', // nâu nhạt cho tiêu đề
 }
-const ACC = { 0: '#a07a3c', 1: '#5f7350', 2: '#a95f3c', 3: '#3f7676', 9: '#8c6a33' }
+// soát thị giác 15/11 (WCAG ≥ 4.5:1 cho chữ nhỏ dùng màu chương): 0 #a07a3c→#7e6230, 2 #a95f3c→#94532f, 3 #3f7676→#346464, 9 #8c6a33→#7a5a28
+const ACC = { 0: '#7e6230', 1: '#5f7350', 2: '#94532f', 3: '#346464', 9: '#7a5a28' }
 const TINT = { 0: '#efe3c6', 1: '#e3e8d8', 2: '#f1dccd', 3: '#d9e6e3', 9: '#efe3c6' }
 const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Serif JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
 const M = { bottom: 58, outer: 40, inner: 50 }
@@ -116,6 +117,9 @@ let FIG = 0 // số thứ tự ảnh (chú thích "Ảnh N: …"), gắn lúc t�
 // Zalo 04/11 (trưởng nhóm): thuật ngữ "Ảnh" trong số thứ tự ảnh bản tiếng Nhật là 画像
 const numCap = (fc, n) => [`Ảnh ${n}: ${fc[0]}`, fc[1] ? `画像${n}：${fc[1]}` : fc[1]]
 const CAP_NAMES = new Set(['Chú thích ảnh', 'Chú thích video'])
+// GVHD 15/11: "Chuyển chữ "Báo" sang tiếng Nhật. VD: Dantri新聞" → bản Nhật ghi "Thanh Niên新聞", "Làng nghề Việt電子雑誌"
+// (T() không áp cho danh mục tài liệu tham khảo: giữ nguyên tên tác giả như trích dẫn APA)
+const jaPaper = (s) => String(s).replace(/Tạp chí điện tử ([^（）()、・,。:：\n]+?)(?=[（）()、・,。:：\n]|$)/g, '$1電子雑誌').replace(/Báo ([^（）()、・,。:：\n]+?)(?=[（）()、・,。:：\n]|$)/g, '$1新聞')
 function T(x, y, w, h, pair, o = {}) {
   // chú thích video không mang số "Ảnh N" (soát vòng 8: "画像110：動画：…" — gọi video là ảnh); vẫn ghi nguồn như chú thích ảnh
   if (o.name === 'Chú thích video' && !o.raw) pair = fmtCap(Array.isArray(pair) ? pair : [pair, null])
@@ -125,7 +129,10 @@ function T(x, y, w, h, pair, o = {}) {
   const vi = small ? strip(vi0) : vi0
   // tiếng Nhật: không ngắt dòng giữa "年" và "前 / 生" (kiểu 2500〜3000年 / 前)
   // soát 05/11: chú thích ngắt "著者撮 / 影" → không ngắt giữa "撮影" (nối bằng ký tự nối từ U+2060)
-  const ja = (ja0 && small ? strip(ja0) : ja0)?.replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影')
+  const ja1 = ja0 && small ? strip(ja0) : ja0
+  // soát độc lập 15/11: ngày "24 / 日" bị ngắt → không ngắt giữa số và 日 / 月; tên katakana "レ・ヴァン・/トゥイ" → không
+  // ngắt sau "・" giữa hai chữ katakana
+  const ja = ja1 == null ? ja1 : (o.name === 'Tài liệu' ? String(ja1) : jaPaper(String(ja1))).replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影').replace(/(\d)(?=[日月])/g, '$1\u2060').replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, (m) => (m.length <= 14 ? m.replace(/・/g, '・\u2060') : m)) // chỉ chuỗi ngắn cỡ tên người; chuỗi liệt kê dài vẫn ngắt được
   // khung đặt cao cố định mà chữ cần nhiều chỗ hơn → nới ra
   if (h != null) h = Math.max(h, textH([vi, ja], w, o))
   const el = {
@@ -649,16 +656,16 @@ const SRC_BY_PATH = [
   [/^online\/thanhnien-/, ['Báo Thanh Niên', 'Báo Thanh Niên']],
   [/^online\/(non-la-sen|non-la-chuong|dao-cat-la|non-thung|qdnd-)/, ['Báo Quân đội nhân dân', 'Báo Quân đội nhân dân']],
   [/^online\/phu-nhan/, ['VietNamNet', 'VietNamNet']],
-  [/^online\/pham-tran-canh/, ['Báo Thể thao & Văn hóa', 'テータオ＆ヴァンホア紙']],
-  [/^online\/non-hoi-cho/, ['Báo Đại biểu Nhân dân', 'ダイビエウニャンザン紙']],
+  [/^online\/pham-tran-canh/, ['Báo Thể thao & Văn hóa', 'Thể thao & Văn hóa新聞']],
+  [/^online\/non-hoi-cho/, ['Báo Đại biểu Nhân dân', 'Đại biểu Nhân dân新聞']],
   [/^online\/(non-thanh-oai|thap-dong)/, ['Daderot, Wikimedia Commons (CC0)', 'Daderot、ウィキメディア・コモンズ（CC0）']],
   [/^online\/trong-dong/, ['Wikimedia Commons', 'ウィキメディア・コモンズ']],
   [/^online\/hang-non-1896/, ['André Salles, Thư viện Quốc gia Pháp', 'アンドレ・サル、フランス国立図書館']],
   [/^online\/bia-cho-non/, ['Hà Trang / Báo Văn Hóa', 'ハー・チャン／ヴァンホア紙']],
-  // tab Bổ sung 08/11: "Nguồn Trọng Khải cung cấp ghi tiếng Nhật: チョン・カイ氏提供"
+  // tab Bổ sung 08/11: "Nguồn Trọng Khải cung cấp ghi tiếng Nhật: チョン・カイ氏撮影"
   [/^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/, ['nhiếp ảnh Trọng Khải', 'チョン・カイ氏']],
   // tab Bổ sung 08/11 khuya: "ảnh 141: do nhóm chụp" (Nụ cười người thợ… — ảnh nằm trong thư mục nghệ nhân Lê Văn Tuy)
-  [/Nón Lê Văn Tuy\/Người thợ 1$/, ['nhóm tác giả', 'グループ撮影']],
+  [/Nón Lê Văn Tuy\/Người thợ 1$/, ['nhóm tác giả', '制作グループ撮影']],
   [/Nón Lê Văn Tuy\/|^new\/IMG_854[78]/, ['nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏']],
   // Doc (Thu Nguyệt, mở đầu chương 2): "Ảnh 2: Nghệ Nhân Tạ Thu Hương cung cấp"
   [/Nón Tạ Thu Hương\/|^new\/IMG_861|^new\/Người thợ hoàn thiện bước luồn nhôi cuối cùng$/, ['nghệ nhân Tạ Thu Hương', '職人タ・トゥ・フオン氏']],
@@ -711,45 +718,45 @@ const CAP_OVR = {
  * (tên nón in riêng) chỉ đổi nguồn.
  */
 const SHEET_JA = {
-  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "制作グループ提供", null], // 2
-  // Zalo 12/11 21:19 (Minh Ánh, ảnh 3): "chú thích ảnh này chỗ trong ngoặc sửa thành 制作グループ提供"; bản Việt theo cùng
-  // (anh Hải 12/11: "cái ảnh 3 thì làm theo bản mới nhất nhé, việt sửa theo") — như các ảnh 制作グループ提供 khác: "nhóm tác giả"
-  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "制作グループ提供", "nhóm tác giả"], // 3
-  "Nón lá làng Chuông — Hà Nội": [null, "制作グループ提供", null], // 10
-  "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "制作グループ提供", null], // 15
-  "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "制作グループ提供", null], // 15
-  "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "制作グループ提供", null], // 16
-  "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "制作グループ提供", null], // 16
-  "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "制作グループ提供", null], // 16
+  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "制作グループ撮影", null], // 2
+  // Zalo 12/11 21:19 (Minh Ánh, ảnh 3): "chú thích ảnh này chỗ trong ngoặc sửa thành 制作グループ撮影"; bản Việt theo cùng
+  // (anh Hải 12/11: "cái ảnh 3 thì làm theo bản mới nhất nhé, việt sửa theo") — như các ảnh 制作グループ撮影 khác: "nhóm tác giả"
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "制作グループ撮影", "nhóm tác giả"], // 3
+  "Nón lá làng Chuông — Hà Nội": [null, "制作グループ撮影", null], // 10
+  "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "制作グループ撮影", null], // 15
+  "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "制作グループ撮影", null], // 15
+  "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "制作グループ撮影", null], // 16
+  "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "制作グループ撮影", null], // 16
+  "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "制作グループ撮影", null], // 16
   "Nghệ nhân ngồi lợp lớp lá trong": ["座ってノンラーを作る職人の様子", "職人レ・ヴァン・トゥイ氏提供", "nghệ nhân Lê Văn Tuy cung cấp"], // 40
-  "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "グループ撮影", null], // 41
-  "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "グループ撮影", null], // 42
-  "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "グループ撮影", null], // 43
-  "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "グループ撮影", null], // 44
-  "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "グループ撮影", null], // 44
-  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "制作グループ提供", null], // 45
-  "Lá lụi phơi ngoài nắng": ["ラルイ（若いヤシの葉）", "制作グループ提供", null], // 46
-  "Búp lá cọ non phơi khô, màu trắng ngà": ["ラルイ（若いヤシの葉）", "制作グループ提供", null], // 46
-  "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "制作グループ提供", null], // 47
-  "Lớp mo nang": ["モーナン（ヌア竹の皮）", "制作グループ提供", null], // 48
-  "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "制作グループ提供", null], // 49
-  "Cây liếc — ruột và vỏ": ["リエックの茎の芯（シダ類の植物）", "制作グループ提供", null], // 50
-  "Sợi chỉ màu": ["ノイを作るための色糸", "制作グループ提供", null], // 51
-  "Khuôn nón hình chóp 16 vòng": ["ノンラーの製作型", "制作グループ提供", null], // 52
+  "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "制作グループ撮影", null], // 41
+  "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "制作グループ撮影", null], // 42
+  "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "制作グループ撮影", null], // 43
+  "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "制作グループ撮影", null], // 44
+  "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "制作グループ撮影", null], // 44
+  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "制作グループ撮影", null], // 45
+  "Lá lụi phơi ngoài nắng": ["ラルイ（若いヤシの葉）", "制作グループ撮影", null], // 46
+  "Búp lá cọ non phơi khô, màu trắng ngà": ["ラルイ（若いヤシの葉）", "制作グループ撮影", null], // 46
+  "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "制作グループ撮影", null], // 47
+  "Lớp mo nang": ["モーナン（ヌア竹の皮）", "制作グループ撮影", null], // 48
+  "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "制作グループ撮影", null], // 49
+  "Cây liếc — ruột và vỏ": ["リエックの茎の芯（シダ類の植物）", "制作グループ撮影", null], // 50
+  "Sợi chỉ màu": ["ノイを作るための色糸", "制作グループ撮影", null], // 51
+  "Khuôn nón hình chóp 16 vòng": ["ノンラーの製作型", "制作グループ撮影", null], // 52
   "Dao, kéo cắt lá": ["ナイフ・はさみ", null, null], // 53
-  "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "制作グループ提供", null], // 54
-  "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "制作グループ提供", null], // 55
-  "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "制作グループ提供", null], // 56
-  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "制作グループ提供", null], // 57
-  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "制作グループ提供", null], // 58
-  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "制作グループ提供", null], // 59
-  "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "制作グループ提供", null], // 60
-  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "制作グループ提供", null], // 61
-  "Cắt lá thừa và khâu viền vành nón": ["ステップ6：ヌック・ノン（ノンラーの外縁を縫って補強する作業）", "制作グループ提供", null], // 62
-  "Chỉ màu luồn trong lòng nón": ["ステップ7：ルオン・ノイ（あごひもを通して固定する部分を色糸で作る作業）", "制作グループ提供", null], // 63
-  "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "制作グループ提供", null], // 64
+  "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "制作グループ撮影", null], // 54
+  "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "制作グループ撮影", null], // 55
+  "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "制作グループ撮影", null], // 56
+  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "制作グループ撮影", null], // 57
+  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "制作グループ撮影", null], // 58
+  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "制作グループ撮影", null], // 59
+  "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "制作グループ撮影", null], // 60
+  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "制作グループ撮影", null], // 61
+  "Cắt lá thừa và khâu viền vành nón": ["ステップ6：ヌック・ノン（ノンラーの外縁を縫って補強する作業）", "制作グループ撮影", null], // 62
+  "Chỉ màu luồn trong lòng nón": ["ステップ7：ルオン・ノイ（あごひもを通して固定する部分を色糸で作る作業）", "制作グループ撮影", null], // 63
+  "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "制作グループ撮影", null], // 64
   "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": ["チュオン村のノンラーに囲まれた子ども", "職人レ・ヴァン・トゥイ氏提供", null], // 65
-  "Các sản phẩm nón đa dạng của làng Chuông": [null, "制作グループ提供", null], // 67
+  "Các sản phẩm nón đa dạng của làng Chuông": [null, "制作グループ撮影", null], // 67
   "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Maries", null], // 73
   "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "制作グループ撮影", null], // 83
   "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "制作グループ撮影", null], // 84
@@ -825,7 +832,7 @@ function fmtCap1(cap, key, srcOvr) {
     }
   }
   if (srcOvr) src = srcOvr
-  if (!src) src = SRC_BY_PATH.find(([re]) => re.test(rel ?? ''))?.[1] ?? (/^online\//.test(rel ?? '') ? null : ['nhóm tác giả', 'グループ撮影'])
+  if (!src) src = SRC_BY_PATH.find(([re]) => re.test(rel ?? ''))?.[1] ?? (/^online\//.test(rel ?? '') ? null : ['nhóm tác giả', '制作グループ撮影'])
   // 08/11 (tab Bổ sung + Zalo chị Linh): mẫu "STT: chú thích (nguồn)", bỏ chữ "Nguồn" / "出典" — vd. nhóm ghi
   // 「画像１：ファッションアイテムとして使われる装飾用ノンラー（職人タ・トゥ・フオン氏提供）」: ảnh nghệ nhân đưa → "… cung cấp" / "…提供"
   // nguồn có ngoặc bên trong ("André Salles (Thư viện Quốc gia Pháp)", "Chạm Sắc (VTV5)") → dấu phẩy, không lồng hai lớp ngoặc
@@ -833,7 +840,9 @@ function fmtCap1(cap, key, srcOvr) {
   const sv0 = flat(src?.[0])
   const sv = /^nghệ nhân /i.test(sv0 ?? '') && !/cung cấp$/.test(sv0) ? `${sv0} cung cấp` : sv0
   const sj0 = src ? flat(src[1] ?? src[0]) : null
-  const sj = /氏$/.test(sj0 ?? '') ? `${sj0}提供` : sj0 // 職人…氏 / チョン・カイ氏 → …氏提供
+  // 職人…氏 → …氏提供 (nghệ nhân gửi ảnh) · チョン・カイ氏 → チョン・カイ氏撮影 (nhiếp ảnh tự chụp; tab Bổ sung 08/11 "ghi tiếng
+  // Nhật: チョン・カイ氏撮影", GVHD 15/11 "Dùng 撮影 chứ sao lại 提供?")
+  const sj = sj0 === 'チョン・カイ氏' ? `${sj0}撮影` : /氏$/.test(sj0 ?? '') ? `${sj0}提供` : sj0
   const sh = SHEET_JA[strip(key ?? cap[0] ?? '')]
   const jaF = sh?.[0] ?? ja
   const sjF = sh?.[1] ?? sj
@@ -1005,11 +1014,34 @@ const wideH = (p, r, cap) => (polaOn(p, cap) ? polaH(CW * 0.86, r, cap) + 14 : C
 
 /** trích dẫn lớn */
 const quoteOpt = (size) => ({ size, font: F.head, lh: 1.45, jaSize: jaPt(size) - 1 })
+// câu trích có người nói ("“…”\nNghệ nhân X"): dòng tên người nói tách riêng — chữ nhỏ hơn, canh phải, không gạch đầu
+// dòng (GVHD 15/11: "Phần trích dẫn ko dùng dấu gạch đầu dòng ở cuối")
+const quoteSplit = (pair) => {
+  const cut = (t) => {
+    const s = String(t ?? '')
+    const i = s.lastIndexOf('\n')
+    return i > 0 && /^[“「"]/.test(s) ? [s.slice(0, i), s.slice(i + 1).replace(/^[—―–-]\s*/, '')] : null
+  }
+  const a = cut(pair[0])
+  const b = pair[1] ? cut(pair[1]) : null
+  return a ? [[a[0], b ? b[0] : pair[1]], [a[1], b ? b[1] : null]] : null
+}
+const attrOpt = (size) => ({ size: Math.max(12, size * 0.72), lh: 1.35, jaSize: Math.max(12, jaPt(size) * 0.72) })
+const quoteH = (pair, w, size) => {
+  const q = quoteSplit(pair)
+  return q ? textH(q[0], w, quoteOpt(size)) + 8 + textH(q[1], w, attrOpt(size)) : textH(pair, w, quoteOpt(size))
+}
 function quote(p, y, pair, x = p.x0, w = p.cw, o = {}) {
-  const opt = quoteOpt(o.size ?? S.quote)
-  const h = textH(pair, w, opt)
-  p.add(T(x, y, w, h, pair, { ...opt, italic: true, color: o.color ?? C.ink2, jaFont: F.jaHead, align: o.align ?? 'left', name: 'Trích dẫn' }))
-  return y + h
+  const size = o.size ?? S.quote
+  const opt = quoteOpt(size)
+  const q = quoteSplit(pair)
+  const body = q ? q[0] : pair
+  const h = textH(body, w, opt)
+  p.add(T(x, y, w, h, body, { ...opt, italic: true, color: o.color ?? C.ink2, jaFont: F.jaHead, align: o.align ?? 'left', name: 'Trích dẫn' }))
+  if (!q) return y + h
+  const ah = textH(q[1], w, attrOpt(size))
+  p.add(T(x, y + h + 8, w, ah, q[1], { ...attrOpt(size), color: o.color ?? C.ink2, align: 'right', jaFont: F.jaSans, name: 'Người nói' }))
+  return y + h + 8 + ah
 }
 
 /**
@@ -1024,7 +1056,7 @@ function tipBox(p, y, pair, o = {}) {
   const to = { font: F.hand, size: Math.min(o.size ?? 14, 14), lh: 1.3, jaSize: Math.min(o.jaSize ?? 12.5, 12.5) }
   const txt = pair.map((t) => (t && !String(t).includes('☝') ? `☝ ${t}` : t))
   const th = textH(txt, w, to)
-  p.add(T(x, y + 4, w, th, txt, { ...to, color: '#8b7355', align: 'center', jaFont: F.jaHand, name: 'Ghi chú tương tác' }))
+  p.add(T(x, y + 4, w, th, txt, { ...to, color: '#6b5844', align: 'center', jaFont: F.jaHand, name: 'Ghi chú tương tác' }))
   return y + th + 8
 }
 
@@ -1776,7 +1808,7 @@ class Flow {
   }
   quote(pair, o = {}) {
     const w = CW - (o.inset ?? 0) * 2
-    const h = textH(pair, w, quoteOpt(o.size ?? S.quote))
+    const h = quoteH(pair, w, o.size ?? S.quote)
     this.place(h, (p, y) => quote(p, y, pair, p.x0 + (o.inset ?? 0), w, o), o.gap ?? 22)
   }
   label(pair) {
@@ -2099,11 +2131,14 @@ let guidePage = null
     f.prose([g.text], { after: 14, free: true })
     const p = f.p
     // ô vuông lớn nhất còn vừa phần trang còn lại
-    const gridCap = (pl, hint) => fmtCap([pl[0], pl[1]], hint[0])
+    // GVHD 15/11 (ảnh 6–11): "Cô ko hiểu cái các bạn viết kiểu 画8：フエ市 … tên ảnh sao lại là tên thành phố?" — chú thích
+    // ảnh chỉ ghi địa phương ("画像8：フエ市") đọc như ảnh chụp thành phố Huế. Chú thích phải gọi đúng vật trong ảnh: tên kiểu
+    // nón + nơi có kiểu nón đó → "画像8：フエ市のノン・ラー・バン", "Ảnh 8: Nón lá bàng (Thành phố Huế)"
+    const gridCap = (n, pl, hint) => fmtCap([`${strip(n[0])} (${strip(pl[0])})`, `${strip(pl[1])}の${strip(n[1])}`], hint[0])
     const hintOf = (n, pl) => [`${n[0]} — ${pl[0]}`, `${strip(n[1])} — ${pl[1]}`]
     // ô chưa có ảnh (trước 06/11: nón thúng Nghệ An) → hình vẽ 16 vòng nón + dòng địa phương không số ảnh
     const noPhoto = (n, pl) => /Nghệ An/.test(pl[0]) && !PHOTOS[hintOf(n, pl)[0]]
-    const plH = (n, pl, w) => textH(noPhoto(n, pl) ? pl : numCap(gridCap(pl, hintOf(n, pl)), 99), w, placeO)
+    const plH = (n, pl, w) => textH(noPhoto(n, pl) ? pl : numCap(gridCap(n, pl, hintOf(n, pl)), 99), w, placeO)
     // 08/11: chú thích ô dài thêm phần nguồn → đo chữ theo đúng bề ngang ô (lặp hai lần), ô không bị thu nhỏ quá mức
     const nameAt = (w) => Math.max(...g.items.map(([n, pl]) => textH(n, w, nameO) + 4 + plH(n, pl, w)))
     const fitW = (w) => Math.min((CW - gap * (cols - 1)) / cols, (f.bot - f.y - 20 - (rows - 1) * 14) / rows - 8 - nameAt(w))
@@ -2146,7 +2181,7 @@ let guidePage = null
         }
       } else {
         // soát 04/11 (B10): dòng địa phương = chú thích ảnh "Ảnh N: địa phương (Nguồn: …)" (ảnh báo chí ghi tên báo)
-        const cp = gridCap(place, hint)
+        const cp = gridCap(name, place, hint)
         p.add(T(gx, gy + cell + 10 + nh, cw, textH(numCap(cp, 99), cw, placeO), cp, { ...placeO, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
       }
     })
@@ -2156,7 +2191,7 @@ let guidePage = null
   f.page()
   grid(sh.groups[0], 3)
   f.page()
-  grid(sh.groups[1], 2)
+  grid(sh.groups[1], 3) // soát 15/11: chú thích nay có tên nón → 2 cột thì ô co còn 116pt; 3 ô một hàng như trang trước
   // giá trị văn hóa và thẩm mỹ: đoạn có dấu ¹ (Nhà hát Cao Văn Lầu) cùng trang với chú thích của nó;
   // mở ở trang mới, phần trống dưới lưới hình dáng nón lấp ảnh (trang lưới không thành trang chữ)
   const val = s11.blocks[2]
@@ -2350,7 +2385,7 @@ let guidePage = null
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Hai mặt khác màu hoặc họa tiết', '表と裏で異なる色・柄'], ['Giữ dáng nón chóp quen thuộc', 'なじみのある円錐形'], ['Phối màu linh hoạt', '色の組み合わせを自由に']]],
     },
     'Nón cô dâu': {
-      details: [[['Họa tiết mặt trong', '内側の模様'], 74, 66, 2.4], [['Mặt ngoài trắng', '白い外側'], 50, 24, 2.6]],
+      details: [[['Mặt ngoài trắng', '白い外側'], 50, 24, 2.6], [['Họa tiết mặt trong', '内側の模様'], 74, 66, 2.4]], // ① ở trên, ② ở dưới như cột ảnh cận
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Họa tiết vẽ ở mặt trong', '内側に模様を描く'], ['Dùng trang trí, chụp ảnh cưới', '飾りや結婚写真の撮影に'], ['Giữ hình dáng nón truyền thống', '伝統的な形を保つ']]],
     },
   }
@@ -2445,29 +2480,73 @@ let guidePage = null
       ;[hint, inside].forEach((h, i) => {
         const x = p.x0 + i * (gw + 14)
         p.add(IMG(x, y, gw, ph, h, { fit: 'cover' }))
-        p.add(T(x, y + ph + 5, gw, 14, labels[i], { size: 11.5, lh: 1.25, color: C.ink2, jaFont: F.jaSans, name: 'Nhãn chi tiết' }))
+        p.add(T(x, y + ph + 5, gw, 14, labels[i], { size: 11.5, weight: 600, lh: 1.25, color: C.ink2, align: 'center', jaFont: F.jaSans, name: 'Nhãn chi tiết' }))
       })
-      p.add(T(p.x0, y + ph + 23, CW, null, cap, { size: 11, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+      // GVHD 15/11: "Nếu 2 bức ảnh chỉ 1 cái nón, thì tên ảnh nên để ra giữa 2 ảnh" → chú thích chung canh giữa dưới cặp ảnh
+      p.add(T(p.x0, y + ph + 23, CW, null, cap, { size: 11, italic: true, color: C.muted, lh: 1.3, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
       y += ph + 18 + capH0 + 16
     } else {
     // không có cột ảnh cận (nón nhà sư): ảnh lớn canh giữa khối, không lệch trái để trống nửa phải
     const hx = p.x0 + (dets.length ? 0 : (CW - hw) / 2)
-    p.add(IMG(hx, y, hw, hh, hint, { fit: ex.hero?.fit ?? 'cover', ...(ex.hero?.pos ? { pos: ex.hero.pos } : {}) }))
+    const heroEl = IMG(hx, y, hw, hh, hint, { fit: ex.hero?.fit ?? 'cover', ...(ex.hero?.pos ? { pos: ex.hero.pos } : {}) })
+    p.add(heroEl)
     p.add(T(hx, y + hh + 5, hw, null, cap, { size: 11, italic: true, color: C.muted, lh: 1.3, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
     if (dets.length) {
       const lh = 22
       const dh = (hh - (dets.length - 1) * 8 - dets.length * lh) / dets.length
+      // GVHD 15/11: "Cần có 1 mũi tên hay chỉ dấu nào đó để cho thấy là 2 ảnh bên phải là từ ảnh bên trái ra" → trên ảnh
+      // lớn khoanh nét đứt đúng vùng được phóng (tính như CanvasPage vẽ ảnh cận: object-fit cover + phóng z quanh điểm x%, y%)
+      // kèm số ①②, ảnh cận mang cùng số ở góc
+      const a = 1 / (natR(hint) ?? heroEl.h / heroEl.w) // rộng / cao của ảnh gốc
+      const win = (fw, fh) => (a > fw / fh ? [fw / fh / a, 1] : [1, a / (fw / fh)]) // phần ảnh gốc hiện trong khung cover
+      const [hpx, hpy] = String(heroEl.pos ?? '50% 50%').split(' ').map((v) => parseFloat(v) / 100)
+      const toHero = (ix, iy) => {
+        if ((heroEl.fit ?? 'cover') === 'contain') {
+          const k = Math.min(heroEl.w, heroEl.h * a) // bề ngang ảnh hiện ra
+          const ox = (heroEl.w - k) * hpx
+          const oy = (heroEl.h - k / a) * hpy
+          return [heroEl.x + ox + ix * k, heroEl.y + oy + iy * (k / a)]
+        }
+        const [vw, vh] = win(heroEl.w, heroEl.h)
+        return [heroEl.x + ((ix - (1 - vw) * hpx) / vw) * heroEl.w, heroEl.y + ((iy - (1 - vh) * hpy) / vh) * heroEl.h]
+      }
+      // anh Hải 15/11 ("mờ vl chả thấy box đâu … đọc cái rule WCAG AA"): WCAG 2.1 SC 1.4.11 — vạch chỉ dấu phải tương phản
+      // ≥ 3:1 với nền liền kề, mà nền là ảnh chụp đủ màu → viền hai lớp: nét gần đen dưới + nét trắng trên (nền sáng thấy nét
+      // đen ~18:1, nền tối thấy nét trắng ~18:1). Số trong chấm: chữ trắng trên nền gần đen ~17:1 (≥ 4.5:1 cho chữ)
+      const INK = '#1b1612'
+      const badge = (bx, by, k) => [
+        ELL(bx - 1.5, by - 1.5, 23, 23, '#ffffff', { name: 'Số chi tiết' }),
+        ELL(bx, by, 20, 20, INK, { name: 'Số chi tiết' }),
+        T(bx, by + 3, 20, 14, [String(k), null], { size: 12, weight: 700, color: '#ffffff', align: 'center', lh: 1.2, name: 'Số chi tiết' }),
+      ]
       dets.forEach(([label, cx, cy, z], i) => {
         const dy = y + i * (dh + lh + 8)
         p.add(IMG(p.x0 + hw + 14, dy, dw, dh, hint, { crop: { x: cx, y: cy, z }, name: 'Ảnh chi tiết' }))
         p.add(T(p.x0 + hw + 14, dy + dh + 5, dw, lh - 6, label, { size: 11.5, lh: 1.25, color: C.ink2, jaFont: F.jaSans, name: 'Nhãn chi tiết' }))
+        // vùng ảnh gốc mà ô cận đang hiện
+        const [vw, vh] = win(dw, dh)
+        const mid = (v) => Math.min(Math.max(v / 100, 0.5 / z), 1 - 0.5 / z)
+        const icx = (1 - vw) * (cx / 100) + mid(cx) * vw
+        const icy = (1 - vh) * (cy / 100) + mid(cy) * vh
+        const [x0, y0] = toHero(icx - vw / z / 2, icy - vh / z / 2)
+        const [x1, y1] = toHero(icx + vw / z / 2, icy + vh / z / 2)
+        const L = Math.max(heroEl.x + 2, x0)
+        const Tp = Math.max(heroEl.y + 2, y0)
+        const Rr = Math.min(heroEl.x + heroEl.w - 2, x1)
+        const B = Math.min(heroEl.y + heroEl.h - 2, y1)
+        if (Rr - L > 12 && B - Tp > 12) {
+          p.add(RECT(L, Tp, Rr - L, B - Tp, 'none', { radius: 3, stroke: INK, sw: 4.2, opacity: 0.9, name: 'Khung chi tiết' }))
+          p.add(RECT(L, Tp, Rr - L, B - Tp, 'none', { radius: 3, stroke: '#ffffff', sw: 2, name: 'Khung chi tiết' }))
+          p.add(...badge(Math.min(Rr - 11, heroEl.x + heroEl.w - 22), Math.max(heroEl.y + 3, Tp - 10), i + 1))
+        }
+        p.add(...badge(p.x0 + hw + 14 + 6, dy + 6, i + 1))
       })
     }
     y += hh + capH0 + 16
     }
     if (boxH) {
       p.add(RECT(p.x0, y, CW, boxH, '#fbf6ea', { radius: 6, stroke: C.line, sw: 0.8, name: 'Khung đặc điểm' }))
-      p.add({ ...DECO('non-line', p.x0 + 14, y + 8, 34, 18, 0.9), name: 'Hình vẽ' })
+      p.add({ ...DECO('toc-non', p.x0 + 16, y + 10, 30, 15, 1), name: 'Hình vẽ' }) // nét mảnh non-line chỉ 1,68:1 → ký hiệu tô kín
       p.add(T(p.x0 + 56, y + 9, CW - 70, 20, bt, { font: F.head, size: 15, weight: 700, color: tone, lh: 1.3, jaFont: F.jaHead, jaSize: 14, name: 'Tên khung' }))
       items.forEach((it, i) => {
         const bx = p.x0 + 18 + (i % 2) * (bw2 + 10)
@@ -3305,7 +3384,26 @@ let stripRight = null
   // ảnh dọc: khung theo chỗ còn dưới đoạn văn (không đẩy sang trang sau, để lại nửa trang trống)
   // Ảnh 101 (ảnh dọc 2:3) thành trang ảnh tràn viền ngay sau trang đoạn ¹ ²; chỗ dưới đoạn văn (trước là Ảnh 101 bị cắt
   // thành dải ngang) dành cho hai ảnh nón lụa hai mặt (sản phẩm của làng) → không lấp ảnh kho lạc đề; đoạn OCOP ³ + ảnh OCOP sau trang ảnh
-  f.row(ri.silk)
+  // GVHD 15/11: "Nếu 2 bức ảnh chỉ 1 cái nón, thì tên ảnh nên để ra giữa 2 ảnh" — ảnh 98/99 là mặt ngoài và lòng của cùng một
+  // chiếc nón lụa hai mặt (doc-0811/lua-hai-mat-do-1, -2; bản Nhật hai chú thích y hệt) → nhãn dưới từng ảnh + một chú thích chung
+  {
+    const gap = 14
+    const w = (CW - gap) / 2
+    const cap = ri.silk[0]
+    const labels = [['Mặt ngoài (sắc đỏ)', '外側（赤）'], ['Mặt trong — họa tiết lông vũ', '内側（羽根の模様）']]
+    const ch = capH(cap, CW)
+    const h = w * R.std
+    if (!f.p || f.room < h + 23 + ch) f.page()
+    const p = f.p
+    const y = f.y
+    ri.silk.forEach((c, i) => {
+      const x = p.x0 + i * (w + gap)
+      p.add(IMG(x, y, w, h, c, { fit: fitOf(c) }))
+      p.add(T(x, y + h + 5, w, 14, labels[i], { size: 11.5, weight: 600, lh: 1.25, color: C.ink2, align: 'center', jaFont: F.jaSans, name: 'Nhãn chi tiết' }))
+    })
+    p.add(T(p.x0, y + h + 23, CW, ch, cap, { ...capOpt, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+    f.y = y + h + 23 + ch + 22
+  }
   f.bleed(ri.products)
   if (rc.notes.length > 2) f.noted([rc.p[1]], rc.notes.slice(2))
   else f.prose([rc.p[1]]) // chú thích OCOP đã chuyển về 1.3.2 (Bổ sung 2, 12/11)
@@ -3473,8 +3571,7 @@ let stripRight = null
     // 08/11: trang phải theo bản Nhật — ảnh 3-20 (bà giới thiệu sản phẩm, rộng hết khối) + 3-21 (giấy khen) cạnh câu trích
     const q = f.page()
     const [pic, wall] = ar.photos.huong
-    const qO = quoteOpt(19)
-    const qh = textH(ar.sayings.Hương, CW - 170 - 54, qO)
+    const qh = quoteH(ar.sayings.Hương, CW - 170 - 54, 19)
     const ch2 = capH(pic, CW)
     const ww = 170
     const wch = capH(wall, ww)
@@ -3517,7 +3614,7 @@ let stripRight = null
       // soát độc lập 08/11: phần còn lại của cặp trang ông Tuy lấp bằng ảnh của chính ông (gian trưng bày, triển lãm, bằng
       // Nghệ nhân làng nghề Việt Nam) thay cho ảnh chợ / du khách trong kho — anh Hải: "ảnh phải có liên quan đến người nói đến"
       f.pool.unshift(
-        ['Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật', '職人レ・ヴァン・トゥイ氏による、さまざまなデザインのチュオン村のノンラーの展示 — 出典：スアン・ライ／ファップルアット紙'],
+        ['Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật', '職人レ・ヴァン・トゥイ氏による、さまざまなデザインのチュオン村のノンラーの展示 — 出典：スアン・ライ／Pháp luật新聞'],
         ['Không gian trưng bày của nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏の展示スペース'],
         ['Bằng công nhận Nghệ nhân làng nghề Việt Nam của ông Lê Văn Tuy', 'レ・ヴァン・トゥイ氏の「ベトナム{工芸村|こうげいむら}職人」{認定|にんてい}証']
       )
@@ -3597,22 +3694,36 @@ let stripRight = null
   f.end()
 
   f.runLabel = ['LƯU Ý', '留意点'] // đầu trang mọi trang của phần này (không chỉ trang đầu)
-  // lưu ý: toàn văn gọn trong một trang (góp ý của người dùng), không chia cặp trang + ảnh
+  // GVHD 15/11 (bản Nhật): "cỡ chữ nhỏ quá, dày quá -> khó đọc"; soát độc lập: 14pt vẫn nhỏ hơn thân bài (16pt) → chữ bằng
+  // thân bài, giãn dòng / giãn đoạn rộng, bốn đoạn chia đều hai trang đối diện (trước: dồn một trang, trang phải chỉ có hình
+  // vẽ). Lũy tre vẽ dần (anh Hải 05/11) thu thành dải đất + măng ở chân cả hai trang, nét đất liền qua gáy sách.
   mark(1, e.notice.title, f.section(null, e.notice.title, ['Đôi lời gửi bạn đọc', '読者の皆様へ']), '—')
-  f.prose(e.notice.p, { budget: false, size: 13.5, lh: 1.5, paraGap: 5, jaSize: 13.5 })
-  // anh Hải 05/11: "trái phải hơi trống … làm cái chuỗi hiệu ứng liên quan đến cây tre lớn dần" → lũy tre vẽ dần
-  // (GroveWidget): dải dưới trang chữ = mặt đất + măng non, trang đối diện = 16 vòng tròn, tre mọc từng đốt, nón được
-  // làm dưới gốc tre. Mặt đất hai trang cùng độ cao (BOT − 2) để nét đất chạy liền qua gáy sách.
   {
+    const nO = { budget: false, size: 14.5, lh: 1.85, paraGap: 12, jaSize: 16 }
+    const pool0 = f.pool
+    f.pool = [] // không chèn ảnh lấp vào hai trang lưu ý
+    const half = Math.ceil(e.notice.p.length / 2)
+    f.prose(e.notice.p.slice(0, half), nO)
     const lp = f.p
-    const gy = Math.max(f.y + 4, BOT - 96)
-    lp.add(WIDGET(0, gy, W, BOT + 8 - gy, 'grove', { name: 'Hình vẽ động', data: { variant: 'left' } }))
-    lp.grove = true
-    const rp = f.page()
-    rp.add(WIDGET(0, TOP, W, BOT + 8 - TOP, 'grove', { name: 'Hình vẽ động', data: { variant: 'right' } }))
-    rp.grove = true
-    rp.fixed = true
+    const ly = f.y
+    f.page()
+    f.prose(e.notice.p.slice(half), nO)
+    const rp = f.p
+    const gy = Math.max(ly + 8, f.y + 8, BOT - 96)
+    for (const [pg, variant] of [[lp, 'left'], [rp, 'left']]) {
+      pg.add(WIDGET(0, gy, W, BOT + 8 - gy, 'grove', { name: 'Hình vẽ động', data: { variant } }))
+      pg.grove = true
+    }
+    if (gy > BOT - 40) console.warn(`⚠ lưu ý: không còn chỗ dải lũy tre (${r1(gy)})`)
+    // trang nào còn khoảng trống lớn giữa chữ và dải tre → một hình vẽ nét mảnh của sách canh giữa khoảng đó
+    for (const [pg, top] of [[lp, ly], [rp, f.y]]) {
+      const room = gy - top - 40
+      if (room < 120) continue
+      const m = pickMotif(pg, 'c', pg.cw * 0.5, Math.min(room, 220), 80)
+      if (m) pg.add({ ...DECO(m.name, pg.x0 + (pg.cw - m.w) / 2, top + 20 + (room - m.h) / 2, m.w, m.h, 0.85), name: 'Hình vẽ', fillDeco: true })
+    }
     f.y = BOT
+    f.pool = pool0
   }
   f.end()
 
@@ -3669,7 +3780,7 @@ let stripRight = null
   refGroups.forEach((g, k) => {
     const label = g.sub ? [`${g.h[0].toUpperCase()} · ${g.sub[0]}`, `${g.h[1]}・${g.sub[1]}`] : [g.h[0].toUpperCase(), g.h[1]]
     f.place(30, (p, y) => {
-      p.add(T(p.x0, y + 8, p.cw, 18, [`${label[0]} · ${g.items.length}`, `${label[1]}・${g.items.length}`], { size: S.label, tracking: 1.8, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm tài liệu' }), HL(p.x0, y + 28, 40, ACC[9], 1.2))
+      p.add(T(p.x0, y + 8, p.cw, 18, label /* GVHD 15/11: "bỏ cái số liệt kê số tài liệu đi 書籍・18" */, { size: S.label, tracking: 1.8, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm tài liệu' }), HL(p.x0, y + 28, 40, ACC[9], 1.2))
     }, 6)
     refNo = 0
     g.items.forEach(putRef)
@@ -3708,7 +3819,7 @@ let stripRight = null
         [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
         [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
         [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển'],
-        [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật（スアン・ライ）'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', '展示会でのトゥイ氏のノンラーの展示ブース'], 'Báo Pháp luật'],
+        [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', '展示会でのトゥイ氏のノンラーの展示ブース（スアン・ライ撮影）'], 'Báo Pháp luật'], // JA: tên người chụp sang cột mô tả — nhãn một dòng (soát 15/11: tr. 131 chữ đè)
         [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」'], 'Chạm Sắc'],
         [['Maries', 'Maries'], ['Lễ báo công năm 2025', '2025年の活動報告式'], 'Maries'],
       ]],
@@ -3773,7 +3884,9 @@ let stripRight = null
         if (draw) p.add(T(p.x0, y, p.cw, 16, label, { size: S.label - 1, tracking: 2.2, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm' }))
         y += 20
         rows.forEach(([src, what, key], i) => {
-          const h = Math.max(textH(src, lw, { ...o, weight: 700 }), textH(what, dw, o))
+          // đo đúng chữ in ra: bản Nhật đã đổi Báo X → X新聞 trong T() (soát 15/11: tr. 131 Pháp luật新聞（スアン・ライ） xuống 2 dòng đè dòng dưới)
+          const jp = (pr) => [pr[0], pr[1] && jaPaper(pr[1])]
+          const h = Math.max(textH(jp(src), lw, { ...o, weight: 700 }), textH(jp(what), dw, o))
           if (draw) {
             if (i) p.add(HL(p.x0, y - 1.75, p.cw, C.line, 0.4))
             p.add(
@@ -4048,30 +4161,42 @@ const CH_PHOTO = {
     const y = top + i * (ch + gap)
     const no = Number(a.label)
     const acc = ACC[no]
-    const card = preface.chapters[i]
     const title = [strip(a.title[0]).replace(/\n/g, ' '), strip(a.title[1]).replace(/\n/g, '')]
     const alt = [`${a.label} ${title[0]} — tr. ${a.page}`, `${a.label} ${title[1] || title[0]} — ${a.page}ページ`]
     // thẻ giấy sáng viền đường khâu màu chương; ảnh mở chương trong khung tròn; số chương lớn + "Trang 08 →" bên phải.
     // Cả thẻ là một nút: lớp link phủ trên cùng
-    const iw = Math.min(ch - 28, 124)
+    const iw = Math.min(ch - 28, 100) // ảnh tròn nhỏ lại cho cột chữ rộng hơn: thẻ nay liệt kê các mục của phần
     const ix = p.x0 + 16
     const tx = ix + iw + 20
     const tw = p.x1 - 70 - tx
     const tO = { font: F.head, size: 17, lh: 1.25, jaSize: 16 }
     const th = textH(title, tw, tO)
-    const dO = { size: 13, lh: 1.45, jaSize: 13 }
-    const dh = textH(card.text, tw, dO)
+    // GVHD 15/11: "đang là phần 構成 thì cần viết có đánh số hoặc kí hiệu cho từng tiểu mục. ko dùng cách liệt kê そして"
+    // → thay câu mô tả bằng danh sách các mục của phần, mỗi mục một dòng có số mục (1.1, 1.2…)
+    const subs = anchors.filter((s) => s.level === 2 && s.label.startsWith(`${no}.`))
+    const iO = { size: 11.5, lh: 1.28, jaSize: 11.5 }
+    const nw = 26
+    const subT = (s) => [strip(s.title[0]).replace(/\n/g, ' '), strip(s.title[1] ?? s.title[0]).replace(/\n/g, '')]
+    const ihs = subs.map((s) => textH(subT(s), tw - nw, iO))
+    const dh = ihs.reduce((n, h) => n + h, 0) + 3 * Math.max(0, subs.length - 1)
     const pad = String(a.page).padStart(2, '0')
-    const ty = y + Math.max(12, (ch - (18 + th + 8 + dh + 26)) / 2)
+    if (18 + th + 8 + dh > ch - 16) console.warn(`⚠ thẻ phần ${no}: chật (${r1(18 + th + 8 + dh)} > ${r1(ch - 16)})`)
+    const ty = y + Math.max(8, (ch - (18 + th + 8 + dh)) / 2)
     p.add(
       RECT(p.x0, y, p.cw, ch, '#fbf6ea', { radius: 8, opacity: 0.92, stroke: TINT[no], sw: 1.2, name: 'Thẻ chương' }),
       RECT(p.x0 + 5, y + 5, p.cw - 10, ch - 10, 'none', { radius: 5, stroke: acc, sw: 0.8, dash: '3 2.5', opacity: 0.7, name: 'Đường khâu' }),
       ELL(ix - 3, y + (ch - iw) / 2 - 3, iw + 6, iw + 6, 'none', { stroke: acc, sw: 1, name: 'Viền ảnh tròn' }),
       { ...IMG(ix, y + (ch - iw) / 2, iw, iw, CH_PHOTO[no], { name: 'Ảnh chương' }), round: true },
-      T(tx, ty, 160, 18, [`PHẦN ${no}`, `パート${no}`], { size: 11, tracking: 2.2, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
+      // số trang đứng chung dòng nhãn phần (thẻ nay liệt kê các mục nên cần chỗ)
+      T(tx, ty, tw, 18, [`PHẦN ${no} · Trang ${pad} →`, `パート${no}・${a.page}ページ →`], { size: 11, tracking: 1.6, weight: 700, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số chương' }),
       T(tx, ty + 18, tw, th, title, { ...tO, color: C.ink, jaFont: F.jaHead, name: 'Tên chương' }),
-      T(tx, ty + 26 + th, tw, dh, card.text, { ...dO, italic: true, color: C.ink2, jaFont: F.jaSans, name: 'Mô tả chương' }),
-      T(tx, ty + 34 + th + dh, 120, 16, [`Trang ${pad} →`, `${a.page}ページ →`], { size: 11.5, weight: 600, tracking: 0.5, color: acc, lh: 1.3, jaFont: F.jaSans, name: 'Số trang chương' }),
+      ...subs.flatMap((s, k) => {
+        const sy = ty + 26 + th + ihs.slice(0, k).reduce((n, h) => n + h + 3, 0)
+        return [
+          T(tx, sy, nw, 16, [s.label, s.label], { size: 11.5, weight: 700, color: acc, lh: 1.32, jaFont: F.jaSans, name: 'Số mục' }),
+          T(tx + nw, sy, tw - nw, ihs[k], subT(s), { ...iO, color: C.ink2, jaFont: F.jaSans, name: 'Mục trong phần' }),
+        ]
+      }),
       T(p.x1 - 66, y + 10, 54, 40, [String(no).padStart(2, '0'), null], { font: F.head, size: 34, color: acc, align: 'right', lh: 1.15, name: 'Số chương lớn' }),
       RECT(p.x0, y, p.cw, ch, 'none', { radius: 8, link: `#p${a.page}`, alt, name: 'Nút thẻ chương' })
     )
@@ -4149,11 +4274,15 @@ const CH_PHOTO = {
       const row = (ry, rh, dx = 0) => RECT(tp.x0 + dx - 8, ry, tp.cw - dx + 16, rh, 'none', { radius: 4, link: `#p${a.page}`, alt: `${a.label === '—' ? '' : a.label + ' '}${title[li] ?? title[0]} — ${li === 1 ? `${a.page}ページ` : `tr. ${a.page}`}`, name: 'Dòng mục lục' })
       if (a.level === 1) {
         y += 14 * k
-        add(T(tp.x0, y - 2, 40, 24, [a.label, null], { font: F.head, size: 19, color: acc, lh: 1.1, name: 'Số chương' }), T(tp.x0 + indent, y, tp.cw - indent - 48, th, title, { ...o, color: C.ink, jaFont: F.jaHead, name: 'Mục lục' }), T(tp.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, name: 'Số trang' }))
+        // GVHD 15/11: "ko dùng dấu gạch đầu dòng, thay bằng 2 ký hiệu khác (chiếc nón nhỏ, lá cây...chẳng hạn)" → dòng không số
+        // (lời mở đầu, kết luận…) có chiếc nón nhỏ thay dấu "—"; mục cấp 2 có chiếc lá thay ô vuông. Anh Hải 15/11 ("mờ vl
+        // ko nhìn thấy gì cả"): hình nét mảnh non-line / leaf-sprig thu nhỏ còn nét ~0.1px → hai ký hiệu riêng tô kín, màu
+        // đạt WCAG 1.4.11 (≥ 3:1 trên nền giấy). Tên "Họa tiết" (DECO) → không thành ảnh bấm phóng to
+        add(a.label === '—' ? { ...DECO('toc-non', tp.x0 + 2, y + 2, 30, 15, 1) } : T(tp.x0, y - 2, 40, 24, [a.label, null], { font: F.head, size: 19, color: acc, lh: 1.1, name: 'Số chương' }), T(tp.x0 + indent, y, tp.cw - indent - 48, th, title, { ...o, color: C.ink, jaFont: F.jaHead, name: 'Mục lục' }), T(tp.x1 - 44, y + 1, 44, 20, [pg, null], { font: F.head, size: 14, color: acc, align: 'right', lh: 1.3, name: 'Số trang' }))
         add(row(y - 5, th + 9))
         y += th + 8 * k
       } else {
-        add(RECT(tp.x0 + indent - 14, y + 7, 5, 5, acc, { radius: 1, opacity: 0.8, name: 'Ký hiệu mục' }), T(tp.x0 + indent, y, tp.cw - indent - 48, th, title, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Mục lục' }), T(tp.x1 - 44, y, 44, 18, [pg, null], { size: 12, color: C.muted, align: 'right', lh: 1.35, name: 'Số trang' }))
+        add({ ...DECO('toc-leaf', tp.x0 + indent - 19, y + 2, 13, 13, 1) }, T(tp.x0 + indent, y, tp.cw - indent - 48, th, title, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Mục lục' }), T(tp.x1 - 44, y, 44, 18, [pg, null], { size: 12, color: C.muted, align: 'right', lh: 1.35, name: 'Số trang' }))
         add(row(y - 3, th + 4, indent - 18))
         y += th + 6 * k
       }
@@ -4172,11 +4301,15 @@ const CH_PHOTO = {
       name: 'Phong bì thư',
       data: {
         letter: ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭（ディン）の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。'],
-        sign: ['— Ca dao —', '— ベトナムの民謡（カーザオ）—'],
+        // GVHD 15/11: "người Nhật họ không cảm nhận được … những tầng ý nghĩa sau câu ca dao này -> đọc bản dịch thì thấy bình
+        // thường. Nên có 2 cách: 1- Viết câu ca dao bằng tiếng Việt - rồi viết dịch nghĩa ngay dưới. Sau đó giải thích 1 vài
+        // câu…" → cách 1: bản Nhật in câu gốc tiếng Việt, dịch nghĩa ngay dưới, rồi ba câu giải thích (thay chú thích 亭 chữ nhỏ)
+        orig: [null, 'Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu'],
+        sign: ['— Ca dao —', 'ベトナムの民謡（カーザオ）'],
         to: ['Gửi bạn đọc', '読者の皆さまへ'],
         from: ['Từ làng Chuông · Thanh Oai, Hà Nội', 'ハノイ・チュオン村より'],
         // soát 08/11: chú thích 亭 để ở chân trang thì lơ lửng lúc thư còn đóng → in nhỏ ngay trong lá thư (bản Nhật)
-        note: [null, '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。'],
+        note: [null, '亭（ディン）は村の守護神を祀る建物です。ノンラーを傾けて亭を見上げる仕草に恋心を込めたこの歌のように、ノンラーは昔からベトナムの女性の姿とともに、村の暮らしと文化の中で歌われてきました。'],
       },
     }),
     alt: ['Phong bì thư gửi bạn đọc — bấm để mở', '読者の皆さまへの手紙 — クリックして開く'],
@@ -4283,6 +4416,18 @@ function centerDeco(p) {
 pages.forEach(centerDeco)
 pages.forEach(vignette)
 pages.forEach(settle)
+// GVHD 15/11 (ảnh 4–5: hai ảnh cạnh nhau, chú thích ba dòng canh trái): "Những ảnh kiểu này cần căn lề giữa" → ảnh nằm
+// cạnh ảnh khác cùng hàng thì chú thích ngay dưới nó canh giữa theo ảnh
+function centerRowCaptions(p) {
+  const imgs = p.els.filter((e) => e.type === 'image' && e.name !== 'Họa tiết' && e.name !== 'Hình vẽ' && e.w < CW - 1 && e.w > 60)
+  for (const c of p.els) {
+    if (c.type !== 'text' || c.name !== 'Chú thích ảnh' || c.align === 'center') continue
+    const ov = (i) => Math.min(i.x + i.w, c.x + c.w) - Math.max(i.x, c.x)
+    const im = imgs.find((i) => ov(i) > 0.6 * Math.min(i.w, c.w) && c.w < CW - 1 && c.y >= i.y + i.h - 1 && c.y <= i.y + i.h + 14)
+    if (im && imgs.some((o) => o !== im && Math.abs(o.y - im.y) < 3 && Math.abs(o.x - im.x) > 20)) c.align = 'center'
+  }
+}
+pages.forEach(centerRowCaptions)
 // hoa văn cuối trang: trang có ảnh mà đáy còn dải trống (chữ / ảnh không chia đều được) → hình vẽ nét mảnh nhỏ của chương
 function tailpiece(p) {
   if (p.fixed || p.grove || p.bg === '#2b2118' || p.els.some((e) => e.type === 'image' && e.w * e.h > W * H * 0.8)) return
@@ -4485,9 +4630,12 @@ pages.forEach(bottomFlora)
       const ja = fc[1] ? strip(pageCap(fc[1])) : null
       // khối nhiều dòng: so từng dòng (dòng i bản Việt ứng dòng i bản Nhật)
       const lines = caps.flatMap((c) => c.text.split('\n').map((t, i) => ({ text: t, ja: c.ja?.split('\n')[i] ?? null })))
-      const hit = e.capSrcOnly ? lines.find((c) => /^Ảnh \d+: \(/.test(c.text)) : lines.find((c) => bare(c.text) === vi || (ja && bare(c.ja) === ja))
+      // soát độc lập 15/11: lưới kiểu nón — chú thích trên trang khác gợi ý ảnh → lấy ô chú thích ngay dưới ảnh (cùng cột,
+      // cách ≤ 60pt: có dòng tên nón ở giữa)
+      const below = caps.find((c) => !c.text.includes('\n') && Math.abs(c.x - e.x) < 2 && Math.abs(c.w - e.w) < 2 && c.y - (e.y + e.h) >= 0 && c.y - (e.y + e.h) <= 60)
+      const hit = e.capSrcOnly ? lines.find((c) => /^Ảnh \d+: \(/.test(c.text)) : lines.find((c) => bare(c.text) === vi || (ja && bare(c.ja) === ja)) ?? (below && { text: below.text, ja: below.ja })
       e.cap = hit ? hit.text : vi
-      e.capJa = hit ? hit.ja ?? null : ja
+      e.capJa = hit ? hit.ja ?? null : ja && jaPaper(ja)
     }
   }
   // FIGMAP=1: bảng số ảnh → khoá chú thích → đường dẫn ảnh (đối chiếu sheet "Chú thích ảnh" của nhóm)

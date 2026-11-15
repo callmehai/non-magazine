@@ -792,3 +792,12 @@
 .cv-it {
   font-style: italic;
 }
+
+/* bản tiếng Nhật: đoạn có dòng cuối 1–2 chữ (đo thật) — bốn chữ cuối dính liền (GVHD 15/11) */
+.cv-keep {
+  white-space: nowrap;
+}
+/* tên tiếng Việt ngắn trong bản Nhật không ngắt giữa chừng ("Phạm / Trần Canh", "Dân / Việt新聞") */
+.cv-nb {
+  white-space: nowrap;
+}

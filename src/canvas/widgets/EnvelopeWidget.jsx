@@ -61,6 +61,8 @@ export default function EnvelopeWidget({ el, interactive }) {
   }, [])
   const pick = (p) => plainText((p && (p[li] ?? p[0])) || '')
   const lines = pick(el.letter).split('\n')
+  // el.orig = [vi, ja]: câu gốc tiếng Việt chỉ in ở bản Nhật (bản Việt đã là câu gốc)
+  const orig = lang === 'ja' && el.orig?.[1] ? plainText(el.orig[1]).split('\n') : []
 
   // ── hình học (đơn vị em = pt của trang)
   const W = el.w
@@ -159,6 +161,12 @@ export default function EnvelopeWidget({ el, interactive }) {
                   <circle cx="30" cy="7.6" r="1.4" fill="#a88a5c" />
                 </svg>
                 <span className="cvw-env__verse">
+                  {/* GVHD 15/11 (cách 1): bản Nhật in câu ca dao gốc tiếng Việt, dịch nghĩa ngay dưới, rồi vài câu giải thích */}
+                  {orig.map((s, i) => (
+                    <span key={`o${i}`} className={`is-orig ${i % 2 === 0 ? 'is-luc' : ''}`}>
+                      {s}
+                    </span>
+                  ))}
                   {lines.map((s, i) => (
                     <span key={i} className={i % 2 === 0 && lang === 'vi' ? 'is-luc' : ''}>
                       {s}

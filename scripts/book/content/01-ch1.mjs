@@ -140,11 +140,11 @@ export const ch1 = {
       p: [
         [
           'Theo tài liệu Nghề đẹp quê hương (Nguyễn Vỵ), những hình ảnh được cho là tiền thân của chiếc nón đã xuất hiện trên trống đồng Ngọc Lũ và thạp đồng Đào Thịnh, có niên đại khoảng 2500–3000 năm trước theo tư liệu này¹. Những hình chạm khắc gợi liên tưởng đến vật đội đầu mà cư dân Việt cổ có thể đã sử dụng, với chất liệu được phỏng đoán là lông chim kết lại hoặc các loại lá cây bản rộng, dày như lá cọ. Tuy nhiên, những hình ảnh này chưa đủ cơ sở để xác định chính xác hình dáng và chất liệu của chiếc nón thời kỳ đó. Vì vậy, đây được xem là những tư liệu tham khảo góp phần tìm hiểu về các hình thức vật đội đầu trong đời sống cư dân Việt cổ, thay vì bằng chứng trực tiếp về chiếc nón lá hiện nay.',
-          'グエン・ヴィの著書『Nghề đẹp quê hương』によると、ノンラーの{原型|げんけい}と考えられる図像が、約2,500～3,000年前のものとされるゴックルーの{銅鼓|どうこ}やダオティンの青銅製容器に見られます¹。これらの彫刻からは、古代ベトナムの人々が使用していた可能性のあるかぶり{物|もの}がうかがえます。その{素材|そざい}については、鳥の{羽|はね}を{束|たば}ねたものや、ヤシの{葉|は}のような幅が広く厚みのある葉が使われていたと{推測|すいそく}されています。しかし、これらの図像だけでは、当時のかぶり物の形や素材を正確に{特定|とくてい}することはできません。そのため、現在のノンラーの存在を{直接|ちょくせつ}示す{証拠|しょうこ}というよりも、古代ベトナムの人々が使用していたかぶり物の形態を知るための参考資料として位置づけられています。',
+          'グエン・ヴィの著書『Nghề đẹp quê hương』（筆者仮訳：『故郷の美しい職業』）によると、ノンラーの{原型|げんけい}と考えられる図像が、約2,500～3,000年前のものとされるゴックルーの{銅鼓|どうこ}やダオティンの青銅製容器に見られます¹。これらの彫刻からは、古代ベトナムの人々が使用していた可能性のあるかぶり{物|もの}がうかがえます。その{素材|そざい}については、鳥の{羽|はね}を{束|たば}ねたものや、ヤシの{葉|は}のような幅が広く厚みのある葉が使われていたと{推測|すいそく}されています。しかし、これらの図像だけでは、当時のかぶり物の形や素材を正確に{特定|とくてい}することはできません。そのため、現在のノンラーの存在を{直接|ちょくせつ}示す{証拠|しょうこ}というよりも、古代ベトナムの人々が使用していたかぶり物の形態を知るための参考資料として位置づけられています。',
         ],
         [
           'Bên cạnh các dấu tích khảo cổ về nón lá thì còn có nghề làm nón được đề cập trong những tài liệu về nghề thủ công truyền thống. Theo tư liệu Từ điển văn hóa cổ truyền Việt Nam do Hữu Ngọc (chủ biên), nghề này muộn nhất đã có từ thời Trần, khoảng thế kỷ XIII–XIV². Trong xã hội xưa, nón có nhiều loại dành cho những đối tượng và mục đích sử dụng khác nhau, chẳng hạn nón tam giang dành cho người lớn tuổi, nón chéo vành dành cho binh lính hay nón tu lờ dành cho nhà sư,... Điều này cho thấy các loại nón đã được sử dụng trong nhiều hoàn cảnh khác nhau của đời sống truyền thống.',
-          'こうした{考古|こうこ}学的な{痕跡|こんせき}に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック{編|へん}『Từ điển văn hóa cổ truyền Việt Nam』によると、ノンラー作りは、{遅|おそ}くとも13～14世紀のチャン朝時代にはすでに存在していたとされています²。かつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
+          'こうした{考古|こうこ}学的な{痕跡|こんせき}に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック{編|へん}『Từ điển văn hóa cổ truyền Việt Nam』（筆者仮訳：『ベトナム伝統文化事典』）によると、ノンラー作りは、{遅|おそ}くとも13～14世紀のチャン朝時代にはすでに存在していたとされています²。かつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
         ],
       ],
       notes: [
@@ -226,7 +226,7 @@ export const ch1 = {
         ],
         [
           'Trong lịch sử, theo cuốn Hỏi đáp về làng nghề truyền thống Việt Nam (Hoàng Đức Nhuận và cộng sự, 2009), nón lá Làng Chuông không chỉ được sử dụng rộng rãi trong đời sống hằng ngày mà còn từng được lựa chọn làm cống vật tiến dâng lên Hoàng hậu, Công chúa¹. Đến thời kỳ kháng chiến chống Mỹ, người dân trong làng tiếp tục duy trì sản xuất để đáp ứng nhu cầu sinh hoạt và hỗ trợ lực lượng thanh niên xung phong. Một số loại nón còn được khâu thêm lớp vải dù ngụy trang để sử dụng trên các tuyến đường ra mặt trận. Điều này không chỉ phản ánh nét đẹp trong sản xuất truyền thống mà còn khẳng định những đóng góp quan trọng của làng nghề qua từng mốc lịch sử gian lao của dân tộc (Vũ Từ Trang & Oger, 2020)².',
-          '『Hỏi đáp về làng nghề truyền thống Việt Nam』（Hoàng Đức Nhuậnほか、2009年）によると、チュオン{村|むら}のノンラーは、かつて日常生活で広く使われていただけでなく、{皇后|こうごう}や{王女|おうじょ}に献上する貢ぎ{物|もの}にも選ばれていました¹。{抗米戦争|こうべいせんそう}期にも、村の人々は生活上の{需要|じゅよう}に{応|こた}え、青年{突撃隊|とつげきたい}を支援するために、ノンラーの生産を続けました。一部のノンラーには、{前線|ぜんせん}へと続く道で使用するため、迷彩用のパラシュート生地が{縫|ぬ}い{付|つ}けられていました。こうした営みは、伝統的なものづくりの美しさを表すだけでなく、民族が{苦難|くなん}を経験した歴史の各時期に、この{工芸村|こうげいむら}が果たしてきた重要な{貢献|こうけん}を明確に示しています（Vũ Từ Trang & Oger、2020年）²。',
+          '『Hỏi đáp về làng nghề truyền thống Việt Nam』（筆者仮訳：『ベトナムの伝統工芸村についての問答』）によると、チュオン{村|むら}のノンラーは、かつて日常生活で広く使われていただけでなく、{皇后|こうごう}や{王女|おうじょ}に献上する貢ぎ{物|もの}にも選ばれていました¹。{抗米戦争|こうべいせんそう}期にも、村の人々は生活上の{需要|じゅよう}に{応|こた}え、青年{突撃隊|とつげきたい}を支援するために、ノンラーの生産を続けました。一部のノンラーには、{前線|ぜんせん}へと続く道で使用するため、迷彩用のパラシュート生地が{縫|ぬ}い{付|つ}けられていました。こうした営みは、伝統的なものづくりの美しさを表すだけでなく、民族が{苦難|くなん}を経験した歴史の各時期に、この{工芸村|こうげいむら}が果たしてきた重要な{貢献|こうけん}を明確に示しています（Vũ Từ Trang & Oger、2020年）²。',
         ],
         [
           'Ngày nay, nghề làm nón Làng Chuông vẫn tiếp tục được gìn giữ chủ yếu theo mô hình sản xuất hộ gia đình. Từ khâu chuẩn bị nguyên liệu, làm khung, chằm nón cho đến hoàn thiện sản phẩm đều diễn ra trong không gian sinh hoạt quen thuộc của mỗi nếp nhà. Tùy theo độ khéo léo và kinh nghiệm, mỗi thành viên trong gia đình sẽ đảm nhận từng công đoạn riêng biệt. Chính phương thức sản xuất mộc mạc ấy không chỉ bảo tồn trọn vẹn những kỹ thuật thủ công tinh xảo, mà còn là sợi dây kết nối, truyền lửa nghề qua nhiều thế hệ.',
@@ -235,7 +235,7 @@ export const ch1 = {
       ],
       notes: [
         ['¹ Hỏi đáp về làng nghề truyền thống Việt Nam, NXB Quân đội nhân dân, 2009, tr. 50.', '¹『Hỏi đáp về làng nghề truyền thống Việt Nam』、人民軍出版社、2009年、50頁。'],
-        ['² Vũ Từ Trang, Henri Oger, Nghề cổ nước Việt – Từ truyền thống đến hiện đại, NXB Phụ nữ Việt Nam, 2020, tr. 218.', '² Vũ Từ Trang, Henri Oger『Nghề cổ nước Việt – Từ truyền thống đến hiện đại』、ベトナム女性出版社、2020年、218頁。'],
+        ['² Vũ Từ Trang, Henri Oger, Nghề cổ nước Việt – Từ truyền thống đến hiện đại, NXB Phụ nữ Việt Nam, 2020, tr. 218.', '² Vũ Từ Trang, Henri Oger『Nghề cổ nước Việt – Từ truyền thống đến hiện đại』（筆者仮訳：『ベトナムの古い職業』）、ベトナム女性出版社、2020年、218頁。'],
       ],
       images: [
         ['Bản đồ hành trình từ trung tâm Hà Nội tới Làng Chuông (xã Thanh Oai, Hà Nội) — nguồn: nền bản đồ © OpenStreetMap', 'ハノイ中心部からチュオン村（ハノイ市タインオアイ社）への道のり — 出典：地図データ © OpenStreetMap'],

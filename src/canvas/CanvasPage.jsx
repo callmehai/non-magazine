@@ -1,9 +1,10 @@
-import { createContext, lazy, memo, Suspense, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createContext, Fragment, lazy, memo, Suspense, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { MagazineContext } from '../lib/context.js'
 import { asset } from '../lib/assets.js'
 import { PAGE_W, PAGE_H } from './model.js'
 import { useCanvasLang, textOf, fontOf, sizeOf, hasLang, parseRuby, plainText } from './lang.js'
 import { useThumbSrc } from './thumbs.js'
+import { ensureFont } from './fonts.js'
 import { t } from '../lib/i18n.js'
 import { PAPER_BASE, paperOf } from './papers.js'
 import { useTab } from './tabs.js'
@@ -211,10 +212,13 @@ function TextBody({ el, mode }) {
   const shown = missing ? 'vi' : lang
   const ref = useRef(null)
   useFillLeading(ref, el, shown, !!el.fillLeading) // cả editor lẫn trang đọc: sửa ở đâu thấy y như người đọc thấy
+  const fix = useOrphanFix(ref, el, shown)
   const body = (
     <div ref={ref} className={`cv-text ${el.vertical ? 'is-vertical' : ''} ${missing ? 'is-missing' : ''} ${el.linkStyle === 'cta' ? 'is-cta' : ''}`} style={textStyle(el, shown)} lang={shown}>
       {paras.map((p, i) => (
-        <p key={i}>{p ? <RubyText text={p} /> : '\u00a0'}</p>
+        <p key={i} style={fix[i] && fix[i] !== 'keep' ? { letterSpacing: fix[i] } : undefined}>
+          {p ? <ParaText text={p} el={el} lang={shown} keep={fix[i] === 'keep'} /> : '\u00a0'}
+        </p>
       ))}
     </div>
   )
@@ -396,7 +400,148 @@ function MoreBody({ el, mode }) {
  * {漢字|かんじ} → chữ có phiên âm; cách đọc chỉ hiện khi rê chuột / chạm (canvas.css).
  * ⟪…⟫ → đoạn in nghiêng giữa câu (tên sách / tên bài trong tài liệu tham khảo APA, như Doc của nhóm — GVHD 11/11)
  */
-export function RubyText({ text }) {
+// ── bản tiếng Nhật: tên riêng tiếng Việt có dấu (Lê Văn Tuy, Phạm Trần Canh, Hà Tây…) nằm giữa chữ Nhật. Font Nhật không
+// có các chữ ă ạ ầ ư…, trình duyệt lấy riêng từng chữ đó từ font khác → một tên hai kiểu chữ (GVHD 15/11: "lỗi font chữ tên
+// ô Phạm Trần Canh", "Lỗi tên nghệ nhân"). Cả cụm chữ Latin có dấu tiếng Việt in bằng font của bản Việt cho đồng đều.
+const VN_MARK = /[À-ÃÈ-ÊÌÍÒ-ÕÙÚÝà-ãè-êìíò-õùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ]/
+const VN_RUN = /[A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+(?:[ '’&.\-–][A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+)*/g
+function vnSplit(s, font) {
+  if (!font || !VN_MARK.test(s)) return s
+  const out = []
+  let last = 0
+  for (const m of s.matchAll(VN_RUN)) {
+    if (!VN_MARK.test(m[0])) continue
+    if (m.index > last) out.push(s.slice(last, m.index))
+    // tên ngắn (Phạm Trần Canh, Dân Việt新聞…) không ngắt giữa chừng — kể cả đuôi 新聞 / 電子雑誌 / 氏 dính sau
+    const short = m[0].length <= 22
+    const suf = short ? (s.slice(m.index + m[0].length).match(/^(?:新聞|電子雑誌|氏)/)?.[0] ?? '') : ''
+    const run = (
+      <span key={short ? undefined : m.index} className="cv-vn" style={{ fontFamily: fontStack(font) }}>
+        {m[0]}
+      </span>
+    )
+    out.push(
+      short ? (
+        <span key={m.index} className="cv-nb">
+          {run}
+          {suf}
+        </span>
+      ) : (
+        run
+      )
+    )
+    last = m.index + m[0].length + suf.length
+  }
+  if (!out.length) return s
+  if (last < s.length) out.push(s.slice(last))
+  return out
+}
+
+// ── bản tiếng Nhật: không để một hai chữ cuối đoạn rơi một mình xuống dòng (GVHD 15/11: "Những chỗ còn 1 chữ rơi xuống
+// dòng thế này thì ko để nó rơi 1 chữ … nhiều chỗ bị, check kĩ"): bốn chữ cuối đoạn dính liền (không ngắt giữa chúng) →
+// dòng cuối luôn có ít nhất bốn chữ; số dòng không đổi nên khung chữ đo sẵn vẫn vừa.
+const KEEP = 4
+const ATOM = /\{[^{}|]+\|[^{}]+\}|[\s\S]/gu
+function keepTail(p) {
+  const atoms = p.match(ATOM) ?? []
+  const len = (a) => (a.length > 1 && a[0] === '{' ? a.slice(1, a.indexOf('|')).length : 1)
+  if (atoms.reduce((n, a) => n + len(a), 0) < KEEP * 4) return null
+  let n = 0
+  let i = atoms.length
+  while (i > 0 && n < KEEP) n += len(atoms[--i])
+  const tail = atoms.slice(i).join('')
+  if (/[⟪⟫A-Za-zÀ-ỹ\s]/.test(tail)) return null // đuôi là chữ Latin / đường dẫn / tên sách in nghiêng: để nguyên
+  return [atoms.slice(0, i).join(''), tail]
+}
+
+// font cho cụm chữ tiếng Việt theo kiểu chữ Nhật của khối: chữ có chân (明朝) → Lora (hoặc font tiêu đề của bản Việt),
+// chữ không chân → Be Vietnam Pro, chữ viết tay → font viết tay của bản Việt
+function vnFontFor(el) {
+  const ja = fontOf(el, 'ja')
+  const vi = fontOf(el, 'vi')
+  if (/Sans|Gothic|Maru/.test(ja)) return 'Be Vietnam Pro'
+  if (/Klee|Hand|Kurenaido|Yomogi/.test(ja)) return vi
+  if (vi === 'Playfair Display' || vi === 'Cormorant Garamond') return vi
+  return 'Lora'
+}
+
+// số chữ (không tính phiên âm, khoảng trắng) nằm trên dòng cuối của đoạn — đo trên chữ đã dàn thật
+function lastLineChars(p) {
+  const w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT)
+  const chars = []
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    if (n.parentElement?.closest('rt')) continue
+    for (let i = 0; i < n.length; i++) if (!/\s/.test(n.data[i])) chars.push([n, i])
+  }
+  if (chars.length < 12) return 99
+  const r = document.createRange()
+  const top = (k) => {
+    r.setStart(chars[k][0], chars[k][1])
+    r.setEnd(chars[k][0], chars[k][1] + 1)
+    return r.getBoundingClientRect().top
+  }
+  const t = top(chars.length - 1)
+  const lh = parseFloat(getComputedStyle(p).fontSize) * 0.5
+  let c = 0
+  for (let k = chars.length - 1; k >= 0 && Math.abs(top(k) - t) < lh; k--) c++
+  return c
+}
+
+// bản Nhật: đoạn nào dòng cuối chỉ còn 1–2 chữ (đo thật, sau khi font tải xong) thì khép chữ cả đoạn rất nhẹ để kéo chữ lẻ
+// lên dòng trên; vẫn không được mới giữ bốn chữ cuối dính nhau. Đoạn khác để nguyên (soát độc lập 15/11: giữ đuôi ở mọi
+// đoạn làm dòng áp chót giãn chữ hở thấy rõ). { [chỉ số đoạn]: '-0.03em' | '-0.06em' | 'keep' }
+function useOrphanFix(ref, el, lang) {
+  const [fix, setFix] = useState({})
+  const key = lang === 'ja' ? `${el.ja}|${el.w}|${el.jaSize ?? el.size}` : ''
+  useEffect(() => {
+    setFix({})
+    if (lang !== 'ja' || el.vertical || !key) return
+    let alive = true
+    document.fonts.ready.then(() =>
+      requestAnimationFrame(() => {
+        const box = ref.current
+        if (!alive || !box || !box.offsetParent) return
+        const out = {}
+        ;[...box.children].forEach((p, i) => {
+          if (p.tagName !== 'P' || lastLineChars(p) > 2) return
+          for (const ls of ['-0.03em', '-0.06em']) {
+            p.style.letterSpacing = ls
+            if (lastLineChars(p) > 2) {
+              out[i] = ls
+              return
+            }
+          }
+          p.style.letterSpacing = ''
+          out[i] = 'keep'
+        })
+        if (Object.keys(out).length) setFix(out)
+      })
+    )
+    return () => {
+      alive = false
+    }
+  }, [key, lang, el.vertical, ref])
+  return fix
+}
+
+/** một đoạn chữ của khối: phiên âm, (bản Nhật) tên tiếng Việt cùng một font, (keep) bốn chữ cuối không rơi lẻ */
+export function ParaText({ text, el, lang, keep }) {
+  if (lang !== 'ja') return <RubyText text={text} />
+  const vn = vnFontFor(el)
+  if (vn === 'Lora') ensureFont('Lora')
+  const cut = keep ? keepTail(String(text)) : null
+  if (!cut) return <RubyText text={text} vn={vn} />
+  return (
+    <>
+      <RubyText text={cut[0]} vn={vn} />
+      <span className="cv-keep">
+        <RubyText text={cut[1]} vn={vn} />
+      </span>
+    </>
+  )
+}
+
+export function RubyText({ text, vn }) {
   if (String(text).includes('⟪')) {
     return String(text)
       .split(/(⟪[^⟪⟫]*⟫)/)
@@ -404,18 +549,18 @@ export function RubyText({ text }) {
       .map((seg, i) =>
         seg.startsWith('⟪') ? (
           <em key={i} className="cv-it">
-            <RubyText text={seg.slice(1, -1)} />
+            <RubyText text={seg.slice(1, -1)} vn={vn} />
           </em>
         ) : (
-          <RubyText key={i} text={seg} />
+          <RubyText key={i} text={seg} vn={vn} />
         )
       )
   }
   const parts = parseRuby(text)
-  if (parts.length === 1 && typeof parts[0] === 'string') return text
+  if (parts.length === 1 && typeof parts[0] === 'string') return vnSplit(text, vn)
   return parts.map((p, i) =>
     typeof p === 'string' ? (
-      p
+      <Fragment key={i}>{vnSplit(p, vn)}</Fragment>
     ) : (
       <ruby key={i} tabIndex={0} data-rt={p.ruby}>
         {p.base}

@@ -445,7 +445,7 @@
   opacity: 0.9;
 }
 .cvw-layers.has-sel .cvw-layers__item:not(.is-on) .cvw-layers__txt b {
-  color: #8b7355;
+  color: #6b5844;
 }
 .cvw-layers.has-sel .cvw-layers__item:not(.is-on) .cvw-layers__no {
   background: #b9a586;
@@ -707,7 +707,7 @@
   margin: 0.6em 0 0;
   font-size: 9.5em;
   text-align: center;
-  color: #8b7355;
+  color: #6b5844;
 }
 
 /* ── dòng thời gian (trang nghệ nhân chương 3) — 1em = 1pt ở khối chứa; phần tử chữ đặt font-size thì lề tính theo chữ đó ── */
@@ -766,7 +766,7 @@
   font-family: 'Playfair Display', 'Shippori Mincho', serif;
   font-size: 20em;
   line-height: 1.6;
-  color: #8f7b62;
+  color: #6b5844;
   transition: color 0.3s, transform 0.3s;
 }
 /* nón nhỏ ở mỗi mốc: vành nằm đúng trên thanh */
@@ -1059,7 +1059,7 @@
   flex-shrink: 0;
   font-size: 11.5em;
   font-style: italic;
-  color: #8f7b62;
+  color: #6b5844;
   text-align: center;
 }
 .cvw-tl.is-ja .cvw-tl__photo figcaption {
@@ -1092,7 +1092,7 @@
 }
 .cvw-tl__count {
   font-size: 12.5em;
-  color: #8f7b62;
+  color: #6b5844;
   letter-spacing: 0.1em;
 }
 
@@ -1444,10 +1444,10 @@
   right: 0;
   top: 89.5%;
   text-align: center;
-  font-size: calc(7em * var(--k, 1));
+  font-size: calc(8.5em * var(--k, 1));
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #8b6b45;
+  color: #5a4530;
   white-space: nowrap;
 }
 .cvw-env.is-ja .cvw-env__from {
@@ -1573,6 +1573,34 @@
   color: #9a8466;
   text-align: center;
 }
+/* GVHD 15/11 (cách 1): câu gốc tiếng Việt viết tay ở trên, dịch nghĩa tiếng Nhật ngay dưới, rồi đoạn giải thích chữ đủ lớn
+   ("Phần chú thích chữ đang quá nhỏ, ko đọc được!") */
+.cvw-env.is-ja .cvw-env__verse .is-orig {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.22em;
+  line-height: 1.25;
+  color: #4e3426;
+}
+.cvw-env.is-ja .cvw-env__verse .is-orig.is-luc {
+  padding-left: 0;
+}
+.cvw-env.is-ja .cvw-env__verse .is-orig + span:not(.is-orig) {
+  margin-top: 0.6em;
+}
+/* có câu gốc: bớt giãn dòng phần dịch cho đủ chỗ đoạn giải thích và dòng ký tên */
+.cvw-env.is-ja .cvw-env__verse:has(.is-orig) {
+  line-height: 1.7;
+}
+.cvw-env.is-ja .cvw-env__note {
+  margin-top: 0;
+  font-family: 'Noto Serif JP', serif;
+  font-size: calc(10.4em * var(--k, 1));
+  line-height: 1.55;
+  color: #4e3426;
+  text-align: justify;
+  white-space: normal;
+  align-self: stretch;
+}
 .cvw-env__foot {
   position: relative;
   align-self: stretch;
@@ -1586,7 +1614,7 @@
   font-style: italic;
   font-size: calc(12em * var(--k, 1));
   letter-spacing: 0.04em;
-  color: #8b7355;
+  color: #6b5844;
 }
 .cvw-env.is-ja .cvw-env__sign {
   font-style: normal;
@@ -1635,7 +1663,7 @@
   display: inline-block;
   font-size: 10.5em;
   font-style: italic;
-  color: #8b7355;
+  color: #6b5844;
   padding: 0.3em 1.1em 0.35em;
   border: 0.08em solid rgba(139, 115, 85, 0.4);
   border-radius: 99em;
@@ -1728,13 +1756,13 @@
 .cvw-rings__cap {
   font-size: 11px;
   font-style: italic;
-  fill: #8b7355;
+  fill: #6b5844;
   text-anchor: middle;
 }
 .cvw-rings__lbl {
   font-size: 13.5px;
   font-style: italic;
-  fill: #8b7355;
+  fill: #6b5844;
 }
 .cvw-rings__lbl.is-rim {
   fill: var(--acc);
@@ -2149,7 +2177,7 @@
 .cvw-sort__txt span {
   font-size: 10.5em;
   font-style: italic;
-  color: #8b7355;
+  color: #6b5844;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

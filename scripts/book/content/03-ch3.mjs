@@ -24,7 +24,7 @@ export const ch3 = {
     p: [
       [
         'Câu ca dao được lưu truyền trong dân gian phần nào phản ánh danh tiếng lâu đời của nón làng Chuông. Trong cuốn Những làng nghề thủ công tiêu biểu của Thăng Long – Hà Nội do Đinh Hạnh chủ biên, có đoạn viết: “Từ xa xưa, nón làng Chuông là một trong những cống vật cung tiến hoàng hậu, công chúa bởi vẻ đẹp rất riêng được những bàn tay tài hoa, khéo léo của các nghệ nhân lành nghề làm nên”¹. Trước năm 1930, Hội làng nón được ghi nhận đã cấp chứng nhận chất lượng cho nón Chuông và đánh giá sản phẩm “còn cao hơn cả nón Huế”².',
-        'このベトナムの民間{詩|し}からは、チュオン{村|むら}のノンラーが古くから評判を得ていたことがうかがえます。\nディン・ハイン{編|へん}『Những làng nghề thủ công tiêu biểu của Thăng Long - Hà Nội』には、次のように記されています。「古くから、チュオン村のノンラーは、熟練した職人たちの{優|すぐ}れた技術と{巧|たく}みな手仕事によって生み出される{独特|どくとく}の美しさゆえに、{皇后|こうごう}や{王女|おうじょ}への{献上品|けんじょうひん}の一つとされていました」¹。\nまた、1930年以前には、「Hội làng nón」と呼ばれる団体がチュオン村のノンラーの品質{証明|しょうめい}書を発行し、その品質を「フエのノンラー²をも上回る」と{評価|ひょうか}したことが記録されています。',
+        'このベトナムの民間{詩|し}からは、チュオン{村|むら}のノンラーが古くから評判を得ていたことがうかがえます。\nディン・ハイン{編|へん}『Những làng nghề thủ công tiêu biểu của Thăng Long - Hà Nội』（筆者仮訳：『タンロン・ハノイの代表的な手工芸村』）には、次のように記されています。「古くから、チュオン村のノンラーは、熟練した職人たちの{優|すぐ}れた技術と{巧|たく}みな手仕事によって生み出される{独特|どくとく}の美しさゆえに、{皇后|こうごう}や{王女|おうじょ}への{献上品|けんじょうひん}の一つとされていました」¹。\nまた、1930年以前には、「Hội làng nón」と呼ばれる団体がチュオン村のノンラーの品質{証明|しょうめい}書を発行し、その品質を「フエのノンラー²をも上回る」と{評価|ひょうか}したことが記録されています。',
       ],
       [
         'Danh tiếng được lưu truyền qua nhiều thế hệ ấy tiếp tục được khẳng định bằng những hình thức công nhận trong thời kỳ hiện đại. Tên gọi “Nón Chuông” được Cục Sở hữu trí tuệ cấp chứng nhận nhãn hiệu tập thể, góp phần bảo hộ tên gọi của sản phẩm truyền thống. Năm 2021, sản phẩm “Nón lá làng Chuông” được đánh giá, phân hạng OCOP 4 sao. Những năm tiếp theo, các sản phẩm của nghệ nhân Lê Văn Tuy và Tạ Thu Hương cũng đạt hạng OCOP 4 sao, góp phần khẳng định chất lượng và giá trị của sản phẩm làng nghề.',
@@ -68,8 +68,8 @@ export const ch3 = {
     title: ['Hoạt động và đóng góp của các nghệ nhân tiêu biểu làng Chuông', 'チュオン{村|むら}を代表する職人たちの活動と{貢献|こうけん}'],
     // câu nói của hai nghệ nhân (tab "Câu nói hay" của Doc, bản tiếng Nhật do nhóm dịch) — in thành câu trích dẫn lớn
     sayings: {
-      Tuy: ['“Mình cứ yêu nghề là yêu nước, cứ yêu nghề là nghề nào cũng thành công.”\n— Nghệ nhân Lê Văn Tuy', '「自分の仕事を愛することは、国を愛することにもつながると思います。どんな仕事でも、好きな気持ちがあれば、きっとうまくいきます。」\n— 職人レ・ヴァン・トゥイ'],
-      Hương: ['“Muốn giữ nghề, người thợ phải vừa bảo tồn kỹ thuật truyền thống, vừa tìm cách để sản phẩm phù hợp hơn với nhu cầu của công chúng.”\n— Nghệ nhân Tạ Thu Hương', '「ノンラー作りを守っていくためには、昔からの技術を大切にしながら、今の人々のニーズに合うように製品を工夫していくことも必要だと思います。」\n— 職人タ・トゥ・フオン'],
+      Tuy: ['“Mình cứ yêu nghề là yêu nước, cứ yêu nghề là nghề nào cũng thành công.”\nNghệ nhân Lê Văn Tuy', '「自分の仕事を愛することは、国を愛することにもつながると思います。どんな仕事でも、好きな気持ちがあれば、きっとうまくいきます。」\n職人レ・ヴァン・トゥイ'],
+      Hương: ['“Muốn giữ nghề, người thợ phải vừa bảo tồn kỹ thuật truyền thống, vừa tìm cách để sản phẩm phù hợp hơn với nhu cầu của công chúng.”\nNghệ nhân Tạ Thu Hương', '「ノンラー作りを守っていくためには、昔からの技術を大切にしながら、今の人々のニーズに合うように製品を工夫していくことも必要だと思います。」\n職人タ・トゥ・フオン'],
     },
     intro: [
       'Các nghệ nhân làng Chuông có vai trò quan trọng trong việc khôi phục, gìn giữ kỹ thuật truyền thống và phát triển sản phẩm. Bốn nhân vật tiêu biểu được giới thiệu gồm ông Hai Cát (Lê Cát), nghệ nhân Phạm Trần Canh, Lê Văn Tuy và Tạ Thu Hương.',
