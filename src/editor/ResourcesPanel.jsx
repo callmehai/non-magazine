@@ -105,7 +105,7 @@ const getBytes = async (p) => new Uint8Array(await (await fetch(asset(BOOK + p))
 const canvasBlob = (cv) => new Promise((ok) => cv.toBlob(ok, 'image/png'))
 const blobBytes = async (b) => new Uint8Array(await b.arrayBuffer())
 
-async function svgToPng(p, w = PNG_W) {
+export async function svgToPng(p, w = PNG_W) {
   const { img, h } = await svgImage(await getText(p), w)
   const cv = Object.assign(document.createElement('canvas'), { width: w, height: h })
   cv.getContext('2d').drawImage(img, 0, 0, w, h)
@@ -124,7 +124,7 @@ async function villagePng(scale = 2) {
  * nền giấy ghép sẵn họa tiết, đúng vị trí như trong sách (canvas.css .cv-paper__deco.is-…), khổ A4.
  * side 'right' | 'left' (trang trái: họa tiết sang mép trái, lật đối xứng — trừ hình in mờ giữa trang và khung)
  */
-async function paperPng(paper, side = 'right', W = PAGE_PX) {
+export async function paperPng(paper, side = 'right', W = PAGE_PX) {
   const k = W / A4[0]
   const H = Math.round(A4[1] * k)
   const cv = Object.assign(document.createElement('canvas'), { width: W, height: H })
