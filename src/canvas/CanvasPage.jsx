@@ -416,32 +416,45 @@ function vnSplit(s, font) {
   if (!font || !VN_MARK.test(s)) return s
   const out = []
   let last = 0
+  const vn = (t, k) => (
+    <span key={k} className="cv-vn" style={{ fontFamily: fontStack(font) }}>
+      {t}
+    </span>
+  )
   for (const m of s.matchAll(VN_RUN)) {
     if (!VN_MARK.test(m[0])) continue
-    // dấu mở （「『 ngay trước tên ngắn đi cùng tên (không thì dấu mở đứng lẻ cuối dòng trên)
-    const pre = m[0].length <= 22 ? (s.slice(last, m.index).match(/[（(「『]+$/)?.[0] ?? '') : ''
+    // dấu mở （「『 ngay trước và đuôi 新聞 / 電子雑誌 / 氏 + dấu đóng （）」』。、) ngay sau dính vào chữ đầu / chữ cuối của cụm,
+    // để dấu ngoặc không đứng lẻ đầu hay cuối dòng (chú thích ảnh 107: “…nhân dân新聞” rồi “）” lẻ). Giữa cụm nhiều chữ vẫn
+    // ngắt được ở dấu cách: cả cụm thành một khối thì khối rơi xuống dòng dưới, dòng trên bị giãn chữ thưa (soát 15/11:
+    // tr. 101 “2019 年 に は 、「 ハ ノ イ 市 職 人” vì cả “（Nghệ nhân Hà Nội）” xuống dòng)
+    const pre = s.slice(last, m.index).match(/[（(「『]+$/)?.[0] ?? ''
     if (m.index - pre.length > last) out.push(s.slice(last, m.index - pre.length))
-    // tên ngắn (Phạm Trần Canh, Dân Việt新聞…) không ngắt giữa chừng — kể cả đuôi 新聞 / 電子雑誌 / 氏 và dấu đóng
-    // （）」』。、) dính sau, để dấu đóng không rơi một mình xuống dòng (chú thích ảnh 107: “…nhân dân新聞” rồi “）” lẻ)
-    const short = m[0].length <= 22
-    const suf = short ? s.slice(m.index + m[0].length).match(/^(?:新聞|電子雑誌|氏)?[）)」』。、]*/)[0] : ''
-    const run = (
-      <span key={short ? undefined : m.index} className="cv-vn" style={{ fontFamily: fontStack(font) }}>
-        {m[0]}
-      </span>
-    )
-    out.push(
-      short ? (
+    const suf = s.slice(m.index + m[0].length).match(/^(?:新聞|電子雑誌|氏)?[）)」』。、]*/)[0]
+    const run = m[0]
+    const a = run.indexOf(' ')
+    const z = run.lastIndexOf(' ')
+    if (a < 0) {
+      out.push(
         <span key={m.index} className="cv-nb">
           {pre}
-          {run}
+          {vn(run)}
           {suf}
         </span>
-      ) : (
-        run
       )
-    )
-    last = m.index + m[0].length + suf.length
+    } else {
+      out.push(
+        <span key={m.index} className="cv-nb">
+          {pre}
+          {vn(run.slice(0, a))}
+        </span>,
+        vn(run.slice(a, z + 1), `${m.index}m`),
+        <span key={`${m.index}z`} className="cv-nb">
+          {vn(run.slice(z + 1))}
+          {suf}
+        </span>
+      )
+    }
+    last = m.index + run.length + suf.length
   }
   if (!out.length) return s
   if (last < s.length) out.push(s.slice(last))

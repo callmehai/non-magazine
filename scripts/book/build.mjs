@@ -128,11 +128,15 @@ function T(x, y, w, h, pair, o = {}) {
   const small = (o.size ?? BODY.size) < RUBY_MIN
   const vi = small ? strip(vi0) : vi0
   // tiếng Nhật: không ngắt dòng giữa "年" và "前 / 生" (kiểu 2500〜3000年 / 前)
+  // tên katakana có dấu ・: tên ngắn (≤ 10 ký tự) không ngắt giữa chừng; tên dài hơn (アオ・モー・バー・モー・バイ) chỉ được
+  // xuống dòng sau dấu ・, không cắt giữa một chữ — dính cả tên thì tên rơi xuống dòng dưới, dòng trên canh đều bị giãn
+  // chữ thưa (soát 15/11: tr. 41 giãn ×1,34). Chuỗi dài quá 14 ký tự (liệt kê) để trình duyệt tự ngắt như cũ
+  const jaNameJoin = (m) => (m.length <= 10 ? m.replace(/・/g, '・\u2060') : m.length <= 14 ? m.split('・').map((w) => [...w].join('\u2060')).join('・') : m)
   // soát 05/11: chú thích ngắt "著者撮 / 影" → không ngắt giữa "撮影" (nối bằng ký tự nối từ U+2060)
   const ja1 = ja0 && small ? strip(ja0) : ja0
   // soát độc lập 15/11: ngày "24 / 日" bị ngắt → không ngắt giữa số và 日 / 月; tên katakana "レ・ヴァン・/トゥイ" → không
   // ngắt sau "・" giữa hai chữ katakana
-  const ja = ja1 == null ? ja1 : (o.name === 'Tài liệu' ? String(ja1) : jaPaper(String(ja1))).replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影').replace(/(\d)(?=[日月])/g, '$1\u2060').replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, (m) => (m.length <= 14 ? m.replace(/・/g, '・\u2060') : m)) // chỉ chuỗi ngắn cỡ tên người; chuỗi liệt kê dài vẫn ngắt được
+  const ja = ja1 == null ? ja1 : (o.name === 'Tài liệu' ? String(ja1) : jaPaper(String(ja1))).replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影').replace(/(\d)(?=[日月])/g, '$1\u2060').replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, jaNameJoin)
   // khung đặt cao cố định mà chữ cần nhiều chỗ hơn → nới ra
   if (h != null) h = Math.max(h, textH([vi, ja], w, o))
   const el = {

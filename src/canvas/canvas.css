@@ -797,9 +797,8 @@
 .cv-keep {
   white-space: nowrap;
 }
-/* tên tiếng Việt ngắn trong bản Nhật không ngắt giữa chừng ("Phạm / Trần Canh", "Dân / Việt新聞"): cả cụm là một khối,
-   không vừa phần còn lại của dòng thì xuống dòng cả cụm; chỉ khi cụm dài hơn cả dòng (chú thích hẹp: "（Quân đội nhân dân新聞）")
-   mới ngắt bên trong cụm — không lấn ra ngoài khung chữ */
+/* bản Nhật: dấu ngoặc / đuôi 新聞… dính với chữ Việt đầu và cuối cụm ("（Nghệ", "Nội）") — không đứng lẻ đầu hay cuối dòng;
+   giữa cụm vẫn ngắt ở dấu cách. Khối dài hơn cả dòng (cột chú thích hẹp) vẫn ngắt bên trong, không lấn ra ngoài khung chữ */
 .cv-nb {
   display: inline-block;
   max-width: 100%;
