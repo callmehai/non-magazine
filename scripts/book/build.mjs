@@ -4344,17 +4344,16 @@ const CH_PHOTO = {
     ...WIDGET(ep.x0, TOP + 26, ep.cw, 610, 'envelope', {
       name: 'Phong bì thư',
       data: {
-        letter: ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭（ディン）¹の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。'],
-        // GVHD 15/11: "người Nhật họ không cảm nhận được … những tầng ý nghĩa sau câu ca dao này -> đọc bản dịch thì thấy bình
-        // thường. Nên có 2 cách: 1- Viết câu ca dao bằng tiếng Việt - rồi viết dịch nghĩa ngay dưới. Sau đó giải thích 1 vài
-        // câu…" → cách 1: bản Nhật in câu gốc tiếng Việt, dịch nghĩa ngay dưới, rồi ba câu giải thích (thay chú thích 亭 chữ nhỏ)
-        orig: [null, 'Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu'],
-        sign: ['— Ca dao —', 'ベトナムの民謡（カーザオ）'],
+        // anh Hải 16/11 (nhóm): "bỏ ca dao đi, thay bằng lời mời hoặc giới thiệu, chào mừng gì đi, ca dao khó giải thích" →
+        // lá thư: lời chào (viết tay) + đoạn mời đọc ngắn; bỏ câu ca dao, bản dịch, đoạn giải thích và chú thích 亭
+        letter: ['Chào mừng bạn đến\nvới làng nón Chuông!', 'チュオン{村|むら}へようこそ！'],
+        sign: ['— Nhóm thực hiện —', '制作チーム一同'],
         to: ['Gửi bạn đọc', '読者の皆さまへ'],
         from: ['Từ làng Chuông · Thanh Oai, Hà Nội', 'ハノイ・チュオン村より'],
-        // soát 08/11: chú thích 亭 để ở chân trang thì lơ lửng lúc thư còn đóng → in nhỏ ngay trong lá thư (bản Nhật)
-        // "Nhờ nhóm xem giúp" mục 2 (16/11): nhóm gửi phần giải thích + chú thích 亭 (nguyên văn; bộ phận tiếng Nhật đang soát lại)
-        note: [null, 'このベトナムの民間詩（カーザオ）では、ノンラー（Non La、円錐形の葉笠）を傾けて亭を眺める情景を通して、大切な人への深い想いが表現されています。屋根瓦の数を想いの深さにたとえることで、身近な風景を通して愛情を伝えています。\nノンラーは、日差しや雨を防ぐ道具であるだけでなく、古くからベトナムの人々の暮らしや文化と深く結びついてきました。\n¹ 亭（ディン）：ベトナムの村にある伝統的な共同施設です。村の守護神（城隍神）を祀るほか、村人の集会や祭りなどが行われる場所でもあります。'],
+        note: [
+          'Mời bạn lật từng trang sách để cùng khám phá chiếc nón lá Làng Chuông: từ những tàu lá lụi phơi trắng trên đê, mười sáu vòng nứa uốn tròn, đến đôi bàn tay khéo léo của người thợ. Mong cuốn sách giúp bạn cảm nhận vẻ đẹp của một làng nghề hơn 300 năm tuổi.',
+          'ページをめくりながら、チュオン村のノンラーの世界を一緒にたどってみませんか。堤防に干された白いラルイの葉、丸く曲げた16本のヌアの輪、そして職人の巧みな手仕事まで、ノンラーができるまでの物語をご紹介します。300年以上続く工芸村の美しさを感じていただければ幸いです。',
+        ],
       },
     }),
     alt: ['Phong bì thư gửi bạn đọc — bấm để mở', '読者の皆さまへの手紙 — クリックして開く'],
