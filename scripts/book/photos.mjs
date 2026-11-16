@@ -25,7 +25,7 @@ export const photos = {
   "Nón lá bên tà áo dài": "doc-0911/IMG_4359", // Bản sửa lần 2: "Thay ảnh 98 thành: IMG_4359.JPG"
   "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": "Chương 1/BTPN/IMG_20260929_102311",
   "Nghệ nhân làng Chuông bên chiếc khung nón, giữa gian trưng bày nón đủ kiểu": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3840",
-  "Nón lá hình chóp truyền thống — ảnh sản phẩm": "doc-0811/chop-ngoai",
+  "Nón lá hình chóp truyền thống — ảnh sản phẩm": "doc-1611/chop-ngoai" /* Bản sửa lần 3 (16/11): ảnh nhóm chụp lại, cầm tay, không thả bụi cây */,
   "Nón Ba tầm — ảnh sản phẩm": "doc-0811/ba-tam-ngoai",
   "Nón Quai thao — ảnh sản phẩm": "doc-0811/quai-thao-ngoai",
   // nón thúng: thư mục "Nón Thúng" trên Drive của nhóm còn trống → ảnh báo QĐND chụp tại Làng Chuông (nón của bà Trần Thị Hoa), ghi nguồn dưới ảnh
@@ -227,7 +227,7 @@ export const photos = {
   "Nón Ba tầm — Bảo tàng Mỹ thuật Việt Nam": "new/Nón ba tầm",
   "Nón của dân tộc Kinh: tre, lá dưa, lồng chim, bạc — Bảo tàng Mỹ thuật Việt Nam": "new/Ảnh nón Dân tộc Kinh _ Tre, Lá dưa, lồng chim, bạc",
   "Nghệ nhân Lê Văn Tuy trong xưởng nón — ảnh: nghệ nhân Lê Văn Tuy": "new/IMG_8547",
-  "Nón lá già ghép sống — ảnh sản phẩm": "doc-0811/la-gia-ngoai",
+  "Nón lá già ghép sống — ảnh sản phẩm": "doc-1611/lagia-ngoai",
   "Nón lá già ghép sống — mặt nón": "new/IMG_8606",
   "Nón Quai thao — mặt trên": "new/IMG_7879",
   "Nón thúng — lòng nón và quai": "new/IMG_8481",
@@ -336,8 +336,8 @@ export const photos = {
   "Nón trang trí làm phụ kiện thời trang — nguồn: nghệ nhân Tạ Thu Hương": "doc-0811/huong-non-thoi-trang",
   // tab パート1 (ND Nhật) 08/11 khuya: mỗi loại nón Chuông hai ảnh — mặt ngoài + lòng nón (ảnh nhóm đổi nền lá xanh, thư mục Drive
   // của nhóm; "Nón lá già" mặt ngoài chưa có file gốc trên Drive → tạm lấy ảnh nhúng trong Doc, 463 px)
-  "Nón lá hình chóp truyền thống — lòng nón": "doc-0811/chop-trong",
-  "Nón lá già ghép sống — lòng nón": "doc-0811/la-gia-trong",
+  "Nón lá hình chóp truyền thống — lòng nón": "doc-1611/chop-trong",
+  "Nón lá già ghép sống — lòng nón": "doc-1611/lagia-trong",
   "Nón Ba tầm — lòng nón": "doc-0811/ba-tam-trong",
   "Nón Quai thao — lòng nón": "doc-0811/quai-thao-trong",
   "Nón thúng — lòng nón": "doc-0811/thung-trong",

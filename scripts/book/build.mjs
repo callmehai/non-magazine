@@ -595,13 +595,23 @@ function sectionHead(p, y, num, title, kicker) {
     const bw = 66
     const tw = p.cw - bw - 18
     const o = { size: 27, font: F.head, lh: 1.2, jaSize: 25 }
-    const th = textH(title, tw, o)
-    const bh = Math.max(52, th + 18)
+    // Bản sửa lần 3 (16/11): "Sửa căn lề toàn bộ các tiểu mục (hiện đang chưa cân)" — trước: dải cao theo thứ tiếng dài hơn
+    // (tên Việt 2 dòng) nên tên Nhật 1 dòng nằm lệch trên, dưới trống. Nay dải cao theo tên Nhật (bản chính), tên mỗi thứ
+    // tiếng một khối riêng (el.only) canh giữa theo chiều dọc; tên Việt dài hơn thì thu cỡ chữ cho vừa dải
+    const bh = Math.max(66, textH1(title, tw, o, 1) + 22)
+    let ov = o
+    for (let sz = o.size; sz >= 18; sz -= 1) {
+      ov = { ...o, size: sz }
+      if (textH([title[0], ''], tw, ov) + 22 <= bh) break
+    }
+    const hv = textH([title[0], ''], tw, ov)
+    const hj = textH1(title, tw, o, 1)
     p.add(
       RECT(x, y, p.cw, bh, TINT[p.chapter] ?? TINT[0], { radius: 4, opacity: 0.55, name: 'Dải tiêu đề' }),
       RECT(x, y, bw, bh, acc, { radius: 4, name: 'Ô số mục' }),
-      T(x, y + bh / 2 - 17, bw, 34, [num, null], { font: F.head, size: 26, weight: 700, color: '#fff', align: 'center', lh: 1.25, name: 'Số mục' }),
-      T(x + bw + 16, y + (bh - th) / 2, tw, th, title, { ...o, color: C.title, jaFont: F.jaHead, name: 'Tên mục' })
+      T(x, y + bh / 2 - 17, bw, 34, [num, num], { font: F.head, size: 26, weight: 700, color: '#fff', align: 'center', lh: 1.25, name: 'Số mục' }),
+      { ...T(x + bw + 16, y + (bh - hv) / 2, tw, hv, [title[0], ''], { ...ov, color: C.title, name: 'Tên mục' }), only: 'vi' },
+      { ...T(x + bw + 16, y + (bh - hj) / 2, tw, hj, ['', title[1]], { ...o, color: C.title, jaFont: F.jaHead, name: 'Tên mục' }), only: 'ja' }
     )
     return y + bh + 30
   }
@@ -682,6 +692,8 @@ const SRC_IN_CAP_JA = /\s*(?:[—―・]\s*(?:出典|写真|提供)\s*[：:]\s*(
  * giữ chữ cũ của thứ tiếng đó.
  */
 const CAP_OVR = {
+  // Bản sửa lần 3 (16/11, ảnh 113): "→ Nguồn: Pháp luật新聞" — bỏ tên người chụp khỏi chú thích (vẫn ghi ở trang Nguồn ảnh)
+  'Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật': { src: ['Báo Pháp luật', 'Pháp luật新聞'] },
   // はじめに: 「アオザイをまとったベトナム人女性とノンラー (グループ撮影。)」
   'Bốn sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội': { vi: 'Những người phụ nữ Việt Nam trong tà áo dài cùng nón lá', ja: 'アオザイをまとったベトナム人女性とノンラー' }, // 14/11: bản Việt theo bản Nhật
   // nguồn ảnh 3 (Nón.jpg): theo sheet "Chú thích ảnh" (12/11) — 職人タ・トゥ・フオン氏提供, xem SHEET_JA
@@ -739,8 +751,9 @@ const SHEET_JA = {
   "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "制作グループ撮影", null], // 44
   "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "制作グループ撮影", null], // 44
   "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "制作グループ撮影", null], // 45
-  "Lá lụi phơi ngoài nắng": ["ラルイ（若いヤシの葉）", "制作グループ撮影", null], // 46
-  "Búp lá cọ non phơi khô, màu trắng ngà": ["ラルイ（若いヤシの葉）", "制作グループ撮影", null], // 46
+  // "Nhờ nhóm xem giúp" mục 8 (16/11): "Anh 70,71 đã chỉnh ở パート2 trước rồi nhé" → chữ Nhật theo パート2 (hai ảnh khác nhau)
+  "Lá lụi phơi ngoài nắng": ["堤防でラルイの葉を天日干しする住民", "制作グループ撮影", null], // 46
+  "Búp lá cọ non phơi khô, màu trắng ngà": ["天日干ししたラルイの葉", "制作グループ撮影", null], // 46
   "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "制作グループ撮影", null], // 47
   "Lớp mo nang": ["モーナン（ヌア竹の皮）", "制作グループ撮影", null], // 48
   "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "制作グループ撮影", null], // 49
@@ -1721,6 +1734,16 @@ class Flow {
     const fits = (r) => this.p && this.room >= w * r + 6 + ch
     const h = w * (o.ratio ?? bestR(caps, w, [R.por, R.sq, R.std].filter(fits)) ?? R.std)
     if (!this.p || this.room < h + 6 + ch) this.page()
+    if (o.oneCap) {
+      // Bản sửa lần 3 (16/11, ảnh 102–103): "Hai ảnh cùng ND + nguồn → Căn giữa 1 chú thích" — các ảnh trong hàng không
+      // chú thích riêng, một chú thích chung canh giữa dưới cả hàng (một số ảnh)
+      caps.forEach((c, i) => figure(this.p, this.p.x0 + i * (w + gap), this.y, w, h, c, { fit: fitOf(c), noCaption: true }))
+      const fc = fmtCap(caps[0])
+      const c1 = capH(caps[0], CW)
+      this.p.add(T(this.p.x0, this.y + h + 6, CW, c1, fc, { ...capOpt, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+      this.y += h + 6 + c1 + 22
+      return
+    }
     caps.forEach((c, i) => figure(this.p, this.p.x0 + i * (w + gap), this.y, w, h, c, { fit: fitOf(c) }))
     this.y += h + 6 + ch + 22
   }
@@ -1936,7 +1959,8 @@ function chapterOpener(ch, photo) {
     o.fmt = true
     return o
   }
-  const oc = srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
+  // "Nhờ nhóm xem giúp" mục 7 (16/11, nhóm: "Đồng ý"): ảnh mở chương có chú thích đầy đủ (trước: chỉ dòng nguồn)
+  const oc = photo.cap ? Object.assign([`${photo.cap[0]} (nhóm tác giả)`, `${photo.cap[1]}（制作グループ撮影）`], { fmt: true }) : srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
   const pw0 = left.cw - 70
   const och = capH(oc, pw0)
   const ph = BOT + 14 - (ry + 26) - 6 - och
@@ -2092,6 +2116,7 @@ let guidePage = null
   const ch = ch1
   const { left } = chapterOpener(ch, {
     main: ['Ảnh mở chương: thiếu nữ áo dài đội nón lá', '章扉写真：アオザイをまとったベトナム人女性とノンラー'],
+    cap: ['Người phụ nữ mặc áo dài đội nón lá', 'アオザイ姿でノンラーをかぶる女性'],
     alt: ['Ảnh toàn trang: nón lá xếp chồng ở chợ Chuông', '全面写真：チュオンの市場に積まれたノンラー'],
   })
   mark(1, ch.title, left, '01')
@@ -2127,7 +2152,10 @@ let guidePage = null
   const grid = (g, cols) => {
     const gap = 16
     const nameO = { font: F.head, size: 16, lh: 1.25, jaSize: 15.5 }
-    const placeO = { size: 12, lh: 1.35 }
+    // Bản sửa lần 3 (16/11): "Bỏ dòng chữ to tên nón ở trên, phóng to dòng chữ nhỏ (giữ nguyên nội dung) ở dưới lên" →
+    // ô ảnh chỉ còn chú thích (tên nón + địa phương + nguồn), cỡ chữ lớn hơn (12 → 14,5)
+    const placeO = { size: 14.5, lh: 1.35, jaSize: 14.5 }
+    const nameOf = (n, pl, w) => (noPhoto(n, pl) ? textH(n, w, nameO) + 4 : 0)
     const rows = Math.ceil(g.items.length / cols)
     // Bản sửa lần 2: "Nón hình chóp + vành rộng nằm trong hình dạng → đổi màu 2 tiểu mục đó" — tiểu mục con của "Hình dáng
     // nón lá phổ biến" màu nâu đất (C.title), khác màu xanh của tiêu đề mục cha
@@ -2144,10 +2172,10 @@ let guidePage = null
     const noPhoto = (n, pl) => /Nghệ An/.test(pl[0]) && !PHOTOS[hintOf(n, pl)[0]]
     const plH = (n, pl, w) => textH(noPhoto(n, pl) ? pl : numCap(gridCap(n, pl, hintOf(n, pl)), 99), w, placeO)
     // 08/11: chú thích ô dài thêm phần nguồn → đo chữ theo đúng bề ngang ô (lặp hai lần), ô không bị thu nhỏ quá mức
-    const nameAt = (w) => Math.max(...g.items.map(([n, pl]) => textH(n, w, nameO) + 4 + plH(n, pl, w)))
+    const nameAt = (w) => Math.max(...g.items.map(([n, pl]) => nameOf(n, pl, w) + plH(n, pl, w)))
     const fitW = (w) => Math.min((CW - gap * (cols - 1)) / cols, (f.bot - f.y - 20 - (rows - 1) * 14) / rows - 8 - nameAt(w))
     const cw = fitW(fitW(fitW(160)))
-    const nameH = Math.max(...g.items.map(([n, pl]) => textH(n, cw, nameO) + 4 + plH(n, pl, cw)))
+    const nameH = Math.max(...g.items.map(([n, pl]) => nameOf(n, pl, cw) + plH(n, pl, cw)))
     const cell = cw
     // dồn khối lưới xuống giữa phần trang còn lại
     const gh = rows * (cell + 8 + nameH) + (rows - 1) * 14
@@ -2175,8 +2203,8 @@ let guidePage = null
         // cái nón, sau khi bấm phóng to sẽ hiện toàn ảnh" → ô nào cũng phủ kín ảnh, khung dời theo chiếc nón (bỏ nền nhoè)
         p.add(IMG(gx, gy, cw, cell, hint, { pos: POS[hint[0]] ?? fr?.pos ?? '50% 50%' }))
       }
-      const nh = textH(name, cw, nameO)
-      p.add(T(gx, gy + cell + 6, cw, nh, name, { ...nameO, color: C.ink, align: 'center', jaFont: F.jaHead, name: 'Tên nón' }))
+      const nh = noPhoto(name, place) ? textH(name, cw, nameO) : -4
+      if (noPhoto(name, place)) p.add(T(gx, gy + cell + 6, cw, nh, name, { ...nameO, color: C.ink, align: 'center', jaFont: F.jaHead, name: 'Tên nón' }))
       if (noPhoto(name, place)) {
         for (const [k, lang] of [[0, 'vi'], [1, 'ja']]) {
           const one = k ? [place[0], place[1]] : [place[0], null]
@@ -2186,7 +2214,7 @@ let guidePage = null
       } else {
         // soát 04/11 (B10): dòng địa phương = chú thích ảnh "Ảnh N: địa phương (Nguồn: …)" (ảnh báo chí ghi tên báo)
         const cp = gridCap(name, place, hint)
-        p.add(T(gx, gy + cell + 10 + nh, cw, textH(numCap(cp, 99), cw, placeO), cp, { ...placeO, italic: true, color: C.muted, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
+        p.add(T(gx, gy + cell + 10 + nh, cw, textH(numCap(cp, 99), cw, placeO), cp, { ...placeO, color: C.ink2, align: 'center', jaFont: F.jaSans, name: 'Chú thích ảnh' }))
       }
     })
     f.y = y0 + gh + 22
@@ -2596,6 +2624,7 @@ let stripRight = null
   const ch = ch2
   const { left } = chapterOpener(ch, {
     main: ['Ảnh mở chương: nghệ nhân khâu nón giữa gian hàng nón ở làng Chuông', '章扉写真：チュオン村のノンラー店でノンラーを縫う職人'],
+    cap: ['Nghệ nhân Lê Văn Tuy khâu nón', 'ノンラーを縫う職人レ・ヴァン・トゥイ氏'],
     alt: ['Ảnh toàn trang: nón lá Làng Chuông', '全面写真：チュオン村のノンラー'],
   })
   mark(1, ch.title, left, '02')
@@ -3413,7 +3442,7 @@ let stripRight = null
   else f.prose([rc.p[1]]) // chú thích OCOP đã chuyển về 1.3.2 (Bổ sung 2, 12/11)
   f.row(ri.ocop)
   f.prose([rc.p[2]])
-  f.row(ri.market)
+  f.row(ri.market, { oneCap: true })
   f.prose([rc.p[3]])
 
   // nghệ nhân
@@ -3435,10 +3464,12 @@ let stripRight = null
   const ptx = piw + 20
   const smallCap = { size: 11, lh: 1.35 }
   // "Nghệ nhân Phạm Trần Canh (1931)" → tên + dòng năm sinh riêng
+  // Bản sửa lần 3 (16/11): "Tên Phạm Trần Canh → xuống dòng song song cũng được" — tên Latin trong ngoặc xuống dòng riêng
+  // (trước: 「ファム・チャン・カイン（Phạm / Trần Canh）」 ngắt giữa tên Việt)
   const YEAR = /\s*[（(](\d{4})(?:年生)?[）)]$/
   // bản Nhật của nhóm (06/11): 「レ・ヴァン・トゥイ（Lê Văn Tuy、1969年生）」 → tên 「レ・ヴァン・トゥイ（Lê Văn Tuy）」 + dòng năm sinh
   const YEAR_JA = /\s*[（(]([^（）()]*?)[、,]\s*\d{4}年生[^）)]*[）)]$/
-  const splitName = (name) => [[name[0].replace(YEAR, ''), YEAR_JA.test(name[1] ?? '') ? name[1].replace(YEAR_JA, (_, latin) => `（${latin}）`) : String(name[1] ?? '').replace(YEAR, '')], name[0].match(YEAR)?.[1]]
+  const splitName = (name) => [[name[0].replace(YEAR, ''), YEAR_JA.test(name[1] ?? '') ? name[1].replace(YEAR_JA, (_, latin) => `\n（${latin}）`) : String(name[1] ?? '').replace(YEAR, '')], name[0].match(YEAR)?.[1]]
   const personNh = (name, tx = ptx) => textH(splitName(name)[0], CW - tx, { size: S.card, font: F.head, lh: 1.25 }) + (splitName(name)[1] ? 18 : 0)
   // 08/11: thẻ không ảnh (ông Hai Cát — nhóm: không có ảnh) thì chữ rộng hết khối; o.notes = chú thích cuối trang của người đó
   const people = (list, fill) =>
@@ -4313,7 +4344,7 @@ const CH_PHOTO = {
     ...WIDGET(ep.x0, TOP + 26, ep.cw, 610, 'envelope', {
       name: 'Phong bì thư',
       data: {
-        letter: ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭（ディン）の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。'],
+        letter: ['Qua đình ngả nón trông đình\nĐình bao nhiêu ngói thương mình bấy nhiêu', '亭（ディン）¹の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。'],
         // GVHD 15/11: "người Nhật họ không cảm nhận được … những tầng ý nghĩa sau câu ca dao này -> đọc bản dịch thì thấy bình
         // thường. Nên có 2 cách: 1- Viết câu ca dao bằng tiếng Việt - rồi viết dịch nghĩa ngay dưới. Sau đó giải thích 1 vài
         // câu…" → cách 1: bản Nhật in câu gốc tiếng Việt, dịch nghĩa ngay dưới, rồi ba câu giải thích (thay chú thích 亭 chữ nhỏ)
@@ -4322,7 +4353,8 @@ const CH_PHOTO = {
         to: ['Gửi bạn đọc', '読者の皆さまへ'],
         from: ['Từ làng Chuông · Thanh Oai, Hà Nội', 'ハノイ・チュオン村より'],
         // soát 08/11: chú thích 亭 để ở chân trang thì lơ lửng lúc thư còn đóng → in nhỏ ngay trong lá thư (bản Nhật)
-        note: [null, '亭（ディン）は村の守護神を祀る建物です。ノンラーを傾けて亭を見上げる仕草に恋心を込めたこの歌のように、ノンラーは昔からベトナムの女性の姿とともに、村の暮らしと文化の中で歌われてきました。'],
+        // "Nhờ nhóm xem giúp" mục 2 (16/11): nhóm gửi phần giải thích + chú thích 亭 (nguyên văn; bộ phận tiếng Nhật đang soát lại)
+        note: [null, 'このベトナムの民間詩（カーザオ）では、ノンラー（Non La、円錐形の葉笠）を傾けて亭を眺める情景を通して、大切な人への深い想いが表現されています。屋根瓦の数を想いの深さにたとえることで、身近な風景を通して愛情を伝えています。\nノンラーは、日差しや雨を防ぐ道具であるだけでなく、古くからベトナムの人々の暮らしや文化と深く結びついてきました。\n¹ 亭（ディン）：ベトナムの村にある伝統的な共同施設です。村の守護神（城隍神）を祀るほか、村人の集会や祭りなどが行われる場所でもあります。'],
       },
     }),
     alt: ['Phong bì thư gửi bạn đọc — bấm để mở', '読者の皆さまへの手紙 — クリックして開く'],

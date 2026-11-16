@@ -161,7 +161,6 @@ export const refGroups = [
    "OpenStreetMap contributors. (2026). ⟪OpenStreetMap⟫. https://www.openstreetmap.org",
    "Project OSRM. (2026). ⟪Open Source Routing Machine⟫. https://project-osrm.org",
    "Natural Earth. (2026). ⟪Natural Earth: Free vector and raster map data⟫. https://www.naturalearthdata.com",
-   "Wikimedia Commons. (2026). ⟪Wikimedia Commons⟫. https://commons.wikimedia.org",
    "Nguyên Kỳ. (không ngày). ⟪Trống cơm (đàn tranh)⟫ [Video]. YouTube. https://www.youtube.com/watch?v=h47j_MyM3Us"
   ]
  }

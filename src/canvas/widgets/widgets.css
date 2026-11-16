@@ -2589,3 +2589,31 @@
   top: 0;
   bottom: auto;
 }
+
+/* Nhờ nhóm xem giúp mục 2 (16/11): đoạn giải thích nhóm gửi dài hơn (2 đoạn + chú thích 亭) → chữ giải thích nhỏ lại cho
+   vừa lá thư; chú thích 亭 chữ nhỏ hơn nữa, có vạch mảnh phía trên */
+.cvw-env.is-ja .cvw-env__paper:has(.cvw-env__fn) {
+  padding: calc(10em * var(--k, 1)) calc(13em * var(--k, 1));
+}
+.cvw-env.is-ja .cvw-env__paper:has(.cvw-env__fn) .cvw-env__note {
+  font-size: calc(7.8em * var(--k, 1));
+  line-height: 1.45;
+}
+.cvw-env.is-ja .cvw-env__note + .cvw-env__note {
+  margin-top: 0.3em;
+}
+.cvw-env.is-ja .cvw-env__paper:has(.cvw-env__fn) .cvw-env__fn {
+  font-size: calc(6.6em * var(--k, 1));
+  color: #7a6450;
+  border-top: 1px solid rgba(122, 100, 80, 0.35);
+  padding-top: 0.4em;
+  margin-top: 0.6em !important;
+}
+.cvw-env.is-ja .cvw-env__paper:has(.cvw-env__fn) .cvw-env__verse {
+  min-height: 0;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+.cvw-env.is-ja .cvw-env__paper:has(.cvw-env__fn) > * {
+  flex-shrink: 0;
+}

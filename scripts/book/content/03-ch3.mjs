@@ -290,10 +290,7 @@ export const ending = {
         'Các thông tin từ việc điều tra khảo sát thực địa, phỏng vấn đều được nhóm tác giả xin phép người được phỏng vấn về việc sử dụng cho sản phẩm này. Sản phẩm là một dự án tốt nghiệp của sinh viên ngành Ngôn ngữ Nhật Bản trường Đại học FPT Hà Nội, chúng tôi cam kết không sử dụng với mục đích thương mại hay chính trị nào khác. Bởi vậy, mọi vấn đề về bản quyền chúng tôi cam kết việc không vi phạm khi tiến hành sản phẩm này.',
         '{現地調査|げんちちょうさ}やインタビューで得た{情報|じょうほう}については、本フリップブックで使用するにあたり、関係者本人の{許可|きょか}を得ています。本フリップブックは、FPT大学ハノイ校の日本語学科の学生による卒業プロジェクトとして{制作|せいさく}したものであり、商業的・政治的な目的で使用することはありません。また、制作にあたっては、著作権を尊重し、適切な許可や出典の明記などを通じて、権利の{侵害|しんがい}を防ぐよう努めています。',
       ],
-      [
-        'Cuối cùng, nhóm biên soạn xin chân thành cảm ơn quý độc giả đã dành thời gian thưởng thức cuốn flipbook này. Mọi ý kiến đóng góp, bình luận xin gửi về nhóm tác giả chúng tôi theo địa chỉ email:\nnonla09092026@gmail.com',
-        '最後に、本書をお読みくださった皆様に心より{感謝|かんしゃ}申し上げます。ご意見・ご感想は、下記のメールアドレスまでお寄せください。\nnonla09092026@gmail.com',
-      ],
+      // Bản sửa lần 3 (16/11): "Bỏ đoạn này trang 123" — đoạn cảm ơn + email đã bỏ
     ],
   },
   team: {

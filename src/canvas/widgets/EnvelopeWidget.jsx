@@ -173,7 +173,15 @@ export default function EnvelopeWidget({ el, interactive }) {
                     </span>
                   ))}
                 </span>
-                {pick(el.note) && <span className="cvw-env__note">{pick(el.note)}</span>}
+                {pick(el.note) &&
+                  // đoạn giải thích (xuống dòng = đoạn mới) + dòng chú thích "¹ …" chữ nhỏ cuối thư
+                  String(pick(el.note))
+                    .split('\n')
+                    .map((t, i) => (
+                      <span key={i} className={/^[¹²³]/.test(t) ? 'cvw-env__note cvw-env__fn' : 'cvw-env__note'}>
+                        {t}
+                      </span>
+                    ))}
                 <span className="cvw-env__foot">
                   <span className="cvw-env__sign">{pick(el.sign)}</span>
                   <span className="cvw-env__chop" aria-hidden="true">
