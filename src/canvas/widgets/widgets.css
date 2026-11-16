@@ -1544,15 +1544,16 @@
   opacity: 0.85;
 }
 .cvw-env__verse {
+  /* lời chào mừng (16/11, thay ca dao): canh giữa từng dòng */
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   font-family: 'Dancing Script', cursive;
   font-size: calc(18em * var(--k, 1));
   white-space: nowrap;
   line-height: 1.45;
   color: #4e3426;
-  text-align: left;
+  text-align: center;
 }
 .cvw-env__verse .is-luc {
   padding-left: 2em;

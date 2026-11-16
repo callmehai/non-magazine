@@ -168,7 +168,7 @@ export default function EnvelopeWidget({ el, interactive }) {
                     </span>
                   ))}
                   {lines.map((s, i) => (
-                    <span key={i} className={i % 2 === 0 && lang === 'vi' ? 'is-luc' : ''}>
+                    <span key={i}>
                       {s}
                     </span>
                   ))}
