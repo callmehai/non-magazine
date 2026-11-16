@@ -25,6 +25,9 @@ const zoomable = (el) =>
   !!el.src &&
   !['Họa tiết', 'Hình vẽ', 'Ảnh bìa', 'Ảnh mở chương', 'Ảnh toàn trang', 'Bóng nắng', 'Nền ô'].includes(el.name) &&
   !/logo/i.test(`${el.name} ${el.hint}`) &&
+  // anh Hải 16/11 ("sao lại cho ấn vào đây zoom ra… chỉ zoom cái nào là ảnh thôi"): hình vẽ nét của sách (deco/, fx/) không
+  // phóng to, dù tên thành phần là gì (vd. "Hình nón nhóm" ở thẻ hai nhóm nón)
+  !/(^|\/)assets\/book\/(deco|fx)\//.test(el.src) &&
   el.w < PAGE_W * 0.95 &&
   el.w * el.h < PAGE_W * PAGE_H * 0.8
 const captionOf = (el, lang) => {
