@@ -2630,12 +2630,20 @@
   align-self: stretch;
 }
 .cvw-env.is-ja .cvw-env__note {
-  font-size: calc(9.2em * var(--k, 1));
+  /* 17/11: bản dịch của nhóm ba đoạn (dài hơn bản cũ) → 9,2 → 8,4 cho vừa lá thư */
+  font-size: calc(8.4em * var(--k, 1));
+  line-height: 1.5;
 }
 .cvw-env.is-ja .cvw-env__verse:not(:has(.is-orig)) {
+  /* 17/11: lời chào nhóm dịch dài hơn ("チュオン村のノンラーの世界へようこそ！") → cỡ 14 cho vừa một dòng; không co lại
+     khi đoạn mời đọc dài (trước: hai dòng chào đè lên đoạn văn) */
   font-family: 'Klee One', 'Noto Serif JP', serif;
-  font-size: calc(15em * var(--k, 1));
+  font-size: calc(14em * var(--k, 1));
   font-weight: 600;
   min-height: 0;
+  flex-shrink: 0;
   margin: 0.4em 0;
+}
+.cvw-env.is-ja .cvw-env__note {
+  flex-shrink: 0;
 }

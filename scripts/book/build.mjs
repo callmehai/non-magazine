@@ -3843,23 +3843,38 @@ let stripRight = null
       ]],
       // 08/11: theo nguồn nhóm ghi cho các ảnh nhóm gắn trong bản Nhật (tên báo để nguyên tiếng Việt như nhóm ghi)
       [['BÁO CHÍ', '新聞・ウェブメディア'], [
-        [['Báo Thanh Niên', 'Báo Thanh Niên'], ['Nón lá sen · Nhà hát Ba Nón Lá · Expo 2021 Dubai · Tổng thống Hàn Quốc', 'ノン・ラー・セン・三つのノンラー劇場・ドバイ国際博覧会2021・韓国大統領'], 'Báo Thanh Niên'],
-        [['Báo Quân đội nhân dân', 'Báo Quân đội nhân dân'], ['Dao, kéo cắt lá · nghệ nhân Phạm Trần Canh · bà Trần Thị Hoa', '小刀とはさみ・職人ファム・チャン・カイン氏・トラン・ティ・ホアさん'], 'Quân đội nhân dân'],
-        [['VietNamNet', 'VietNamNet'], ['Phu nhân Thủ tướng Singapore · nón lá trong thiết kế trang phục', 'シンガポール首相夫人・衣装デザインに取り入れられたノンラー'], 'VietNamNet'],
+        [['Báo Thanh Niên', 'Báo Thanh Niên'], null, 'Báo Thanh Niên', [
+          ['Nón lá sen', 'ノン・ラー・セン', 'Nón lá sen'],
+          ['Nhà hát Ba Nón Lá', '三つのノンラー劇場', 'Nhà hát Ba Nón Lá', 'https://thanhnien.vn/kham-pha-nha-hat-3-non-la-o-xu-so-cong-tu-bac-lieu-185260725162920665.htm'],
+          ['Expo 2021 Dubai', 'ドバイ国際博覧会2021', 'Expo 2021', 'https://thanhnien.vn/nhung-cai-nhat-cua-chuong-trinh-dong-chay-bat-tan-ngay-quoc-gia-viet-nam-tai-dubai-1851420170.htm'],
+          ['Tổng thống Hàn Quốc', '韓国大統領', 'Tổng thống Hàn Quốc', 'https://thanhnien.vn/tong-thong-han-quoc-va-phu-nhan-an-pho-di-dao-quanh-ho-hoan-kiem-185260424024437025.htm'],
+        ]],
+        Object.assign([['Báo Quân đội nhân dân', 'Báo Quân đội nhân dân'], null, 'Quân đội nhân dân', [
+          // dao kéo + bà Hoa cùng một bài ("Nặng lòng với nón lá làng Chuông") → một ô
+          ['Dao, kéo cắt lá · bà Trần Thị Hoa', '小刀とはさみ・トラン・ティ・ホアさん', ['Dao, kéo', 'Bà Trần Thị Hoa'], 'https://www.qdnd.vn/phong-su-dieu-tra/phong-su/nang-long-voi-non-la-lang-chuong-703377'],
+          ['Nghệ nhân Phạm Trần Canh', '職人ファム・チャン・カイン氏', 'Nghệ nhân Phạm Trần Canh', 'https://www.qdnd.vn/phong-su-dieu-tra/ky-su/nguoi-thuong-binh-phuc-hoi-non-thung-quai-thao-453430'],
+        ]], { oneCol: true }),
+        [['VietNamNet', 'VietNamNet'], null, 'VietNamNet', [
+          ['Thiết kế trang phục', '衣装デザインのノンラー', 'thiết kế trang phục', 'https://vietnamnet.vn/non-la-dat-vang-ao-dai-di-san-duoc-trinh-dien-o-le-hoi-ao-dai-680982.html'],
+          ['Phu nhân Thủ tướng Singapore', 'シンガポール首相夫人', 'Phu nhân Thủ tướng Singapore', 'https://vietnamnet.vn/phu-nhan-thu-tuong-singapore-duoc-tang-non-la-trang-phuc-tho-cam-2384623.html'],
+        ]],
         [['Báo Dân Việt', 'Báo Dân Việt'], ['Nón bài thơ', 'ノン・バイ・トー'], 'Báo Dân Việt'],
         [['Báo Lao Động', 'Báo Lao Động'], ['Nón lá bàng', 'ノン・ラー・バン'], 'Báo Lao Động'],
         [['VnExpress', 'VnExpress'], ['Nón ngựa', 'ノン・グア'], 'VnExpress'],
         [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
-        [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong'],
+        [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong', 'https://www.instagram.com/p/DEZ5IFBhd0L/'],
         [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
         [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
-        [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển'],
-        [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', '展示会でのトゥイ氏のノンラーの展示ブース（スアン・ライ撮影）'], 'Báo Pháp luật'], // JA: tên người chụp sang cột mô tả — nhãn một dòng (soát 15/11: tr. 131 chữ đè)
+        [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển', 'https://vanhoavaphattrien.vn/nghe-nhan-ta-thu-huong-ben-bi-giu-nghe-lan-toa-hon-non-viet-a35642.html'],
+        [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', 'トゥイ氏のノンラーの展示ブース（スアン・ライ撮影）'], 'Báo Pháp luật', 'https://baophapluat.vn/non-lang-chuong-di-san-song-tren-nhung-tang-la-co.html'], // JA: tên người chụp sang cột mô tả — nhãn một dòng (soát 15/11: tr. 131 chữ đè)
         [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」'], 'Chạm Sắc'],
-        [['Maries', 'Maries'], ['Lễ báo công năm 2025', '2025年の活動報告式'], 'Maries'],
+        [['Maries', 'Maries'], ['Lễ báo công năm 2025', '2025年の活動報告式'], 'Maries', 'https://madebymaries.com/le-bao-cong-dang-bac-tai-khu-di-tich-chu-tich-ho-chi-minh/'],
       ]],
       [['BẢO TÀNG', '博物館'], [
-        [['Bảo tàng Lịch sử Quốc gia', '国立歴史博物館'], ['Trống đồng Ngọc Lũ · thạp đồng Đào Thịnh', 'ゴックルー銅鼓・ダオティン銅製容器'], 'Bảo tàng Lịch sử Quốc gia'],
+        [['Bảo tàng Lịch sử Quốc gia', '国立歴史博物館'], null, 'Bảo tàng Lịch sử Quốc gia', [
+          ['Trống đồng Ngọc Lũ', 'ゴックルー銅鼓', 'Trống đồng Ngọc Lũ', 'https://baotanglichsu.vn/vi/Articles/1001/13602/gioi-thieu-bao-vat-quoc-gia-1-trong-djong-ngoc-lu-hien-vat-tieu-bieu-nhat-cua-nen-van-hoa-djong-son.html'],
+          ['Thạp đồng Đào Thịnh', 'ダオティン銅製容器', 'Thạp đồng Đào Thịnh', 'https://baotanglichsu.vn/vi/Articles/1001/28536/thap-djong-djao-thinh.html'],
+        ]],
         [['Bảo tàng Hà Nội', 'ハノイ博物館'], ['Nón lá khi lao động · người dân đội nón đi chợ', '屋外での作業に使われるノンラー・市場へ行く人々'], 'Bảo tàng Hà Nội'],
       ]],
       [['VIDEO VÀ BẢN ĐỒ', '動画・地図'], [
@@ -3869,7 +3884,7 @@ let stripRight = null
       ]],
     ]
     // số ảnh theo nguồn — đếm như bước "Ảnh N" lúc xuất: chú thích theo thứ tự trang, mỗi thứ tiếng một bộ đếm (el.only)
-    const numsOf = (key) => {
+    const numsOf = (key, cap) => {
       if (key.video) {
         const pg = pages.find((q) => q.els.some((e) => e.name === 'Chú thích video' && String(e.text).includes(key.video)))?.n
         return pg ? [`tr. ${pg}`, `${pg}ページ`] : null
@@ -3883,7 +3898,7 @@ let stripRight = null
           if (!['Chú thích ảnh', 'Chú thích video'].includes(e.name) || !e.text || !/^Ảnh \d+: /.test(e.text)) continue
           const lines = e.text.split('\n').filter((l) => /^Ảnh \d+: /.test(l))
           lines.forEach((l, i) => {
-            const hit = (l.match(/\(([^()]*)\)\s*$/)?.[1] ?? '').includes(key)
+            const hit = (l.match(/\(([^()]*)\)\s*$/)?.[1] ?? '').includes(key) && (!cap || [].concat(cap).some((c) => l.includes(c)))
             if (hit && e.only !== 'ja') vi.push(nv + i + 1)
             if (hit && e.only !== 'vi') ja.push(nj + i + 1)
           })
@@ -3892,12 +3907,18 @@ let stripRight = null
         }
       return vi.length || ja.length ? [`Ảnh ${vi.join(', ')}`, `画像${ja.join('・')}`] : null
     }
+    // Tab "Video + nguồn" (17/11, mục 3): nhóm dán link bài gốc của từng ảnh → dòng nào có link thì bấm được (mở bài gốc);
+    // nguồn có nhiều bài (Thanh Niên, QĐND…) tách mỗi bài một dòng con [vi, ja, đoạn chú thích để tìm số ảnh, link]
+    const arrow = ' ↗'
     for (const [, rows] of groups)
       for (const r of rows) {
-        const n = numsOf(r[2])
-        if (!n) console.warn(`⚠ Nguồn ảnh: không thấy ảnh nào của "${r[0][0]}"`)
-        r.nums = n
-        r[1] = n ? [`${r[1][0]} → ${n[0]}`, `${r[1][1]} → ${n[1]}`] : r[1]
+        const subs = Array.isArray(r[3]) ? r[3] : [[r[1][0], r[1][1], null, r[3]]]
+        r.items = subs.map(([vi, ja, cap, url]) => {
+          const n = numsOf(r[2], cap)
+          if (!n) console.warn(`⚠ Nguồn ảnh: không thấy ảnh nào của "${r[0][0]}"${cap ? ` / ${cap}` : ''}`)
+          const t = n ? [`${vi} → ${n[0]}`, `${ja} → ${n[1]}`] : [vi, ja]
+          return { t: url ? [t[0] + arrow, t[1] + arrow] : t, url, cap }
+        })
       }
     const note = [
       'Các ảnh không có trong bảng do nhóm tác giả tự chụp tại làng Chuông và các bảo tàng ở Hà Nội.',
@@ -3918,18 +3939,31 @@ let stripRight = null
       for (const [label, rows] of groups) {
         if (draw) p.add(T(p.x0, y, p.cw, 16, label, { size: S.label - 1, tracking: 2.2, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm' }))
         y += 20
-        rows.forEach(([src, what, key], i) => {
+        rows.forEach((r, i) => {
+          const [src, , key] = r
           // đo đúng chữ in ra: bản Nhật đã đổi Báo X → X新聞 trong T() (soát 15/11: tr. 131 Pháp luật新聞（スアン・ライ） xuống 2 dòng đè dòng dưới)
           const jp = (pr) => [pr[0], pr[1] && jaPaper(pr[1])]
-          const h = Math.max(textH(jp(src), lw, { ...o, weight: 700 }), textH(jp(what), dw, o))
+          // nhiều bài một nguồn → lưới hai cột trong ô mô tả (mỗi ô một link), giữ bảng gọn trong một trang
+          // mọi nguồn chia cột dùng chung một mốc 44% / 56% (cột phải rộng hơn cho "Phu nhân Thủ tướng Singapore → Ảnh 29 ↗"
+          // vừa một dòng); QĐND một cột (hai bài, chữ Nhật dài → ở lưới bị ngắt "画像 / 79・106")
+          const cols = r.items.length > 1 && !r.oneCol ? 2 : 1
+          const cw = cols === 1 ? [dw] : [r1((dw - 6) * 0.44), r1((dw - 6) * 0.56)]
+          const hs = r.items.map((it, k) => textH(jp(it.t), cw[k % cols], o))
+          const rowsH = []
+          for (let k = 0; k < hs.length; k += cols) rowsH.push(Math.max(...hs.slice(k, k + cols)))
+          const h = Math.max(textH(jp(src), lw, { ...o, weight: 700 }), rowsH.reduce((a, b) => a + b, 0))
           if (draw) {
-            if (i) p.add(HL(p.x0, y - 1.75, p.cw, C.line, 0.4))
-            p.add(
-              T(p.x0, y, lw, h, src, { ...o, weight: 700, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }),
-              { ...T(p.x0 + lw + 14, y, dw, h, what, { ...o, color: C.ink2, jaFont: F.jaSans, name: 'Ảnh' }), srcKey: typeof key === 'string' ? key : undefined }
-            )
+            if (i) p.add(HL(p.x0, y - 1.5, p.cw, C.line, 0.4))
+            p.add(T(p.x0, y, lw, h, src, { ...o, weight: 700, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }))
+            let yy = y
+            r.items.forEach((it, k) => {
+              const c = k % cols
+              const lk = it.url ? { link: it.url, linkStyle: 'src', alt: ['Mở bài gốc', '元の記事を開く'] } : {}
+              p.add({ ...T(p.x0 + lw + 14 + (c ? cw[0] + 6 : 0), yy, cw[c], hs[k], it.t, { ...o, color: it.url ? ACC[2] : C.ink2, jaFont: F.jaSans, name: 'Ảnh', ...lk }), srcKey: typeof key === 'string' ? key : undefined, ...(it.cap ? { srcCap: it.cap } : {}) })
+              if (c === cols - 1 || k === r.items.length - 1) yy += rowsH[Math.floor(k / cols)]
+            })
           }
-          y += h + 3.5
+          y += h + 3 // 3,5 → 3 (17/11: thêm dòng link bài gốc, bảng vẫn vừa một trang)
         })
         y += 5
       }
@@ -4346,13 +4380,14 @@ const CH_PHOTO = {
       data: {
         // anh Hải 16/11 (nhóm): "bỏ ca dao đi, thay bằng lời mời hoặc giới thiệu, chào mừng gì đi, ca dao khó giải thích" →
         // lá thư: lời chào (viết tay) + đoạn mời đọc ngắn; bỏ câu ca dao, bản dịch, đoạn giải thích và chú thích 亭
-        letter: ['Chào mừng bạn đến\nvới làng nón Chuông!', 'チュオン{村|むら}へようこそ！'],
-        sign: ['— Nhóm thực hiện —', '制作チーム一同'],
+        // Bản sửa lần 3 (17/11): nhóm dịch lá thư sang tiếng Nhật ("→ Dịch: …") → lời chào, ba đoạn, chữ ký đúng bản nhóm
+        letter: ['Chào mừng bạn đến\nvới làng nón Chuông!', 'チュオン{村|むら}のノンラーの{世界|せかい}へようこそ！'],
+        sign: ['— Nhóm thực hiện —', '―著者一同―'],
         to: ['Gửi bạn đọc', '読者の皆さまへ'],
         from: ['Từ làng Chuông · Thanh Oai, Hà Nội', 'ハノイ・チュオン村より'],
         note: [
           'Mời bạn lật từng trang sách để cùng khám phá chiếc nón lá Làng Chuông: từ những tàu lá lụi phơi trắng trên đê, mười sáu vòng nứa uốn tròn, đến đôi bàn tay khéo léo của người thợ. Mong cuốn sách giúp bạn cảm nhận vẻ đẹp của một làng nghề hơn 300 năm tuổi.',
-          'ページをめくりながら、チュオン村のノンラーの世界を一緒にたどってみませんか。堤防に干された白いラルイの葉、丸く曲げた16本のヌアの輪、そして職人の巧みな手仕事まで、ノンラーができるまでの物語をご紹介します。300年以上続く工芸村の美しさを感じていただければ幸いです。',
+          'ページをめくりながら、チュオン村のノンラーの魅力に触れてみませんか。\n村の堤防に広げて天日干しされた白いラルイの葉、ヌアで作られた16の輪、そして職人の巧みな手さばき。こうした材料と職人の技によって、一つひとつのノンラーが丁寧に作り上げられています。\n本フリップブックを通して、300年以上の歴史を持つチュオン村のノンラーの美しさと、そこに息づく文化や伝統を感じていただければ幸いです。',
         ],
       },
     }),
@@ -4644,22 +4679,22 @@ pages.forEach(bottomFlora)
         const jl = (e.ja ?? '').split('\n').filter((l) => /^画像\d+：/.test(l))
         lines.forEach((l, i) => {
           const src = l.match(/\(([^()]*)\)\s*$/)?.[1] ?? ''
-          if (e.only !== 'ja') byKey.set(`v${v + i + 1}`, src)
-          if (e.only !== 'vi') byKey.set(`j${j + i + 1}`, src)
+          if (e.only !== 'ja') byKey.set(`v${v + i + 1}`, [src, l])
+          if (e.only !== 'vi') byKey.set(`j${j + i + 1}`, [src, l])
         })
         if (e.only !== 'ja') v += lines.length
         if (e.only !== 'vi') j += lines.length
       }
-    const pick = (pre, key) => [...byKey].filter(([k, src]) => k[0] === pre && src.includes(key)).map(([k]) => +k.slice(1))
+    const pick = (pre, key, cap) => [...byKey].filter(([k, [src, l]]) => k[0] === pre && src.includes(key) && (!cap || [].concat(cap).some((c) => l.includes(c)))).map(([k]) => +k.slice(1))
     for (const p of pages)
       for (const e of p.els) {
         if (!e.srcKey) continue
-        const nv = pick('v', e.srcKey)
-        const nj = pick('j', e.srcKey)
-        const tv = e.text.replace(/ → Ảnh [\d, ]+$/, ` → Ảnh ${nv.join(', ')}`)
+        const nv = pick('v', e.srcKey, e.srcCap)
+        const nj = pick('j', e.srcKey, e.srcCap)
+        const tv = e.text.replace(/ → Ảnh [\d, ]+(?=( ↗)?$)/, ` → Ảnh ${nv.join(', ')}`)
         if (tv !== e.text) console.warn(`⚠ Nguồn ảnh "${e.srcKey}": số ảnh đổi sau khi đánh số → ${nv.join(', ')}`)
         e.text = tv
-        if (e.ja) e.ja = e.ja.replace(/ → 画像[\d・]+$/, ` → 画像${nj.join('・')}`)
+        if (e.ja) e.ja = e.ja.replace(/ → 画像[\d・]+(?=( ↗)?$)/, ` → 画像${nj.join('・')}`)
       }
   }
   // khung phóng ảnh (lightbox) hiện đúng chú thích in trên trang ("Ảnh N: … (nguồn)"), không phải gợi ý thô

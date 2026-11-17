@@ -85,6 +85,19 @@
   background: rgb(139 90 43 / 0.08);
 }
 
+/* trang Nguồn ảnh: ô "… → Ảnh N ↗" mở bài báo gốc (chữ màu son sẵn trong sách) — rê chuột thì gạch chân, nền nhạt */
+.cv-link--src {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cv-link--src:hover,
+.cv-link--src:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  background: rgb(148 83 47 / 0.08);
+}
+
 /* link tới trang khác trong sách: không gạch chân */
 .cv-link--page {
   display: block;
