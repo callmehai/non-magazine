@@ -244,6 +244,9 @@ export const photos = {
   "Lớp lá lụi trong — trước khi lợp: khung 16 vòng nứa": "Chương 2/Tại làng Chuông/2.3.2 Quy trình dựng và hoàn thiện nón/Ảnh phụ/IMG_3841",
   // Doc 09/11: "Thay ảnh 66: Nghệ nhân ngồi lợp lớp lá trong ; ảnh 67: Lớp lá 1" · "Thay ảnh 68 ( quay ngang lớp mo nang: Ảnh mo nang)" ·
   // "Ảnh 69 Lớp mo nang" · "Ảnh 71: thay bằng lớp ngoài" — ảnh nhóm gắn link; ảnh tách nền đổi nền xám → giấy ngà
+  // Zalo 18/11 (chị Thu Nguyệt): "Mấy ảnh cắt nền 3 lớp lá … xem kĩ thì mấy cái ảnh nó bị kiểu lóa ấy. Em giúp chị thử thay mấy ảnh
+  // chị tự cắt" → bỏ bước đổi nền xám → giấy ngà (recolor.py tô nhầm mảng mo nang xám bạc thành nền, loang trắng); 4 ảnh tách
+  // nền dưới đây dùng nguyên ảnh nhóm cắt (nền xám), file .webp ở scripts/book/out/r1011/webp/doc-1011 đã thay
   "Nghệ nhân ngồi lợp lớp lá trong": "doc-1011/lop-la-trong-nghe-nhan",
   "Lớp lá lụi trong — sau khi lợp": "doc-1011/lop-la-trong",
   "Lớp mo nang — tàu mo trước khi lợp": "doc-1011/mo-nang",
