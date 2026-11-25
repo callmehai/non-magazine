@@ -1012,6 +1012,12 @@
   font-size: 14.5em;
   line-height: 1.9;
 }
+/* Bản sửa lần 4: tên người không xuống dòng giữa chừng → nhãn mốc nhỏ hơn một chút để các tên katakana dài (ファム・チャン・カイン) vẫn nằm gọn một dòng, không chạm tên bên cạnh */
+.cvw-tl.is-ja .cvw-tl__who {
+  font-size: 10.6em;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
 .cvw-tl.is-ja .cvw-tl__role,
 .cvw-tl.is-ja .cvw-tl__who,
 .cvw-tl.is-ja .cvw-tl__hint {

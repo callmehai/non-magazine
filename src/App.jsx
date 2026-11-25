@@ -433,7 +433,7 @@ export default function App({ magazine: source }) {
             <span className="brand__sub">{magazine.subtitle}</span>
             {magazine.issue && <span className="brand__issue">{magazine.issue}</span>}
           </header>
-          {languages && <LangSwitch languages={languages} lang={lang} onChange={changeLang} />}
+          {languages && import.meta.env.DEV && <LangSwitch languages={languages} lang={lang} onChange={changeLang} />}
 
           <button type="button" className="replay" onClick={replayIntro} aria-label={t('replayAria')} tabIndex={phase === 'reading' ? 0 : -1}>
             <Icon name="rotate" size={15} />
@@ -505,6 +505,9 @@ const LANG_NAMES = { vi: 'VI', ja: '日本語' }
 function initialLang(languages, fallback) {
   if (!languages) return fallback
   const fromUrl = new URLSearchParams(location.search).get('lang')
+  // 25/11 (nhóm): "ẩn tiếng Việt đi, web bỏ mode tiếng Việt" → bản chạy thật chỉ có tiếng Nhật, không nút đổi ngôn ngữ, bỏ qua ?lang=vi và
+  // lựa chọn cũ trong trình duyệt. Khi chạy dev (npm run dev) vẫn đổi được để soát bản Việt.
+  if (!import.meta.env.DEV && languages.includes('ja')) return 'ja'
   if (languages.includes(fromUrl)) return fromUrl
   try {
     const saved = localStorage.getItem(LANG_KEY)

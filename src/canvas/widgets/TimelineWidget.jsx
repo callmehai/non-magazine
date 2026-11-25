@@ -29,6 +29,18 @@ function Ruby({ text }) {
   )
 }
 
+/** Bản sửa lần 4 (25/11, nhóm): họ và tên không bị ngắt giữa chừng, không để một chữ (vd. "Canh") rơi xuống dòng dưới —
+ *  tên katakana (≤ 14 ký tự) và tên Latin trong ngoặc giữ liền một khối; chỗ được xuống dòng là sau dấu 、 hoặc trước （ */
+function keepName(v) {
+  if (typeof v !== 'string') return v
+  return v
+    .replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, (m) => (m.length <= 14 ? [...m].join('\u2060') : m))
+    .replace(/（([^）]*)）/g, (_, a) =>
+      // trong ngoặc: chỉ được xuống dòng sau dấu 、 (không rơi một chữ như "認）" hay "生）")
+      `（${a.split('、').map((x) => [...x.replace(/ /g, '\u00a0')].join('\u2060')).join('、')}）`
+    )
+}
+
 export default function TimelineWidget({ el, interactive }) {
   const lang = useCanvasLang() === 'ja' ? 'ja' : 'vi'
   const li = lang === 'ja' ? 1 : 0
@@ -81,7 +93,7 @@ export default function TimelineWidget({ el, interactive }) {
         </span>
       </div>
       <div className="cvw-tl__name">
-        <Ruby text={it.name[li]} />
+        <Ruby text={keepName(it.name[li])} />
       </div>
       <div className="cvw-tl__bio">
         <Ruby text={it.bio[li]} />
@@ -144,7 +156,7 @@ export default function TimelineWidget({ el, interactive }) {
             </svg>
             <span className="cvw-tl__who">
               {/* tên Nhật chỉ xuống dòng ở dấu ・ (không ngắt giữa "トゥ / イ") */}
-              <Ruby text={String(x.short?.[li] ?? x.name[li]).replace(/・/g, '・\u200b')} />
+              <Ruby text={keepName(String(x.short?.[li] ?? x.name[li]))} />
             </span>
           </button>
         ))}

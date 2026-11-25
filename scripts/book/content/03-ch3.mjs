@@ -79,7 +79,7 @@ export const ch3 = {
       {
         name: ['Nghệ nhân phục hưng, phục dựng kỹ thuật', '伝統技術の{復興|ふっこう}・{復元|ふくげん}に{携|たずさ}わった職人たち'],
         people: [
-          [['Ông Hai Cát (chưa rõ năm sinh, năm mất)', 'ハイ・カット（Hai Cát、生没年未確認）'], ['Góp phần khôi phục nghề nón', 'ノンラー作りの{復興|ふっこう}に{貢献|こうけん}'], ['Ông Hai Cát là một trong những người có đóng góp quan trọng trong việc khôi phục nghề nón làng Chuông sau thời kỳ suy thoái. Ông đã đưa mẫu nón Xuân Kiều (Ba Đồn) về làng sản xuất, góp phần cải tiến mẫu mã và nâng cao khả năng cạnh tranh của sản phẩm. Năm 1930, nón do ông chế tác được đánh giá cao tại Hội chợ Hà Đông. Sau đó, ông tiếp tục truyền dạy kỹ thuật làm nón tại nhiều địa phương.', 'ハイ・カット氏は、{衰退期|すいたいき}を{経|へ}たチュオン{村|むら}のノンラー作りの{復興|ふっこう}に大きく{貢献|こうけん}した人物の一人です。バードン（Ba Đồn）のスアンキエウ（Xuân Kiều）で作られていた型のノンラーをチュオン村に持ち帰り、その製作に{取|と}り入れました。これにより、製品のデザインの改良や{競争|きょうそう}力の向上に貢献しました。\n1930年には、同氏が製作したノンラーがハドン（Hà Đông）の見本市で高い{評価|ひょうか}を受けました。その後も、各地でノンラー作りの技術を教えました。']],
+          [['Ông Hai Cát (chưa rõ năm sinh, năm mất)', 'ハイ・カット（Hai Cát、生没年未確認）'], ['Góp phần khôi phục nghề nón', 'ノンラー作りの{復興|ふっこう}に{貢献|こうけん}'], ['Ông Hai Cát là một trong những người có đóng góp quan trọng trong việc khôi phục nghề nón làng Chuông sau thời kỳ suy thoái. Ông đã đưa mẫu nón Xuân Kiều (Ba Đồn) về làng sản xuất, góp phần cải tiến mẫu mã và nâng cao khả năng cạnh tranh của sản phẩm. Năm 1930, nón do ông chế tác được đánh giá cao tại Hội chợ Hà Đông. Sau đó, ông tiếp tục truyền dạy kỹ thuật làm nón tại nhiều địa phương.', 'ハイ・カット氏は、{衰退期|すいたいき}を{経|へ}たチュオン{村|むら}のノンラー作りの{復興|ふっこう}に大きく{貢献|こうけん}した人物の一人です。バードン（Ba Đồn）のスアンキエウ（Xuân Kiều）で作られていた型のノンラーをチュオン村に持ち帰り、その製作に{取|と}り入れました。これにより、製品のデザインの改良や{競争|きょうそう}力の向上に貢献しました。\n1930年には、ハイ・カット氏が製作したノンラーがハドン（Hà Đông）の見本市で高い{評価|ひょうか}を受けました。その後も、各地でノンラー作りの技術を教えました。']],
           // 08/11: dấu ¹ (chú thích [4] ハタイ省) chỉ có ở bản Nhật của nhóm
           [['Nghệ nhân Phạm Trần Canh (1931)', 'ファム・チャン・カイン（Phạm Trần Canh、1931年生・没年未確認）'], ['Phục dựng những mẫu nón cổ', '古いノンラーの様式を{復元|ふくげん}'], ['Nghệ nhân Phạm Trần Canh có đóng góp nổi bật trong việc phục dựng và bảo tồn các mẫu nón truyền thống, đặc biệt là nón quai thao cổ. Bên cạnh việc lưu giữ và chế tác các mẫu nón phục vụ triển lãm, ông còn truyền nghề miễn phí cho gần 100 người. Năm 2006, ông được phong danh hiệu Nghệ nhân làng nghề Hà Tây¹.', 'ファム・チャン・カイン氏は、伝統的なノンラーの様式の{復元|ふくげん}・{保存|ほぞん}に大きく{貢献|こうけん}し、特に古くから伝わるノン・クアイ・タオ（nón quai thao）の復元に力を注ぎました。\n展示用にさまざまな伝統的なノンラーを製作・保存するとともに、100人近くに{無償|むしょう}でノンラー作りの技術を伝えました。2006年には、「ハタイ{省|しょう}¹{工芸村|こうげいむら}職人（Nghệ nhân làng nghề Hà Tây）」の{称号|しょうごう}を授与されました。']],
         ],
@@ -123,9 +123,9 @@ export const ch3 = {
     // 08/11 ("chú ý cả footnote nhé"): chú thích [4] [5] [6] của bản Nhật; 14/11: bản Việt dịch theo (bản Nhật là bản chuẩn)
     notes: {
       Canh: [['¹ Hà Tây: tỉnh cũ của Việt Nam, được sáp nhập vào thành phố Hà Nội năm 2008.', '¹ ハタイ{省|しょう}：2008年にハノイ市に{編入|へんにゅう}された、ベトナムの旧行政区画（省）です。']],
-      Tuy: [['¹ 5 sản phẩm đạt OCOP 4 sao của cơ sở Lê Văn Tuy: nón lá vải lụa mặt ngoài, nón lá truyền thống đặc biệt, nón lá hai mặt lụa, nón cô dâu, nón chùm (nón treo trang trí).', '¹ レ・ヴァン・トゥイ氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（5種類）：外側に絹布を使用したノンラー（Nón lá vải lụa mặt ngoài）、伝統的な特別仕様のノンラー（Nón lá truyền thống đặc biệt）、内側と外側の両面に絹布を使用したノンラー（Nón lá hai mặt lụa）、花嫁用のノンラー（Nón cô dâu）、ノン・チュム（吊り下げて飾るノンラー）（Nón chùm）']],
+      Tuy: [['¹ 5 sản phẩm đạt OCOP 4 sao của cơ sở Lê Văn Tuy:\n1. Nón lá vải lụa mặt ngoài\n2. Nón lá truyền thống đặc biệt\n3. Nón lá hai mặt lụa\n4. Nón cô dâu\n5. Nón chùm (nón treo trang trí)', '¹ レ・ヴァン・トゥイ氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（5種類）：\n1. 外側に絹布を使用したノンラー（Nón lá vải lụa mặt ngoài）\n2. 伝統的な特別仕様のノンラー（Nón lá truyền thống đặc biệt）\n3. 内側と外側の両面に絹布を使用したノンラー（Nón lá hai mặt lụa）\n4. 花嫁用のノンラー（Nón cô dâu）\n5. ノン・チュム（吊り下げて飾るノンラー）（Nón chùm）']],
       // lỗi gõ đã sửa: 「（（平たくて…」 → 「（平たくて…」, khoảng trắng trước 「（Nón trắng kỹ đẹp）」
-      Hương: [['¹ 6 sản phẩm đạt OCOP 4 sao của cơ sở Tạ Thu Hương: nón trắng kỹ đẹp, nón lá trên lụa, nón quai thao, nón lá bồ đề, nón lá già ghép sống, nón bộ treo trang trí (decor).', '¹ タ・トゥ・フオン氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（6種類）：丁寧に仕上げられた白いノンラー（Nón trắng kỹ đẹp）、絹布を使用したノンラー（Nón lá trên lụa）、ノン・クアイ・タオ（平たくてつばの広い伝統的な笠 - Nón quai thao）、ノンラー・ボーデー（菩提樹の葉を用いたノンラー）（Nón lá bồ đề）、ノン・ラー・ザー・ゲップ・ソン (成熟したヤシの葉で作られたノンラー)（Nón lá già ghép sống）、吊り下げて飾るノンラー（Nón bộ treo trang trí decor）']],
+      Hương: [['¹ 6 sản phẩm đạt OCOP 4 sao của cơ sở Tạ Thu Hương:\n1. Nón trắng kỹ đẹp\n2. Nón lá trên lụa\n3. Nón quai thao\n4. Nón lá bồ đề\n5. Nón lá già ghép sống\n6. Nón bộ treo trang trí (decor)', '¹ タ・トゥ・フオン氏の事業所におけるOCOP 4つ星{認定|にんてい}製品（6種類）：\n1. 丁寧に仕上げられた白いノンラー（Nón trắng kỹ đẹp）\n2. 絹布を使用したノンラー（Nón lá trên lụa）\n3. ノン・クアイ・タオ（平たくてつばの広い伝統的な笠 - Nón quai thao）\n4. ノンラー・ボーデー（菩提樹の葉を用いたノンラー）（Nón lá bồ đề）\n5. ノン・ラー・ザー・ゲップ・ソン (成熟したヤシの葉で作られたノンラー)（Nón lá già ghép sống）\n6. 吊り下げて飾るノンラー（Nón bộ treo trang trí decor）']],
     },
   },
 
@@ -294,7 +294,7 @@ export const ending = {
     ],
   },
   team: {
-    title: ['Nhóm thực hiện', '{制作|せいさく}チーム'],
+    title: ['Nhóm thực hiện', '制作グループ'],
     lead: [
       'Sản phẩm này là dự án tốt nghiệp của sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội, được thực hiện dưới sự hướng dẫn của giảng viên Nguyễn Thị Quế Hường.',
       '本フリップブック『チュオン{村|むら}のノンラー - ベトナムの伝統美』は FPT大学ハノイ校の日本語学科の学生がグエン・ティ・クエ・フオン先生の指導のもと、卒業プロジェクトとして{制作|せいさく}したものです。',
@@ -313,7 +313,7 @@ export const ending = {
     email: 'nonla09092026@gmail.com',
   },
   references: {
-    title: ['Tài liệu tham khảo', '{参考文献|さんこうぶんけん}'],
+    title: ['Tài liệu tham khảo', '参考資料'],
     // 55 mục, nguyên văn tab "Danh sách tài liệu tham khảo" của Doc (04/11/2026)
     items: refs,
   },

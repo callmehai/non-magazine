@@ -32,8 +32,12 @@ export const preface = {
       '本フリップブックでは、画像資料と製作工程を示すGIFアニメーションを{組|く}み合わせることで、{伝統的|でんとうてき}なノンラーが作られる過程を視覚的に{理解|りかい}できるようにしています。完成品や{材料|ざいりょう}、製作工程、{工芸村|こうげいむら}の{風景|ふうけい}、ノンラーを作る人々の画像は、本文の情報を補足し、内容をより分かりやすくするとともに、伝統的なノンラー作りの様子を視覚的に紹介するものです。こうした視覚的に分かりやすく、{親|した}しみやすい{構成|こうせい}を通じて、{読者|どくしゃ}の{皆様|みなさま}に楽しく読み進めていただける一冊を目指しています。',
     ],
     [
-      'Hy vọng rằng, qua từng trang sách, độc giả Nhật Bản sẽ có cơ hội khám phá những nét đặc trưng của nón lá làng Chuông, đồng thời hiểu thêm về những con người và giá trị văn hóa gắn liền với nghề thủ công truyền thống này. Nhóm tác giả xin mời quý độc giả cùng bắt đầu hành trình tìm hiểu về nón lá làng Chuông qua cuốn flipbook này.',
-      '本フリップブックを読み進める中で、日本の{読者|どくしゃ}の{皆様|みなさま}がチュオン{村|むら}のノンラーならではの{特徴|とくちょう}に触れ、この伝統工芸に{携|たずさ}わる人々や、それに結びついた文化的{価値|かち}について{理解|りかい}を深めていただければ幸いです。それでは、本フリップブックとともにチュオン村のノンラーについて学ぶ{旅|たび}を始めましょう。',
+      'Hy vọng rằng, qua từng trang sách, độc giả Nhật Bản sẽ có cơ hội khám phá những nét đặc trưng của nón lá làng Chuông, đồng thời hiểu thêm về những con người và giá trị văn hóa gắn liền với nghề thủ công truyền thống này.',
+      '本フリップブックを読み進める中で、日本の{読者|どくしゃ}の{皆様|みなさま}がチュオン{村|むら}のノンラーならではの{特徴|とくちょう}に触れ、この伝統工芸に{携|たずさ}わる人々や、それに結びついた文化的{価値|かち}について{理解|りかい}を深めていただければ幸いです。',
+    ],
+    [
+      'Nhóm tác giả xin mời quý độc giả cùng bắt đầu hành trình tìm hiểu về nón lá làng Chuông qua cuốn flipbook này.',
+      'それでは、本フリップブックとともにチュオン村のノンラーについて学ぶ{旅|たび}を始めましょう。',
     ],
   ],
   sign: ['Hà Nội, tháng 11 năm 2026\nNhóm tác giả', 'ハノイ 2026年11月\n{著者|ちょしゃ}一同'],
