@@ -1912,7 +1912,7 @@ const POOL = {
     ['Người bán vành và khung nón trong phiên chợ Chuông', 'チュオンの市場でノンラーの輪と骨組みを売る人'],
     // soát 04/11: bỏ ảnh chợ đêm (lặp cảnh); 3.3 "người kế thừa": người thợ lớn tuổi bên người trẻ
     // soát 06/11 (R3): bỏ "Đôi bàn tay người thợ luồn chỉ nhôi" — cùng loạt, cùng tay, cùng nón với "Đôi bàn tay người thợ" (3.3)
-    ['Người nghệ nhân lớn tuổi', '年配の職人'],
+    // Bản sửa lần 5 (nhóm 26/11: "Thay ảnh 134 hoặc bỏ"): bỏ ảnh 年配の職人 (IMG_3226)
   ],
   // góp ý buổi họp (anh Hải nhắc 05/11): "phần kết nhiều ảnh đẹp quá, cắt bớt đi vì nó không quan trọng, đẩy cho các nội dung
   // trên" → kết luận chỉ một ảnh; ảnh chợ còn lại chuyển lên kho ảnh mục 1.3 (Làng Chuông, chợ nón) — xem KET_UP
@@ -2883,12 +2883,13 @@ let stripRight = null
         const W2 = CW - 14
         let best = null
         for (let h = Math.min(430, BOT - top - 50); h >= 150 && !best; h -= 4)
-          for (let w1 = 120; w1 <= W2 - 120; w1 += 3) {
+          for (const w1 of [W2 / 2]) {
+            // Bản sửa lần 5 (nhóm 26/11, tr.53): ảnh trái và ảnh phải bằng nhau → chỉ thử hai khung rộng đúng nửa
             const w2 = W2 - w1
             const ch = Math.max(capH(pair[0], w1), capH(pair[1], w2))
             if (top + h + 6 + ch > BOT) continue
             const c = Math.max(cutOf(pair[0], w1, h), cutOf(pair[1], w2, h))
-            if (c <= 0.04 && (!best || c < best.c)) best = { w1, w2, h, ch, c }
+            if (c <= 0.1 && (!best || c < best.c)) best = { w1, w2, h, ch, c }
           }
         if (!best) best = { w1: W2 / 2, w2: W2 / 2, h: 220, ch: Math.max(...pair.map((c) => capH(c, W2 / 2))) }
         // cụm ảnh ngay dưới chữ; chân trang còn trống (ảnh không cao thêm được mà không cắt nón / tay người thợ) thì đặt
@@ -2896,7 +2897,7 @@ let stripRight = null
         const yy = top
         const gap = BOT + 24 - (yy + best.h + 6 + best.ch)
         const nat = pair.map((c) => natR(c) ?? R.std)
-        if (gap >= 130 && Math.min(...nat) < 1 && Math.max(...nat) > 1.2) {
+        if (false && gap >= 130 && Math.min(...nat) < 1 && Math.max(...nat) > 1.2) {
           // một ảnh ngang + một ảnh dọc mà đặt cạnh nhau thì cả hai nhỏ, chân trang trống (lớp ngoài: "đang lợp" chụp ngang)
           // → so le chồng mép như tr. bước 6: ảnh ngang to ở trên-trái, ảnh dọc dưới-phải đè nhẹ góc ảnh trên; cả hai khung
           // đúng tỉ lệ ảnh (không cắt); chú thích ở hai khoảng còn lại (trên-phải, dưới-trái)
