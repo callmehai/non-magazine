@@ -679,7 +679,7 @@ const SRC_BY_PATH = [
   // tab Bổ sung 08/11: "Nguồn Trọng Khải cung cấp ghi tiếng Nhật: チョン・カイ氏撮影"
   [/^(Drive\/)?(Trọng Khải\/|Chương 3\/Không gian chợ nón\/)/, ['nhiếp ảnh Trọng Khải', 'チョン・カイ氏']],
   // tab Bổ sung 08/11 khuya: "ảnh 141: do nhóm chụp" (Nụ cười người thợ… — ảnh nằm trong thư mục nghệ nhân Lê Văn Tuy)
-  [/Nón Lê Văn Tuy\/Người thợ 1$/, ['nhóm tác giả', '制作グループ撮影']],
+  [/Nón Lê Văn Tuy\/Người thợ 1$/, ['nhóm tác giả', 'グループ撮影']],
   [/Nón Lê Văn Tuy\/|^new\/IMG_854[78]/, ['nghệ nhân Lê Văn Tuy', '職人レ・ヴァン・トゥイ氏']],
   // Doc (Thu Nguyệt, mở đầu chương 2): "Ảnh 2: Nghệ Nhân Tạ Thu Hương cung cấp"
   [/Nón Tạ Thu Hương\/|^new\/IMG_861|^new\/Người thợ hoàn thiện bước luồn nhôi cuối cùng$/, ['nghệ nhân Tạ Thu Hương', '職人タ・トゥ・フオン氏']],
@@ -694,7 +694,7 @@ const SRC_IN_CAP_JA = /\s*(?:[—―・]\s*(?:出典|写真|提供)\s*[：:]\s*(
 const CAP_OVR = {
   // Bản sửa lần 4 (25/11, nhóm): ảnh 118 / ảnh chợ sáng sửa chú thích tiếng Nhật; bản Việt theo
   'Du khách vẽ trang trí nón tại một cơ sở làng Chuông': { vi: 'Du khách tô màu nón lá mini tại làng Chuông', ja: 'チュオン村でミニサイズのノンラーに色を塗る観光客' },
-  // ảnh chợ đèn lồng (ảnh 103 cũ, nhóm chỉ vào: "Sửa lại tên chú thích → チュオン村の早朝のノンラー市場（制作グループ撮影）")
+  // ảnh chợ đèn lồng (ảnh 103 cũ, nhóm chỉ vào: "Sửa lại tên chú thích → チュオン村の早朝のノンラー市場（グループ撮影）")
   'Ảnh toàn trang: phiên chợ lá lụi lúc tờ mờ sáng': { vi: 'Chợ nón làng Chuông lúc sáng sớm', ja: 'チュオン村の早朝のノンラー市場' },
   // Bản sửa lần 3 (16/11, ảnh 113): "→ Nguồn: Pháp luật新聞" — bỏ tên người chụp khỏi chú thích (vẫn ghi ở trang Nguồn ảnh)
   'Gian trưng bày nón Chuông nhiều mẫu mã của nghệ nhân Lê Văn Tuy tại một triển lãm — nguồn: Xuân Lai / Báo Pháp luật': { src: ['Báo Pháp luật', 'Pháp luật新聞'] },
@@ -738,58 +738,58 @@ const CAP_OVR = {
  * (tên nón in riêng) chỉ đổi nguồn.
  */
 const SHEET_JA = {
-  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "制作グループ撮影", null], // 2
-  // Zalo 12/11 21:19 (Minh Ánh, ảnh 3): "chú thích ảnh này chỗ trong ngoặc sửa thành 制作グループ撮影"; bản Việt theo cùng
-  // (anh Hải 12/11: "cái ảnh 3 thì làm theo bản mới nhất nhé, việt sửa theo") — như các ảnh 制作グループ撮影 khác: "nhóm tác giả"
-  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "制作グループ撮影", "nhóm tác giả"], // 3
-  "Nón lá làng Chuông — Hà Nội": [null, "制作グループ撮影", null], // 10
-  "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "制作グループ撮影", null], // 15
-  "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "制作グループ撮影", null], // 15
-  "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "制作グループ撮影", null], // 16
-  "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "制作グループ撮影", null], // 16
-  "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "制作グループ撮影", null], // 16
+  "Ảnh mở chương: thiếu nữ áo dài đội nón lá": ["アオザイをまとったベトナム人女性とノンラー", "グループ撮影", null], // 2
+  // Zalo 12/11 21:19 (Minh Ánh, ảnh 3): "chú thích ảnh này chỗ trong ngoặc sửa thành グループ撮影"; bản Việt theo cùng
+  // (anh Hải 12/11: "cái ảnh 3 thì làm theo bản mới nhất nhé, việt sửa theo") — như các ảnh グループ撮影 khác: "nhóm tác giả"
+  "Nón lá — nguồn: nghệ nhân Tạ Thu Hương": ["ノンラー", "グループ撮影", "nhóm tác giả"], // 3
+  "Nón lá làng Chuông — Hà Nội": [null, "グループ撮影", null], // 10
+  "Thiếu nữ trong tà áo dài bên những chiếc nón lá": [null, "グループ撮影", null], // 15
+  "Những người phụ nữ trong tà áo dài cùng nón lá": [null, "グループ撮影", null], // 15
+  "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "グループ撮影", null], // 16
+  "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "グループ撮影", null], // 16
+  "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "グループ撮影", null], // 16
   "Nghệ nhân ngồi lợp lớp lá trong": ["座ってノンラーを作る職人の様子", "職人レ・ヴァン・トゥイ氏提供", "nghệ nhân Lê Văn Tuy cung cấp"], // 40
-  "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "制作グループ撮影", null], // 41
-  "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "制作グループ撮影", null], // 42
-  "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "制作グループ撮影", null], // 43
-  "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "制作グループ撮影", null], // 44
-  "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "制作グループ撮影", null], // 44
-  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "制作グループ撮影", null], // 45
+  "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "グループ撮影", null], // 41
+  "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "グループ撮影", null], // 42
+  "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "グループ撮影", null], // 43
+  "Lớp lá lụi ngoài — đang lợp": ["ラルイの葉の層（外層） — 重ねているところ", "グループ撮影", null], // 44
+  "Lớp lá lụi ngoài — sau khi lợp": ["ラルイの葉の層（外層）", "グループ撮影", null], // 44
+  "Lá lụi, nón và chỉ màu — nguyên liệu nghề nón trưng bày tại Bảo tàng Dân tộc học Việt Nam": ["ベトナム民族学博物館における調査グループによる現地撮影（2026年）", "グループ撮影", null], // 45
   // "Nhờ nhóm xem giúp" mục 8 (16/11): "Anh 70,71 đã chỉnh ở パート2 trước rồi nhé" → chữ Nhật theo パート2 (hai ảnh khác nhau)
-  "Lá lụi phơi ngoài nắng": ["堤防でラルイの葉を天日干しする住民", "制作グループ撮影", null], // 46
-  "Búp lá cọ non phơi khô, màu trắng ngà": ["天日干ししたラルイの葉", "制作グループ撮影", null], // 46
-  "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "制作グループ撮影", null], // 47
-  "Lớp mo nang": ["モーナン（ヌア竹の皮）", "制作グループ撮影", null], // 48
-  "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "制作グループ撮影", null], // 49
-  "Cây liếc — ruột và vỏ": ["リエックの茎の芯（シダ類の植物）", "制作グループ撮影", null], // 50
-  "Sợi chỉ màu": ["ノイを作るための色糸", "制作グループ撮影", null], // 51
-  "Khuôn nón hình chóp 16 vòng": ["ノンラーの製作型", "制作グループ撮影", null], // 52
+  "Lá lụi phơi ngoài nắng": ["堤防でラルイの葉を天日干しする住民", "グループ撮影", null], // 46
+  "Búp lá cọ non phơi khô, màu trắng ngà": ["天日干ししたラルイの葉", "グループ撮影", null], // 46
+  "Các thanh nứa vót mỏng": ["ヌアの細い竹材", "グループ撮影", null], // 47
+  "Lớp mo nang": ["モーナン（ヌア竹の皮）", "グループ撮影", null], // 48
+  "Cuộn sợi cước": ["縫い糸（ナイロン糸）", "グループ撮影", null], // 49
+  "Cây liếc — ruột và vỏ": ["リエックの茎の芯（シダ類の植物）", "グループ撮影", null], // 50
+  "Sợi chỉ màu": ["ノイを作るための色糸", "グループ撮影", null], // 51
+  "Khuôn nón hình chóp 16 vòng": ["ノンラーの製作型", "グループ撮影", null], // 52
   "Dao, kéo cắt lá": ["ナイフ・はさみ", null, null], // 53
-  "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "制作グループ撮影", null], // 54
-  "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "制作グループ撮影", null], // 55
-  "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "制作グループ撮影", null], // 56
-  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "制作グループ撮影", null], // 57
-  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "制作グループ撮影", null], // 58
-  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "制作グループ撮影", null], // 59
-  "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "制作グループ撮影", null], // 60
-  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "制作グループ撮影", null], // 61
-  "Cắt lá thừa và khâu viền vành nón": ["ステップ6：ヌック・ノン（ノンラーの外縁を縫って補強する作業）", "制作グループ撮影", null], // 62
-  "Chỉ màu luồn trong lòng nón": ["ステップ7：ルオン・ノイ（あごひもを通して固定する部分を色糸で作る作業）", "制作グループ撮影", null], // 63
-  "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "制作グループ撮影", null], // 64
+  "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "グループ撮影", null], // 54
+  "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "グループ撮影", null], // 55
+  "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "グループ撮影", null], // 56
+  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "グループ撮影", null], // 57
+  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "グループ撮影", null], // 58
+  "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "グループ撮影", null], // 59
+  "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "グループ撮影", null], // 60
+  "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "グループ撮影", null], // 61
+  "Cắt lá thừa và khâu viền vành nón": ["ステップ6：ヌック・ノン（ノンラーの外縁を縫って補強する作業）", "グループ撮影", null], // 62
+  "Chỉ màu luồn trong lòng nón": ["ステップ7：ルオン・ノイ（あごひもを通して固定する部分を色糸で作る作業）", "グループ撮影", null], // 63
+  "Quét lớp dầu bóng lên mặt nón": ["クアン・ザウ（防水のために表面に保護用の油を塗る作業）", "グループ撮影", null], // 64
   "Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề": ["チュオン村のノンラーに囲まれた子ども", "職人レ・ヴァン・トゥイ氏提供", null], // 65
-  "Các sản phẩm nón đa dạng của làng Chuông": [null, "制作グループ撮影", null], // 67
+  "Các sản phẩm nón đa dạng của làng Chuông": [null, "グループ撮影", null], // 67
   "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Maries", null], // 73
-  "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "制作グループ撮影", null], // 83
-  "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "制作グループ撮影", null], // 84
-  "Trải nghiệm vẽ trên nón lá ở làng Chuông": ["チュオン村でのノンラーの絵付け体験", "制作グループ撮影", null], // 87
-  "Du khách trải nghiệm vẽ nón ở làng Chuông": [null, "制作グループ撮影", null], // 91
-  "Du khách nước ngoài trải nghiệm vẽ nón ở làng Chuông": [null, "制作グループ撮影", null], // 91
-  "Biển “Lớp học giữ nghề nón làng Chuông”": [null, "制作グループ撮影", null], // 93
-  "Cụ bà bán nón ở làng Chuông": [null, "制作グループ撮影", "nhóm tác giả"], // 95
-  "Người phụ nữ mang nón ở chợ Chuông": [null, "制作グループ撮影", "nhóm tác giả"], // 96
-  "Người thợ cắt phần lá thừa của chiếc nón": ["ノンラーを作る職人", "制作グループ撮影", null], // 97
-  "Nụ cười người thợ làng Chuông bên chiếc nón": [null, "制作グループ撮影", null], // 98
-  "Du khách đội nón lá làng Chuông chụp ảnh lưu niệm": [null, "制作グループ撮影", null], // 99
+  "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "グループ撮影", null], // 83
+  "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "グループ撮影", null], // 84
+  "Trải nghiệm vẽ trên nón lá ở làng Chuông": ["チュオン村でのノンラーの絵付け体験", "グループ撮影", null], // 87
+  "Du khách trải nghiệm vẽ nón ở làng Chuông": [null, "グループ撮影", null], // 91
+  "Du khách nước ngoài trải nghiệm vẽ nón ở làng Chuông": [null, "グループ撮影", null], // 91
+  "Biển “Lớp học giữ nghề nón làng Chuông”": [null, "グループ撮影", null], // 93
+  "Cụ bà bán nón ở làng Chuông": [null, "グループ撮影", "nhóm tác giả"], // 95
+  "Người phụ nữ mang nón ở chợ Chuông": [null, "グループ撮影", "nhóm tác giả"], // 96
+  "Người thợ cắt phần lá thừa của chiếc nón": ["ノンラーを作る職人", "グループ撮影", null], // 97
+  "Nụ cười người thợ làng Chuông bên chiếc nón": [null, "グループ撮影", null], // 98
+  "Du khách đội nón lá làng Chuông chụp ảnh lưu niệm": [null, "グループ撮影", null], // 99
 }
 /**
  * 14/11 (bản Nhật là bản chuẩn): chú thích tiếng Việt dịch theo đúng câu tiếng Nhật trong SHEET_JA (trước đây bản Nhật đổi theo
@@ -853,7 +853,7 @@ function fmtCap1(cap, key, srcOvr) {
     }
   }
   if (srcOvr) src = srcOvr
-  if (!src) src = SRC_BY_PATH.find(([re]) => re.test(rel ?? ''))?.[1] ?? (/^online\//.test(rel ?? '') ? null : ['nhóm tác giả', '制作グループ撮影'])
+  if (!src) src = SRC_BY_PATH.find(([re]) => re.test(rel ?? ''))?.[1] ?? (/^online\//.test(rel ?? '') ? null : ['nhóm tác giả', 'グループ撮影'])
   // 08/11 (tab Bổ sung + Zalo chị Linh): mẫu "STT: chú thích (nguồn)", bỏ chữ "Nguồn" / "出典" — vd. nhóm ghi
   // 「画像１：ファッションアイテムとして使われる装飾用ノンラー（職人タ・トゥ・フオン氏提供）」: ảnh nghệ nhân đưa → "… cung cấp" / "…提供"
   // nguồn có ngoặc bên trong ("André Salles (Thư viện Quốc gia Pháp)", "Chạm Sắc (VTV5)") → dấu phẩy, không lồng hai lớp ngoặc
@@ -1963,7 +1963,7 @@ function chapterOpener(ch, photo) {
     return o
   }
   // "Nhờ nhóm xem giúp" mục 7 (16/11, nhóm: "Đồng ý"): ảnh mở chương có chú thích đầy đủ (trước: chỉ dòng nguồn)
-  const oc = photo.cap ? Object.assign([`${photo.cap[0]} (nhóm tác giả)`, `${photo.cap[1]}（制作グループ撮影）`], { fmt: true }) : srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
+  const oc = photo.cap ? Object.assign([`${photo.cap[0]} (nhóm tác giả)`, `${photo.cap[1]}（グループ撮影）`], { fmt: true }) : srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
   const pw0 = left.cw - 70
   const och = capH(oc, pw0)
   const ph = BOT + 14 - (ry + 26) - 6 - och
@@ -3671,7 +3671,13 @@ let stripRight = null
       )
     }
   )
-  if (huongAt >= 0 && !huongSpread()) people([[g2.people[huongAt], ar.image[huongAt], ar.image[huongAt], ar.notes.Hương]], () => f.quote(ar.sayings.Hương, { size: 17, inset: 18, gap: 18, color: ACC[3] }))
+  if (huongAt >= 0 && !huongSpread()) people([[g2.people[huongAt], ar.image[huongAt], ar.image[huongAt], ar.notes.Hương]], () => {
+    f.quote(ar.sayings.Hương, { size: 17, inset: 18, gap: 18, color: ACC[3] })
+    // Bản sửa lần 5 (nhóm 26/11: "ảnh bên bà Hương đang nhầm 101-103"): ảnh thừa của ông Tuy trong kho đang rơi sang trang bà → bỏ;
+    // trang bà chỉ dùng ảnh của bà (giới thiệu sản phẩm, giấy khen, ảnh lưu niệm)
+    f.pool = f.pool.filter((c) => !/Lê Văn Tuy/.test(c[0]))
+    f.pool.unshift(...ar.photos.huong, ['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥ・フオン氏（赤い服）と、工房を訪れた若者たち'])
+  })
   // nút "đọc tiếp" trên thẻ ông Tuy / bà Hương của dòng thời gian → trang có tiểu sử đầy đủ (số trang biết sau khi dàn)
   for (const it of tl) {
     const who = it.who
