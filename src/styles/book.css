@@ -60,6 +60,10 @@
 .orientation-landscape .book__glare[data-alone='left'] {
   right: 50%;
 }
+/* đang lật trang: tạm ẩn vệt sáng — lớp soft-light phủ cả cuốn sách bắt Chrome trộn lại mọi khung hình của hiệu ứng lật (giật, 27/11) */
+.book__tilt.is-turning .book__glare {
+  visibility: hidden;
+}
 @media (prefers-reduced-motion: reduce) {
   .book__tilt {
     transform: none;

@@ -357,6 +357,8 @@ function ImageBody({ el }) {
       src={src || undefined}
       loading={load === 'lazy' ? 'lazy' : undefined}
       fetchPriority={load === 'warm' ? 'low' : undefined}
+      // giải mã ảnh ngay khi tải xong (trước khi lật tới): không thì lần đầu vẽ trang mới mới giải mã → giật đúng lúc lật (27/11)
+      onLoad={(e) => e.currentTarget.decode?.().catch(() => {})}
       alt={el.alt || ''}
       draggable="false"
       style={el.blur ? { objectFit: 'cover', objectPosition: el.pos, filter: 'blur(5em) saturate(0.9) brightness(1.04)', transform: 'scale(1.25)' } : c ? { objectFit: 'cover', objectPosition: `${c.x}% ${c.y}%`, transform: `translate(${((0.5 - mid(c.x)) * 100).toFixed(2)}%, ${((0.5 - mid(c.y)) * 100).toFixed(2)}%) scale(${c.z})`, transformOrigin: `${mid(c.x) * 100}% ${mid(c.y) * 100}%` } : { objectFit: el.fit || 'cover', objectPosition: el.pos, ...spin }}
