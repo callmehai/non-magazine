@@ -46,7 +46,7 @@ const C = {
 // soát thị giác 15/11 (WCAG ≥ 4.5:1 cho chữ nhỏ dùng màu chương): 0 #a07a3c→#7e6230, 2 #a95f3c→#94532f, 3 #3f7676→#346464, 9 #8c6a33→#7a5a28
 const ACC = { 0: '#7e6230', 1: '#5f7350', 2: '#94532f', 3: '#346464', 9: '#7a5a28' }
 const TINT = { 0: '#efe3c6', 1: '#e3e8d8', 2: '#f1dccd', 3: '#d9e6e3', 9: '#efe3c6' }
-const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Sans JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
+const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Serif JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
 const M = { bottom: 58, outer: 40, inner: 50 }
 // hạn mức chữ thân bài mỗi trang (pt, ≈ 12–13 dòng): phần còn lại của trang là ảnh — góp ý: trang dày đặc chữ quá,
 // cả sách không quá ~7 trang toàn chữ. Chữ vượt hạn mức chảy sang trang / cặp trang sau (không cắt bớt, không "Đọc thêm")
