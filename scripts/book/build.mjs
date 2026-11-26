@@ -750,7 +750,7 @@ const SHEET_JA = {
   "Tủ trưng bày các kiểu nón lá trong bảo tàng": [null, "グループ撮影", null], // 16
   "Nón lá trưng bày cùng con rối và đồ thủ công trong bảo tàng": [null, "グループ撮影", null], // 16
   "Nón lá trưng bày tại Bảo tàng Phụ nữ Việt Nam": [null, "グループ撮影", null], // 16
-  "Nghệ nhân ngồi lợp lớp lá trong": ["座ってノンラーを作る職人の様子", "職人レ・ヴァン・トゥイ氏提供", "nghệ nhân Lê Văn Tuy cung cấp"], // 40
+  "Nghệ nhân ngồi lợp lớp lá trong": ["座ってノンラーを作る職人の様子", "グループ撮影", "nhóm tác giả"], // 40
   "Lớp lá lụi trong — sau khi lợp": ["ラルイの葉の層（内層）", "グループ撮影", null], // 41
   "Lớp mo nang — tàu mo trước khi lợp": ["ヌア竹の皮の層", "グループ撮影", null], // 42
   "Lớp mo nang — sau khi lợp": ["ヌア竹の皮の層（中間層）", "グループ撮影", null], // 43
