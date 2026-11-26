@@ -303,7 +303,7 @@ export const ch1 = {
           name: ['Nón Quai thao', 'ノン・クアイ・タオ（Nón quai thao）'],
           text: [
             'Là loại nón rộng vành gắn liền với trang phục truyền thống của phụ nữ Bắc Bộ, đặc biệt là hình ảnh các liền chị Quan họ trong dịp hội hè. Nón có ba kích cỡ phổ biến (đường kính 30 cm, 70 cm, 90 cm và thành cao 3–4 cm), đặc trưng với mặt nón rộng, tương đối phẳng, thành thấp, kết hợp cùng dây quai tết và các chùm thao trang trí rực rỡ quanh vành. Do đặc điểm cấu tạo, nón chủ yếu được dùng làm phụ kiện trang phục, tạo dáng trong lễ hội và biểu diễn văn hóa. Trong một số không gian giao duyên, nón còn được dùng làm khay đặt trầu têm cánh phụng để mời khách.',
-            'ベトナム北部の女性の伝統衣装と深く結びついた、つばの広いノンラーです。一般的には三つのサイズ（70cm、90cm、側面の高さ3～4cm）があり、広く比較的平らな面と低い側面、編み込んだあご紐、縁の周囲を彩る鮮やかな房飾りが特徴です。その構造から、主に衣装に添える小物として、祭りや文化公演で姿を美しく見せるために用いられます。また、男女が歌を交わす場では、鳳凰の翼の形に整えたキンマを載せ、客にキンマを勧めるための盆として使われることもあります[14]。',
+            'ベトナム北部の女性の伝統衣装と深く結びついた、つばの広いノンラーです。一般的には二つのサイズ（70cm、90cm、側面の高さ3～4cm）があり、広く比較的平らな面と低い側面、編み込んだあご紐、縁の周囲を彩る鮮やかな房飾りが特徴です。その構造から、主に衣装に添える小物として、祭りや文化公演で姿を美しく見せるために用いられます。また、男女が歌を交わす場では、鳳凰の翼の形に整えたキンマを載せ、客にキンマを勧めるための盆として使われることもあります[14]。',
           ],
         },
         {
