@@ -3828,12 +3828,13 @@ let stripRight = null
     const url = urlOf(t)
     const lk = url ? { link: url, linkStyle: 'ref' } : {}
     refNo++
-    const body = [viDate(t), t]
+    // Bản sửa lần 5 (anh Hải 27/11): mục có link phải liếc qua là biết → ↗ cuối mục + số [n] màu son đậm
+    const body = url ? [`${viDate(t)}\u00a0↗`, `${t}\u00a0↗`] : [viDate(t), t]
     const ro = { size: 10, lh: 1.42, jaSize: 10 }
     const nw = plainRefs ? 0 : 30
     const h1 = textH(body, CW - nw, ro)
     f.place(h1, (p, y) => {
-      if (!plainRefs) p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
+      if (!plainRefs) p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: url ? ACC[2] : C.ink2, weight: url ? 700 : undefined, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
       p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
     }, 33) // (Bản sửa lần 5: 42 mục IEEE, cách 33pt: 45 mục (42 + 3 từ điển) tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
