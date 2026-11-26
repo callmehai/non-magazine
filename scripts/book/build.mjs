@@ -2402,7 +2402,7 @@ let guidePage = null
       // ảnh IMG_7879 (08/11: đúng ảnh nhóm gắn 1-36 — mặt trên, quai lụa đỏ): chụp từ trên xuống, thấy trọn mặt nón
       hero: { r: 0.9, pos: '50% 50%', fit: 'contain' },
       details: [[['Chùm thao trang trí', '房飾り'], 30, 66, 2.6], [['Núm chóp, mặt nón rộng', '頂の飾りと広い面'], 50, 48, 2.3], [['Quai lụa', 'あごひも'], 14, 32, 2.6]],
-      box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 30 cm · 70 cm · 90 cm', '直径30cm・70cm・90cm'], ['Thành cao 3–4 cm', '側面の高さ3～4cm'], ['Mặt nón rộng, tương đối phẳng', '広く比較的平らな面と低い側面'], ['Quai tết, chùm thao quanh vành', '編んだあごひもと房飾り']]],
+      box: [['Kích thước phổ biến', '一般的な大きさ'], [['Đường kính 70 cm · 90 cm', '直径70cm・90cm'], ['Thành cao 3–4 cm', '側面の高さ3～4cm'], ['Mặt nón rộng, tương đối phẳng', '広く比較的平らな面と低い側面'], ['Quai tết, chùm thao quanh vành', '編んだあごひもと房飾り']]],
     },
     'Nón thúng': {
       // ảnh IMG_8480 (góp ý: ảnh nón thúng cũ sai): chụp thẳng từ trên xuống
@@ -4752,6 +4752,25 @@ pages.forEach(bottomFlora)
   const toSup = (n) => [...String(n)].map((d) => SUP[+d]).join('')
   const RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g
   const isNote = (e) => e.name === 'Chú thích'
+  // Bản sửa lần 5 (nhóm 26/11): tài liệu trích dẫn theo IEEE ngay trong câu ([n, ページ x]) → bản Nhật bỏ các chú thích cuối trang
+  // chỉ ghi nguồn / giải nghĩa mà tab tiếng Nhật không có (chỉ giữ 10 chú thích [1]–[10] của nhóm)
+  const DROP_JA = /^(『Nghề|フー・?ゴック|『Hỏi|Vũ Từ Trang|ヌア：|モーナン|OCOP（One|ディン・?ハイン)/
+  for (const p of pages) {
+    const notes = p.els.filter((e) => e.type === 'text' && isNote(e) && typeof e.ja === 'string')
+    const gone = []
+    for (const e of notes) {
+      e.ja = e.ja
+        .split('\n')
+        .filter((ln) => {
+          const m = ln.match(/^([⁰¹²³⁴⁵⁶⁷⁸⁹]+)\s*(.*)$/)
+          if (m && DROP_JA.test(m[2].replace(/[\u2060\u200b]/g, ''))) return gone.push(m[1]), false
+          return true
+        })
+        .join('\n')
+    }
+    for (const sup of gone)
+      for (const e of p.els) if (e.type === 'text' && !isNote(e) && typeof e.ja === 'string') e.ja = e.ja.split(sup).join('')
+  }
   for (const key of ['text', 'ja']) {
     let g = 0
     for (const p of pages) {
