@@ -204,6 +204,8 @@ const POS = {
   // Bổ sung 2 (12/11): "Sửa lại ảnh này cho hình cái nón ở giữa khung hình ( dính bông hoa cũng không sao nhe)" — nón x 480–1150 / 1282 px, khung vuông → tâm khung 815 px
   'Nón lá bàng — Thành phố Huế': '81% 50%',
   'Nón Tày — Thái Nguyên': '96% 50%',
+  // Bản sửa lần 5 (nhóm 26/11, nón chóp truyền thống): "cắt dịch xuống dưới cho lộ hết nón"
+  'Nón lá hình chóp truyền thống — ảnh sản phẩm': '50% 100%',
   'Nón ba tầm — Hà Nội': '50% 0%',
   'Nón thúng — Nghệ An': '50% 22%',
   // ảnh 97 mới (IMG_4829): mặt nón trắng ở giữa-trên ảnh, tà áo dài phía dưới
