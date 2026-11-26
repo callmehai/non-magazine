@@ -109,7 +109,7 @@ export const ch1 = {
           [['Nón ngựa', 'ノン・グア'], ['Tỉnh Gia Lai (Bình Định cũ)', 'ザライ{省|しょう}（旧ビンディン省）']],
           [['Nón lá làng Chuông', 'チュオン{村|むら}のノンラー'], ['Hà Nội', 'ハノイ市']],
           // 06/11: nhóm thêm trong bản Nhật (ảnh 1-10): タイ族のノンラー ― タイグエン省 (Báo Dân tộc và Phát triển)
-          [['Nón người Tày', 'タイ族のノンラー'], ['Thái Nguyên', 'タイグエン{省|しょう}']],
+          [['Nón Tày', 'タイ族のノンラー'], ['Thái Nguyên', 'タイグエン{省|しょう}']],
         ],
       },
       {
@@ -284,7 +284,7 @@ export const ch1 = {
           ],
         },
         {
-          name: ['Nón lá già ghép sống', '古いヤシの{葉|は}で作られたノンラー'],
+          name: ['Nón lá già ghép sống', '成熟したヤシの{葉|は}で作られたノンラー'],
           text: [
             'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật bởi các đường sống lá rõ nét, mang lại vẻ ngoài mộc mạc và khác biệt. Nón có kích thước tương đương với nón chóp truyền thống.',
             '古いヤシの{葉|は}を{継|つ}ぎ合わせ、ノンラーの{骨組|ほねぐ}みに{縫|ぬ}い{付|つ}けて固定したものです。表面は薄{茶色|ちゃいろ}で、頂部から{縁|ふち}に向かって均等に{放射状|ほうしゃじょう}に伸びる葉脈と、横方向の縫い{目|め}が{特徴|とくちょう}的な構造を形作っています。葉の表面が{平|たい}らで色も明るい伝統的な{円錐形|えんすいけい}のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、{素朴|そぼく}で独特な外観を生み出しています。',

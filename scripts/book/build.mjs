@@ -46,7 +46,7 @@ const C = {
 // soát thị giác 15/11 (WCAG ≥ 4.5:1 cho chữ nhỏ dùng màu chương): 0 #a07a3c→#7e6230, 2 #a95f3c→#94532f, 3 #3f7676→#346464, 9 #8c6a33→#7a5a28
 const ACC = { 0: '#7e6230', 1: '#5f7350', 2: '#94532f', 3: '#346464', 9: '#7a5a28' }
 const TINT = { 0: '#efe3c6', 1: '#e3e8d8', 2: '#f1dccd', 3: '#d9e6e3', 9: '#efe3c6' }
-const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Serif JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
+const F = { head: 'Playfair Display', body: 'Be Vietnam Pro', script: 'Dancing Script', hand: 'Patrick Hand', jaHead: 'Shippori Mincho', jaBody: 'Noto Sans JP', jaSans: 'Noto Sans JP', jaHand: 'Klee One' }
 const M = { bottom: 58, outer: 40, inner: 50 }
 // hạn mức chữ thân bài mỗi trang (pt, ≈ 12–13 dòng): phần còn lại của trang là ảnh — góp ý: trang dày đặc chữ quá,
 // cả sách không quá ~7 trang toàn chữ. Chữ vượt hạn mức chảy sang trang / cặp trang sau (không cắt bớt, không "Đọc thêm")
@@ -203,7 +203,7 @@ const POS = {
   // ô vuông tr. 13–14 (không còn nền nhoè): khung dời về chiếc nón
   // Bổ sung 2 (12/11): "Sửa lại ảnh này cho hình cái nón ở giữa khung hình ( dính bông hoa cũng không sao nhe)" — nón x 480–1150 / 1282 px, khung vuông → tâm khung 815 px
   'Nón lá bàng — Thành phố Huế': '81% 50%',
-  'Nón người Tày — Thái Nguyên': '96% 50%',
+  'Nón Tày — Thái Nguyên': '96% 50%',
   'Nón ba tầm — Hà Nội': '50% 0%',
   'Nón thúng — Nghệ An': '50% 22%',
   // ảnh 97 mới (IMG_4829): mặt nón trắng ở giữa-trên ảnh, tà áo dài phía dưới
@@ -2422,16 +2422,16 @@ let guidePage = null
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Đường kính khoảng 50 cm', '直径約50cm'], ['Chóp được hạ thấp', '頂を低く改良'], ['Cân đối cùng áo cà sa', '袈裟と釣り合う形'], ['Đón nhận tại Ấn Độ, nhiều nước Phật giáo', 'インドなど多くの仏教国で愛用']]],
     },
     'Nón lụa': {
-      details: [[['Lụa vẽ hoa', '花を描いた絹'], 44, 44, 2.6], [['Mặt lụa vân hoa', '花模様の絹地'], 24, 82, 3.4]],
+      details: [[['Lụa vẽ hoa', '花を描いた絹地'], 44, 44, 2.6], [['Mặt lụa vân hoa', '花模様の絹地'], 24, 82, 3.4]],
       box: [['Đặc điểm nổi bật', '主な特徴'], [['Bọc lụa tơ tằm Vạn Phúc (Hà Đông)', 'ヴァンフック（ハドン）の絹で包む'], ['Màu sắc, hoa văn đa dạng', '豊かな色と柄'], ['Phụ kiện thời trang, quà lưu niệm', 'ファッション小物・お土産']]],
     },
     'Nón lụa hai mặt': {
       details: [[['Mặt lụa màu ngọc', '青緑の絹の面'], 50, 56, 2.2], [['Vành nón', '縁'], 22, 60, 3]],
-      box: [['Đặc điểm nổi bật', '主な特徴'], [['Hai mặt khác màu hoặc họa tiết', '表と裏で異なる色・柄'], ['Giữ dáng nón chóp quen thuộc', 'なじみのある円錐形'], ['Phối màu linh hoạt', '色の組み合わせを自由に']]],
+      box: [['Đặc điểm nổi bật', '主な特徴'], [['Dùng lụa cho cả mặt trong lẫn mặt ngoài', '内側と外側の両方に絹布を使用'], ['Hai mặt thống nhất màu và họa tiết', '両面で色と柄を統一'], ['Phụ kiện thời trang, quà lưu niệm', 'ファッション小物・お土産']]],
     },
     'Nón cô dâu': {
       details: [[['Mặt ngoài trắng', '白い外側'], 50, 24, 2.6], [['Họa tiết mặt trong', '内側の模様'], 74, 66, 2.4]], // ① ở trên, ② ở dưới như cột ảnh cận
-      box: [['Đặc điểm nổi bật', '主な特徴'], [['Họa tiết vẽ ở mặt trong', '内側に模様を描く'], ['Dùng trang trí, chụp ảnh cưới', '飾りや結婚写真の撮影に'], ['Giữ hình dáng nón truyền thống', '伝統的な形を保つ']]],
+      box: [['Đặc điểm nổi bật', '主な特徴'], [['Thiết kế có họa tiết ở mặt trong', '内側に模様を施したデザイン'], ['Dùng trong đám cưới, chụp ảnh kỷ niệm', '結婚式や記念撮影で使用']]],
     },
   }
   const to = { size: 13.5, lh: 1.55, jaSize: jaPt(13.5) }
@@ -3820,12 +3820,12 @@ let stripRight = null
     refNo++
     const body = [viDate(t), t]
     const ro = { size: 10, lh: 1.42, jaSize: 10 }
-    const nw = 24
+    const nw = 30
     const h1 = textH(body, CW - nw, ro)
     f.place(h1, (p, y) => {
-      p.add(T(p.x0, y, nw - 4, 15, [`${refNo}.`, `${refNo}.`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
+      p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
       p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
-    }, 17) // (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
+    }, 38) // (Bản sửa lần 5: 42 mục IEEE, cách 38pt: 42 mục chia đều 6/trang, tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
   const refP0 = pages.length - 1
   refGroups.forEach((g, k) => {
@@ -3877,7 +3877,7 @@ let stripRight = null
         [['Báo Dân Việt', 'Báo Dân Việt'], ['Nón bài thơ', 'ノン・バイ・トー'], 'Báo Dân Việt'],
         [['Báo Lao Động', 'Báo Lao Động'], ['Nón lá bàng', 'ノン・ラー・バン'], 'Báo Lao Động'],
         [['VnExpress', 'VnExpress'], ['Nón ngựa', 'ノン・グア'], 'VnExpress'],
-        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển'], ['Nón người Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
+        [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển'], ['Nón Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
         [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong', 'https://www.instagram.com/p/DEZ5IFBhd0L/'],
         [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
         [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],

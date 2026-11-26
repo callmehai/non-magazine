@@ -274,7 +274,7 @@ export const photos = {
 
   // ── ảnh nhóm gắn trong bản Nhật (Doc, 06/11; "ảnh nào phù hợp em cứ lấy nhé"). Chú thích VI dịch sát chú thích JA của nhóm
   // (nhóm chỉ ghi chú thích tiếng Nhật); nguồn theo nhóm ghi. Ảnh trong thư mục doc-0611/ do nhóm chụp (グループ撮影).
-  "Nón người Tày — Thái Nguyên": "online/dtpt-non-tay",
+  "Nón Tày — Thái Nguyên": "online/dtpt-non-tay",
   "Giới thiệu văn hóa Việt Nam tại Triển lãm Thế giới Expo 2021 Dubai": "online/thanhnien-expo-dubai",
   "Cổng đình làng Chuông": "doc-0611/dinh-chuong",
   "Nghệ nhân Phạm Trần Canh": "online/qdnd-pham-tran-canh",
