@@ -302,7 +302,7 @@ export const ending = {
     membersTitle: ['Thành viên nhóm thực hiện', 'グループのメンバー'],
     members: [
       [['Phùng Thị Khánh Linh', 'フン・ティ・カイン・リン'], 'HA170019'],
-      [['Mai Khánh Huyền', 'マイ・カイン・フエン'], 'HA16038'],
+      [['Mai Khánh Huyền', 'マイ・カイン・フエン'], 'HA163038'],
       [['Nguyễn Minh Ánh', 'グエン・ミン・アイン'], 'HA170145'],
       [['Nguyễn Thị Thu Nguyệt', 'グエン・ティ・トゥ・グエット'], 'HA160098'],
     ],

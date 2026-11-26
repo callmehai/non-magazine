@@ -3823,16 +3823,17 @@ let stripRight = null
   // đoạn liền (không tách "Tác giả. (năm)." đậm + phần sau xuống dòng chữ nhỏ), tên tài liệu in nghiêng đúng như Doc (⟪…⟫ trong
   // refs.mjs, lấy từ định dạng nghiêng của tab 参考資料), các dòng sau canh thẳng sau số
   let refNo = 0
+  let plainRefs = false
   const putRef = (t) => {
     const url = urlOf(t)
     const lk = url ? { link: url, linkStyle: 'ref' } : {}
     refNo++
     const body = [viDate(t), t]
     const ro = { size: 10, lh: 1.42, jaSize: 10 }
-    const nw = 30
+    const nw = plainRefs ? 0 : 30
     const h1 = textH(body, CW - nw, ro)
     f.place(h1, (p, y) => {
-      p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
+      if (!plainRefs) p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
       p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
     }, 38) // (Bản sửa lần 5: 42 mục IEEE, cách 38pt: 42 mục chia đều 6/trang, tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
@@ -3843,6 +3844,7 @@ let stripRight = null
       p.add(T(p.x0, y + 8, p.cw, 18, label /* GVHD 15/11: "bỏ cái số liệt kê số tài liệu đi 書籍・18" */, { size: S.label, tracking: 1.8, weight: 700, color: ACC[9], lh: 1.3, jaFont: F.jaSans, name: 'Nhóm tài liệu' }), HL(p.x0, y + 28, 40, ACC[9], 1.2))
     }, 6)
     refNo = 0
+    plainRefs = !!g.plain
     g.items.forEach(putRef)
   })
   // soát 07/11: 6 trang tài liệu chỉ có chữ → mỗi trang một hình vẽ nét nhỏ ở góc dưới phía ngoài (nón, nhánh tre xen nhau)
@@ -4777,6 +4779,8 @@ pages.forEach(bottomFlora)
         })
         .join('\n')
     }
+    // chú thích JA bị bỏ hết dòng → bỏ luôn khung (không thì bản Nhật rơi về chữ Việt)
+    p.els = p.els.filter((e) => !(notes.includes(e) && e.ja.trim() === ''))
     for (const sup of gone)
       for (const e of p.els) if (e.type === 'text' && !isNote(e) && typeof e.ja === 'string') e.ja = e.ja.split(sup).join('')
   }
