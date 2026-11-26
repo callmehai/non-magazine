@@ -297,7 +297,7 @@ export const ending = {
     title: ['Nhóm thực hiện', '制作グループ'],
     lead: [
       'Sản phẩm này là dự án tốt nghiệp của sinh viên ngành Ngôn ngữ Nhật Bản, Trường Đại học FPT Hà Nội, được thực hiện dưới sự hướng dẫn của giảng viên Nguyễn Thị Quế Hường.',
-      '本フリップブック『チュオン{村|むら}のノンラー - ベトナムの伝統美』は FPT大学ハノイ校の日本語学科の学生がグエン・ティ・クエ・フオン先生の指導のもと、卒業プロジェクトとして{制作|せいさく}したものです。',
+      '本フリップブック『チュオン{村|むら}のノンラー - ベトナムの伝統美』はFPT大学ハノイ校の日本語学科の学生がグエン・ティ・クエ・フオン先生の指導のもと、卒業プロジェクトとして{制作|せいさく}したものです。',
     ],
     membersTitle: ['Thành viên nhóm thực hiện', 'グループのメンバー'],
     members: [

@@ -2421,7 +2421,7 @@ let guidePage = null
       details: [[['Chóp nón thấp', '低く抑えた頂'], 47, 24, 2.6], [['Quai lụa vàng', '黄色い絹のあごひも'], 24, 76, 2.4]],
       // đoạn chữ dài, chỗ còn lại thấp hơn nón lụa → hạ ngưỡng chiều cao mỗi ô cận để vẫn đủ hai ô như nón lụa
       detMin: 84,
-      box: [['Đặc điểm nổi bật', '主な特徴'], [['Đường kính khoảng 50 cm', '直径約50cm'], ['Chóp được hạ thấp', '頂を低く改良'], ['Cân đối cùng áo cà sa', '袈裟と釣り合う形'], ['Đón nhận tại Ấn Độ, nhiều nước Phật giáo', 'インドなど多くの仏教国で愛用']]],
+      box: [['Đặc điểm nổi bật', '主な特徴'], [['Đường kính khoảng 50 cm', '直径約50cm'], ['Chóp được hạ thấp', '頂を低く改良'], ['Cân đối cùng áo cà sa', '袈裟と釣り合う形']]],
     },
     'Nón lụa': {
       details: [[['Lụa vẽ hoa', '花を描いた絹地'], 44, 44, 2.6], [['Mặt lụa vân hoa', '花模様の絹地'], 24, 82, 3.4]],
@@ -4010,7 +4010,7 @@ let stripRight = null
   let y = sectionHead(p, TOP, null, e.team.title, ['Những người làm nên cuốn sách', '本フリップブックの制作メンバー'])
   const lo = { size: 14, lh: 1.6, jaSize: jaPt(14) }
   const lh = textH(e.team.lead, p.cw, lo)
-  p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, name: 'Đoạn văn' }))
+  p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, align: 'justify', name: 'Đoạn văn' }))
   y += lh + 18
   // khối thành viên + lời nhắn đặt giữa phần trang còn lại (không dồn lên trên, không dạt xuống đáy)
   const co = { size: 13, lh: 1.45, jaSize: 13, paraGap: 3 }
