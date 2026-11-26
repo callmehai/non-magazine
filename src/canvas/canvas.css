@@ -75,14 +75,27 @@
 
 /* mục tài liệu tham khảo: cả mục bấm được (mở bài gốc), không gạch chân sẵn — rê chuột thì gạch chân, đổi màu */
 .cv-link--ref {
+  /* khối (không phải inline): nền / viền hiện đủ quanh cả mục; rộng vừa chữ, không phủ cả hàng → bấm bừa vào chỗ trống không mở link */
+  display: block;
+  width: fit-content;
+  max-width: 100%;
   text-decoration: none;
   cursor: pointer;
 }
 
-.cv-link--ref:hover,
-.cv-link--ref:focus-visible {
-  color: #8b5a2b;
-  background: rgb(139 90 43 / 0.08);
+/* anh Hải 27/11: rê chuột vào mục tài liệu phải thấy rõ "đây là link" (khác với bấm lật trang) → khung viền màu son + nền nhạt */
+.cv-link--ref .cv-text {
+  border-radius: 0.35em;
+  outline: 0.12em solid transparent;
+  outline-offset: 0.2em;
+  transition: background-color 0.12s, outline-color 0.12s;
+}
+
+.cv-link--ref:hover .cv-text,
+.cv-link--ref:focus-visible .cv-text {
+  color: #7a2418;
+  background: rgb(168 56 43 / 0.09);
+  outline-color: rgb(168 56 43 / 0.55);
 }
 
 /* trang Nguồn ảnh: ô "… → Ảnh N ↗" mở bài báo gốc (chữ màu son sẵn trong sách) — rê chuột thì gạch chân, nền nhạt */
@@ -91,11 +104,25 @@
   cursor: pointer;
 }
 
-.cv-link--src:hover,
-.cv-link--src:focus-visible {
+.cv-link--src {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.cv-link--src .cv-text {
+  border-radius: 0.35em;
+  outline: 0.12em solid transparent;
+  outline-offset: 0.2em;
+  transition: background-color 0.12s, outline-color 0.12s;
+}
+
+.cv-link--src:hover .cv-text,
+.cv-link--src:focus-visible .cv-text {
   text-decoration: underline;
   text-underline-offset: 0.15em;
-  background: rgb(148 83 47 / 0.08);
+  background: rgb(148 83 47 / 0.09);
+  outline-color: rgb(148 83 47 / 0.55);
 }
 
 /* link tới trang khác trong sách: không gạch chân */
