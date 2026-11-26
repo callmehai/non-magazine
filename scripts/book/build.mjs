@@ -3835,7 +3835,7 @@ let stripRight = null
     f.place(h1, (p, y) => {
       if (!plainRefs) p.add(T(p.x0, y, nw - 4, 15, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
       p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
-    }, 38) // (Bản sửa lần 5: 42 mục IEEE, cách 38pt: 42 mục chia đều 6/trang, tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
+    }, 33) // (Bản sửa lần 5: 42 mục IEEE, cách 33pt: 45 mục (42 + 3 từ điển) tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
   const refP0 = pages.length - 1
   refGroups.forEach((g, k) => {
