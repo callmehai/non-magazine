@@ -799,8 +799,9 @@ const SHEET_JA = {
   "Lưỡi cày gang đặt trên bếp điện": ["葉を平らに伸ばす道具", "グループ撮影", null], // 54
   "Lá lụi tươi trước khi vò và chọn lá": ["乾燥させる前の生ラルイの下処理", "グループ撮影", null], // 55
   "Phơi lá lụi dưới nắng": ["シートの上でラルイを干す住民の様子", "グループ撮影", null], // 56
-  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼーラー（葉のしわや反りを伸ばして平らにする作業）", "グループ撮影", null], // 57
-  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラーラー（熱を加えて葉を平らに伸ばす作業）", "グループ撮影", null], // 58
+  // soát cả sách 28/11: sheet chú thích của nhóm viết ゼーラー / ラーラー, thân bài + tên bước viết ゼー・ラー / ラー・ラー → thống nhất có ・ (anh Hải chọn)
+  "Tay nghệ nhân rẽ từng chiếc lá": ["ステップ1：ゼー・ラー（葉のしわや反りを伸ばして平らにする作業）", "グループ撮影", null], // 57
+  "Nghệ nhân ngồi là lá bên bếp điện": ["ステップ2：ラー・ラー（熱を加えて葉を平らに伸ばす作業）", "グループ撮影", null], // 58
   "Khuôn nón — nơi đặt lần lượt 16 vành nứa": ["ステップ3：ブット・ヴォン（ノンラーの輪をつなぎ、骨組みを作る作業）", "グループ撮影", null], // 59
   "Xếp từng lớp lá lụi lên khuôn": ["ステップ4：クアイ・ノン（型に葉を重ねてかぶせる作業）", "グループ撮影", null], // 60
   "Cận cảnh mũi kim, sợi cước xuyên qua lớp lá": ["ステップ5：カウ・ノン（葉とモーナンを輪に縫い付ける作業）", "グループ撮影", null], // 61
