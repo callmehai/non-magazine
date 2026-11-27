@@ -542,10 +542,12 @@
   pointer-events: none;
 }
 
-/* ── bưu thiếp Làng Chuông (trang cuối) ── */
+/* ── bưu thiếp Làng Chuông (trang cuối) ──
+   Zalo 28/11: "125% mà cũng chả nhìn thấy gì… sao ko làm cho tấm bưu thiếp to hơn" → thiếp cao hết khối (280 → 340em),
+   cột bên chỉ còn ảnh để chọn (một cột) + nút số chọn câu ca dao; câu ca dao đọc trên chính tấm thiếp */
 .cvw-pc {
   display: flex;
-  gap: 18em;
+  gap: 16em;
   align-items: center;
 }
 /* .stf__parent canvas (thư viện lật trang) ép mọi canvas phủ kín trang → đè lại */
@@ -554,11 +556,11 @@
   left: auto;
   top: auto;
   flex: none;
-  width: 280em;
+  width: 340em;
   height: auto;
   aspect-ratio: 1200 / 1650;
   box-shadow: 0 3em 14em rgba(60, 35, 10, 0.22), 0 0 0 0.6em rgba(160, 122, 60, 0.35);
-  transform: rotate(-1.2deg);
+  transform: rotate(-1deg);
   background: #efe4cf;
 }
 .cvw-pc__side {
@@ -569,7 +571,7 @@
   flex-direction: column;
 }
 .cvw-pc__label {
-  margin: 0 0 0.7em;
+  margin: 0 0 0.6em;
   font-size: 11.5em;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -581,12 +583,12 @@
 }
 .cvw-pc__thumbs {
   flex: 1;
-  min-height: 110em;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 9em;
-  margin-bottom: 18em;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  gap: 8em;
+  margin-bottom: 16em;
 }
 .cvw-pc__thumb {
   padding: 0;
@@ -615,61 +617,37 @@
 }
 .cvw-pc__verses {
   display: grid;
-  gap: 5em;
-  margin-bottom: 18em;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8em;
+  margin-bottom: 16em;
 }
 .cvw-pc__verse {
   font: inherit;
-  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
-  font-style: italic;
-  font-weight: 600;
-  font-size: 14.5em;
-  line-height: 1.25;
-  text-align: left;
-  padding: 0.4em 0.55em;
-  border: 0.08em solid rgba(160, 122, 60, 0.45);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 16em;
+  line-height: 1;
+  padding: 0.45em 0;
+  border: 0.08em solid rgba(160, 122, 60, 0.55);
   border-radius: 0.35em;
   background: rgba(255, 252, 244, 0.6);
   color: #4e3426;
+  transition: background 0.2s, color 0.2s;
 }
-.cvw-pc__verse span {
-  display: block;
-  text-wrap: pretty;
-}
-/* soát 08/11: câu bát rớt đuôi xuống dòng ("…thì về / làng Chuông") → bản Việt mỗi câu một dòng trọn */
-:lang(vi) .cvw-pc__verse {
-  font-size: 12.5em;
-}
-:lang(vi) .cvw-pc__verse span {
-  text-wrap: nowrap; /* text-wrap: pretty ở trên đặt lại chế độ xuống dòng → phải tắt ngay trên dòng */
-}
-/* lục bát: câu lục thụt vào, câu bát sát lề */
-.cvw-pc__verse span:first-child {
-  padding-left: 1.2em;
-}
-:lang(ja) .cvw-pc__verse {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 11em;
-  line-height: 1.45;
-  line-break: strict;
-  /* ngắt theo cụm từ, không cắt giữa chữ (「遊びに行／こう。」) */
-  word-break: auto-phrase;
-}
-:lang(ja) .cvw-pc__verse span:first-child {
-  padding-left: 0;
+.cvw-pc__verse:hover:not(:disabled) {
+  border-color: #a8382b;
 }
 .cvw-pc__verse.is-on {
   border-color: #a8382b;
-  background: #fbf3e2;
-  box-shadow: inset 0.25em 0 0 #a8382b;
+  background: #a8382b;
+  color: #fbf4e6;
 }
 .cvw-pc__save {
   font: inherit;
   font-size: 13.5em;
   font-weight: 600;
   letter-spacing: 0.04em;
-  padding: 0.75em 1em;
+  padding: 0.75em 0.5em;
   border: 0;
   border-radius: 999px;
   background: #4e3426;
@@ -679,28 +657,15 @@
 .cvw-pc__save:hover:not(:disabled) {
   background: #a8382b;
 }
-/* soát đọc lần đầu 05/11: trên điện thoại nút "Tải bưu thiếp" chỉ cao 25px → chạm bằng ngón tay tối thiểu 44px
-   (nút câu ca dao không ép cao: ép thì lưới ảnh chọn co còn 24px, khó chọn hơn) */
+/* soát đọc lần đầu 05/11: trên điện thoại nút "Tải bưu thiếp" chỉ cao 25px → chạm bằng ngón tay tối thiểu 44px */
 @media (pointer: coarse) {
-  .cvw-pc__save {
+  .cvw-pc__save,
+  .cvw-pc__verse {
     min-height: 44px;
   }
   /* bù chỗ cho nút cao hơn: dòng "Ảnh JPG 1200 × 1650" là thông tin phụ */
   .cvw-pc__size {
     display: none;
-  }
-  /* review lần 2: trên điện thoại ảnh để chọn chỉ 61×35px → bưu thiếp xem trước nhỏ lại một chút, lưới ảnh cao hơn
-     (đo ở trang rộng 365px: 80×53px, cả khối vẫn vừa khung) */
-  .cvw .cvw-pc__card {
-    width: 225em;
-  }
-  .cvw-pc {
-    gap: 14em;
-  }
-  .cvw-pc__thumbs {
-    min-height: 175em;
-    gap: 7em;
-    margin-bottom: 12em;
   }
 }
 .cvw-pc__size {

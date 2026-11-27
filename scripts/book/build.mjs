@@ -4092,6 +4092,8 @@ let stripRight = null
     const pA = p
     const layout = (size, draw) => {
       const o = { size, lh: 1.4, jaSize: size }
+      // Zalo 28/11: "in đậm nhiều quá, tên báo còn to hơn cả tên topic" → tên nguồn chữ thường, nhỏ hơn chữ mô tả nửa cỡ
+      const so = { ...o, size: size - 0.5, jaSize: size - 0.5 }
       let pg = pA
       let y = y0 - 6
       const nh = textH(note, pA.cw, o)
@@ -4105,7 +4107,7 @@ let stripRight = null
         const hs = r.items.map((it, k) => textH(jp(it.t), cw[k % cols], o))
         const rowsH = []
         for (let k = 0; k < hs.length; k += cols) rowsH.push(Math.max(...hs.slice(k, k + cols)))
-        return { cols, cw, hs, rowsH, h: Math.max(textH(jp(r[0]), lw, { ...o, weight: 700 }), rowsH.reduce((x, z) => x + z, 0)) }
+        return { cols, cw, hs, rowsH, h: Math.max(textH(jp(r[0]), lw, so), rowsH.reduce((x, z) => x + z, 0)) }
       }
       // sang trang phải khi dòng không vừa (nhãn nhóm đi cùng dòng đầu của nhóm, không đứng lẻ cuối trang trái)
       const fit = (h) => {
@@ -4129,7 +4131,7 @@ let stripRight = null
           const p = pg
           if (draw) {
             if (i && !moved) p.add(HL(p.x0, y - 1.5, p.cw, C.line, 0.4))
-            p.add(T(p.x0, y, lw, h, src, { ...o, weight: 700, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }))
+            p.add(T(p.x0, y, lw, h, src, { ...so, color: C.ink, jaFont: F.jaSans, name: 'Nguồn' }))
             let yy = y
             r.items.forEach((it, k) => {
               const c = k % cols

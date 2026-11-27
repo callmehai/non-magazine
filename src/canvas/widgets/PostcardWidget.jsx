@@ -134,30 +134,16 @@ async function drawCard(canvas, { photo, verse, lang }) {
   // câu ca dao (lục bát: câu lục thụt vào, câu bát sát lề; chữ Nhật không nghiêng)
   g.fillStyle = '#4e3426'
   g.textAlign = 'left'
-  const vx = 120
+  const vx = 76 // thẳng lề ảnh (70) → dòng ca dao dài nhất vẫn một dòng mà chữ to hơn
   const maxW = w - 2 * vx
   const fontAt = (z) => FONTS[lang][0].replace(/\d+px/, `${z}px`)
-  let lines = plainText(verse[lang === 'ja' ? 1 : 0] ?? verse[0]).split('\n')
-  // bản Nhật: dòng dài thì ngắt sau dấu "、" (cả câu một cỡ chữ, không co riêng một dòng cho vừa)
-  if (lang === 'ja') {
-    g.font = fontAt(54)
-    lines = lines.flatMap((ln) => {
-      const out = []
-      let rest = ln
-      while (g.measureText(rest).width > maxW) {
-        const cuts = [...rest.matchAll(/、/g)].map((m) => m.index + 1).filter((k) => k < rest.length && g.measureText(rest.slice(0, k)).width <= maxW)
-        if (!cuts.length) break
-        const k = cuts.at(-1)
-        out.push(rest.slice(0, k))
-        rest = rest.slice(k)
-      }
-      return [...out, rest]
-    })
-  }
+  // Zalo 28/11: "câu thơ không được xuống dòng như kia, mỗi câu 1 dòng" → không ngắt thêm sau "、", cả bài co một cỡ chữ
+  // cho dòng dài nhất vừa khung
+  const lines = plainText(verse[lang === 'ja' ? 1 : 0] ?? verse[0]).split('\n')
   const indentOf = (i) => (lang !== 'ja' && i % 2 === 0 && lines.length > 1 ? 60 : 0)
   let size = lang === 'ja' ? 54 : 64
   g.font = fontAt(size)
-  while (lines.some((ln, i) => g.measureText(ln).width > maxW - indentOf(i)) && size > 30) g.font = fontAt((size -= 2))
+  while (lines.some((ln, i) => g.measureText(ln).width > maxW - indentOf(i)) && size > 24) g.font = fontAt((size -= 1))
   const lh = Math.round(size * (lang === 'ja' ? 1.5 : 1.3))
   lines.forEach((ln, i) => g.fillText(ln, vx + indentOf(i), 1150 + i * lh))
   g.font = lang === 'ja' ? '700 42px "Noto Sans JP"' : 'italic 46px "Cormorant Garamond", serif'
@@ -259,14 +245,21 @@ export default function PostcardWidget({ el, interactive }) {
           ))}
         </div>
         <p className="cvw-pc__label">{t.verse}</p>
+        {/* Zalo 28/11: cột bên quá hẹp → câu ca dao trong nút bị ngắt giữa câu; thiếp to hơn, chọn câu bằng nút số, câu hiện trọn
+            từng dòng trên thiếp */}
         <div className="cvw-pc__verses">
           {verses.map((v, i) => (
-            <button key={i} type="button" className={`cvw-pc__verse ${i === vi ? 'is-on' : ''}`} onClick={() => setVi(i)} disabled={!interactive} aria-pressed={i === vi}>
-              {plainText(v[li] ?? v[0])
-                .split('\n')
-                .map((ln, k) => (
-                  <span key={k}>{ln}</span>
-                ))}
+            <button
+              key={i}
+              type="button"
+              className={`cvw-pc__verse ${i === vi ? 'is-on' : ''}`}
+              onClick={() => setVi(i)}
+              disabled={!interactive}
+              aria-pressed={i === vi}
+              aria-label={plainText(v[li] ?? v[0]).replace(/\n/g, ' ')}
+              title={plainText(v[li] ?? v[0]).replace(/\n/g, ' / ')}
+            >
+              {i + 1}
             </button>
           ))}
         </div>
