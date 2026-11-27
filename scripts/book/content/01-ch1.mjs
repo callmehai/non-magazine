@@ -144,7 +144,7 @@ export const ch1 = {
         ],
         [
           'Bên cạnh các dấu tích khảo cổ về nón lá thì còn có nghề làm nón được đề cập trong những tài liệu về nghề thủ công truyền thống. Theo tư liệu Từ điển văn hóa cổ truyền Việt Nam do Hữu Ngọc (chủ biên), nghề này muộn nhất đã có từ thời Trần, khoảng thế kỷ XIII–XIV².\nTrong xã hội xưa, nón có nhiều loại dành cho những đối tượng và mục đích sử dụng khác nhau, chẳng hạn nón tam giang dành cho người lớn tuổi, nón chéo vành dành cho binh lính hay nón tu lờ dành cho nhà sư,... Điều này cho thấy các loại nón đã được sử dụng trong nhiều hoàn cảnh khác nhau của đời sống truyền thống.',
-          'こうした考古学的な痕跡に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック編『Từ điển văn hóa cổ truyền Việt Nam』（筆者仮訳：『ベトナム伝統文化事典』）によると、ノンラー作りは、遅くとも13～14世紀のチャン朝時代にはすでに存在していたとされています[5, ページ 521]。\nかつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
+          'こうした考古学的な痕跡に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック編『Từ điển văn hóa cổ truyền Việt Nam』（筆者仮訳：『ベトナム伝統文化事典』）によると、ノンラー作りは、遅くとも13～14世紀のチャン朝時代にはすでに存在していたとされています[5, ページ 521]。\nかつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン「nón\u00a0tam\u00a0giang」、兵士が使用するノン・チェオヴァイン「nón\u00a0chéo\u00a0vành」、{僧侶|そうりょ}がかぶるノン・トゥーロー「nón\u00a0tu\u00a0lờ」などが挙げられます[6, ページ 205]。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
         ],
       ],
       notes: [
@@ -173,7 +173,7 @@ export const ch1 = {
         p: [
           [
             'Ngày nay, nón lá còn xuất hiện trong nhiều hoạt động giao lưu và quảng bá văn hóa Việt Nam. Hình ảnh chiếc nón được sử dụng trong các chương trình biểu diễn nghệ thuật, sự kiện văn hóa và hoạt động quảng bá du lịch. Bên cạnh đó, nón lá còn được lựa chọn làm sản phẩm thủ công và quà lưu niệm dành cho du khách, bạn bè quốc tế.',
-            '現在、ノンラーはベトナム文化の交流や発信を目的としたさまざまな活動にも登場しています。ノンラーは、芸術公演や文化イベント、観光プロモーションなどでも用いられています[8],[9]。また、観光客や海外の人々向けの工芸品や土産物としても選ばれています[10]、[11]。',
+            '現在、ノンラーはベトナム文化の交流や発信を目的としたさまざまな活動にも登場しています。ノンラーは、芸術公演や文化イベント、観光プロモーションなどでも用いられています[8]、[9]。また、観光客や海外の人々向けの工芸品や土産物としても選ばれています[10]、[11]。',
           ],
           [
             'Trong các hoạt động giao lưu văn hóa ở nước ngoài, nón lá thường xuất hiện cùng áo dài và những sản phẩm thủ công truyền thống khác. Sự hiện diện này góp phần giới thiệu những nét đặc trưng của văn hóa Việt Nam đến với công chúng quốc tế, đồng thời cho thấy nón lá là một trong những hình ảnh mang tính biểu trưng của văn hóa Việt Nam.',

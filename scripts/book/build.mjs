@@ -649,14 +649,16 @@ function sectionHead(p, y, num, title, kicker) {
 }
 
 /** tiêu đề nhỏ (có thể kèm số mục cấp 3: "1.3.1") → chiều cao */
-const blockOpt = { size: S.block, font: F.head, lh: 1.25, jaSize: 20 }
+// soát bằng mắt 28/11 (tr. 22 VI: tiêu đề 2 dòng đè lên đoạn văn): đo chiều cao bằng đúng chữ đậm 700 như khi vẽ —
+// trước đây đo chữ thường 400 → vừa 1 dòng, còn chữ đậm thật xuống 2 dòng
+const blockOpt = { size: S.block, font: F.head, lh: 1.25, jaSize: 20, weight: 700 }
 const blockLabel = (h, num) => (num ? [`${num}  ${h[0]}`, `${num}　${h[1]}`] : h)
 const blockHeight = (h, w, num) => textH(blockLabel(h, num), w, blockOpt) + 14
 function blockHead(p, y, h, num, x = p.x0, w = p.cw, color) {
   const acc = color ?? ACC[p.chapter]
   const pair = blockLabel(h, num)
   const hh = textH(pair, w, blockOpt)
-  p.add(T(x, y, w, hh, pair, { ...blockOpt, weight: 700, color: acc, jaFont: F.jaHead, name: 'Tiêu đề nhỏ' }))
+  p.add(T(x, y, w, hh, pair, { ...blockOpt, color: acc, jaFont: F.jaHead, name: 'Tiêu đề nhỏ' }))
   return y + blockHeight(h, w, num)
 }
 
@@ -2064,14 +2066,16 @@ const mark = (level, title, page, label) => anchors.push({ level, title, page: p
     // anh Hải 09/11 01:50: "viền dưới hơi xấu, trông ảnh này nó tách khỏi nền luôn ấy, làm bìa tràn viền cho t" → bỏ lề ngà + đường
     // khâu của ảnh, phóng phần trong ra kín trang (lá sen tràn mép), sương ngà chân bìa phủ tới mép dưới (hop-3-tran.png)
     { ...IMG(0, 0, W, H, ['Ảnh bìa: chiếc nón lá Làng Chuông bên ao sen (ao sen tạo bằng AI)', '表紙写真：蓮池とチュオン村のノンラー（蓮池はAIで作成）'], { src: 'assets/book/cover/bia-ao-sen.webp', fit: 'fill' }), name: 'Ảnh bìa' },
-    T(0, 84, W, 14, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 8.5, tracking: 3.4, weight: 600, align: 'center', color: gold, jaFont: F.jaSans, jaSize: 9, name: 'Dòng nhỏ' }),
+    // soát bằng mắt 28/11: dòng nhỏ 8.5pt vàng nhạt khó đọc → 10.5pt (JA 12pt), vàng đậm hơn
+    T(0, 80, W, 18, ['LÀNG NGHỀ NÓN · THANH OAI · HÀ NỘI', 'ハノイ・タインオアイのノン{村|むら}'], { size: 10.5, tracking: 3.4, weight: 600, align: 'center', color: '#8a6a3a', jaFont: F.jaSans, jaSize: 12, name: 'Dòng nhỏ' }),
     { ...T(0, 104, W, 92, ['Nón lá', ''], { font: F.head, size: 76, lh: 1.15, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
     { ...T(0, 196, W, 26, ['LÀNG CHUÔNG', ''], { font: F.head, size: 19, tracking: 9, lh: 1.3, align: 'center', color: ink, name: 'Tên sách' }), only: 'vi' },
     { ...T(0, 112, W, 26, ['', 'チュオン{村|むら}の'], { size: 18, tracking: 6, lh: 1.3, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 18, name: 'Tên sách' }), only: 'ja' },
     { ...T(0, 140, W, 80, ['', 'ノンラー'], { size: 60, lh: 1.2, tracking: 4, align: 'center', color: ink, jaFont: F.jaHead, jaSize: 60, name: 'Tên sách' }), only: 'ja' },
     T(0, 236, W, 40, front.subtitle.map(strip), { font: F.script, size: 25, lh: 1.3, align: 'center', color: '#7a5a36', jaFont: F.jaHead, jaSize: 16, name: 'Tên phụ' }),
     HL(cx - 28, 286, 56, gold, 0.9),
-    ...SEAL(W - 50 - 44, 52, 44),
+    // soát bằng mắt 28/11: dấu 44pt → chữ dấu ~5px trên màn hình; dấu 64pt → chữ 8.5pt
+    ...SEAL(W - 44 - 64, 40, 64),
     // (bỏ đường kẻ nét đứt chân bìa: cắt ngang lá sen; ảnh nền đã có sương ngà làm nền cho logo + dòng nhóm)
     // bản tiếng Nhật: logo không kèm dòng chữ tiếng Việt "TRƯỜNG ĐẠI HỌC FPT"
     IMG(56, H - 86, 112, 32, ['Logo FPT', 'FPTロゴ'], { fit: 'contain', name: 'Logo', srcJa: PHOTOS['Logo FPT Education'] }),
@@ -2098,63 +2102,25 @@ let guidePage = null
   // phải = trọn năm đoạn lời mở đầu + ký tên trên một trang (cỡ chữ co tới khi vừa)
   const f = new Flow(0, ['LỜI MỞ ĐẦU', 'はじめに'], [])
   padLeft(f.pool, 0, f.runLabel)
-  // 27/11 (Doc "sửa thêm 2" mục 1: "Mở đầu dãn ra 1 chút nữa được không em, chị nhìn đang hơi bé chữ"): dồn cả lời mở đầu
-  // vào một trang thì chữ chỉ còn ~12pt (thân bài 16pt) → trải hai trang. Trái: ảnh nhóm tràn mép trên (giữ kiểu tràn viền
-  // nhóm chọn 09/11, cắt bớt phần chân ghế — mặt và áo dài giữ trọn) + tiêu đề + các đoạn đầu; phải: các đoạn còn lại + ký tên.
-  // Đoạn văn không tách trang; cỡ chữ lớn nhất vừa cả hai trang.
+  f.bleed(preface.photo)
+  mark(1, preface.title, pages[pages.length - 1], '—')
+  const p = f.page()
+  p.add({ ...DECO('sen-canh', p.x1 - 96, 58, 96, 96, 0.5), name: 'Họa tiết' })
+  const to = { size: 34, font: F.head, lh: 1.15, jaSize: 31 }
+  p.add(T(p.x0, 90, p.cw - 130, 44, preface.title, { ...to, color: C.title, jaFont: F.jaHead, name: 'Tiêu đề' }))
+  p.add(HL(p.x0, 144, 56, ACC[0], 1.4))
   const sg = { size: 15, lh: 1.45, font: F.hand, jaSize: 14 }
   const sh = textH(preface.sign, 260, sg)
-  const GAP = 10
-  const po = (s) => ({ size: s, lh: 1.6, jaSize: jaPt(s, 1.12) })
-  const RT = TOP + 8
-  const PCAP = fmtCap(preface.photo)
-  const CAPH = textH(numCap(PCAP, FIG + 1), CW, capOpt)
-  // chia đoạn: trái (dưới ảnh cao ph) lấy các đoạn đầu tới khi đầy, phải nhận phần còn lại (+ ký tên)
-  const split = (s, ph) => {
-    const hs = preface.paras.map((x) => textH(x, CW, po(s)))
-    let k = 0
-    let y = ph + CAPH + 104
-    while (k < hs.length && y + hs[k] <= BOT) y += hs[k++] + GAP
-    const rest = hs.slice(k).reduce((a, h) => a + h + GAP, 0)
-    return k >= 1 && RT + rest + 6 + sh <= BOT ? { k, hs } : null
-  }
-  // ảnh cao 360–460pt: chọn chỗ chữ to nhất; bằng nhau thì ảnh cao hơn
-  const bestSize = (ph) => {
-    let s = 15
-    while (s > 11 && !split(s, ph)) s -= 0.25
-    return s
-  }
-  // ảnh 2:3 dọc: dưới 420pt là mất mặt hai bạn ngồi hàng dưới
-  const PH = [470, 460, 450, 440, 430, 420].reduce((a, ph) => (bestSize(ph) > bestSize(a) ? ph : a))
-  const size = bestSize(PH)
-  const { k, hs } = split(size, PH)
-  const L = new Page({ chapter: 0 })
-  L.fixed = true
-  // chú thích dưới ảnh (dải mờ đè lên ảnh thì che mặt hai bạn ngồi hàng dưới)
-  L.add({ ...IMG(0, 0, W, PH, preface.photo, { pos: '50% 20%' }), name: 'Ảnh trang' })
-  L.add(T(L.x0, PH + 8, CW, CAPH, PCAP, { ...capOpt, italic: true, align: 'center', color: C.muted, jaFont: F.jaSans, name: 'Chú thích ảnh' }))
-  mark(1, preface.title, L, '—')
-  const to = { size: 30, font: F.head, lh: 1.15, jaSize: 28 }
-  const TY = PH + CAPH + 34
-  L.add(T(L.x0, TY, L.cw - 110, 40, preface.title, { ...to, color: C.title, jaFont: F.jaHead, name: 'Tiêu đề' }))
-  L.add({ ...DECO('sen-canh', L.x1 - 84, TY - 14, 84, 84, 0.5), name: 'Họa tiết' })
-  L.add(HL(L.x0, TY + 50, 56, ACC[0], 1.4))
-  const p = f.page()
-  const LT = TY + 70
-  let y = LT
-  preface.paras.forEach((para, i) => {
-    if (i === k) y = RT
-    const pg = i < k ? L : p
-    pg.add(T(pg.x0, y, CW, hs[i], para, { ...po(size), align: 'justify', color: C.ink, jaFont: F.jaBody, name: 'Đoạn văn' }))
-    y += hs[i] + GAP
-  })
-  {
-    const ly = LT + hs.slice(0, k).reduce((a, h) => a + h + GAP, 0)
-    const room = BOT - ly
-    if (room > 70) {
-      const dh = Math.min(room - 6, 120)
-      L.add({ ...DECO('m-chong-non', L.x0 + (L.cw - dh * 1.6) / 2, BOT - dh, dh * 1.6, dh, 0.45), name: 'Hình vẽ' })
-    }
+  const GAP = 9
+  const po = (s) => ({ size: s, lh: 1.55, jaSize: jaPt(s, 1.12) })
+  const tot = (s) => preface.paras.reduce((a, x) => a + textH(x, CW, po(s)) + GAP, 0)
+  let size = 13
+  while (size > 10.5 && 164 + tot(size) + 6 + sh > BOT) size -= 0.25
+  let y = 164
+  for (const para of preface.paras) {
+    const h = textH(para, CW, po(size))
+    p.add(T(p.x0, y, CW, h, para, { ...po(size), align: 'justify', color: C.ink, jaFont: F.jaBody, name: 'Đoạn văn' }))
+    y += h + GAP
   }
   p.add(T(p.x1 - 260, y + 6, 260, sh, preface.sign, { ...sg, align: 'right', color: C.ink2, jaFont: F.jaHand, name: 'Ký tên' }))
   // còn chỗ dưới chữ ký → cụm sen nét mảnh lấp chân trang
@@ -2240,8 +2206,9 @@ let guidePage = null
     // nón + nơi có kiểu nón đó → "画像8：フエ市のノン・ラー・バン", "Ảnh 8: Nón lá bàng (Thành phố Huế)"
     // Bản sửa lần 4 (25/11, nhóm): "bỏ tên thành phố sau tên nón, thay bằng tên nón tiếng Việt để trong ngoặc; tên nón JA + VI một
     // dòng, tên nguồn một dòng" → 画6.ノン・バイ・トー(nón bài thơ) ⏎ （Dân Việt新聞）
+    // Zalo 27/11 (nhóm): "đồng nhất chữ cái đầu viết hoa tiếng việt" → giữ chữ N hoa như tên nón ở các trang khác (（Nón …）)
     const gridCap = (n, pl, hint) => {
-      const c = fmtCap([`${strip(n[0])} (${strip(pl[0])})`, `${strip(n[1])}(${strip(n[0]).replace(/^N/, 'n').replace(/ /g, '\u00a0')})`], hint[0])
+      const c = fmtCap([`${strip(n[0])} (${strip(pl[0])})`, `${strip(n[1])}(${strip(n[0]).replace(/ /g, '\u00a0')})`], hint[0])
       return c[1] ? [c[0], c[1].replace(/（([^（）]+)）$/, '\n（$1）')] : c
     }
     const hintOf = (n, pl) => [`${n[0]} — ${pl[0]}`, `${strip(n[1])} — ${pl[1]}`]
@@ -2250,7 +2217,8 @@ let guidePage = null
     // Bản sửa lần 4 (25/11): chú thích "画6.ノン・バイ・トー(nón bài thơ)" phải nằm trọn một dòng → khung chữ rộng bằng cả cột
     // (không chỉ bằng ô ảnh, ô ảnh co theo chiều cao) và cỡ chữ vừa hơn
     const colW = (CW - gap * (cols - 1)) / cols
-    const capO = { size: 9.5, lh: 1.35, jaSize: 9.5 }
+    // soát bằng mắt 28/11: 9.5pt hiện ~8px trên màn hình → 10.5pt
+    const capO = { size: 10.5, lh: 1.35, jaSize: 10.5 }
     const plH = (n, pl, w) => (noPhoto(n, pl) ? textH(pl, w, placeO) : textH(numCap(gridCap(n, pl, hintOf(n, pl)), 99), Math.max(w, colW), capO))
     // 08/11: chú thích ô dài thêm phần nguồn → đo chữ theo đúng bề ngang ô (lặp hai lần), ô không bị thu nhỏ quá mức
     const nameAt = (w) => Math.max(...g.items.map(([n, pl]) => nameOf(n, pl, w) + plH(n, pl, w)))
@@ -2362,7 +2330,12 @@ let guidePage = null
       return
     }
     f.pending = b.images?.[0] ?? null
+    // soát bằng mắt 28/11: tiêu đề "Từ nón lá nói chung…" đo đúng 2 dòng (trước đo 1 dòng → đè chữ) → ảnh lấp trang thấp hơn
+    // một chút thì bị ghép thêm một ảnh kho bên cạnh (thêm ảnh nhóm không yêu cầu, số ảnh cả sách dời +1) → chỉ cho dùng
+    // đúng ảnh kho đầu tiên như bản 26/11, phần còn lại của kho giữ nguyên thứ tự
+    const rest = f.pool.splice(1)
     f.prose(b.p)
+    f.pool.push(...rest)
     f.pending = null
     if (b.images) f.row(b.images)
   })
@@ -3959,11 +3932,17 @@ let stripRight = null
     // 1 chút" (mẫu: danh sách đánh số liền nhau) → bỏ ↗ và số [n] tô son của mục có link (vẫn bấm mở bài được), mọi mục cùng một
     // kiểu; chữ 10 → 12pt, các mục sát nhau (33 → 7pt). Chữ giữ nguyên văn nhóm, [n] là số trích dẫn IEEE.
     const body = [viDate(t), t]
-    const ro = { size: 12, lh: 1.4, jaSize: 12 }
     const nw = plainRefs ? 0 : 36
+    // Zalo 27/11 "đừng tách giãn": mục có đường dẫn dài ([3], [10], [39]) bản Việt (Be Vietnam Pro rộng hơn) xuống thêm một dòng
+    // → khung cao theo bản Việt, bản Nhật hở một dòng trống. Bản Việt của riêng mục đó nhỏ chữ dần tới khi không cao hơn bản Nhật
+    let ro = { size: 12, lh: 1.4, jaSize: 12 }
+    for (const s of [11.5, 11, 10.5]) {
+      if (textH1(body, CW - nw, ro, 0) <= textH1(body, CW - nw, ro, 1) + 2) break
+      ro = { ...ro, size: s }
+    }
     const h1 = textH(body, CW - nw, ro)
     f.place(h1, (p, y) => {
-      if (!plainRefs) p.add(T(p.x0, y, nw - 6, 18, [`[${refNo}]`, `[${refNo}]`], { ...ro, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
+      if (!plainRefs) p.add(T(p.x0, y, nw - 6, 18, [`[${refNo}]`, `[${refNo}]`], { size: 12, lh: 1.4, jaSize: 12, color: C.ink2, align: 'right', jaFont: F.jaSans, name: 'Số tài liệu' }))
       p.add(T(p.x0 + nw, y, CW - nw, h1, body, { ...ro, color: C.ink, jaFont: F.jaSans, name: 'Tài liệu', ...lk }))
     }, 4) // (Bản sửa lần 5: 42 mục IEEE, cách 33pt: 45 mục (42 + 3 từ điển) tr.122–128, Nguồn ảnh vẫn là trang phải) (Bản sửa lần 4: 12 → 17pt để trang tài liệu cuối không còn một mục lẻ) cách 12pt: 85 mục kéo đủ tr. 122–128 → trang Nguồn ảnh là trang phải (cách 10pt: hết ở 127, tr. 129 thành trang trống)
   }
@@ -4068,14 +4047,16 @@ let stripRight = null
     }
     // Tab "Video + nguồn" (17/11, mục 3): nhóm dán link bài gốc của từng ảnh → dòng nào có link thì bấm được (mở bài gốc);
     // nguồn có nhiều bài (Thanh Niên, QĐND…) tách mỗi bài một dòng con [vi, ja, đoạn chú thích để tìm số ảnh, link]
-    const arrow = ' ↗'
+    // Zalo 27/11 (nhóm): "chắc em đang để phân biệt nhấn link đúng k · thì cái này k cần nhé" → bỏ dấu ↗ sau ô có link (vẫn bấm mở bài)
+    const arrow = ''
     for (const [, rows] of groups)
       for (const r of rows) {
         const subs = Array.isArray(r[3]) ? r[3] : [[r[1][0], r[1][1], null, r[3]]]
         r.items = subs.map(([vi, ja, cap, url]) => {
           const n = numsOf(r[2], cap)
           if (!n) console.warn(`⚠ Nguồn ảnh: không thấy ảnh nào của "${r[0][0]}"${cap ? ` / ${cap}` : ''}`)
-          const t = n ? [`${vi} → ${n[0]}`, `${ja} → ${n[1]}`] : [vi, ja]
+          // "→ 画N" / "→ Ảnh N" không ngắt giữa chừng (soát 28/11: "→ 画" cuối dòng, "7" rơi xuống dòng sau)
+          const t = n ? [`${vi} →\u00a0${n[0].replace(/^Ảnh /, 'Ảnh\u00a0')}`, `${ja} →\u00a0${n[1].replace(/^画/, '画\u2060')}`] : [vi, ja]
           return { t: url ? [t[0] + arrow, t[1] + arrow] : t, url, cap }
         })
       }
@@ -4136,7 +4117,7 @@ let stripRight = null
             r.items.forEach((it, k) => {
               const c = k % cols
               const lk = it.url ? { link: it.url, linkStyle: 'src', alt: ['Mở bài gốc', '元の記事を開く'] } : {}
-              p.add({ ...T(p.x0 + lw + 14 + (c ? cw[0] + 6 : 0), yy, cw[c], hs[k], it.t, { ...o, color: it.url ? ACC[2] : C.ink2, jaFont: F.jaSans, name: 'Ảnh', ...lk }), srcKey: typeof key === 'string' ? key : undefined, ...(it.cap ? { srcCap: it.cap } : {}) })
+              p.add({ ...T(p.x0 + lw + 14 + (c ? cw[0] + 6 : 0), yy, cw[c], hs[k], it.t, { ...o, color: C.ink2 /* Zalo 27/11: ô có link không tô màu riêng */, jaFont: F.jaSans, name: 'Ảnh', ...lk }), srcKey: typeof key === 'string' ? key : undefined, ...(it.cap ? { srcCap: it.cap } : {}) })
               if (c === cols - 1 || k === r.items.length - 1) yy += rowsH[Math.floor(k / cols)]
             })
           }
@@ -4161,14 +4142,12 @@ let stripRight = null
   runningHead(p, ['NHÓM THỰC HIỆN', '制作グループ'])
   mark(1, e.team.title, p, '—')
   let y = sectionHead(p, TOP, null, e.team.title, ['Những người làm nên cuốn sách', '本フリップブックの制作メンバー'])
-  // Doc "sửa thêm 2" mục 1 (27/11, tr. 130): "Đoạn này có thể phóng to 1 chút" → 14 → 16pt (JA 17pt); lời cảm ơn 13 → 14pt
-  const lo = { size: 16, lh: 1.65, jaSize: jaPt(16) }
+  const lo = { size: 14, lh: 1.6, jaSize: jaPt(14) }
   const lh = textH(e.team.lead, p.cw, lo)
-  // canh trái: tên sách 『…』 và tên cô giáo không ngắt dòng → canh đều thì dòng 2 giãn thưa từng chữ
-  p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, align: 'left', name: 'Đoạn văn' }))
+  p.add(T(p.x0, y, p.cw, lh, e.team.lead, { ...lo, jaFont: F.jaBody, align: 'justify', name: 'Đoạn văn' }))
   y += lh + 18
   // khối thành viên + lời nhắn đặt giữa phần trang còn lại (không dồn lên trên, không dạt xuống đáy)
-  const co = { size: 14, lh: 1.5, jaSize: 14, paraGap: 3 }
+  const co = { size: 13, lh: 1.45, jaSize: 13, paraGap: 3 }
   const ch = textH(e.team.contact, p.cw, co)
   const portraits = e.team.members.every(([name]) => PHOTOS[`Thành viên: ${name[0]}`])
   if (portraits) {
@@ -4275,8 +4254,12 @@ let stripRight = null
     // bản tiếng Nhật: chú thích hai từ trong ca dao (nhóm dịch, tab "Câu nói hay") ngay dưới đoạn dẫn, bản tiếng Việt không cần
     // (soát 04/11: đặt ở đáy trang thì đè lên dòng "JPG 1200 × 1650" ở chân tấm thiếp)
     // 14/11 (bản Nhật là bản chuẩn): bản Việt cũng có dòng chú thích → một khối chung, bưu thiếp chung một chỗ
-    q.add({ ...T(q.x0, y - 4, q.cw, 32, ['Đình: công trình truyền thống của làng Việt, nơi thờ thành hoàng, đồng thời là nơi hội họp và tổ chức lễ hội.\nCờ người: trò chơi truyền thống của Việt Nam, người thật đóng vai các quân cờ.', '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。\n人間棋：人が駒の役割を演じるベトナムの伝統的な遊びです。'], { size: 9.5, lh: 1.45, jaSize: 9.5, color: C.muted, jaFont: F.jaSans, name: 'Chú thích' }) })
-    y += 34
+    // soát bằng mắt 28/11: chú thích 9.5pt xám nhạt (~8px trên màn hình) → 11pt màu chữ thân, cao theo số đo thật
+    const nPair = ['Đình: công trình truyền thống của làng Việt, nơi thờ thành hoàng, đồng thời là nơi hội họp và tổ chức lễ hội.\nCờ người: trò chơi truyền thống của Việt Nam, người thật đóng vai các quân cờ.', '亭（ディン）：ベトナムの村にある伝統的な建物で、守護神を祀り、集会や祭りにも使われます。\n人間棋：人が駒の役割を演じるベトナムの伝統的な遊びです。']
+    const nO = { size: 11, lh: 1.45, jaSize: 11 }
+    const nH = textH(nPair, q.cw, nO)
+    q.add({ ...T(q.x0, y - 4, q.cw, nH, nPair, { ...nO, color: C.ink2, jaFont: F.jaSans, name: 'Chú thích' }) })
+    y += nH + 2
     q.add({ ...WIDGET(q.x0, y, q.cw, BOT - y, 'postcard', { name: 'Bưu thiếp tương tác', data: { photos, verses } }) })
     q.fixed = true
   }
@@ -4873,10 +4856,10 @@ pages.forEach(bottomFlora)
         if (!e.srcKey) continue
         const nv = pick('v', e.srcKey, e.srcCap)
         const nj = pick('j', e.srcKey, e.srcCap)
-        const tv = e.text.replace(/ → Ảnh [\d, ]+(?=( ↗)?$)/, ` → Ảnh ${nv.join(', ')}`)
+        const tv = e.text.replace(/ →\u00a0Ảnh\u00a0[\d, ]+$/, ` →\u00a0Ảnh\u00a0${nv.join(', ')}`)
         if (tv !== e.text) console.warn(`⚠ Nguồn ảnh "${e.srcKey}": số ảnh đổi sau khi đánh số → ${nv.join(', ')}`)
         e.text = tv
-        if (e.ja) e.ja = e.ja.replace(/ → 画[\d・]+(?=( ↗)?$)/, ` → 画${nj.join('・')}`)
+        if (e.ja) e.ja = e.ja.replace(/ →\u00a0画\u2060[\d・]+$/, ` →\u00a0画\u2060${nj.join('・')}`)
       }
   }
   // khung phóng ảnh (lightbox) hiện đúng chú thích in trên trang ("Ảnh N: … (nguồn)"), không phải gợi ý thô
@@ -4932,8 +4915,12 @@ pages.forEach(bottomFlora)
         })
         .join('\n')
     }
-    // chú thích JA bị bỏ hết dòng → bỏ luôn khung (không thì bản Nhật rơi về chữ Việt)
-    p.els = p.els.filter((e) => !(notes.includes(e) && e.ja.trim() === ''))
+    // chú thích JA bị bỏ hết dòng → khung chỉ còn ở bản Việt (only: 'vi'; không thì bản Nhật rơi về chữ Việt).
+    // Trước đây xoá hẳn khung → bản Việt mất chú thích mà số ¹²³ trong câu vẫn còn (soát bằng mắt 28/11: tr. 18, 19, 26, 39, 42, 45)
+    const viOnly = notes.filter((e) => e.ja.trim() === '')
+    for (const e of viOnly) e.only = 'vi'
+    if (viOnly.length && viOnly.length === notes.length)
+      for (const e of p.els) if (e.name === 'Kẻ chú thích' && !e.only) e.only = 'vi'
     for (const sup of gone)
       for (const e of p.els) if (e.type === 'text' && !isNote(e) && typeof e.ja === 'string') e.ja = e.ja.split(sup).join('')
   }

@@ -117,10 +117,11 @@ async function drawCard(canvas, { photo, verse, lang }) {
   if (hat) [0, 1].forEach(() => sg.drawImage(hat, 26, 92, 198, 116))
   sg.fillStyle = '#a8382b'
   sg.textAlign = 'center'
-  sg.font = lang === 'ja' ? '700 34px "Noto Sans JP"' : '700 28px "Be Vietnam Pro"'
-  sg.fillText(t.stamp, 125, 70)
-  sg.font = '700 36px "Playfair Display"'
-  sg.fillText('2026', 125, 262)
+  // soát bằng mắt 28/11: chữ tem / ca dao / con dấu vẫn quá nhỏ khi thiếp hiện trên trang (~1/4 cỡ thật) → to thêm lần nữa
+  sg.font = lang === 'ja' ? '700 46px "Noto Sans JP"' : '700 34px "Be Vietnam Pro"'
+  sg.fillText(t.stamp, 125, lang === 'ja' ? 76 : 72)
+  sg.font = '700 48px "Playfair Display"'
+  sg.fillText('2026', 125, 266)
   g.save()
   g.translate(w - 200, 170)
   g.rotate(0.05)
@@ -159,19 +160,25 @@ async function drawCard(canvas, { photo, verse, lang }) {
   while (lines.some((ln, i) => g.measureText(ln).width > maxW - indentOf(i)) && size > 30) g.font = fontAt((size -= 2))
   const lh = Math.round(size * (lang === 'ja' ? 1.5 : 1.3))
   lines.forEach((ln, i) => g.fillText(ln, vx + indentOf(i), 1150 + i * lh))
-  g.font = lang === 'ja' ? '500 32px "Noto Sans JP"' : 'italic 36px "Cormorant Garamond", serif'
-  g.fillStyle = '#8a6630'
+  g.font = lang === 'ja' ? '700 42px "Noto Sans JP"' : 'italic 46px "Cormorant Garamond", serif'
+  g.fillStyle = '#6e4f24'
   g.fillText(t.by, vx + (lang === 'ja' ? 0 : 60), 1150 + lines.length * lh + 6)
 
   // chân thiếp + con dấu son
-  g.font = lang === 'ja' ? '700 40px "Noto Sans JP"' : '700 34px "Be Vietnam Pro"'
-  g.fillStyle = '#6b5236'
-  if (g.letterSpacing !== undefined) g.letterSpacing = lang === 'ja' ? '2px' : '5px'
-  g.fillText(t.foot, vx, h - 92)
-  if (g.letterSpacing !== undefined) g.letterSpacing = '0px'
-  const s = 200
+  const s = 240
   const sx = w - 70 - s
   const sy = h - 70 - s
+  // dòng chân thiếp dừng trước con dấu (dấu to hơn từ 28/11 → bản Việt dài bị dấu che mất "HÀ NỘI"): co chữ cho vừa
+  let fz = lang === 'ja' ? 40 : 34
+  const footFont = () => (lang === 'ja' ? `700 ${fz}px "Noto Sans JP"` : `700 ${fz}px "Be Vietnam Pro"`)
+  g.font = footFont()
+  g.fillStyle = '#6b5236'
+  if (g.letterSpacing !== undefined) g.letterSpacing = lang === 'ja' ? '2px' : '5px'
+  const room = sx - vx - 30
+  if (g.letterSpacing !== undefined && lang !== 'ja') for (let ls = 5; ls > 1 && g.measureText(t.foot).width > room; ) g.letterSpacing = `${--ls}px`
+  while (g.measureText(t.foot).width > room && fz > 20) g.font = footFont((fz -= 1))
+  g.fillText(t.foot, vx, h - 92)
+  if (g.letterSpacing !== undefined) g.letterSpacing = '0px'
   g.fillStyle = '#a8382b'
   g.fillRect(sx, sy, s, s)
   g.strokeStyle = '#f6e9d6'
@@ -180,10 +187,10 @@ async function drawCard(canvas, { photo, verse, lang }) {
   g.fillStyle = '#f6e9d6'
   g.textAlign = 'center'
   // chữ dấu co lại cho vừa lòng dấu
-  let fs = 44
+  let fs = 60
   const sealFont = () => FONTS[lang][2].replace(/\d+px/, `${fs}px`)
   g.font = sealFont()
-  while (Math.max(...t.seal.map((x) => g.measureText(x).width)) > s - 40 && fs > 20) {
+  while (Math.max(...t.seal.map((x) => g.measureText(x).width)) > s - 36 && fs > 20) {
     fs -= 1
     g.font = sealFont()
   }

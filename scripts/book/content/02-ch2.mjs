@@ -101,7 +101,7 @@ export const ch2 = {
       [['Lá lụi (lá cọ non)', 'ラルイ（若いヤシの葉）'], ['Là loại lá khô, chủ yếu được nhập từ các tỉnh miền Trung như Thanh Hóa, Nghệ An. Khi tới các làng nghề (như làng nón Chuông), hình ảnh những triền đê phủ đầy lá lụi phơi nắng đã trở nên quen thuộc.', 'ラルイは、チュオン村のノンラーの耐久性や色合い、すっきりとした優美な形を{左右|さゆう}する重要な材料です。この材料の大部分は、タインホア省やゲアン省など、ベトナム中部の各{省|しょう}から{仕入|しい}れられています。村に運ばれてきた新鮮な葉は、丁寧な下処理を経て、{堤防|ていぼう}の斜面一面に広げられ、天日干しにされます。こうして、堤防にラルイが広がる光景は、この村ならではの{労働|ろうどう}風景として親しまれるようになりました。ここでは、風と日光の自然な作用によって、葉の色が鮮やかな緑色から象牙色へと変わり、次の加工工程に進む準備が整います。'], ['Búp lá cọ non phơi khô, màu trắng ngà', '{干|ほ}した若いヤシの葉（象牙色）']],
       [['Thanh nứa', 'ヌアの細い竹材'], ['Được chuốt vót công phu thành những sợi mảnh, tròn đều rồi uốn nối lại thành các vòng nón với kích thước từ nhỏ đến lớn. Đây chính là phần khung xương giúp định hình dáng nón.', 'ヌアは竹の一種で、細く、均一な丸い棒状になるまで丁寧に削られます。その後、曲げて両端をつなぎ合わせ、大きさの異なる輪に仕上げます。これらの輪はノンラーの骨組みとなり、形を整える役割を果たします。'], ['Các thanh nứa vót mỏng', '細く削ったヌア']],
       [['Mo nang (lớp mo nứa)', 'モーナン（ヌア竹の皮）'], ['Được đặt làm lớp giữa các lớp lá, giúp chiếc nón giữ được độ chắc chắn và cứng cáp.', 'モーナンは、ノンラーの葉の層の間に挟み込まれ、ノンラーの強度と硬さを保つ役割を果たします。'], ['Lớp mo nang', 'モーナン（ヌア竹の皮）']],
-      [['Sợi cước', '縫い糸（ナイロン糸）'], ['Trước đây, nón được làm bằng sợi móc và sợi dứa làm từ cây móc và cây dứa nhưng từ đầu những năm 80, đã được thay bằng sợi cước nhờ tính thẩm mỹ, độ bền và tiện lợi. Cước có nhiều kích cỡ và được bán theo lạng hoặc mua cả guổng (1 kg). Thường được mua tại Chợ Chuông có khu vực chuyên bán cước và các dụng cụ làm nón.', '以前は、モックという植物やパイナップルから作られた{繊維|せんい}がノンラーの製作に使われていました。しかし、1980年代初頭からは、見た目の美しさ、耐久性、使いやすさを理由に、ナイロン糸へと切り替わりました。ナイロン糸にはさまざまな太さがあり、100グラム{単位|たんい}、または「グオン」と呼ばれる1キログラム単位で販売されています。通常はチュオン市場で購入されており、市場内にはナイロン糸やノンラーの製作道具を{専門|せんもん}に扱う売り場があります。'], ['Cuộn sợi cước', '縫い糸（ナイロン糸）']],
+      [['Sợi cước', '縫い糸（ナイロン糸）'], ['Trước đây, nón được làm bằng sợi móc và sợi dứa làm từ cây móc và cây dứa nhưng từ đầu những năm 80, đã được thay bằng sợi cước nhờ tính thẩm mỹ, độ bền và tiện lợi. Cước có nhiều kích cỡ và được bán theo lạng hoặc mua cả guổng (1 kg). Thường được mua tại Chợ Chuông có khu vực chuyên bán cước và các dụng cụ làm nón.', '以前は、モックという植物やパイナップルから作られた{繊維|せんい}がノンラーの製作に使われていました。しかし、1980年代初頭からは、見た目の美しさ、耐久性、使いやすさを理由に、ナイロン糸へと切り替わりました。ナイロン糸にはさまざまな太さがあり、100グラム{単位|たんい}、または「グオン」と呼ばれる1キログラム単位で販売されています。通常はチュオン市場で購入されており、市場内にはナイロン糸やノンラーの製作道具を{専門|せんもん}に扱う売り場があります[20]、[21]。'], ['Cuộn sợi cước', '縫い糸（ナイロン糸）']],
       [['Liếc (cây lòng bông)', 'リエックの茎の芯（シダ類の植物）'], ['Liếc (hay cây lòng bông thuộc họ dương xỉ) do người làng Lưu Thượng (Phú Xuyên) cung cấp, bán theo bó khoảng 100 cây để tách ruột và vỏ làm nón. Trong đó, phần ruột (guột) dùng để buộc nối đầu sợi vòng giúp chiếc nón mịn màng, hài hòa; còn phần vỏ cứng, bóng, màu nâu sẫm được chẻ đôi khâu cùng vòng nứa để cạp nón thêm chắc chắn.', 'リエックは、フースエンのルー・トゥオン村の人々によって供給され、約100本を一束として販売されています。ノンラーの製作では、茎の{芯|しん}と外皮を分けて使用します。芯の部分は「グオット」と呼ばれ、輪を作る細い材料の端同士を結びつけるために使われます。これにより、ノンラーの表面が滑らかで調和の取れた仕上がりになります。一方、{硬|かた}く光沢のある濃い茶色の外皮は、縦に二つに裂き、ヌアで作られた輪と一緒に縫い付けることで、ノンラーの外縁をより丈夫にします。'], ['Cây liếc — ruột và vỏ', 'リエック：芯と皮']],
       [['Sợi luồn nhôi (sợi chỉ màu)', 'ノイを作るための{色糸|いろいと}'], ['Dùng để tạo và cố định giữ chắc phần quai nón khi sử dụng.', 'ノイを作るために使用する色糸です。ノイは、ノンラーを着用する際に、あごひもを通してしっかりと固定するための部分です。'], ['Sợi chỉ màu', 'ノイを作るための色糸']],
     ],
@@ -145,11 +145,11 @@ export const ch2 = {
       p: [
         [
           'Quy trình chuẩn bị lá nón bắt đầu từ công đoạn vò lá (chỉ áp dụng với lá lụi mua về còn tươi và nhiều nước), lá phải được vò qua cát để hút bớt độ ẩm, giúp lá khô, trắng và không bị thối. Cát dùng để vò được lấy từ giữa lòng sông Đáy, phơi khô khoảng một ngày và đãi sạch sạn sỏi bằng giản đan bằng tre trước khi đổ vào bãi vò rộng khoảng 10 mét vuông. Công việc này rất vất vả, đòi hỏi sức lực – thường do con trai đảm nhận, với thời gian vò khoảng 10 phút cho đến khi lá mềm. Sau khi vò xong, lá được đem phơi dọc bờ đê, cánh đồng hoặc sân gạch và phải đảo lá vào gần trưa để lá khô đều hai mặt. Thời gian phơi phụ thuộc vào thời tiết; mùa hè cần khoảng 2 đến 3 nắng, trong khi mùa đông cần phơi lâu hơn. Nếu gặp ngày nắng yếu hoặc mưa dầm, khi lá khô được khoảng 50 đến 60%, người thợ sẽ tiến hành sấy lá với số lượng khoảng 2.000 lá (nếu lá ướt) hoặc 2 lượt (nếu lá khô hơn) cho mỗi lần sấy. Lá sau khi khô sẽ được bó thành từng túm, mỗi túm khoảng 20 tàu.',
-          '仕入れたラルイがまだ新鮮で、水分を多く含んでいる場合は、まず砂とともに葉をもみ込む作業を行います。この工程では、葉の水分を減らし、乾燥させて白くするとともに、腐敗を{防|ふせ}ぎます。この作業に使う砂は、ダーイ川の川底の中央付近から採取します。砂を約1日天日干しにした後、竹で編んだふるいを使って小石や砂利を取り除きます。この工程は体力を要するため、主に男性が担当します。葉が柔らかくなるまで、約10分間もみ込みます。その後、葉を堤防沿いや畑、れんが{敷|じ}きの{庭|にわ}などに広げて天日干しにします。昼近くには葉を{裏返|うらがえ}し、両面が均等に乾くようにします。乾燥にかかる時間は天候によって異なります。夏は通常、晴天の日に2～3日程度干しますが、冬はさらに長い時間が必要です。日差しが弱い日や雨が長く続く場合は、葉が50～60％程度乾いた段階で、加熱して乾燥させます。乾燥後、葉は約20枚ずつ小さな束にまとめられます。',
+          '仕入れたラルイがまだ新鮮で、水分を多く含んでいる場合は、まず砂とともに葉をもみ込む作業を行います。この工程では、葉の水分を減らし、乾燥させて白くするとともに、腐敗を{防|ふせ}ぎます。この作業に使う砂は、ダーイ川の川底の中央付近から採取します。砂を約1日天日干しにした後、竹で編んだふるいを使って小石や砂利を取り除きます。この工程は体力を要するため、主に男性が担当します。葉が柔らかくなるまで、約10分間もみ込みます。その後、葉を堤防沿いや畑、れんが{敷|じ}きの{庭|にわ}などに広げて天日干しにします。昼近くには葉を{裏返|うらがえ}し、両面が均等に乾くようにします[21]。乾燥にかかる時間は天候によって異なります。夏は通常、晴天の日に2～3日程度干しますが、冬はさらに長い時間が必要です。日差しが弱い日や雨が長く続く場合は、葉が50～60％程度乾いた段階で、加熱して乾燥させます。乾燥後、葉は約20枚ずつ小さな束にまとめられます。',
         ],
         [
           'Đối với công đoạn phơi lá, lá mua về phải được phơi nắng trên nền đất với hai mép tàu lá kéo căng và có vật nặng đè xung quanh để mặt lá đón trọn ánh nắng. Sau khi phơi khô, lá được xếp thành từng bó (mỗi bó 10 tàu), ngâm nước 3 tiếng, dựng lên cho ráo nước rồi phơi tiếp hai nắng. Cuối cùng, người thợ tiến hành phơi lá vào ban đêm để lá "ăn" (ngấm) sương nhằm giúp lá mềm mại, tránh bị gãy rách khi khâu.',
-          '仕入れた葉を地面に広げて天日干しにします。このとき、葉の両端を引っ張って伸ばし、周囲に重しを置いて固定することで、葉の表面全体に日光が当たるようにします。葉が乾いたら、約10枚ずつ束にして約3時間水に{浸|ひた}します。その後、葉を立てて水を切り、再び晴天の日に2日ほど干します。最後に、葉を夜間に屋外に置き、{夜露|よつゆ}を吸収させます。この作業はベトナム語で「アンスオン（葉に夜露を吸収させること）」と呼ばれます。夜露によって葉が柔らかくなり、ノンラーを縫う際に{折|お}れたり{破|やぶ}れたりするのを防ぎます。',
+          '仕入れた葉を地面に広げて天日干しにします。このとき、葉の両端を引っ張って伸ばし、周囲に重しを置いて固定することで、葉の表面全体に日光が当たるようにします。葉が乾いたら、約10枚ずつ束にして約3時間水に{浸|ひた}します。その後、葉を立てて水を切り、再び晴天の日に2日ほど干します。最後に、葉を夜間に屋外に置き、{夜露|よつゆ}を吸収させます。この作業はベトナム語で「アンスオン（葉に夜露を吸収させること）」と呼ばれます。夜露によって葉が柔らかくなり、ノンラーを縫う際に{折|お}れたり{破|やぶ}れたりするのを防ぎます[21]。',
         ],
       ],
       images: [
@@ -194,7 +194,7 @@ export const ch2 = {
           ],
           [
             'Công đoạn này đòi hỏi sự khéo léo trong việc canh chỉnh nhiệt độ bếp điện: nếu nhiệt quá cao, lá (đặc biệt là lá lụi mỏng) sẽ bị đỏ và giòn; ngược lại, nếu nhiệt quá thấp, lá sẽ không đủ độ phẳng và dễ bị quăn trở lại.',
-            'この工程では、電気コンロの温度を適切に調節する技術が求められます。温度が高すぎると、特に薄いラルイは赤みを帯びてもろくなります。一方、温度が低すぎると、葉を十分に平らにすることができず、再び反り返りやすくなります[6],[21]。',
+            'この工程では、電気コンロの温度を適切に調節する技術が求められます。温度が高すぎると、特に薄いラルイは赤みを帯びてもろくなります。一方、温度が低すぎると、葉を十分に平らにすることができず、再び反り返りやすくなります[6]、[21]。',
           ],
         ],
         image: ['Miết phẳng lá trên mặt gang nóng', '熱い鉄板で葉をのばす'],
@@ -210,7 +210,7 @@ export const ch2 = {
           ],
           [
             'Tổng cộng có 16 vòng được đưa lần lượt vào khung theo một thứ tự nhất định, từ vòng cạp lớn ở miệng nón cho đến các vòng ở thân và chóp. Mỗi loại vòng sẽ có cách xử lý riêng; ví dụ như các vòng ở thân nón thường được vuốt qua bằng miếng vải để trở nên mềm, cong và mịn hơn. Trong các bước thì phần nối vòng cạp là khó nhất vì vòng này to, cứng và rất khó uốn tròn. Những người thợ lành nghề sẽ dùng cước trắng chuyên dụng để buộc nối thật chặt, khít và mịn màng, sao cho điểm nối giáp vào nhau hoàn toàn tự nhiên. Đây được xem là một trong những kỹ thuật khéo léo nhất của nghề làm nón, thường được các thiếu niên khoảng 14–15 tuổi bắt đầu học và thực hành.',
-            '全部で16本の輪を、ノンラーの開口部にある大きな外縁の輪から、胴部、頂点付近の輪へと、決められた順序に従って型にはめ込んでいきます。輪の種類によって加工方法も異なります。例えば、胴部に使用する輪は、布で表面をなでるようにこすり、より柔らかく、曲がりやすく、滑らかな状態に整えます。なかでも、外縁の大きな輪をつなぎ合わせる作業が最も難しいとされています。この輪は大きくて硬く、きれいな円形に曲げることが難しいためです。熟練した職人は専用の白いナイロン糸を使い、両端をしっかりと密着させて結びつけ、継ぎ目が自然で滑らかに見えるように仕上げます。これはノンラー作りのなかでも特に熟練を要する技術の一つとされ、14～15歳頃の少年少女、練習を始めることが多い作業です。',
+            '全部で16本の輪を、ノンラーの開口部にある大きな外縁の輪から、胴部、頂点付近の輪へと、決められた順序に従って型にはめ込んでいきます。輪の種類によって加工方法も異なります。例えば、胴部に使用する輪は、布で表面をなでるようにこすり、より柔らかく、曲がりやすく、滑らかな状態に整えます。なかでも、外縁の大きな輪をつなぎ合わせる作業が最も難しいとされています。この輪は大きくて硬く、きれいな円形に曲げることが難しいためです。熟練した職人は専用の白いナイロン糸を使い、両端をしっかりと密着させて結びつけ、継ぎ目が自然で滑らかに見えるように仕上げます[6]、[21]。これはノンラー作りのなかでも特に熟練を要する技術の一つとされ、14～15歳頃の少年少女、練習を始めることが多い作業です。',
           ],
         ],
         image: ['Khuôn nón — nơi đặt lần lượt 16 vành nứa', '16本のヌアの輪を順にはめていくノンラーの製作型'],
@@ -230,7 +230,7 @@ export const ch2 = {
           ],
           [
             'Sau lớp lá đầu tiên, người thợ tiếp tục lợp lớp mo ở giữa, gồm 5 tàu mo có kích thước đều nhau. Phần mo được cắt và gọt mỏng ở mép để khi xếp nối tiếp không bị cộm, với mặt phẳng mịn được quay vào trong. Lớp mo này cũng được chằng buộc bằng dây gai, sau đó sợi dây chằng của lớp lá thứ nhất sẽ được rút ra.',
-            '一層目の葉をかぶせた後、中央にモーナンの層を重ねます。この層には、大きさのそろった5枚のモーナンを使用します。モーナンは縁を切りそろえて薄く削り、重ねた部分が盛り上がらないようにします。また、滑らかな面を内側に向けて配置します。',
+            '一層目の葉をかぶせた後、中央にモーナンの層を重ねます。この層には、大きさのそろった5枚のモーナンを使用します。モーナンは縁を切りそろえて薄く削り、重ねた部分が盛り上がらないようにします。また、滑らかな面を内側に向けて配置します。\nモーナンの層も麻ひもで固定します。その後、一層目の葉を固定していたひもを引き抜きます。',
           ],
           [
             'Cuối cùng, lớp lá thứ hai được lợp tương tự như lớp đầu tiên, nhưng điểm khác biệt là mặt phải của lá sẽ quay ra ngoài. Khi hoàn thành lớp thứ hai, nón lại được chằng buộc cẩn thận, rút dây chằng mo ra để chuẩn bị chuyển sang công đoạn khâu.',
@@ -255,7 +255,7 @@ export const ch2 = {
           ],
           [
             'Nhờ sự khéo léo của người thợ, khoảng cách giữa các mũi khâu đều tăm tắp như được máy làm, các mũi kim đâm từ dưới lên khớp hoàn hảo với mũi từ trên xuống, giúp 16 vòng nón dần hiện lên duyên dáng. Thậm chí, cách giấu mối nối cước cũng khéo léo đến mức thoạt nhìn trông giống như một sợi cước dài vô tận. Sau khi khâu xong, người thợ tiến hành tháo dây chằng, nhấc nón ra khỏi khung và dùng kéo cắt bỏ phần lá thừa xung quanh, với nguyên tắc cắt càng sát vòng cạp thì vành nón trông sẽ càng đẹp.',
-            '職人の巧みな技術によって、縫い目の間隔はまるで機械で縫ったかのように均一になります。下から刺した針の位置も上から刺した針の位置と正確に{合|あ}い、16本の輪が次第に美しく{浮|う}かび上がります。さらに、ナイロン糸の継ぎ目も巧みに隠され、一見すると一本の長い糸で縫い続けているように見えます。縫い終えたら、固定用のひもを外し、ノンラーを型から取り出します。その後、はさみで周囲の余分な葉を切り落とします。外縁の輪にできるだけ近い位置で切るほど、縁が美しく仕上がるとされています。',
+            '職人の巧みな技術によって、縫い目の間隔はまるで機械で縫ったかのように均一になります。上下から刺した針の位置も正確に{合|あ}い、16本の輪が次第に美しく{浮|う}かび上がります。ナイロン糸の継ぎ目も巧みに隠され、一本の長い糸で縫い続けているように見えます[6]、[21]。\n縫い終えたら、固定用のひもを外し、ノンラーを型から取り出します。その後、はさみで周囲の余分な葉を切り落とします。外縁の輪にできるだけ近い位置で切るほど、縁が美しく仕上がるとされています。',
           ],
         ],
         image: ['Cận cảnh mũi kim, sợi cước xuyên qua lớp lá', '葉の層を通る針と糸のクローズアップ'],
@@ -267,7 +267,7 @@ export const ch2 = {
         text: [
           [
             'Sau khi nón đã được khâu xong và cắt bỏ phần lá thừa sát vòng cạp, người thợ tiến hành dùng cước hoặc sợi liếc chuyên dụng để khâu bọc, nức cố định kỹ phần cạp nón. Công đoạn này giúp che đi các mép cắt thô, đồng thời gia cố giúp vành nón trở nên chắc chắn, cứng cáp và giữ được dáng chuẩn. Các mũi khâu mép đòi hỏi sự đều đặn, khít và mịn màng để tạo nên độ thẩm mỹ tinh xảo, sắc nét cho toàn bộ chiếc nón trước khi đưa ra sử dụng.',
-            'ノンラー全体を縫い終え、外縁の輪に{沿|そ}って余分な葉を切り落とした後、職人はナイロン糸または専用のリエックの繊維を使い、外縁を包み込むように縫って、しっかりと固定します。この工程では、切り口の{粗|あら}い部分を覆うとともに、外縁を補強し、丈夫さと硬さを高めて、ノンラーの形を{保|たも}ちます。縁を縫う際には、縫い目の間隔が均一で、隙間なく、滑らかに仕上がることが求められます。これにより、使用前のノンラー全体に、細部まで整った美しい仕上がりを与えます。',
+            'ノンラー全体を縫い終え、外縁の輪に{沿|そ}って余分な葉を切り落とした後、職人はナイロン糸または専用のリエックの繊維を使い、外縁を包み込むように縫って、しっかりと固定します[21]。この工程では、切り口の{粗|あら}い部分を覆うとともに、外縁を補強し、丈夫さと硬さを高めて、ノンラーの形を{保|たも}ちます。縁を縫う際には、縫い目の間隔が均一で、隙間なく、滑らかに仕上がることが求められます。これにより、使用前のノンラー全体に、細部まで整った美しい仕上がりを与えます。',
           ],
         ],
         image: ['Cắt lá thừa và khâu viền vành nón', '余分な葉を切り、外縁を縫う'],
@@ -300,7 +300,7 @@ export const ch2 = {
         ],
         [
           'Chiếc nón sau khi đã được nức và cắt tỉa gọn gàng, người thợ nhúng chổi vào dung dịch dầu, gạt bớt phần thừa để chổi chỉ ẩm đều, sau đó quét nhẹ nhàng và đều tay từ đỉnh chóp nón tỏa ra các hướng xuống tận vành dưới. Thao tác đòi hỏi sự tỉ mỉ, khéo léo để lớp dầu phủ lên bề mặt lá phải thật mỏng, đều và nhẵn mịn, tuyệt đối không để dầu bị vón cục, đọng vũng hay loang lổ chỗ dày chỗ mỏng.',
-          '外縁の縫い付けと余分な葉の切りそろえを終えたノンラーに、油を塗っていきます。まず、刷毛を油に浸し、余分な油を落として、刷毛全体に適度に含ませます。その後、ノンラーの頂点から下部の外縁に向かって、各方向へ軽く均一に{塗|ぬ}り広げます。この作業には{細|こま}やかな注意と器用さが求められます。葉の表面を覆う油の層が薄く、均一で滑らかになるように塗り、油が{固|かた}まったり、一か所にたまったり、厚さにむらができたりしないようにします。',
+          '外縁の縫い付けと余分な葉の切りそろえを終えたノンラーに、油を塗っていきます。まず、刷毛を油に浸し、余分な油を落として、刷毛全体に適度に含ませます。その後、ノンラーの頂点から下部の外縁に向かって、各方向へ軽く均一に{塗|ぬ}り広げます。この作業には{細|こま}やかな注意と器用さが求められます。葉の表面を覆う油の層が薄く、均一で滑らかになるように塗り、油が{固|かた}まったり、一か所にたまったり、厚さにむらができたりしないようにします[6]、[22]。',
         ],
         [
           'Công đoạn này tạo ra một lớp màng bảo vệ trong suốt giúp nón ngăn ngừa ẩm mốc, giữ cho màu sắc của lá luôn trắng sáng đẹp theo thời gian, đồng thời làm tăng thêm độ bóng bẩy và độ bền chắc cho chiếc nón lá truyền thống. Sau khi quét xong, nón được mang ra phơi ở nơi thoáng gió, có nắng nhẹ cho đến khi lớp dầu khô hoàn toàn.',

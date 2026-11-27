@@ -1670,9 +1670,9 @@
 .cvw-env__hint span {
   pointer-events: auto; /* nhìn như nút → bấm được (khối ngoài xuyên cú bấm, xem .cvw-env) */
   display: inline-block;
-  font-size: 10.5em;
+  font-size: 13em; /* soát bằng mắt 28/11: 10.5em (~8px trên màn hình) → 13em, màu đậm hơn */
   font-style: italic;
-  color: #6b5844;
+  color: #4e3d2c;
   padding: 0.3em 1.1em 0.35em;
   border: 0.08em solid rgba(139, 115, 85, 0.4);
   border-radius: 99em;
@@ -1684,7 +1684,7 @@
 }
 .cvw-env.is-ja .cvw-env__hint span {
   font-style: normal;
-  font-size: 9.5em;
+  font-size: 12.5em;
 }
 @media (prefers-reduced-motion: reduce) {
   .cvw-env *,
