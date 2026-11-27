@@ -3568,7 +3568,8 @@ let stripRight = null
   {
     const jh = textH1(ar.intro, CW, { ...BODY, paraGap: 8 }, 1)
     const vs = [18, 17.5, 17, 16.5, 16, 15.5, 15].find((z) => textH1(ar.intro, CW, { size: z, lh: BODY.lh, paraGap: 8, jaSize: BODY.jaSize }, 0) <= jh + 4) ?? BODY.size
-    f.prose([ar.intro], { size: vs, jaSize: BODY.jaSize, color: C.ink2 })
+    // 27/11: đoạn liệt kê 4 tên (tên + （tiếng Việt） giữ liền một dòng) → canh đều làm dòng trước tên giãn từng chữ; canh trái
+    f.prose([ar.intro], { size: vs, jaSize: BODY.jaSize, color: C.ink2, align: 'left' })
   }
   // 08/11: ảnh nhóm gắn ở đầu phần nghệ nhân (3-11, Lễ báo công 2025)
   f.figure(ar.photos.honor)

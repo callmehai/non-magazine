@@ -1011,6 +1011,8 @@
   font-family: 'Noto Serif JP', serif;
   font-size: 14.5em;
   line-height: 1.9;
+  /* 27/11: thẻ hẹp + "（Hà Đông）" không ngắt → canh đều làm dòng 1 giãn từng chữ; canh trái cho đều chữ */
+  text-align: left;
 }
 /* Bản sửa lần 4: tên người không xuống dòng giữa chừng → nhãn mốc nhỏ hơn một chút để các tên katakana dài (ファム・チャン・カイン) vẫn nằm gọn một dòng, không chạm tên bên cạnh */
 .cvw-tl.is-ja .cvw-tl__who {
