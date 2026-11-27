@@ -2677,6 +2677,13 @@ let guidePage = null
   // lời kết của mục: đoạn văn thường (khối ghi chú nghiêng 15 dòng quá nặng)
   if (ty.outroNotes) f.noted([ty.outro], ty.outroNotes)
   else f.prose([ty.outro])
+  // Doc "sửa thêm 2" mục 22: hai ảnh chợ (画47, 画48 bản 26/11) đứng ngay sau đoạn kết mục như bản 26/11 — từ 27/11 đoạn kết
+  // có chú thích ⁹ cuối trang nên prose() không còn lấp hai ảnh này, chúng nằm lại trong kho và rơi khỏi sách
+  {
+    const market = f.pool.filter((c) => /^Người bán xếp nón/.test(c[0]))
+    f.pool = f.pool.filter((c) => !market.includes(c))
+    if (market.length) f.row(market)
+  }
   // góp ý 04/11 (Thu Nguyệt): hai ảnh cuối mục thay bằng OCOP.JPG + Làm nón truyền thống.JPG
   f.row(
     [
@@ -2768,7 +2775,17 @@ let stripRight = null
     })
     // chú thích mo nang cuối trang (Bổ sung 2, 12/11) bớt chỗ → cho phép khung thấp hơn để ảnh vẫn ở trang này
     // Doc "sửa thêm 2" mục 22 (画57): nhóm ngắt dòng "輪をすべて / 付け終えた骨組みを手にする職人 / レ・ヴァン・トゥイ氏 / （グループ撮影）"
-    f.figure(['Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành', '輪をすべて\n付け終えた骨組みを手にする職人\nレ・ヴァン・トゥイ氏\n'], { ratios: [R.wide, R.cin, R.pan, 0.45] })
+    // 28/11: chú thích 4 dòng tính theo bề ngang cả khối → không còn đủ chỗ, ảnh rơi sang trang sau (mục 2.1 thành 4 trang) và
+    // cột chú thích 140pt ngắt "手に / する職人" → ảnh đặt cạnh chú thích, cột chú thích rộng vừa dòng dài nhất của nhóm
+    const tuy = ['Nghệ nhân Lê Văn Tuy bên khung nón đã lên đủ vành', '輪をすべて\n付け終えた骨組みを手にする職人\nレ・ヴァン・トゥイ氏\n']
+    const side = Math.ceil(S.cap * 15 + 8) // 15 chữ Nhật của dòng "付け終えた骨組みを手にする職人"
+    const iw = CW - 16 - side
+    const bh = r1(iw * (natR(tuy) ?? R.std))
+    // ảnh bên trái như bản 26/11; bản 27/11 có thêm một ảnh kho cạnh chú thích ở trang sau → giữ nhịp trái/phải các trang sau như cũ
+    if (SIDE % 2) SIDE++
+    const yy = f.p && f.room >= bh + 4 && sideFigure(f.p, f.y, bh, tuy, iw)
+    if (yy) f.y = yy + 22
+    else f.figure(tuy, { ratios: [R.wide, R.cin, R.pan, 0.45] })
   }
   // 2.1.1 — khung 16 vòng (thứ tự theo Doc: khung trước, lá lợp sau): sơ đồ vòng, dáng thấp như nón thật
   // (cao ≤ 0,72 × bán kính vành, chóp có núm tròn nhỏ — góp ý: hình nón vẽ nhọn quá)
