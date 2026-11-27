@@ -9,7 +9,7 @@
 export const front = {
   title: ['Nón lá Làng Chuông', 'チュオン{村|むら}のノンラー'],
   subtitle: ['Nét đẹp truyền thống Việt Nam', 'ベトナムの{伝統美|でんとうび}'],
-  team: ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật Bản\nTrường Đại học FPT Hà Nội · 2026', 'FPT大学ハノイ校 日本語学科\n卒業制作・2026年'],
+  team: ['Đồ án tốt nghiệp · Ngành Ngôn ngữ Nhật Bản\nTrường Đại học FPT Hà Nội · 2026', 'FPT大学ハノイ校 日本語学科\n卒業プロジェクト・2026年'],
 }
 
 export const preface = {

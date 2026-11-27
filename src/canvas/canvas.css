@@ -839,6 +839,10 @@
 }
 /* bản Nhật: dấu ngoặc / đuôi 新聞… dính với chữ Việt đầu và cuối cụm ("（Nghệ", "Nội）") — không đứng lẻ đầu hay cuối dòng;
    giữa cụm vẫn ngắt ở dấu cách. Khối dài hơn cả dòng (cột chú thích hẹp) vẫn ngắt bên trong, không lấn ra ngoài khung chữ */
+/* dấu ngoặc mở nửa khổ ngay sau dấu đóng: "）（" không hở như có dấu cách */
+.cv-halt {
+  font-feature-settings: 'halt';
+}
 .cv-nb {
   display: inline-block;
   max-width: 100%;

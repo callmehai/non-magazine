@@ -5,7 +5,8 @@ import { fontOf } from '../canvas/lang.js'
 import { measureKey } from '../../scripts/book/measureKey.mjs'
 import '../canvas/canvas.css'
 
-const SRC = `${import.meta.env.BASE_URL}scripts/book/out/book.json`
+// ?src=measure-todo.json → đo danh sách khối chữ build.mjs phải ước lượng (MEASURE_ALL=1), thay cho bản build
+const SRC = `${import.meta.env.BASE_URL}scripts/book/out/${new URLSearchParams(location.search).get('src') || 'book.json'}`
 const PX = 4 // 1pt của trang = 4px khi đo (đo ở cỡ lớn cho chính xác)
 
 /**

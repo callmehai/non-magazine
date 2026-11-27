@@ -23,7 +23,7 @@ export const ch1 = {
         p: [
           [
             'Nón lá là sản phẩm thủ công truyền thống của Việt Nam, được làm từ các nguyên liệu tự nhiên như lá lụi (lá cọ non¹), tre và nứa. Trong đó, lá được sử dụng để tạo phần lợp, còn tre, nứa được gia công thành khung và các vành nón nhằm định hình sản phẩm. Tùy theo nhu cầu sử dụng, đặc điểm văn hóa và kỹ thuật chế tác của từng địa phương, nón lá có nhiều kiểu dáng và kích thước khác nhau, góp phần tạo nên sự đa dạng của nghề làm nón truyền thống Việt Nam.',
-            'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイ（{若|わか}いヤシの葉¹）や竹、ヌア（ベトナムの竹の{一種|いっしゅ}）などの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
+            'ノンラー（ベトナム発祥の、{葉|は}で作られた伝統的なノンラーの一種）は、ラルイ（{若|わか}いヤシの葉¹）や竹、ヌア（ベトナムの竹の{一種|いっしゅ}）などの{天然|てんねん}{素材|そざい}を使って作られるベトナムの伝統工芸品です[1]。葉はノンラーの表面を覆う部分に使われ、竹やヌアは{骨組|ほねぐ}みや輪状の部材に加工され、ノンラーの形を整える役割を果たします。ノンラーには、使用目的や地域ごとの文化的{特徴|とくちょう}、{製作技術|せいさくぎじゅつ}に応じて、さまざまな形や大きさがあります。こうした違いが、ベトナムの伝統的なノンラー作りの{多様性|たようせい}につながっています。',
           ],
         ],
         // Bổ sung 2 (12/11): 'Footnote “ヤシ：…” chuyển lên phần 1.1'; 14/11 (bản Nhật là bản chuẩn): bản Việt cũng chuyển chú thích "Cây cọ" lên đây
@@ -140,11 +140,11 @@ export const ch1 = {
       p: [
         [
           'Theo tài liệu Nghề đẹp quê hương (Nguyễn Vỵ), những hình ảnh được cho là tiền thân của chiếc nón đã xuất hiện trên trống đồng Ngọc Lũ và thạp đồng Đào Thịnh, có niên đại khoảng 2500–3000 năm trước theo tư liệu này¹.\nNhững hình chạm khắc gợi liên tưởng đến vật đội đầu mà cư dân Việt cổ có thể đã sử dụng, với chất liệu được phỏng đoán là lông chim kết lại hoặc các loại lá cây bản rộng, dày như lá cọ.\nTuy nhiên, những hình ảnh này chưa đủ cơ sở để xác định chính xác hình dáng và chất liệu của chiếc nón thời kỳ đó. Vì vậy, đây được xem là những tư liệu tham khảo góp phần tìm hiểu về các hình thức vật đội đầu trong đời sống cư dân Việt cổ, thay vì bằng chứng trực tiếp về chiếc nón lá hiện nay.',
-          'グエン・ヴィの著書『Nghềđẹp quê hương 』（筆者仮訳：『故郷の美しい職業』）によると、ノンラーの原型と考えられる図像が、約2,500～3,000年前のものとされるゴックルーの銅鼓やダオティンの青銅製容器に見られます[4, ページ 141]。\nこれらの彫刻からは、古代ベトナムの人々が使用していた可能性のあるかぶり物がうかがえます。その素材については、鳥の羽を束ねたものや、ヤシの葉のような幅が広く厚みのある葉が使われていたと推測されています[4]。\nしかし、これらの図像だけでは、当時のかぶり物の形や素材を正確に特定することはできません。そのため、現在のノンラーの存在を直接示す証拠というよりも、古代ベトナムの人々が使用していたかぶり物の形態を知るための参考資料として位置づけられています。',
+          'グエン・ヴィの著書『Nghề đẹp quê hương』（筆者仮訳：『故郷の美しい職業』）によると、ノンラーの原型と考えられる図像が、約2,500～3,000年前のものとされるゴックルーの銅鼓やダオティンの青銅製容器に見られます[4, ページ 141]。\nこれらの彫刻からは、古代ベトナムの人々が使用していた可能性のあるかぶり物がうかがえます。その素材については、鳥の羽を束ねたものや、ヤシの葉のような幅が広く厚みのある葉が使われていたと推測されています[4]。\nしかし、これらの図像だけでは、当時のかぶり物の形や素材を正確に特定することはできません。そのため、現在のノンラーの存在を直接示す証拠というよりも、古代ベトナムの人々が使用していたかぶり物の形態を知るための参考資料として位置づけられています。',
         ],
         [
           'Bên cạnh các dấu tích khảo cổ về nón lá thì còn có nghề làm nón được đề cập trong những tài liệu về nghề thủ công truyền thống. Theo tư liệu Từ điển văn hóa cổ truyền Việt Nam do Hữu Ngọc (chủ biên), nghề này muộn nhất đã có từ thời Trần, khoảng thế kỷ XIII–XIV².\nTrong xã hội xưa, nón có nhiều loại dành cho những đối tượng và mục đích sử dụng khác nhau, chẳng hạn nón tam giang dành cho người lớn tuổi, nón chéo vành dành cho binh lính hay nón tu lờ dành cho nhà sư,... Điều này cho thấy các loại nón đã được sử dụng trong nhiều hoàn cảnh khác nhau của đời sống truyền thống.',
-          'こうした考古学的な痕跡に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック編『Từđiển văn hóa cổ truyền Việt Nam』（筆者仮訳：『ベトナム伝統文化事典』）によると、ノンラー作りは、遅くとも13～14世紀のチャン朝時代にはすでに存在していたとされています[5, ページ 521]。\nかつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
+          'こうした考古学的な痕跡に加え、伝統工芸に関する文献にも、ノンラー作りについての記述が見られます。フー・ゴック編『Từ điển văn hóa cổ truyền Việt Nam』（筆者仮訳：『ベトナム伝統文化事典』）によると、ノンラー作りは、遅くとも13～14世紀のチャン朝時代にはすでに存在していたとされています[5, ページ 521]。\nかつての社会では、使用する人や目的に応じてさまざまな{種類|しゅるい}のノンラーがありました。例えば、年配の人がかぶるノン・タムザン、兵士が使用するノン・チェオヴァイン、{僧侶|そうりょ}がかぶるノン・トゥーローなどが挙げられます。このことから、さまざまな種類のノンラーが、かつての人々の暮らしのさまざまな場面で使用されていたことがわかります。',
         ],
       ],
       notes: [
@@ -222,7 +222,7 @@ export const ch1 = {
         [
           'Làng Chuông nằm tại xã Thanh Oai (trước đây là xã Phương Trung, huyện Thanh Oai), thành phố Hà Nội, cách trung tâm Thủ đô khoảng 30 km về phía Tây Nam. Đây là làng nghề nổi tiếng với truyền thống làm nón lá từ hơn 300 năm trước. Nghề làm nón đã được duy trì qua nhiều thế hệ, trở thành hoạt động gắn liền với đời sống kinh tế, sinh hoạt và văn hóa của người dân địa phương.',
           // địa chỉ theo bản Nhật của nhóm (xã Phương Trung, ~30 km về phía Tây); chữ Việt giữ — xem ja-p1.issues.md
-          'チュオン村はハノイ市フオンチュン社に位置し、ハノイ中心部から西へ約30kmの距離にあります。300年以上にわたるノンラー作りの伝統で知られる工芸村です[12]。ノンラー作りは代々受け継がれ、地域の人々の経済活動や日常生活、文化と深く結びついています。',
+          'チュオン村はハノイ市タインオアイ社に位置し、ハノイ中心部から西へ約30kmの距離にあります。300年以上にわたるノンラー作りの伝統で知られる工芸村です[12]。ノンラー作りは代々受け継がれ、地域の人々の経済活動や日常生活、文化と深く結びついています。',
         ],
         [
           'Trong lịch sử, theo cuốn Hỏi đáp về làng nghề truyền thống Việt Nam (Hoàng Đức Nhuận và cộng sự, 2009), nón lá Làng Chuông không chỉ được sử dụng rộng rãi trong đời sống hằng ngày mà còn từng được lựa chọn làm cống vật tiến dâng lên Hoàng hậu, Công chúa¹. Đến thời kỳ kháng chiến chống Mỹ, người dân trong làng tiếp tục duy trì sản xuất để đáp ứng nhu cầu sinh hoạt và hỗ trợ lực lượng thanh niên xung phong. Một số loại nón còn được khâu thêm lớp vải dù ngụy trang để sử dụng trên các tuyến đường ra mặt trận. Điều này không chỉ phản ánh nét đẹp trong sản xuất truyền thống mà còn khẳng định những đóng góp quan trọng của làng nghề qua từng mốc lịch sử gian lao của dân tộc (Vũ Từ Trang & Oger, 2020)².',
@@ -277,14 +277,14 @@ export const ch1 = {
       hero: ['Cảnh làm nón ở làng Chuông — nguồn: nghệ nhân Lê Văn Tuy', 'チュオン{村|むら}でのノンラー製作の様子 — 出典：職人レ・ヴァン・トゥイ氏'],
       list: [
         {
-          name: ['Nón lá hình chóp truyền thống', '伝統的な円錐形のノンラー (nón lá hình chóp truyền thống）'],
+          name: ['Nón lá hình chóp truyền thống', '伝統的な円錐形のノンラー（Nón lá hình chóp truyền thống）'],
           text: [
             'Đây là loại nón có dáng chóp nhọn, được làm từ lá lụi (lá cọ non) đã qua xử lý và khâu trên 16 vòng nứa. Nón thường có màu trắng sáng hoặc vàng ngà, bề mặt lá phẳng mượt với các đường chỉ khâu tương đối đều đặn. Thông thường, vành rộng của nón có đường kính mở rộng khoảng 30 đến 40 cm, tùy thuộc vào vóc dáng cùng mục đích sử dụng; kết hợp cùng chiều cao chóp từ 20 đến 25 cm giúp ôm vừa vặn vòm đầu mà vẫn giữ độ thông thoáng cần thiết. Với hình dáng gọn nhẹ và tính ứng dụng trong đời sống, loại nón này được sử dụng trong sinh hoạt hằng ngày và làm quà tặng.',
             '先端が尖った円錐形で、下処理を施したラルイ（ヤシの若葉）を16本のヌアひごの輪に縫い付けて作られます。色は一般に明るい白色または淡い象牙色で、葉の表面は平らに整えられ、縫い目も比較的均一です。通常、ノンラーの縁の直径は、かぶる人の体格や用途に応じて約30〜40cmです。縁から頂部までの高さは20〜25cmで、こうした寸法により、頭にほどよくフィットしながら、必要な通気性も確保されています。かさばらず軽量で、日常生活での実用性もあるため、普段使いのほか、贈り物にも用いられています。',
           ],
         },
         {
-          name: ['Nón lá già ghép sống', '成熟したヤシの葉で作られたノンラー(nón lá già ghép sống)'],
+          name: ['Nón lá già ghép sống', '成熟したヤシの葉で作られたノンラー（Nón lá già ghép sống）'],
           text: [
             'Đây là loại nón được làm từ lá cọ già, ghép và khâu cố định trên khung nón. Bề mặt nón có màu nâu nhạt, với các đường sống lá tỏa đều từ đỉnh xuống vành, kết hợp cùng các đường khâu ngang tạo thành kết cấu đặc trưng. So với nón chóp truyền thống có bề mặt lá phẳng và màu sắc sáng hơn, loại nón này nổi bật bởi các đường sống lá rõ nét, mang lại vẻ ngoài mộc mạc và khác biệt. Nón có kích thước tương đương với nón chóp truyền thống.',
             '成熟したヤシの葉を継ぎ合わせ、ノンラーの骨組みに縫い付けて固定したものです。表面は薄茶色で、頂部から縁に向かって均等に放射状に伸びる葉脈と、横方向の縫い目が特徴的な構造を形作っています。葉の表面が平らで色も明るい伝統的な円錐形のノンラーに比べ、葉脈がはっきりと見えるのが特徴で、素朴で独特な外観を生み出しています[14]。',
@@ -364,8 +364,8 @@ export const ch1 = {
         ],
       ],
       outro: [
-        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP¹ 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay. Vì vậy, flipbook sẽ giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
-        '本プロジェクトでは、チュオン{村|むら}の伝統的な{円錐形|えんすいけい}のノンラーを、フリップブックの主な紹介対象に選びました。先端が尖った{特徴|とくちょう}的な形を持ち、ベトナムの女性の姿と深く結びついているためです。文化的{価値|かち}や日常生活における{実用性|じつようせい}に加え、チュオン村の円錐形のノンラーはOCOP¹の4つ星{認定|にんてい}を{受|う}けており、地域の伝統工芸品としての価値が認められています。また、現在もこの{工芸村|こうげいむら}で広く生産されている{種類|しゅるい}です。そのため、本フリップブックでは、チュオン村のノンラーについて概説し、「{概要|がいよう}・特徴」「構造・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」「製作工程」という三つの主要な内容を通して、伝統的な円錐形のノンラーの特徴を詳しく紹介します。これにより、ノンラーの全体像や各製作工程、チュオン村の職人の技術や熟練の技に見られる特徴を伝えます。',
+        'Dự án lựa chọn nón lá chóp truyền thống Làng Chuông làm nội dung giới thiệu chính trong flipbook vì đây là kiểu nón có dáng chóp nhọn đặc trưng, gắn liền với hình ảnh người phụ nữ Việt Nam. Bên cạnh giá trị văn hóa và tính ứng dụng trong đời sống, nón lá chóp nhọn Làng Chuông còn được công nhận là sản phẩm OCOP¹ 4 sao, khẳng định giá trị của sản phẩm thủ công truyền thống tại địa phương. Đây cũng là dòng nón được sản xuất phổ biến tại làng nghề hiện nay.\nVì vậy, flipbook sẽ giới thiệu khái quát về nón lá Làng Chuông, tập trung làm rõ đặc điểm của nón lá chóp truyền thống thông qua ba nội dung chính: khái quát, đặc điểm, cấu tạo – nguyên liệu – kỹ thuật chế tác nón lá, và quy trình sản xuất nón lá. Qua đó, flipbook cung cấp cái nhìn tổng quan về nón lá, các công đoạn làm nón và những nét đặc trưng trong kỹ thuật, tay nghề của người thợ Làng Chuông.',
+        '本プロジェクトでは、チュオン{村|むら}の伝統的な{円錐形|えんすいけい}のノンラーを、フリップブックの主な紹介対象に選びました。先端が尖った{特徴|とくちょう}的な形を持ち、ベトナムの女性の姿と深く結びついているためです。文化的{価値|かち}や日常生活における{実用性|じつようせい}に加え、チュオン村の円錐形のノンラーはOCOP¹の4つ星{認定|にんてい}を{受|う}けており、地域の伝統工芸品としての価値が認められています。また、現在もこの{工芸村|こうげいむら}で広く生産されている{種類|しゅるい}です[18, ページ 152]。\nそのため、本フリップブックでは、チュオン村のノンラーについて概説し、「{概要|がいよう}・特徴」「構造・{材料|ざいりょう}・{製作技術|せいさくぎじゅつ}」「製作工程」という三つの主要な内容を通して、伝統的な円錐形のノンラーの特徴を詳しく紹介します。これにより、ノンラーの全体像や各製作工程、チュオン村の職人の技術や熟練の技に見られる特徴を伝えます。',
       ],
     },
   },

@@ -125,7 +125,7 @@ const STRINGS = {
     introLoading: 'ノンラーを編んでいます…',
     introKicker: 'ハノイ・タインオアイ　ノンラーの村',
     introCadao: '白いご飯とナマズを食べたいなら、\nよいノンラーをかぶりたいなら、チュオン村へ。',
-    introCadaoBy: 'ベトナムの民謡（カーザオ）',
+    introCadaoBy: 'カーザオ（ベトナムの民間詩）',
     introScene: 'イラスト：夕暮れのチュオン村の亭の門',
     bowCadao: '亭（ディン）の前を通り、ノンラーを傾けて亭を眺める。\n亭の屋根を覆う瓦の数ほど、あなたを想う。',
     bootLoading: '本をひらいています…',

@@ -76,7 +76,9 @@ async function drawCard(canvas, { photo, verse, lang }) {
   g.restore()
 
   // ảnh (cắt theo khung, giữ tâm theo pos)
-  const box = { x: 70, y: 70, w: w - 140, h: 1110 }
+  // Doc "sửa thêm 2" (27/11): "bưu thiếp hơi mờ logo, chữ hơi bé (chị phải zoom 200% mới thấy)" → ảnh thấp lại một chút,
+  // câu ca dao / chân thiếp / tem / con dấu son đều to và đậm hơn (thiếp hiện trên trang chỉ ~1/4 cỡ thật)
+  const box = { x: 70, y: 70, w: w - 140, h: 990 }
   g.fillStyle = '#d9cdb4'
   g.fillRect(box.x, box.y, box.w, box.h)
   if (img) {
@@ -92,88 +94,101 @@ async function drawCard(canvas, { photo, verse, lang }) {
 
   // tem: giấy trắng răng cưa, hình nón nét vàng như bìa sách
   const stamp = document.createElement('canvas')
-  stamp.width = 210
-  stamp.height = 250
+  stamp.width = 250
+  stamp.height = 300
   const sg = stamp.getContext('2d')
   sg.fillStyle = '#fbf7ee'
-  sg.fillRect(0, 0, 210, 250)
+  sg.fillRect(0, 0, 250, 300)
   sg.globalCompositeOperation = 'destination-out'
   const hole = (x, y) => {
     sg.beginPath()
     sg.arc(x, y, 6, 0, Math.PI * 2)
     sg.fill()
   }
-  for (let x = 0; x <= 210; x += 17.5) [0, 250].forEach((y) => hole(x, y))
-  for (let y = 0; y <= 250; y += 17.86) [0, 210].forEach((x) => hole(x, y))
+  for (let x = 0; x <= 250; x += 17.86) [0, 300].forEach((y) => hole(x, y))
+  for (let y = 0; y <= 300; y += 18.75) [0, 250].forEach((x) => hole(x, y))
   sg.globalCompositeOperation = 'source-over'
   sg.fillStyle = '#f1e3c4'
-  sg.fillRect(20, 20, 170, 210)
+  sg.fillRect(20, 20, 210, 260)
   sg.strokeStyle = '#a8382b'
-  sg.lineWidth = 2
-  sg.strokeRect(20, 20, 170, 210)
-  if (hat) sg.drawImage(hat, 28, 82, 154, 90)
+  sg.lineWidth = 3
+  sg.strokeRect(20, 20, 210, 260)
+  // hình nón nét vàng mảnh → vẽ hai lần (đậm hơn), to hơn
+  if (hat) [0, 1].forEach(() => sg.drawImage(hat, 26, 92, 198, 116))
   sg.fillStyle = '#a8382b'
   sg.textAlign = 'center'
-  sg.font = lang === 'ja' ? '500 22px "Noto Sans JP"' : '600 20px "Be Vietnam Pro"'
-  sg.fillText(t.stamp, 105, 58)
-  sg.font = '700 24px "Playfair Display"'
-  sg.fillText('2026', 105, 212)
+  sg.font = lang === 'ja' ? '700 34px "Noto Sans JP"' : '700 28px "Be Vietnam Pro"'
+  sg.fillText(t.stamp, 125, 70)
+  sg.font = '700 36px "Playfair Display"'
+  sg.fillText('2026', 125, 262)
   g.save()
-  g.translate(w - 190, 150)
+  g.translate(w - 200, 170)
   g.rotate(0.05)
   g.shadowColor = 'rgba(30, 15, 5, 0.35)'
   g.shadowBlur = 14
   g.shadowOffsetY = 4
-  g.drawImage(stamp, -105, -125)
+  g.drawImage(stamp, -125, -150)
   g.restore()
 
   // câu ca dao (lục bát: câu lục thụt vào, câu bát sát lề; chữ Nhật không nghiêng)
-  const lines = plainText(verse[lang === 'ja' ? 1 : 0] ?? verse[0]).split('\n')
   g.fillStyle = '#4e3426'
   g.textAlign = 'left'
-  g.font = FONTS[lang][0]
   const vx = 120
-  const lh = lang === 'ja' ? 64 : 74
-  lines.forEach((ln, i) => {
-    const indent = lang !== 'ja' && i % 2 === 0 && lines.length > 1 ? 60 : 0
-    let size = lang === 'ja' ? 40 : 56
-    g.font = FONTS[lang][0].replace(/\d+px/, `${size}px`)
-    while (g.measureText(ln).width > w - 2 * vx - indent - 150 && size > 28) {
-      size -= 2
-      g.font = FONTS[lang][0].replace(/\d+px/, `${size}px`)
-    }
-    g.fillText(ln, vx + indent, 1268 + i * lh)
-  })
-  g.font = lang === 'ja' ? '500 20px "Noto Sans JP"' : 'italic 26px "Cormorant Garamond", serif'
-  g.fillStyle = '#a07a3c'
-  g.fillText(t.by, vx + (lang === 'ja' ? 0 : 60), 1268 + lines.length * lh + 2)
+  const maxW = w - 2 * vx
+  const fontAt = (z) => FONTS[lang][0].replace(/\d+px/, `${z}px`)
+  let lines = plainText(verse[lang === 'ja' ? 1 : 0] ?? verse[0]).split('\n')
+  // bản Nhật: dòng dài thì ngắt sau dấu "、" (cả câu một cỡ chữ, không co riêng một dòng cho vừa)
+  if (lang === 'ja') {
+    g.font = fontAt(54)
+    lines = lines.flatMap((ln) => {
+      const out = []
+      let rest = ln
+      while (g.measureText(rest).width > maxW) {
+        const cuts = [...rest.matchAll(/、/g)].map((m) => m.index + 1).filter((k) => k < rest.length && g.measureText(rest.slice(0, k)).width <= maxW)
+        if (!cuts.length) break
+        const k = cuts.at(-1)
+        out.push(rest.slice(0, k))
+        rest = rest.slice(k)
+      }
+      return [...out, rest]
+    })
+  }
+  const indentOf = (i) => (lang !== 'ja' && i % 2 === 0 && lines.length > 1 ? 60 : 0)
+  let size = lang === 'ja' ? 54 : 64
+  g.font = fontAt(size)
+  while (lines.some((ln, i) => g.measureText(ln).width > maxW - indentOf(i)) && size > 30) g.font = fontAt((size -= 2))
+  const lh = Math.round(size * (lang === 'ja' ? 1.5 : 1.3))
+  lines.forEach((ln, i) => g.fillText(ln, vx + indentOf(i), 1150 + i * lh))
+  g.font = lang === 'ja' ? '500 32px "Noto Sans JP"' : 'italic 36px "Cormorant Garamond", serif'
+  g.fillStyle = '#8a6630'
+  g.fillText(t.by, vx + (lang === 'ja' ? 0 : 60), 1150 + lines.length * lh + 6)
 
   // chân thiếp + con dấu son
-  g.font = FONTS[lang][1]
-  g.fillStyle = '#8b7355'
+  g.font = lang === 'ja' ? '700 40px "Noto Sans JP"' : '700 34px "Be Vietnam Pro"'
+  g.fillStyle = '#6b5236'
   if (g.letterSpacing !== undefined) g.letterSpacing = lang === 'ja' ? '2px' : '5px'
-  g.fillText(t.foot, vx, h - 78)
+  g.fillText(t.foot, vx, h - 92)
   if (g.letterSpacing !== undefined) g.letterSpacing = '0px'
-  const s = 124
+  const s = 200
   const sx = w - 70 - s
   const sy = h - 70 - s
   g.fillStyle = '#a8382b'
   g.fillRect(sx, sy, s, s)
   g.strokeStyle = '#f6e9d6'
-  g.lineWidth = 2
-  g.strokeRect(sx + 8, sy + 8, s - 16, s - 16)
+  g.lineWidth = 3
+  g.strokeRect(sx + 10, sy + 10, s - 20, s - 20)
   g.fillStyle = '#f6e9d6'
   g.textAlign = 'center'
   // chữ dấu co lại cho vừa lòng dấu
-  let fs = 24
+  let fs = 44
   const sealFont = () => FONTS[lang][2].replace(/\d+px/, `${fs}px`)
   g.font = sealFont()
-  while (Math.max(...t.seal.map((x) => g.measureText(x).width)) > s - 30 && fs > 14) {
+  while (Math.max(...t.seal.map((x) => g.measureText(x).width)) > s - 40 && fs > 20) {
     fs -= 1
     g.font = sealFont()
   }
   const n = t.seal.length
-  const sealLh = fs + 4
+  const sealLh = fs + 8
   t.seal.forEach((x, i) => g.fillText(x, sx + s / 2, sy + s / 2 + fs / 2.8 + (i - (n - 1) / 2) * sealLh))
 }
 

@@ -416,7 +416,8 @@ function MoreBody({ el, mode }) {
 // có các chữ ă ạ ầ ư…, trình duyệt lấy riêng từng chữ đó từ font khác → một tên hai kiểu chữ (GVHD 15/11: "lỗi font chữ tên
 // ô Phạm Trần Canh", "Lỗi tên nghệ nhân"). Cả cụm chữ Latin có dấu tiếng Việt in bằng font của bản Việt cho đồng đều.
 const VN_MARK = /[À-ÃÈ-ÊÌÍÒ-ÕÙÚÝà-ãè-êìíò-õùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ]/
-const VN_RUN = /[A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+(?:[ '’&.\-–][A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+)*/g
+// \u00a0 (dấu cách không ngắt, vd. "Hà\u00a0Đông") nối cụm như dấu cách nhưng cả cụm không xuống dòng giữa chừng
+const VN_RUN = /[A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+(?:[ \u00a0'’&.\-–][A-Za-zÀ-ÖØ-öø-ÿĂăĐđĨĩŨũƠơƯưẠ-ỹ]+)*/g
 function vnSplit(s, font) {
   if (!font || !VN_MARK.test(s)) return s
   const out = []
@@ -518,7 +519,8 @@ function hasShortLine(p) {
     else rows.push({ top: b.top, n: 1 })
   }
   if (rows.length < 2) return 0
-  return rows[rows.length - 1].n <= 2 ? 2 : rows.some((row) => row.n <= 2) ? 1 : 0 // 2: dòng cuối · 1: chỉ dòng giữa
+  // Doc "sửa thêm 2" (27/11, tr. 72): dòng cuối chỉ còn "ます。" (3 chữ) cũng là chữ rơi lẻ → dòng cuối ≤ 3 chữ
+  return rows[rows.length - 1].n <= 3 ? 2 : rows.some((row) => row.n <= 2) ? 1 : 0 // 2: dòng cuối · 1: chỉ dòng giữa
 }
 
 // bản Nhật: đoạn nào có dòng chỉ 1–2 chữ (đo thật, sau khi font tải xong) thì khép chữ cả đoạn rất nhẹ để kéo chữ lẻ
@@ -598,6 +600,22 @@ export function ParaText({ text, el, lang, keep }) {
 }
 
 export function RubyText({ text, vn }) {
+  // "）（" liền nhau (chú thích ảnh: "…ノンラー）（Chạm Sắc）"): mỗi dấu ngoặc toàn khổ tự mang nửa ô trắng nên giữa hai dấu
+  // hở như có dấu cách (Doc "sửa thêm 2" mục 17) → dấu mở thứ hai in nửa khổ (halt)
+  if (String(text).includes('）（')) {
+    return String(text)
+      .split('）（')
+      .map((seg, i) => (
+        <Fragment key={i}>
+          {i > 0 && (
+            <>
+              ）<span className="cv-halt">（</span>
+            </>
+          )}
+          <RubyText text={seg} vn={vn} />
+        </Fragment>
+      ))
+  }
   if (String(text).includes('⟪')) {
     return String(text)
       .split(/(⟪[^⟪⟫]*⟫)/)

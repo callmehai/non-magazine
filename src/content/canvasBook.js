@@ -17,7 +17,7 @@ const canvasBook = {
     ja: {
       title: 'チュオン村のノンラー',
       subtitle: 'ベトナムの伝統美',
-      issue: 'FPT大学ハノイ校 卒業制作 · 2026',
+      issue: 'FPT大学ハノイ校 - 卒業プロジェクト - 2026',
     },
   },
 
