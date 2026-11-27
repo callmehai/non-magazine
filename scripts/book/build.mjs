@@ -96,6 +96,7 @@ function todo(pair, w, o, size, jaSize, lh) {
 }
 if (TODO) process.on('exit', () => fs.writeFileSync(path.join(here, 'out', 'measure-todo.json'), JSON.stringify({ pages: [{ elements: [...TODO.values()] }] })))
 function textH(pair, w, o = {}) {
+  if (pair[1]) pair = [pair[0], jaFix(pair[1])]
   const size = o.size ?? BODY.size
   const lh = o.lh ?? BODY.lh
   const jaSize = o.jaSize ?? size
@@ -116,6 +117,7 @@ function textH(pair, w, o = {}) {
 
 /** chiều cao chữ của MỘT thứ tiếng (k = 0 tiếng Việt, 1 tiếng Nhật): lấy số đo thật của cả cặp nếu có */
 function textH1(pair, w, o, k) {
+  if (pair[1]) pair = [pair[0], jaFix(pair[1])]
   const size = o.size ?? BODY.size
   const m = MEASURED[measureKey({ text: pair[0], ja: pair[1], w, size, jaSize: o.jaSize ?? size, lh: o.lh ?? BODY.lh, paraGap: o.paraGap ?? 0, font: o.font ?? F.body, weight: o.weight ?? 400, tracking: o.tracking ?? 0 })]
   if (m) return Math.ceil(m[k] + 2)
@@ -132,6 +134,17 @@ const CAP_NAMES = new Set(['Chú thích ảnh', 'Chú thích video'])
 // GVHD 15/11: "Chuyển chữ "Báo" sang tiếng Nhật. VD: Dantri新聞" → bản Nhật ghi "Thanh Niên新聞", "Làng nghề Việt電子雑誌"
 // (T() không áp cho danh mục tài liệu tham khảo: giữ nguyên tên tác giả như trích dẫn APA)
 const jaPaper = (s) => String(s).replace(/Tạp chí điện tử ([^（）()、・,。:：\n]+?)(?=[（）()、・,。:：\n]|$)/g, '$1電子雑誌').replace(/Báo ([^（）()、・,。:：\n]+?)(?=[（）()、・,。:：\n]|$)/g, '$1新聞')
+// soát cả sách 28/11 (bản Nhật): tên / từ tiếng Việt trong ngoặc （Hai Cát）（Nón quai thao） và tên báo trước 新聞 / 電子雑誌
+// bị tách dòng ("Hai ⏎ Cát", "Thanh ⏎ Niên新聞") → nối bằng khoảng trắng không ngắt; cụm dài (> 14 ký tự) chỉ nối hai chữ cuối
+// để không còn một chữ lẻ xuống dòng mà khối liền vẫn vừa cột hẹp
+const VN_RUN = /[A-Za-zÀ-ỹĐđ]+(?: [A-Za-zÀ-ỹĐđ]+)+/g
+const vnJoin = (run) => (run.length <= 14 ? run.replace(/ /g, '\u00a0') : run.replace(/ (\S+)$/, '\u00a0$1'))
+const jaFix = (s) =>
+  s == null || s === ''
+    ? s
+    : String(s)
+        .replace(/（[^（）\n]*[A-Za-zÀ-ỹĐđ][^（）\n]*）/g, (m) => m.replace(VN_RUN, vnJoin))
+        .replace(/[A-Za-zÀ-ỹĐđ]+(?: [A-Za-zÀ-ỹĐđ]+)*(?=新聞|電子雑誌)/g, vnJoin)
 function T(x, y, w, h, pair, o = {}) {
   // chú thích video không mang số "Ảnh N" (soát vòng 8: "画像110：動画：…" — gọi video là ảnh); vẫn ghi nguồn như chú thích ảnh
   if (o.name === 'Chú thích video' && !o.raw) pair = fmtCap(Array.isArray(pair) ? pair : [pair, null])
@@ -148,7 +161,8 @@ function T(x, y, w, h, pair, o = {}) {
   const ja1 = ja0 ? strip(ja0) : ja0 // Bản sửa lần 4 (25/11): bỏ toàn bộ furigana, thống nhất cả dự án
   // soát độc lập 15/11: ngày "24 / 日" bị ngắt → không ngắt giữa số và 日 / 月; tên katakana "レ・ヴァン・/トゥイ" → không
   // ngắt sau "・" giữa hai chữ katakana
-  const ja = ja1 == null ? ja1 : (o.name === 'Tài liệu' ? String(ja1) : jaPaper(String(ja1))).replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影').replace(/(\d)(?=[日月])/g, '$1\u2060').replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, jaNameJoin)
+  const ja0b = ja1 == null ? ja1 : (o.name === 'Tài liệu' ? String(ja1) : jaPaper(String(ja1))).replace(/年(?=[前生])/g, '年\u2060').replace(/撮影/g, '撮\u2060影').replace(/(\d)(?=[日月])/g, '$1\u2060').replace(/[ァ-ヶー]+(?:・[ァ-ヶー]+)+/g, jaNameJoin)
+  const ja = o.name === 'Tài liệu' ? ja0b : jaFix(ja0b)
   // khung đặt cao cố định mà chữ cần nhiều chỗ hơn → nới ra
   if (h != null) h = Math.max(h, textH([vi, ja], w, o))
   const el = {
@@ -4977,6 +4991,9 @@ const KEEP = (m0) => {
 const keepHonor = (t) => t.replace(/([^\s\u2060])\u2060?(氏|さん)/g, '$1\u2060$2')
 const keepNames = (t) =>
   keepHonor(t.replace(/[ァ-ヶー]+(?:\u2060*・\u2060*[ァ-ヶー]+)+/g, KEEP).replace(/職\u2060?人/g, '職\u2060人'))
+// đoạn canh đều có cụm tiếng Việt nối liền: cụm rơi xuống dòng dưới thì dòng trên bị giãn từng chữ ("の 称 号 を 授 与") →
+// canh trái kiểu 'start' (canvas.css: bản Nhật vẫn ngắt từng chữ như khối canh đều, không ngắt theo cụm → mép phải gần thẳng)
+for (const p of pages) for (const e of p.els) if (e.type === 'text' && e.align === 'justify' && /[A-Za-zÀ-ỹĐđ]\u00a0[A-Za-zÀ-ỹĐđ]/.test(e.ja ?? '')) e.align = 'start'
 const stripAll = (v) => (typeof v === 'string' ? keepNames(strip(v)) : Array.isArray(v) ? v.map(stripAll) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, stripAll(x)])) : v)
 const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: stripAll(addFrames(p)) }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })

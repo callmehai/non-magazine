@@ -351,6 +351,11 @@
 .cv-text:lang(ja):not([style*='justify']) {
   word-break: auto-phrase;
 }
+/* soát cả sách 28/11: đoạn văn có tên tiếng Việt nối liền (khoảng trắng không ngắt) bỏ canh đều để dòng trên không giãn chữ
+   (build đặt align 'start') → vẫn ngắt từng chữ như khối canh đều, mép phải gần thẳng, không nham nhở như ngắt theo cụm */
+.cv-text:lang(ja)[style*='text-align: start'] {
+  word-break: normal;
+}
 
 /* editor đang xem tiếng Nhật, khối chưa dịch: mờ + viền chấm */
 .cv-text.is-missing {
