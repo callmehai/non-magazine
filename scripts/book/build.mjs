@@ -795,8 +795,8 @@ const SHEET_JA = {
   "Các sản phẩm nón đa dạng của làng Chuông": [null, "グループ撮影", null], // 67
   "Năm 2025, các nghệ nhân tiêu biểu toàn quốc dự Lễ báo công dâng Bác — nguồn: Maries": [null, "Maries", null], // 73
   "Một phần giấy khen, bằng khen nghệ nhân Tạ Thu Hương đã nhận": [null, "グループ撮影", null], // 83
-  // Doc "sửa thêm 2" mục 5 (27/11): chú thích nguyên văn nhóm (タ・トゥー・フオン — nhóm viết có trường âm)
-  "Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà": ["タ・トゥー・フオン（Tạ Thu Hương）氏とグループメンバーの記念写真", "グループ撮影", "nhóm tác giả"],
+  // Doc "sửa thêm 2" mục 5 (27/11): chú thích theo nhóm; tên thống nhất タ・トゥ・フオン như 20 chỗ khác (anh Hải chốt 27/11)
+  "Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà": ["タ・トゥ・フオン（Tạ Thu Hương）氏とグループメンバーの記念写真", "グループ撮影", "nhóm tác giả"],
   "Nón lá vẽ cờ đỏ sao vàng, nón lụa và nón vẽ hoa ở một cơ sở làng Chuông": [null, "グループ撮影", null], // 84
   "Trải nghiệm vẽ trên nón lá ở làng Chuông": ["チュオン村でのノンラーの絵付け体験", "グループ撮影", null], // 87
   "Du khách trải nghiệm vẽ nón ở làng Chuông": [null, "グループ撮影", null], // 91
@@ -3688,7 +3688,7 @@ let stripRight = null
   // soát đọc lần đầu 05/11 (tr. 96–97): bà Hương theo khuôn thẻ chung (chân dung nhỏ cạnh tiểu sử, câu trích, ảnh lấp
   // trang sau) → gần nửa cặp trang trống + hai cành tre giống hệt nhau. Cặp trang riêng: trái = ảnh 103 lớn rộng hết
   // khối, tên + tiểu sử dưới; phải = ảnh 104 lớn, câu trích của bà ngay dưới. Ông Tuy giữ khuôn thẻ.
-  const HUONG_GROUP = ['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥー・フオン（Tạ Thu Hương）氏とグループメンバーの記念写真']
+  const HUONG_GROUP = ['Nghệ nhân Tạ Thu Hương (áo đỏ) cùng các bạn trẻ tại cơ sở nón của bà', 'タ・トゥ・フオン（Tạ Thu Hương）氏とグループメンバーの記念写真']
   const huongAt = g2.people.findIndex(([name]) => /Hương/.test(name[0]))
   const huongSpread = () => {
     const [[name, role, bio], img] = [g2.people[huongAt], ar.image[huongAt]]
