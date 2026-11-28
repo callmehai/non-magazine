@@ -195,8 +195,9 @@ export function textStyle(el, lang = 'vi') {
   return {
     fontFamily: fontStack(fontOf(el, lang)),
     fontWeight: el.weight || 400,
-    // chữ Nhật không có kiểu nghiêng thật: trình duyệt nghiêng giả trông méo → tiếng Nhật luôn đứng
-    fontStyle: el.italic && lang !== 'ja' ? 'italic' : 'normal',
+    // chữ Nhật không có kiểu nghiêng thật: trình duyệt nghiêng giả trông méo → tiếng Nhật đứng, trừ khối ghi jaItalic
+    // (chú thích ảnh: nhóm chọn Mincho nghiêng, Zalo 28/11)
+    fontStyle: (lang === 'ja' ? el.jaItalic : el.italic) ? 'italic' : 'normal',
     fontSize: `${size}em`,
     color: el.color,
     textAlign: el.align || 'left',

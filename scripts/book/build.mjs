@@ -5005,6 +5005,10 @@ const keepNames = (t) =>
 // đoạn canh đều có cụm tiếng Việt nối liền: cụm rơi xuống dòng dưới thì dòng trên bị giãn từng chữ ("の 称 号 を 授 与") →
 // canh trái kiểu 'start' (canvas.css: bản Nhật vẫn ngắt từng chữ như khối canh đều, không ngắt theo cụm → mép phải gần thẳng)
 for (const p of pages) for (const e of p.els) if (e.type === 'text' && e.align === 'justify' && /[A-Za-zÀ-ỹĐđ]\u00a0[A-Za-zÀ-ỹĐđ]/.test(e.ja ?? '')) e.align = 'start'
+// Zalo 28/11 14:54 (nhóm, ảnh mẫu 画134 chữ Mincho nghiêng): "nếu đc em đồng nhất hết giúp c font này nhó" → mọi chú thích
+// ảnh / video bản Nhật dùng Mincho (Noto Serif JP, như thân bài) và nghiêng như chú thích bản Việt (jaItalic: renderer mặc
+// định để chữ Nhật đứng)
+for (const p of pages) for (const e of p.els) if (e.type === 'text' && CAP_NAMES.has(e.name)) Object.assign(e, { jaFont: F.jaBody, jaItalic: true })
 const stripAll = (v) => (typeof v === 'string' ? keepNames(strip(v)) : Array.isArray(v) ? v.map(stripAll) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, stripAll(x)])) : v)
 const out = pages.map((p) => ({ bg: p.bg, bgImage: null, paper: paperFor(p), template: null, hideNumber: p.hideNumber, elements: stripAll(addFrames(p)) }))
 fs.mkdirSync(path.join(here, 'out'), { recursive: true })
