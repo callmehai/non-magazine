@@ -2011,7 +2011,9 @@ function chapterOpener(ch, photo) {
     return o
   }
   // "Nhờ nhóm xem giúp" mục 7 (16/11, nhóm: "Đồng ý"): ảnh mở chương có chú thích đầy đủ (trước: chỉ dòng nguồn)
-  const oc = photo.cap ? Object.assign([`${photo.cap[0]} (nhóm tác giả)`, `${photo.cap[1]}（グループ撮影）`], { fmt: true }) : srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
+  // photo.capSrc: nguồn khác nhóm tác giả (ảnh mở Phần 3 do nghệ nhân Lê Văn Tuy cung cấp)
+  const [capSv, capSj] = photo.capSrc ?? ['nhóm tác giả', 'グループ撮影']
+  const oc = photo.cap ? Object.assign([`${photo.cap[0]} (${capSv})`, `${photo.cap[1]}（${capSj}）`], { fmt: true }) : srcOnly(fmtCap([pageCap(photo.main[0]), pageCap(photo.main[1])], photo.main[0]))
   const pw0 = left.cw - 70
   const och = capH(oc, pw0)
   const ph = BOT + 14 - (ry + 26) - 6 - och
@@ -3512,6 +3514,9 @@ let stripRight = null
   const ch = ch3
   const { left } = chapterOpener(ch, {
     main: ['Ảnh mở chương: em bé ôm chiếc nón lá — thế hệ mai sau của làng nghề', '章扉写真：ノンラーを抱く子ども — 工芸村の未来を担う世代'],
+    // Câu hỏi thêm 2 (28/11), nhóm "OK em": chú thích trước chỉ có dòng nguồn → thêm câu mô tả
+    cap: ['Em bé cầm nón lá giữa sạp nón làng Chuông', 'チュオン村のノンラー売り場でノンラーを手にする女の子'],
+    capSrc: ['nghệ nhân Lê Văn Tuy cung cấp', '職人レ・ヴァン・トゥイ氏提供'],
     breakOut: { src: 'assets/book/fx/mo-chuong-3.webp', top: 0.34, head: 0.27 }, // head: đỉnh khăn em bé (tỉ lệ chiều cao ảnh)
     alt: ['Ảnh toàn trang: chợ nón Chuông', '全面写真：チュオン村のノンラー市場'],
   })
@@ -4034,7 +4039,7 @@ let stripRight = null
         [['Báo Dân tộc và Phát triển', 'Báo Dân tộc và Phát triển'], ['Nón Tày (Thái Nguyên)', 'タイ族のノンラー（タイグエン省）'], 'Dân tộc và Phát triển'],
         [['Đông Phong', 'Đông Phong'], ['Nón thúng (Nghệ An)', 'ノン・トゥン（ゲアン省）'], 'Đông Phong', 'https://www.instagram.com/p/DEZ5IFBhd0L/'],
         [['Tạp chí điện tử Làng nghề Việt', 'Tạp chí điện tử Làng nghề Việt'], ['Nón quai thao', 'ノン・クアイ・タオ'], 'Làng nghề Việt'],
-        [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', '衣装デザインに取り入れられたノンラー'], 'Sóng Trẻ'],
+        [['Báo Sóng Trẻ', 'Báo Sóng Trẻ'], ['Nón lá trên sàn diễn thời trang', 'ファッションショーのランウェイに登場したノンラー'], 'Sóng Trẻ'],
         [['Tạp chí điện tử Văn hóa và Phát triển', 'Tạp chí điện tử Văn hóa và Phát triển'], ['Nón lá làng Chuông nhiều kiểu dáng', 'さまざまな形やデザインのチュオン村のノンラー'], 'Văn hóa và Phát triển', 'https://vanhoavaphattrien.vn/nghe-nhan-ta-thu-huong-ben-bi-giu-nghe-lan-toa-hon-non-viet-a35642.html'],
         [['Báo Pháp luật (Xuân Lai)', 'Báo Pháp luật'], ['Gian trưng bày nón của nghệ nhân Lê Văn Tuy tại triển lãm', 'トゥイ氏のノンラーの展示ブース（スアン・ライ撮影）'], 'Báo Pháp luật', 'https://baophapluat.vn/non-lang-chuong-di-san-song-tren-nhung-tang-la-co.html'], // JA: tên người chụp sang cột mô tả — nhãn một dòng (soát 15/11: tr. 131 chữ đè)
         [['Chạm Sắc (VTV5)', 'Chạm Sắc（VTV5）'], ['Nón lá vẽ hoa văn sơn mài', '「ノンラー・ソンマイ」'], 'Chạm Sắc'],

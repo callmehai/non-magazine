@@ -81,7 +81,8 @@ export const ch1 = {
           theater: ['Nhà hát Ba Nón Lá Cao Văn Lầu, Bạc Liêu — nguồn: Báo Thanh Niên', 'バクリエウ{省|しょう}にあるカオ・ヴァン・ラウ三つのノンラー{劇場|げきじょう} — 出典：Báo Thanh Niên'],
           fashion: [
             ['Nón lá trong thiết kế trang phục — nguồn: VietNamNet', '衣装デザインに取り入れられたノンラー — 出典：VietNamNet'],
-            ['Nón lá trên sàn diễn thời trang — nguồn: Báo Sóng Trẻ', '衣装デザインに取り入れられたノンラー — 出典：Báo Sóng Trẻ'],
+            // Câu hỏi thêm 2 (28/11): nhóm "Em sửa giúp chị 画22 thành ファッションショーのランウェイに登場したノンラー"
+            ['Nón lá trên sàn diễn thời trang — nguồn: Báo Sóng Trẻ', 'ファッションショーのランウェイに登場したノンラー — 出典：Báo Sóng Trẻ'],
           ],
         },
       },
