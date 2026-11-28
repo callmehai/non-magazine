@@ -4944,7 +4944,8 @@ pages.forEach(bottomFlora)
   const isNote = (e) => e.name === 'Chú thích'
   // Bản sửa lần 5 (nhóm 26/11): tài liệu trích dẫn theo IEEE ngay trong câu ([n, ページ x]) → bản Nhật bỏ các chú thích cuối trang
   // chỉ ghi nguồn / giải nghĩa mà tab tiếng Nhật không có (chỉ giữ 10 chú thích [1]–[10] của nhóm)
-  const DROP_JA = /^(『Nghề|フー・?ゴック|『Hỏi|Vũ Từ Trang|ヌア：|モーナン|OCOP（One|ディン・?ハイン)/
+  // Doc "Sửa thêm 3" (28/11): "E ơi cho c thêm footnote lần 5 trang 39 từ ocop" → chú thích OCOP（One…）bản Nhật giữ lại
+  const DROP_JA = /^(『Nghề|フー・?ゴック|『Hỏi|Vũ Từ Trang|ヌア：|モーナン|ディン・?ハイン)/
   for (const p of pages) {
     const notes = p.els.filter((e) => e.type === 'text' && isNote(e) && typeof e.ja === 'string')
     const gone = []
