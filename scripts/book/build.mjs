@@ -2323,7 +2323,11 @@ let guidePage = null
     ]
     const pw = (CW - 14) / 2
     const pch = Math.max(...pics.map((c) => capH(c, pw)))
-    const ratio = [R.por, R.sq, R.std, R.wide, R.cin].find((r) => f.y + pw * r + 6 + pch <= f.bot) ?? R.std
+    // Zalo 28/11 (chị Minh Ánh, ảnh tr. 19): "hai cái ảnh này … chỉnh lại cho to ra chút giống bản cũ" — đoạn văn tr. 19 dài
+    // thêm một dòng nên khung vuông (bản 26/11) thiếu 0,75pt so với lề dưới và rơi xuống 3:4 → khung cao vừa đúng chỗ còn
+    // lại (tối đa vuông) thay vì nhảy bậc xuống 3:4
+    const fit = Math.min(R.sq, (f.bot - f.y - 6 - pch) / pw)
+    const ratio = [R.por, R.sq].find((r) => f.y + pw * r + 6 + pch <= f.bot) ?? (fit >= R.std ? fit : [R.std, R.wide, R.cin].find((r) => f.y + pw * r + 6 + pch <= f.bot) ?? R.std)
     f.row(pics, { ratio })
   }
   // tab Bổ sung 08/11: "ND trang 22, 23, 24 mỗi luận điểm cho 1 trang: VD: Sự thay đổi…: 1 trang, Nón lá trong hoạt
